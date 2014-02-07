@@ -1,0 +1,26 @@
+Changelog:
+
+1.2.1:
+*updated plugin structure
+*updated bukkit version
+*code improvements
+
+1.2.0:
+*added mcstats
+
+1.1.0:
+*add zvpleave command to leave the game
+*updated language files
+*updated to 1.7.2
+
+1.0.2:
+*add scoreboard team to disable pvp
+*Change package name
+*Fixed bug in zvpstop command
+
+1.0.1:
+*Change commands and permissions
+*Add Scoreboard support
+
+1.0.0:
+*Release Candidate
