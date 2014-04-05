@@ -1,6 +1,6 @@
 package me.Aubli.ZvP.Listeners;
 
-import me.Aubli.ZvP.zombie;
+import me.Aubli.ZvP.ZvP;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,7 +12,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
 public class InventoryCloseListener implements Listener{
-	public InventoryCloseListener(zombie plugin){
+	public InventoryCloseListener(ZvP plugin){
 		this.plugin = plugin;
 	}
 
@@ -56,5 +56,5 @@ public class InventoryCloseListener implements Listener{
 		}		
 	}
 	
-	private zombie plugin;
+	private ZvP plugin;
 }

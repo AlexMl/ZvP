@@ -16,13 +16,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class CommandExecuter implements CommandExecutor {
+public class ZvPCommands implements CommandExecutor {
 
-	private zombie plugin;
+	private ZvP plugin;
 	private Logger log;
-	public CommandExecuter(zombie zombie) {
+	public ZvPCommands(ZvP zombie) {
 		plugin = zombie;	
-		log = me.Aubli.ZvP.zombie.log;
+		log = me.Aubli.ZvP.ZvP.log;
 	}
 	
 	@Override

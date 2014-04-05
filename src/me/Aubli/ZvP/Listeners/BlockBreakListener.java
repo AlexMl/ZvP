@@ -1,6 +1,6 @@
 package me.Aubli.ZvP.Listeners;
 
-import me.Aubli.ZvP.zombie;
+import me.Aubli.ZvP.ZvP;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,7 +9,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 public class BlockBreakListener implements Listener{
 
-	public BlockBreakListener(zombie plugin){
+	public BlockBreakListener(ZvP plugin){
 		this.plugin = plugin;
 	}
 
@@ -24,5 +24,5 @@ public class BlockBreakListener implements Listener{
 		}	
 	}
 	
-	private zombie plugin;
+	private ZvP plugin;
 }

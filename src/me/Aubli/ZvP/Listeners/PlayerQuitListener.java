@@ -1,6 +1,6 @@
 package me.Aubli.ZvP.Listeners;
 
-import me.Aubli.ZvP.zombie;
+import me.Aubli.ZvP.ZvP;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerQuitListener implements Listener{
 
-	public PlayerQuitListener(zombie plugin){
+	public PlayerQuitListener(ZvP plugin){
 		this.plugin = plugin;
 	}
 	
@@ -31,5 +31,5 @@ public class PlayerQuitListener implements Listener{
 			}
 		}
 	}
-	private zombie plugin;
+	private ZvP plugin;
 }

@@ -39,7 +39,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-public class zombie extends JavaPlugin{
+public class ZvP extends JavaPlugin{
 
 	public static final Logger log = Bukkit.getLogger();
 	public Location zombieZvpStartLoc;
@@ -116,12 +116,12 @@ public class zombie extends JavaPlugin{
 	}
 	
 	private void registerCommands(){
-		this.getCommand("zvpsell").setExecutor(new CommandExecuter(this));
-		this.getCommand("zvpstart").setExecutor(new CommandExecuter(this));
-		this.getCommand("zvpstop").setExecutor(new CommandExecuter(this));
-		this.getCommand("zvpjoin").setExecutor(new CommandExecuter(this));
-		this.getCommand("zvpleave").setExecutor(new CommandExecuter(this));
-		this.getCommand("zvp").setExecutor(new CommandExecuter(this));	
+		this.getCommand("zvpsell").setExecutor(new ZvPCommands(this));
+		this.getCommand("zvpstart").setExecutor(new ZvPCommands(this));
+		this.getCommand("zvpstop").setExecutor(new ZvPCommands(this));
+		this.getCommand("zvpjoin").setExecutor(new ZvPCommands(this));
+		this.getCommand("zvpleave").setExecutor(new ZvPCommands(this));
+		this.getCommand("zvp").setExecutor(new ZvPCommands(this));	
 	}
 	
 	private void registerEvent(){

@@ -1,6 +1,6 @@
 package me.Aubli.ZvP.Listeners;
 
-import me.Aubli.ZvP.zombie;
+import me.Aubli.ZvP.ZvP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,7 +28,7 @@ public class PlayerInteractListener implements Listener{
 	int lederHelmPreis, lederBrustpanzerPreis, lederBeinschutzPreis, lederStiefelPreis;
 	int eisenHelmPreis, eisenBrustpanzerPreis, eisenBeinschutzPreis, eisenStiefelPreis;
 	
-	public PlayerInteractListener(zombie plugin){
+	public PlayerInteractListener(ZvP plugin){
 		this.plugin = plugin;
 	}	
 		
@@ -801,5 +801,5 @@ public class PlayerInteractListener implements Listener{
 			}	
 		}
 	}		
-	private zombie plugin;
+	private ZvP plugin;
 }
