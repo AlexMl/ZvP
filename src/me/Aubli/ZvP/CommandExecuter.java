@@ -1,4 +1,4 @@
-package me.Aubli.zombie;
+package me.Aubli.ZvP;
 
 import java.util.logging.Logger;
 
@@ -22,7 +22,7 @@ public class CommandExecuter implements CommandExecutor {
 	private Logger log;
 	public CommandExecuter(zombie zombie) {
 		plugin = zombie;	
-		log = me.Aubli.zombie.zombie.log;
+		log = me.Aubli.ZvP.zombie.log;
 	}
 	
 	@Override

@@ -1,4 +1,4 @@
-package me.Aubli.zombie;
+package me.Aubli.ZvP;
 
 import java.util.ArrayList;
 import java.util.Random;

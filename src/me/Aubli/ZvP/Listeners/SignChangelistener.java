@@ -1,15 +1,15 @@
-package me.Aubli.Listeners;
+package me.Aubli.ZvP.Listeners;
 
-import me.Aubli.zombie.zombie;
+import me.Aubli.ZvP.zombie;
 
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 
-public class zombieSignChangelistener implements Listener{
+public class SignChangelistener implements Listener{
 
-	public zombieSignChangelistener(zombie plugin){
+	public SignChangelistener(zombie plugin){
 		this.plugin = plugin;
 	}
 	

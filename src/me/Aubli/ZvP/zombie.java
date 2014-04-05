@@ -1,4 +1,4 @@
-package me.Aubli.zombie;
+package me.Aubli.ZvP;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,14 +7,14 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Logger;
 
-import me.Aubli.Listeners.zombieBlockBreakListener;
-import me.Aubli.Listeners.zombieEntityDeathListener;
-import me.Aubli.Listeners.zombieInventoryCloseListener;
-import me.Aubli.Listeners.zombiePlayerDeathListener;
-import me.Aubli.Listeners.zombiePlayerInteractListener;
-import me.Aubli.Listeners.zombiePlayerQuitListener;
-import me.Aubli.Listeners.zombiePlayerRespawnListener;
-import me.Aubli.Listeners.zombieSignChangelistener;
+import me.Aubli.ZvP.Listeners.BlockBreakListener;
+import me.Aubli.ZvP.Listeners.EntityDeathListener;
+import me.Aubli.ZvP.Listeners.InventoryCloseListener;
+import me.Aubli.ZvP.Listeners.PlayerDeathListener;
+import me.Aubli.ZvP.Listeners.PlayerInteractListener;
+import me.Aubli.ZvP.Listeners.PlayerQuitListener;
+import me.Aubli.ZvP.Listeners.PlayerRespawnListener;
+import me.Aubli.ZvP.Listeners.SignChangelistener;
 
 import org.util.Metrics.Metrics;
 import org.bukkit.Bukkit;
@@ -26,10 +26,8 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
@@ -129,14 +127,14 @@ public class zombie extends JavaPlugin{
 	private void registerEvent(){
 		PluginManager pm = Bukkit.getPluginManager();
 		
-		pm.registerEvents(new zombieEntityDeathListener(this), this);
-		pm.registerEvents(new zombiePlayerInteractListener(this), this);
-		pm.registerEvents(new zombieSignChangelistener(this), this);
-		pm.registerEvents(new zombiePlayerQuitListener(this), this);
-		pm.registerEvents(new zombieBlockBreakListener(this), this);
-		pm.registerEvents(new zombiePlayerDeathListener(this), this);
-		pm.registerEvents(new zombiePlayerRespawnListener(this), this);
-		pm.registerEvents(new zombieInventoryCloseListener(this), this);		
+		pm.registerEvents(new EntityDeathListener(this), this);
+		pm.registerEvents(new PlayerInteractListener(this), this);
+		pm.registerEvents(new SignChangelistener(this), this);
+		pm.registerEvents(new PlayerQuitListener(this), this);
+		pm.registerEvents(new BlockBreakListener(this), this);
+		pm.registerEvents(new PlayerDeathListener(this), this);
+		pm.registerEvents(new PlayerRespawnListener(this), this);
+		pm.registerEvents(new InventoryCloseListener(this), this);		
 	}
 	
  	public void zomStart(final Player Sender,final int Runden){

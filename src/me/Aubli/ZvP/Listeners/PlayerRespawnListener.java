@@ -1,6 +1,6 @@
-package me.Aubli.Listeners;
+package me.Aubli.ZvP.Listeners;
 
-import me.Aubli.zombie.zombie;
+import me.Aubli.ZvP.zombie;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,8 +13,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-public class zombiePlayerRespawnListener implements Listener{
-	public zombiePlayerRespawnListener(zombie plugin){
+public class PlayerRespawnListener implements Listener{
+	public PlayerRespawnListener(zombie plugin){
 		this.plugin = plugin;
 	}
 

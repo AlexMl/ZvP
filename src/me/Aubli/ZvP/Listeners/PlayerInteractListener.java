@@ -1,6 +1,6 @@
-package me.Aubli.Listeners;
+package me.Aubli.ZvP.Listeners;
 
-import me.Aubli.zombie.zombie;
+import me.Aubli.ZvP.zombie;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class zombiePlayerInteractListener implements Listener{
+public class PlayerInteractListener implements Listener{
 	
 	int eisenSchwertPreis, steinSchwertPreis, holzSchwertPreis, steinAxtPreis, bogenPreis, pfeilPreis64, pfeilPreis32;
 	int braustandPreis;
@@ -28,7 +28,7 @@ public class zombiePlayerInteractListener implements Listener{
 	int lederHelmPreis, lederBrustpanzerPreis, lederBeinschutzPreis, lederStiefelPreis;
 	int eisenHelmPreis, eisenBrustpanzerPreis, eisenBeinschutzPreis, eisenStiefelPreis;
 	
-	public zombiePlayerInteractListener(zombie plugin){
+	public PlayerInteractListener(zombie plugin){
 		this.plugin = plugin;
 	}	
 		

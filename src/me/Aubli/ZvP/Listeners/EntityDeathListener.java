@@ -1,6 +1,6 @@
-package me.Aubli.Listeners;
+package me.Aubli.ZvP.Listeners;
 
-import me.Aubli.zombie.zombie;
+import me.Aubli.ZvP.zombie;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,9 +13,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.scoreboard.DisplaySlot;
 
-public class zombieEntityDeathListener implements Listener{
+public class EntityDeathListener implements Listener{
 
-	public zombieEntityDeathListener(zombie plugin){
+	public EntityDeathListener(zombie plugin){
 		this.plugin = plugin;
 	}
 	
