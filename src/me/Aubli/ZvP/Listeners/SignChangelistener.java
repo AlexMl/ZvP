@@ -1,8 +1,15 @@
 package me.Aubli.ZvP.Listeners;
 
+import me.Aubli.ZvP.Arena;
+import me.Aubli.ZvP.GameManager;
+import me.Aubli.ZvP.Lobby;
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Sign.SignManager.SignType;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
@@ -15,7 +22,132 @@ public class SignChangelistener implements Listener{
 	
 	@EventHandler
 	public void onSignChange(SignChangeEvent event){
-
+		
+		Player eventPlayer = event.getPlayer();
+		
+		if(event.getLine(0).equalsIgnoreCase("[zvp]")){
+			if(eventPlayer.hasPermission("zvp.manage.sign")){
+				if(!event.getLine(1).isEmpty()){
+					if(!event.getLine(2).isEmpty()){
+						if(event.getLine(3).equalsIgnoreCase("interact")){
+							int arenaID = Integer.parseInt(event.getLine(1));
+							int lobbyID = Integer.parseInt(event.getLine(2));
+							
+							Arena a = GameManager.getManager().getArena(arenaID);
+							Lobby l = GameManager.getManager().getLobby(lobbyID);
+							
+							if(a!=null){
+								if(l!=null){
+									boolean success = SignManager.getManager().createSign(SignType.INTERACT_SIGN, event.getBlock().getLocation().clone(), a, l);
+									
+									if(success){
+										event.setLine(0, ZvP.pluginPrefix);
+										event.setLine(1, "Arena: " + arenaID);
+										event.setLine(2, "[JOIN]");
+										event.setLine(3, "ID: " + SignManager.getManager().getInteractSign(event.getBlock().getLocation()).getID());
+										
+										//TODO Message
+										return;
+									}else{
+										eventPlayer.sendMessage("error");
+										//TODO MESSAGE
+										return;
+									}								
+								}else{
+									//TODO message
+									event.setCancelled(true);
+									return;
+								}
+							}else{
+								//TODO message
+								event.setCancelled(true);
+								return;
+							}	
+						}else if(event.getLine(3).equalsIgnoreCase("info")){
+							int arenaID = Integer.parseInt(event.getLine(1));
+							int lobbyID = Integer.parseInt(event.getLine(2));
+							
+							Arena a = GameManager.getManager().getArena(arenaID);
+							Lobby l = GameManager.getManager().getLobby(lobbyID);
+							
+							if(a!=null){
+								if(l!=null){
+									boolean success = SignManager.getManager().createSign(SignType.INFO_SIGN, event.getBlock().getLocation().clone(), a, l);
+									
+									if(success){
+										event.setLine(0, ZvP.pluginPrefix);
+										event.setLine(1, "Arena: " + arenaID);
+										event.setLine(2, "0 / 15");
+										event.setLine(3, "Round 0 / ?");
+										
+										//TODO Message
+										return;
+									}else{
+										//TODO MESSAGE
+										return;
+									}								
+								}else{
+									//TODO message
+									event.setCancelled(true);
+									return;
+								}
+							}else{
+								//TODO message
+								event.setCancelled(true);
+								return;
+							}
+						}else{
+							//TODO message				
+							event.setCancelled(true);
+							return;
+						}
+					}else{
+						//TODO message				
+						event.setCancelled(true);
+						return;
+					}
+				}else{
+					//TODO message				
+					event.setCancelled(true);
+					return;
+				}
+			}else{
+				//TODO permission
+				event.setCancelled(true);
+				event.getBlock().setType(Material.AIR);
+				return;
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		String materialLine = "";
 		String[] materialLineArray;
 		
