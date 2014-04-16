@@ -1,11 +1,11 @@
 name: ZombieVsPlayer
-version: 1.2.1
+version: 2.0.0
 description: Zombie versus Player Minigame
 website: http://dev.bukkit.org/bukkit-plugins/zombievsplayer/
 author: Aubli
 main: me.Aubli.ZvP.ZvP
 
-commands:
+commands:     
      zvp:
           description: Basic Commands.
           usage: |
@@ -13,19 +13,7 @@ commands:
                  /<command> setlang [language]
                  /<command> setspawn
                  /<command> setspecspawn
-                 /<command> addkit [name]                 
-     zvpstart:
-          description: Start a Zombie vs. Player Game!
-          usage: /<command> [Rounds]
-     zvpstop:
-          description: Stops a Zombie vs. Player Game!
-          usage: /<command>
-     zvpsell:
-          description: Sell the item that you hold!
-          usage: /<command>
-     zvpjoin:
-          description: Let you join a running game!
-          usage: /<command>
-     zvpleave:
-          description: Let you leave a running game!
+                 /<command> addkit [name]
+     test:
+          description: test command
           usage: /<command>

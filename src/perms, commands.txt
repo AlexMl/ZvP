@@ -11,3 +11,15 @@ zvp setspawn		zvp.admin.set.spawn
 zvp setspecspawn	zvp.admin.set.spectatorspawn
 
 
+
+zvp.help
+zvp.status
+zvp.tool
+
+zvp.reload
+zvp.save
+
+
+zvp.manage.arena
+zvp.manage.lobby
+zvp.manage.sign

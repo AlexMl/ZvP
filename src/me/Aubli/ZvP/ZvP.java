@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -15,6 +16,7 @@ import me.Aubli.ZvP.Listeners.PlayerInteractListener;
 import me.Aubli.ZvP.Listeners.PlayerQuitListener;
 import me.Aubli.ZvP.Listeners.PlayerRespawnListener;
 import me.Aubli.ZvP.Listeners.SignChangelistener;
+import me.Aubli.ZvP.Sign.SignManager;
 
 import org.util.Metrics.Metrics;
 import org.bukkit.Bukkit;
@@ -26,10 +28,12 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
@@ -42,9 +46,15 @@ import org.bukkit.scoreboard.Team;
 public class ZvP extends JavaPlugin{
 
 	public static final Logger log = Bukkit.getLogger();
+	private static ZvP instance;
 	public Location zombieZvpStartLoc;
 	public File messageFile;
 	public FileConfiguration messageFileConfiguration;
+	
+	
+	public static ItemStack tool;
+	
+	public static String pluginPrefix = ChatColor.DARK_GREEN + "[" + ChatColor.DARK_RED + "Z" + ChatColor.DARK_GRAY + "v" + ChatColor.DARK_RED + "P" + ChatColor.DARK_GREEN + "]"  + ChatColor.RESET + " ";
 	
 	public HashMap<Player, String> kills = new HashMap<Player, String>();
 	public HashMap<Player, String> deaths = new HashMap<Player, String>();
@@ -77,11 +87,32 @@ public class ZvP extends JavaPlugin{
 	
 	@Override	
 	public void onDisable() {
+		
+		for(Player p: Bukkit.getOnlinePlayers()){
+			removeTool(p);
+		}
+		
+		
+		GameManager.getManager().saveConfig();
 		log.info("[ZombieVsPlayer] Plugin is disabled!");
 	}
 	
 	@Override
 	public void onEnable() {
+		
+		instance = this;
+		
+		new MessageManager();
+		new GameManager();
+		new SignManager();
+		
+		setTool();
+		
+		registerListeners();
+		getCommand("zvp").setExecutor(new ZvPCommands());
+		getCommand("test").setExecutor(new ZvPCommands());
+		
+		
 		if(this.getConfig().getString("config.misc.language")!=null){
 			language = this.getConfig().getString("config.misc.language");
 		}else{language = "en";}	
@@ -94,8 +125,7 @@ public class ZvP extends JavaPlugin{
 		start=false;
 		Runde = 1;
 		
-		registerCommands();
-		registerEvent();
+		//registerEvent();
 		
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
 		Obj = board.getObjective("customm");
@@ -115,27 +145,48 @@ public class ZvP extends JavaPlugin{
 		log.info("[ZombieVsPlayer] Plugin is enabled!");
 	}
 	
-	private void registerCommands(){
-		this.getCommand("zvpsell").setExecutor(new ZvPCommands(this));
-		this.getCommand("zvpstart").setExecutor(new ZvPCommands(this));
-		this.getCommand("zvpstop").setExecutor(new ZvPCommands(this));
-		this.getCommand("zvpjoin").setExecutor(new ZvPCommands(this));
-		this.getCommand("zvpleave").setExecutor(new ZvPCommands(this));
-		this.getCommand("zvp").setExecutor(new ZvPCommands(this));	
-	}
-	
-	private void registerEvent(){
+	private void registerListeners(){
 		PluginManager pm = Bukkit.getPluginManager();
 		
 		pm.registerEvents(new EntityDeathListener(this), this);
 		pm.registerEvents(new PlayerInteractListener(this), this);
 		pm.registerEvents(new SignChangelistener(this), this);
 		pm.registerEvents(new PlayerQuitListener(this), this);
-		pm.registerEvents(new BlockBreakListener(this), this);
+		pm.registerEvents(new BlockBreakListener(), this);
 		pm.registerEvents(new PlayerDeathListener(this), this);
 		pm.registerEvents(new PlayerRespawnListener(this), this);
 		pm.registerEvents(new InventoryCloseListener(this), this);		
 	}
+	
+	private void setTool(){
+		tool = new ItemStack(Material.STICK);
+
+		List<String> lore = new ArrayList<String>();
+		
+		ItemMeta toolMeta = tool.getItemMeta();
+		toolMeta.setDisplayName(pluginPrefix + "Tool");
+		toolMeta.addEnchant(Enchantment.DURABILITY, 5, true);
+		lore.add("Use this tool to add an Arena!");
+		toolMeta.setLore(lore);
+		
+		tool.setItemMeta(toolMeta);
+	}
+	
+	
+	public static ZvP getInstance(){
+		return instance;
+	}
+	
+	
+	public boolean removeTool(Player player){
+		
+		if(player.getInventory().contains(tool)){
+			player.getInventory().removeItem(tool);
+			return true;
+		}
+		return false;		
+	}
+	
 	
  	public void zomStart(final Player Sender,final int Runden){
 		

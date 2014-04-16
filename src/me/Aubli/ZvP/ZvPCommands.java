@@ -1,31 +1,236 @@
 package me.Aubli.ZvP;
 
-import java.util.logging.Logger;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 public class ZvPCommands implements CommandExecutor {
-
-	private ZvP plugin;
-	private Logger log;
-	public ZvPCommands(ZvP zombie) {
-		plugin = zombie;	
-		log = me.Aubli.ZvP.ZvP.log;
-	}
+	
+	/*
+	 * ZvP-Commands:
+	 * 
+	 * - zvp
+	 * - zvp help
+	 * - zvp status
+	 * - zvp list	
+	 * - zvp save
+	 * - zvp reload
+	 *  
+	 * - zvp add Arena 
+	 * - zvp add Lobby
+	 * - zvp remove Arena
+	 * - zvp remove Lobby
+	 * 
+	 * - zvp stop [arena]
+	 * - zvp stop
+	 * 
+	 *
+	 */
 	
 	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String[] args) {
+		
+		if(!(sender instanceof Player)){
+			sender.sendMessage("This command is only for Players!");
+			return true;
+		}
+		
+		Player playerSender = (Player) sender;
+		GameManager game = GameManager.getManager();
+		
+		if(cmd.getName().equalsIgnoreCase("test")){
+		
+			Arena a = game.getArena(Integer.parseInt(args[0]));
+			Bukkit.broadcastMessage(a.getZombies() + " Zombies");
+			a.clearArena();
+			
+		}
+		
+		
+		
+		
+		
+		
+		if(cmd.getName().equalsIgnoreCase("zvp")){
+			
+			if(args.length==0){
+				printCommands(playerSender);
+				return true;
+			}
+			
+			if(args.length==1){
+				
+				if(args[0].equalsIgnoreCase("help")){
+					printCommands(playerSender);
+					return true;
+				}				
+				if(args[0].equalsIgnoreCase("status")){
+					
+					return false;
+				}	
+				if(args[0].equalsIgnoreCase("list")){
+					
+					return true;
+				}	
+				if(args[0].equalsIgnoreCase("save")){
+					if(playerSender.hasPermission("zvp.save")){
+						GameManager.getManager().saveConfig();
+						//TODO message
+						playerSender.sendMessage("saved");
+						return true;
+					}else{
+						//TODO message
+						return true;
+					}
+				}
+				if(args[0].equalsIgnoreCase("reload")){
+					if(playerSender.hasPermission("zvp.reload")){
+						GameManager.getManager().loadConfig();
+						//TODO message
+						playerSender.sendMessage("reloaded");
+						return true;
+					}else{
+						//TODO message
+						return true;
+					}
+				}
+				
+				if(args[0].equalsIgnoreCase("stop")){
+					if(playerSender.hasPermission("zvp.stop.all")){
+						
+						for(Arena a : game.getArenas()){
+							a.stop();
+						}
+						//TODO Message
+						return true;
+					}else{
+						//TODO permision
+						return true;
+					}
+				}
+				
+				printCommands(playerSender);
+				return true;
+			}
+			
+			if(args.length==2){
+				if(args[0].equalsIgnoreCase("add")){
+					if(args[1].equalsIgnoreCase("arena")){
+						if(playerSender.hasPermission("zvp.manage.arena")){
+							//TODO Message
+							playerSender.getInventory().addItem(ZvP.tool);
+							return true;
+						}else{
+							//TODO permision
+							return true;
+						}
+					}
+					
+					if(args[1].equalsIgnoreCase("lobby")){
+						if(playerSender.hasPermission("zvp.manage.lobby")){	
+							GameManager.getManager().addLobby(playerSender.getLocation().clone());
+							playerSender.sendMessage("Lobby created!"); //TODO Message		
+							return true;
+						}else{
+							//TODO permision
+							return true;
+						}
+					}					
+
+					printCommands(playerSender);
+					return true;
+				}
+				if(args[0].equalsIgnoreCase("stop")){
+					if(playerSender.hasPermission("zvp.stop")){						
+						Arena a = game.getArena(Integer.parseInt(args[1]));
+						if(a!=null){
+							a.stop();
+							//TODO Message
+							return true;
+						}else{
+							//TODO message
+							return true;
+						}
+					}else{
+						//TODO Permissions
+						return true;
+					}
+				}
+
+				printCommands(playerSender);
+				return true;
+			}
+			
+			if(args.length==3){
+				if(args[0].equalsIgnoreCase("remove")){
+					if(args[1].equalsIgnoreCase("arena")){
+						if(playerSender.hasPermission("zvp.manage.arena")){
+							GameManager.getManager().removeArena(GameManager.getManager().getArena(Integer.parseInt(args[2])));
+							playerSender.sendMessage("Arena removed"); //TODO message
+							return true;
+						}else{
+							//TODO permision
+							return true;
+						}
+					}
+					
+					if(args[1].equalsIgnoreCase("lobby")){
+						if(playerSender.hasPermission("zvp.manage.lobby")){
+							GameManager.getManager().removeLobby(GameManager.getManager().getLobby(Integer.parseInt(args[2])));
+							playerSender.sendMessage("Lobby removed"); //TODO message
+							return true;
+						}else{
+							//TODO permision
+							return true;
+						}
+					}
+					
+					printCommands(playerSender);
+					return true;
+				}
+				printCommands(playerSender);
+				return true;
+			}
+			
+			printCommands(playerSender);
+			return true;
+		}
+		return true;
+	}
+	
+	
+	private void printCommands(Player player){
+		
+		if(player.hasPermission("zvp.help")){			
+			String pluginName = ZvP.getInstance().getDescription().getName();
+			String pluginVersion = ZvP.getInstance().getDescription().getVersion();
+			String prefix = ZvP.getInstance().pluginPrefix;
+			
+			player.sendMessage("\n\n");
+			player.sendMessage(ChatColor.GRAY + "|--------------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + ChatColor.RESET + " ( " + prefix + ")" + ChatColor.GRAY + " ---------------|");
+			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp help");			
+			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp status");
+			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list");
+			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp save");
+			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp reload");
+			
+			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena");
+			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add lobby");
+			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove arena [Arena-ID]");
+			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove lobby [Lobby-ID]");
+			
+			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop");
+			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop [Arena-ID]");
+			
+		}else{
+			//TODO permission
+		}
+	}
+	
+	/*@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String[] args) {
 		
 		FileConfiguration messageFileConfiguration = YamlConfiguration.loadConfiguration(plugin.messageFile);
@@ -67,8 +272,8 @@ public class ZvPCommands implements CommandExecutor {
 		verrottetesFleisch64Preis = plugin.getConfig().getInt("config.price.sell.rottenflesh64");
 		
 		pfeil32Preis = plugin.getConfig().getInt("config.price.sell.arrow32");
-		pfeil64Preis = plugin.getConfig().getInt("config.price.sell.arrow64");
-			
+		pfeil64Preis = plugin.getConfig().getInt("config.price.sell.arrow64");		
+		
 		//zomdef Befehle
 		if(cmd.getName().equalsIgnoreCase("zvp")){
 			if(args.length==0){
@@ -424,5 +629,5 @@ public class ZvPCommands implements CommandExecutor {
 		log.info(messageFileConfiguration.getString("config.error_messages.error_console_command"));
 		return true;
 	}	
-	}
+	}*/
 }
