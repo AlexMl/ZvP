@@ -209,12 +209,12 @@ public class GameManager {
 	}
 	
 	public void stopGame(Arena a){
-		
+		a.stop();
 	}
 	
 	public void stopGames(){
 		for(Arena a : getArenas()){
-			
+			a.stop();
 		}
 	}
 	
