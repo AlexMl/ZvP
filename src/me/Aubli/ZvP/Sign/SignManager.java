@@ -169,7 +169,7 @@ public class SignManager {
 	public boolean removeSign(SignType type, Location signLoc){
 		if(type==SignType.INFO_SIGN){
 			InfoSign s = getInfoSign(signLoc);
-			infoSigns.remove(s);
+			infoSigns.remove(s);			
 			s.delete();
 			return true;
 		}

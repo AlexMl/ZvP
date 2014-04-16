@@ -2,6 +2,9 @@ package me.Aubli.ZvP;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import me.Aubli.ZvP.Sign.InfoSign;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,6 +20,9 @@ public class Lobby {
 	private int lobbyID;
 	
 	private Location centerLoc;
+	
+	private ArrayList<InfoSign> signs;
+	
 	
 	public Lobby(int lobbyID, String lobbyPath, Location loc){
 		
@@ -74,5 +80,28 @@ public class Lobby {
 	
 	public Location getLocation(){
 		return centerLoc;
+	}
+	
+	public InfoSign[] getSigns(){
+		InfoSign[] s = new InfoSign[signs.size()];		
+		for(int i=0;i<signs.size();i++){
+			s[i] = signs.get(i);
+		}
+		return s;
+	}
+	
+	
+	public void addSign(InfoSign sign){
+		signs.add(sign);
+	}
+	
+	public void removeSign(InfoSign sign){
+		signs.remove(sign);
+	}
+	
+	public void updateSigns(){
+		for(InfoSign sign : getSigns()){
+			sign.update();
+		}
 	}
 }
