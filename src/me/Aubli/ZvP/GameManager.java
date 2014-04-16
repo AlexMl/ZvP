@@ -180,7 +180,7 @@ public class GameManager {
 				max.setZ(tempZ);
 			}			
 			
-			Arena a = new Arena(getNewID(arenaPath), arenaPath, min.clone(), max.clone());
+			Arena a = new Arena(getNewID(arenaPath), ZvP.getMaxPlayers(), arenaPath, min.clone(), max.clone());
 			arenas.add(a);
 			return true;
 		}

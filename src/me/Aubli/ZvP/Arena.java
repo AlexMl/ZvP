@@ -12,7 +12,6 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -25,6 +24,8 @@ public class Arena {
 	
 	private int arenaID;
 	
+	private int maxPlayers;
+	
 	private World arenaWorld;
 	private Location minLoc;
 	private Location maxLoc;
@@ -35,9 +36,11 @@ public class Arena {
 	private ArrayList<ZvPPlayer> players;
 	
 	
-	public Arena(int ID, String arenaPath, Location min, Location max){
+	public Arena(int ID, int maxPlayers, String arenaPath, Location min, Location max){
 		
 		this.arenaID = ID;
+		
+		this.maxPlayers = maxPlayers;
 		
 		this.arenaWorld = min.getWorld();
 		this.minLoc = min.clone();
@@ -64,6 +67,7 @@ public class Arena {
 		this.arenaConfig = YamlConfiguration.loadConfiguration(arenaFile);
 		
 		this.arenaID = arenaConfig.getInt("arena.ID");
+		this.maxPlayers = arenaConfig.getInt("arena.maxPlayers");
 		this.arenaWorld = Bukkit.getWorld(arenaConfig.getString("arena.Location.world"));
 		
 		this.isOnline = arenaConfig.getBoolean("arena.Online");
@@ -84,6 +88,7 @@ public class Arena {
 	
 	void save() throws IOException{	
 		arenaConfig.set("arena.ID", arenaID);
+		arenaConfig.set("arena.maxPlayers", maxPlayers);
 		arenaConfig.set("arena.Online", isOnline);
 		
 		arenaConfig.set("arena.Location.world", arenaWorld.getName());
@@ -105,6 +110,10 @@ public class Arena {
 	
 	public int getID(){
 		return arenaID;
+	}
+	
+	public int getMaxPlayers(){
+		return maxPlayers;
 	}
 	
 	public World getWorld(){
