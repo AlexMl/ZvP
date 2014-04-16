@@ -1,5 +1,8 @@
 package me.Aubli.ZvP.Listeners;
 
+import java.util.HashMap;
+
+import me.Aubli.ZvP.GameManager;
 import me.Aubli.ZvP.ZvP;
 
 import org.bukkit.Bukkit;
@@ -28,19 +31,53 @@ public class PlayerInteractListener implements Listener{
 	int lederHelmPreis, lederBrustpanzerPreis, lederBeinschutzPreis, lederStiefelPreis;
 	int eisenHelmPreis, eisenBrustpanzerPreis, eisenBeinschutzPreis, eisenStiefelPreis;
 	
+	private HashMap<Action, Location> clickLoc = new HashMap<Action, Location>();
+	
+	
 	public PlayerInteractListener(ZvP plugin){
 		this.plugin = plugin;
 	}	
 		
-	@EventHandler(priority=EventPriority.HIGH)
+	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event){
+		
+		Player eventPlayer = (Player) event.getPlayer();
+		
+		if(event.getItem()!=null){
+			if(event.getItem().equals(ZvP.tool)){
+				if(eventPlayer.hasPermission("zvp.tool") && eventPlayer.hasPermission("zvp.manage.arena")){
+					event.setCancelled(true);
+					
+					if(event.getAction() == Action.RIGHT_CLICK_BLOCK){
+						clickLoc.put(event.getAction(), event.getClickedBlock().getLocation().clone());
+						eventPlayer.sendMessage("Right click saved!"); //TODO Message
+					}
+					
+					if(event.getAction() == Action.LEFT_CLICK_BLOCK){
+						clickLoc.put(event.getAction(), event.getClickedBlock().getLocation().clone());
+						eventPlayer.sendMessage("Left click saved!"); //TODO Message						
+					}
+					
+					if(clickLoc.containsKey(Action.RIGHT_CLICK_BLOCK) && clickLoc.containsKey(Action.LEFT_CLICK_BLOCK)){
+						GameManager.getManager().addArena(clickLoc.get(Action.LEFT_CLICK_BLOCK), clickLoc.get(Action.RIGHT_CLICK_BLOCK));
+						eventPlayer.sendMessage("arena created!"); //TODO Message
+						clickLoc.clear();
+						return;
+					}
+				}else{
+					//TODO Permissions
+					plugin.removeTool(eventPlayer);
+					return;
+				}
+			}
+		}
 		
 		
 		if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
 		
 			FileConfiguration messageFileConfiguration = YamlConfiguration.loadConfiguration(plugin.messageFile);
 		
-			Player eventPlayer = (Player) event.getPlayer();
+			
 			PlayerInventory inv = eventPlayer.getInventory();
 			
 			String specNotSet = messageFileConfiguration.getString("config.error_messages.error_spectator_place_not_set");
