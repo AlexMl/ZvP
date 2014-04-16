@@ -123,7 +123,7 @@ public class InfoSign {
 		sign.setLine(0, ZvP.getPrefix());
 		sign.setLine(1, "Arena: " + arena.getID());
 		sign.setLine(2, arena.getPlayers().length + " / " + arena.getMaxPlayers());
-		sign.setLine(3, "Round 0 / ?");
+		sign.setLine(3, "Round " + arena.getRound() + ":" + arena.getRound()  + " / " + arena.getMaxRounds() );
 		sign.update();
 	}
 	

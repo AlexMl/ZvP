@@ -25,6 +25,9 @@ public class Arena {
 	private int arenaID;
 	
 	private int maxPlayers;
+	private int maxRounds;
+	private int round;
+	private int wave;	
 	
 	private World arenaWorld;
 	private Location minLoc;
@@ -46,8 +49,11 @@ public class Arena {
 		this.minLoc = min.clone();
 		this.maxLoc = max.clone();
 		
-		isOnline = true;
-		running = false;
+		this.isOnline = true;
+		this.running = false;
+		
+		this.round = 0;
+		this.wave = 0;
 		
 		arenaFile = new File(arenaPath + "/" + ID + ".yml");
 		arenaConfig = YamlConfiguration.loadConfiguration(arenaFile);
@@ -114,6 +120,18 @@ public class Arena {
 	
 	public int getMaxPlayers(){
 		return maxPlayers;
+	}
+	
+	public int getMaxRounds(){
+		return maxRounds;
+	}
+	
+	public int getRound(){
+		return round;
+	}
+	
+	public int getWave(){
+		return wave;
 	}
 	
 	public World getWorld(){
@@ -212,8 +230,12 @@ public class Arena {
 		return false;
 	}
 	
-	public void start(){
+	public void start(int rounds, int waves){
 		this.running = true;
+		this.maxRounds = rounds;
+		this.round = 0;
+		this.wave = 0;
+		
 		
 	}
 	
@@ -224,6 +246,8 @@ public class Arena {
 		}
 		clearArena();
 		this.running = false;
+		this.round = 0;
+		this.wave = 0;
 	}
 	
 	public void clearArena(){		

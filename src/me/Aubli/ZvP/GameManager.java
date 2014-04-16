@@ -204,7 +204,10 @@ public class GameManager {
 	}
 
 	
-	public void startGame(Arena a){
+	public void startGame(Arena a, Lobby l, int rounds, int waves){
+		
+		a.start(rounds, waves);
+		
 		
 	}
 	
