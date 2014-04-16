@@ -207,7 +207,7 @@ public class ZvPCommands implements CommandExecutor {
 		if(player.hasPermission("zvp.help")){			
 			String pluginName = ZvP.getInstance().getDescription().getName();
 			String pluginVersion = ZvP.getInstance().getDescription().getVersion();
-			String prefix = ZvP.getInstance().pluginPrefix;
+			String prefix = ZvP.getPrefix();
 			
 			player.sendMessage("\n\n");
 			player.sendMessage(ChatColor.GRAY + "|--------------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + ChatColor.RESET + " ( " + prefix + ")" + ChatColor.GRAY + " ---------------|");

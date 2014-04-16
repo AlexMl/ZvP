@@ -54,7 +54,9 @@ public class ZvP extends JavaPlugin{
 	
 	public static ItemStack tool;
 	
-	public static String pluginPrefix = ChatColor.DARK_GREEN + "[" + ChatColor.DARK_RED + "Z" + ChatColor.DARK_GRAY + "v" + ChatColor.DARK_RED + "P" + ChatColor.DARK_GREEN + "]"  + ChatColor.RESET + " ";
+	private static String pluginPrefix = ChatColor.DARK_GREEN + "[" + ChatColor.DARK_RED + "Z" + ChatColor.DARK_GRAY + "v" + ChatColor.DARK_RED + "P" + ChatColor.DARK_GREEN + "]"  + ChatColor.RESET + " ";
+	
+	private static int maxPlayers;
 	
 	public HashMap<Player, String> kills = new HashMap<Player, String>();
 	public HashMap<Player, String> deaths = new HashMap<Player, String>();
@@ -101,6 +103,7 @@ public class ZvP extends JavaPlugin{
 	public void onEnable() {
 		
 		instance = this;
+		loadConfig();
 		
 		new MessageManager();
 		new GameManager();
@@ -120,7 +123,7 @@ public class ZvP extends JavaPlugin{
 		messageFile = new File("plugins/ZombieVsPlayer/" + language + "_messages.yml");
 		messageFileConfiguration = YamlConfiguration.loadConfiguration(messageFile);
 		portOnJoin = false;
-		loadConfig();		
+				
 		Konto=0;
 		start=false;
 		Runde = 1;
@@ -177,8 +180,16 @@ public class ZvP extends JavaPlugin{
 		return instance;
 	}
 	
+	public static String getPrefix(){
+		return pluginPrefix;
+	}
 	
-	public boolean removeTool(Player player){
+	public static int getMaxPlayers(){
+		return maxPlayers;
+	}
+	
+	
+ 	public boolean removeTool(Player player){
 		
 		if(player.getInventory().contains(tool)){
 			player.getInventory().removeItem(tool);
@@ -956,6 +967,9 @@ public class ZvP extends JavaPlugin{
 				"If you want more items that you can sell or buy. Write a comemnt or an ticket on the bukkit-dev site:\n" +
 				"http://dev.bukkit.org/bukkit-mods/zombievsplayer/\n");
 		
+		this.getConfig().addDefault("config.misc.enableMetrics", true);
+		this.getConfig().addDefault("config.maximal_Players", 15);
+		
 		this.getConfig().addDefault("config.misc.ZombieCash", 0.2);
 		this.getConfig().addDefault("config.misc.PlayerCash", 2.5);
 		this.getConfig().addDefault("config.misc.language", "en");
@@ -963,7 +977,7 @@ public class ZvP extends JavaPlugin{
 		this.getConfig().addDefault("config.misc.storeInventory", true);
 		this.getConfig().addDefault("config.misc.storeEXPLevel", true);
 		this.getConfig().addDefault("config.misc.changeToSpectatorAfterDeath", false);
-		this.getConfig().addDefault("config.misc.enableMetrics", true);
+		
 		
 		this.getConfig().addDefault("config.starterkit.enable", true);
 		this.getConfig().addDefault("config.starterkit.whichkit", "standardKit");
@@ -1001,6 +1015,8 @@ public class ZvP extends JavaPlugin{
 		this.getConfig().addDefault("config.price.buy.ironChestplate", 11);
 		this.getConfig().addDefault("config.price.buy.ironLeggings", 9);
 		this.getConfig().addDefault("config.price.buy.ironBoots", 6);
+		
+		maxPlayers = getConfig().getInt("config.maximal_Players");
 		
 		zombieCash = this.getConfig().getDouble("config.misc.ZombieCash");
 		playerCash = this.getConfig().getDouble("config.misc.PlayerCash");
