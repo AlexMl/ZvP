@@ -11,6 +11,7 @@ import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Sign;
@@ -67,7 +68,7 @@ public class InfoSign {
 			delete();
 			throw new Exception("Location is not a Sign!");
 		}
-		
+		update();
 	}
 	
 	public InfoSign(File signFile){
@@ -85,7 +86,7 @@ public class InfoSign {
 		this.arena = GameManager.getManager().getArena(signConfig.getInt("sign.Arena"));
 		this.lobby = GameManager.getManager().getLobby(signConfig.getInt("sign.Lobby"));
 		this.lobby.addSign(this);
-		
+		update();
 	}
 	
 	void delete(){
@@ -126,8 +127,8 @@ public class InfoSign {
 	public void update(){
 		sign.setLine(0, ZvP.getPrefix());
 		sign.setLine(1, "Arena: " + arena.getID());
-		sign.setLine(2, arena.getPlayers().length + " / " + arena.getMaxPlayers());
-		sign.setLine(3, "Round " + arena.getRound() + ":" + arena.getRound()  + " / " + arena.getMaxRounds() );
+		sign.setLine(2, ChatColor.AQUA + "" + arena.getPlayers().length + ChatColor.DARK_GRAY + " / " + ChatColor.DARK_RED + arena.getMaxPlayers());
+		sign.setLine(3, "R " + ChatColor.BLUE + "" + arena.getRound() + ":" + arena.getWave() + ChatColor.RESET + " / " + ChatColor.DARK_RED + arena.getMaxRounds());
 		sign.update();
 	}
 	

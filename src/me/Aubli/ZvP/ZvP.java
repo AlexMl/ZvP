@@ -967,7 +967,7 @@ public class ZvP extends JavaPlugin{
 				"If you want more items that you can sell or buy. Write a comemnt or an ticket on the bukkit-dev site:\n" +
 				"http://dev.bukkit.org/bukkit-mods/zombievsplayer/\n");
 		
-		this.getConfig().addDefault("config.misc.enableMetrics", true);
+		this.getConfig().addDefault("config.enableMetrics", true);
 		this.getConfig().addDefault("config.maximal_Players", 15);
 		
 		this.getConfig().addDefault("config.misc.ZombieCash", 0.2);
@@ -1017,6 +1017,7 @@ public class ZvP extends JavaPlugin{
 		this.getConfig().addDefault("config.price.buy.ironBoots", 6);
 		
 		maxPlayers = getConfig().getInt("config.maximal_Players");
+		useMetrics = getConfig().getBoolean("config.enableMetrics");
 		
 		zombieCash = this.getConfig().getDouble("config.misc.ZombieCash");
 		playerCash = this.getConfig().getDouble("config.misc.PlayerCash");
@@ -1026,14 +1027,14 @@ public class ZvP extends JavaPlugin{
 		storeInventory = this.getConfig().getBoolean("config.misc.storeInventory");
 		storeExp = this.getConfig().getBoolean("config.misc.storeEXPLevel");
 		enableKit = this.getConfig().getBoolean("config.starterkit.enable");
-		useMetrics = this.getConfig().getBoolean("config.misc.enableMetrics");
+		
 		
 		if(enableKit == true){
 			starterKitName = this.getConfig().getString("config.starterkit.whichkit");
 		}
 		
 		
-		messageFileConfiguration.options().header("This file contains all output from the Zombie versus Player Plugin.\n" +
+		/*messageFileConfiguration.options().header("This file contains all output from the Zombie versus Player Plugin.\n" +
 				"Some translations are already available in the language-pack.\n" +
 				"If you customize this file, don't edit the <newLine> tag or something in characters like %keyWord%\n" +
 				"If you want to add your own language, copy this file and name it like 'language-tag_messages.yml'\n" +
@@ -1092,11 +1093,10 @@ public class ZvP extends JavaPlugin{
 		
 		try {
 			messageFileConfiguration.options().copyDefaults(true);
-			messageFileConfiguration.save(messageFile);
-			this.saveConfig();
+			messageFileConfiguration.save(messageFile);			
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 		
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();

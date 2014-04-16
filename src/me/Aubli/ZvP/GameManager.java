@@ -27,11 +27,6 @@ public class GameManager {
 		arenaPath = plugin.getDataFolder().getPath() + "/Arenas";
 		lobbyPath = plugin.getDataFolder().getPath() + "/Lobbys";
 		
-		if(!new File(arenaPath).exists() || !new File(lobbyPath).exists()){
-			new File(arenaPath).mkdirs();
-			new File(lobbyPath).mkdirs();
-		}		
-		
 		loadConfig();
 	}
 	
@@ -40,6 +35,11 @@ public class GameManager {
 	}
 	
 	public void loadConfig(){
+		
+		if(!new File(arenaPath).exists() || !new File(lobbyPath).exists()){
+			new File(arenaPath).mkdirs();
+			new File(lobbyPath).mkdirs();
+		}
 		
 		lobbys = new ArrayList<Lobby>();
 		arenas = new ArrayList<Arena>();

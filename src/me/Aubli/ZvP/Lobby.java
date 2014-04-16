@@ -33,6 +33,8 @@ public class Lobby {
 		this.lobbyFile = new File(lobbyPath + "/" + lobbyID + ".yml");
 		this.lobbyConfig = YamlConfiguration.loadConfiguration(lobbyFile);
 		
+		this.signs = new ArrayList<InfoSign>();
+		
 		try {
 			lobbyFile.createNewFile();
 			save();
@@ -51,6 +53,7 @@ public class Lobby {
 				lobbyConfig.getInt("lobby.Location.X"),
 				lobbyConfig.getInt("lobby.Location.Y"),
 				lobbyConfig.getInt("lobby.Location.Z"));
+		this.signs = new ArrayList<InfoSign>();
 	}
 	
 	
