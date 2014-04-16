@@ -7,6 +7,7 @@ import java.util.UUID;
 import me.Aubli.ZvP.Arena;
 import me.Aubli.ZvP.GameManager;
 import me.Aubli.ZvP.Lobby;
+import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
 
 import org.bukkit.Bukkit;
@@ -116,4 +117,14 @@ public class InfoSign {
 	public Lobby getLobby(){
 		return lobby;
 	}
+	
+	
+	public void update(){
+		sign.setLine(0, ZvP.getPrefix());
+		sign.setLine(1, "Arena: " + arena.getID());
+		sign.setLine(2, arena.getPlayers().length + " / " + arena.getMaxPlayers());
+		sign.setLine(3, "Round 0 / ?");
+		sign.update();
+	}
+	
 }
