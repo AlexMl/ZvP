@@ -57,6 +57,8 @@ public class ZvP extends JavaPlugin{
 	private static String pluginPrefix = ChatColor.DARK_GREEN + "[" + ChatColor.DARK_RED + "Z" + ChatColor.DARK_GRAY + "v" + ChatColor.DARK_RED + "P" + ChatColor.DARK_GREEN + "]"  + ChatColor.RESET + " ";
 	
 	private static int maxPlayers;
+	private static int DEFAULT_ROUNDS;
+	private static int DEFAULT_WAVES;
 	
 	public HashMap<Player, String> kills = new HashMap<Player, String>();
 	public HashMap<Player, String> deaths = new HashMap<Player, String>();
@@ -188,6 +190,13 @@ public class ZvP extends JavaPlugin{
 		return maxPlayers;
 	}
 	
+	public static int getDefaultRounds(){
+		return DEFAULT_ROUNDS;
+	}
+	
+	public static int getDefaultWaves(){
+		return DEFAULT_WAVES;
+	}
 	
  	public boolean removeTool(Player player){
 		
@@ -968,7 +977,10 @@ public class ZvP extends JavaPlugin{
 				"http://dev.bukkit.org/bukkit-mods/zombievsplayer/\n");
 		
 		this.getConfig().addDefault("config.enableMetrics", true);
-		this.getConfig().addDefault("config.maximal_Players", 15);
+		this.getConfig().addDefault("config.maximal_Players", 20);
+		
+		this.getConfig().addDefault("config.rounds", 3);
+		this.getConfig().addDefault("config.waves", 5);
 		
 		this.getConfig().addDefault("config.misc.ZombieCash", 0.2);
 		this.getConfig().addDefault("config.misc.PlayerCash", 2.5);
@@ -1018,6 +1030,9 @@ public class ZvP extends JavaPlugin{
 		
 		maxPlayers = getConfig().getInt("config.maximal_Players");
 		useMetrics = getConfig().getBoolean("config.enableMetrics");
+		
+		DEFAULT_ROUNDS = getConfig().getInt("config.rounds");
+		DEFAULT_WAVES = getConfig().getInt("config.waves");
 		
 		zombieCash = this.getConfig().getDouble("config.misc.ZombieCash");
 		playerCash = this.getConfig().getDouble("config.misc.PlayerCash");

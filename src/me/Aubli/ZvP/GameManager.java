@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -180,7 +181,24 @@ public class GameManager {
 				max.setZ(tempZ);
 			}			
 			
-			Arena a = new Arena(getNewID(arenaPath), ZvP.getMaxPlayers(), arenaPath, min.clone(), max.clone());
+			Location tempMax = max.clone();
+			tempMax.setY(min.getY());
+			
+			double dist = min.clone().distance(tempMax);
+			Bukkit.broadcastMessage("Distance: " + dist);
+			
+			int mP = ((int)((Math.ceil(dist+2))/4))+1;
+			Bukkit.broadcastMessage("maxP: " + mP);
+			
+			if(mP<3){
+				mP = 3;
+			}
+			
+			if(mP>ZvP.getMaxPlayers()){
+				mP = ZvP.getMaxPlayers();
+			}
+			
+			Arena a = new Arena(getNewID(arenaPath), mP, arenaPath, min.clone(), max.clone(), ZvP.getDefaultRounds(), ZvP.getDefaultWaves());
 			arenas.add(a);
 			return true;
 		}

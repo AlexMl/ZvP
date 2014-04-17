@@ -25,7 +25,9 @@ public class Arena {
 	private int arenaID;
 	
 	private int maxPlayers;
+	private int minPlayers;
 	private int maxRounds;
+	private int maxWaves;
 	private int round;
 	private int wave;	
 	
@@ -39,11 +41,15 @@ public class Arena {
 	private ArrayList<ZvPPlayer> players;
 	
 	
-	public Arena(int ID, int maxPlayers, String arenaPath, Location min, Location max){
+	public Arena(int ID, int maxPlayers, String arenaPath, Location min, Location max, int rounds, int waves){
 		
 		this.arenaID = ID;
 		
 		this.maxPlayers = maxPlayers;
+		this.minPlayers = ((int)Math.ceil(maxPlayers/4));
+		
+		this.maxRounds = rounds;
+		this.maxWaves = waves;
 		
 		this.arenaWorld = min.getWorld();
 		this.minLoc = min.clone();
@@ -74,11 +80,15 @@ public class Arena {
 		
 		this.arenaID = arenaConfig.getInt("arena.ID");
 		this.maxPlayers = arenaConfig.getInt("arena.maxPlayers");
-		this.arenaWorld = Bukkit.getWorld(arenaConfig.getString("arena.Location.world"));
+		this.maxPlayers = arenaConfig.getInt("arena.minPlayers");
+		
+		this.maxRounds = arenaConfig.getInt("arena.rounds");
+		this.maxWaves = arenaConfig.getInt("arena.waves");
 		
 		this.isOnline = arenaConfig.getBoolean("arena.Online");
 		this.running = false;
 		
+		this.arenaWorld = Bukkit.getWorld(arenaConfig.getString("arena.Location.world"));		
 		this.minLoc = new Location(arenaWorld, 
 				arenaConfig.getInt("arena.Location.min.X"), 
 				arenaConfig.getInt("arena.Location.min.Y"),
@@ -93,9 +103,13 @@ public class Arena {
 	
 	
 	void save() throws IOException{	
-		arenaConfig.set("arena.ID", arenaID);
-		arenaConfig.set("arena.maxPlayers", maxPlayers);
+		arenaConfig.set("arena.ID", arenaID);	
 		arenaConfig.set("arena.Online", isOnline);
+		
+		arenaConfig.set("arena.minPlayers", minPlayers);
+		arenaConfig.set("arena.maxPlayers", maxPlayers);
+		arenaConfig.set("arena.rounds", maxRounds);
+		arenaConfig.set("arena.waves", maxWaves);
 		
 		arenaConfig.set("arena.Location.world", arenaWorld.getName());
 		arenaConfig.set("arena.Location.min.X", minLoc.getBlockX());
@@ -120,6 +134,10 @@ public class Arena {
 	
 	public int getMaxPlayers(){
 		return maxPlayers;
+	}
+	
+	public int getMinPlayers(){
+		return minPlayers;
 	}
 	
 	public int getMaxRounds(){
@@ -217,6 +235,11 @@ public class Arena {
 	public boolean addPlayer(ZvPPlayer player){
 		if(!players.contains(player)){
 			players.add(player);
+			
+			if(players.size()>=minPlayers){
+				start();
+			}
+			
 			return true;
 		}
 		return false;
@@ -231,8 +254,13 @@ public class Arena {
 	}
 	
 	public void start(int rounds, int waves){
-		this.running = true;
 		this.maxRounds = rounds;
+		this.maxWaves = waves;
+		start();
+	}
+	
+	public void start(){
+		this.running = true;		
 		this.round = 0;
 		this.wave = 0;
 		
