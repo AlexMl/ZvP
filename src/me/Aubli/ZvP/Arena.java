@@ -46,7 +46,7 @@ public class Arena {
 		this.arenaID = ID;
 		
 		this.maxPlayers = maxPlayers;
-		this.minPlayers = ((int)Math.ceil(maxPlayers/4));
+		this.minPlayers = ((int)Math.ceil(maxPlayers/4))+1;
 		
 		this.maxRounds = rounds;
 		this.maxWaves = waves;
