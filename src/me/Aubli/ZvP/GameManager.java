@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import me.Aubli.ZvP.Sign.SignManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -47,6 +49,10 @@ public class GameManager {
 		
 		loadArenas();
 		loadLobbys();
+		
+		if(SignManager.getManager()!=null){
+			SignManager.getManager().reloadConfig();
+		}
 	}
 	
 	public void saveConfig(){

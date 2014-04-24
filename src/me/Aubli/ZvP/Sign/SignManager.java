@@ -35,16 +35,15 @@ public class SignManager {
 		infoSigns = new ArrayList<InfoSign>();
 		
 		interact = new File(ZvP.getInstance().getDataFolder().getPath() + "/Signs/Interact");
-		info = new File(ZvP.getInstance().getDataFolder().getPath() + "/Signs/Info");
-		
-		if(!interact.exists() || !info.exists()){
-			info.mkdirs();
-			interact.mkdirs();
-		}
-		loadSigns();
+		info = new File(ZvP.getInstance().getDataFolder().getPath() + "/Signs/Info");		
+		reloadConfig();
 	}		
 	
 	private void loadSigns(){		
+		
+		interactSigns = new ArrayList<InteractSign>();
+		infoSigns = new ArrayList<InfoSign>();
+		
 		for(File f : info.listFiles()){
 			InfoSign sign = new InfoSign(f);
 			infoSigns.add(sign);
@@ -54,6 +53,14 @@ public class SignManager {
 			InteractSign sign = new InteractSign(f);
 			interactSigns.add(sign);
 		}		
+	}
+	
+	public void reloadConfig(){
+		if(!interact.exists() || !info.exists()){
+			info.mkdirs();
+			interact.mkdirs();
+		}
+		loadSigns();
 	}
 	
 	
@@ -142,8 +149,8 @@ public class SignManager {
 			if(type==SignType.INFO_SIGN){
 				try{
 					String path = info.getPath();
-					InfoSign infSign = new InfoSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby);
-					infoSigns.add(infSign);
+					InfoSign s = new InfoSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby);					
+					infoSigns.add(s);	
 					return true;
 				}catch(Exception e){
 					e.printStackTrace();
