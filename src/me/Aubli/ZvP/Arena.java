@@ -144,6 +144,10 @@ public class Arena {
 		return maxRounds;
 	}
 	
+	public int getMaxWaves(){
+		return maxWaves;
+	}
+	
 	public int getRound(){
 		return round;
 	}

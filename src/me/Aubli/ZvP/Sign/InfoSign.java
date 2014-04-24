@@ -110,7 +110,7 @@ public class InfoSign {
 	}
 	
 	public Sign getSign(){
-		return sign;
+		return (Sign)getLocation().getBlock().getState();
 	}
 	
 	public SignType getType(){
@@ -126,19 +126,19 @@ public class InfoSign {
 	}
 	
 	
-	public void update(){
+	public void update(){		
 		if(arena!=null){
 			sign.setLine(0, ZvP.getPrefix());
 			sign.setLine(1, "Arena: " + arena.getID());
-			sign.setLine(2, ChatColor.AQUA + "" + arena.getPlayers().length + ChatColor.DARK_GRAY + " / " + ChatColor.DARK_RED + arena.getMaxPlayers());
-			sign.setLine(3, "R " + ChatColor.BLUE + "" + arena.getRound() + ":" + arena.getWave() + ChatColor.RESET + " / " + ChatColor.DARK_RED + arena.getMaxRounds());
-			sign.update();
+			sign.setLine(2, ChatColor.AQUA + "" + arena.getPlayers().length + ChatColor.RESET + " / " + ChatColor.DARK_RED + arena.getMaxPlayers());
+			sign.setLine(3, ChatColor.BLUE + "" + arena.getRound() + ":" + arena.getWave() + ChatColor.RESET + " / " + ChatColor.DARK_RED + arena.getMaxRounds() + ":" + arena.getMaxWaves());
+			sign.update(true);
 		}else{
 			sign.setLine(0, ZvP.getPrefix());
 			sign.setLine(1, "");
 			sign.setLine(2, ChatColor.DARK_RED + "Arena is not");
 			sign.setLine(3, ChatColor.DARK_RED + "available!");
-			sign.update();
+			sign.update(true);
 		}
 	}
 	
