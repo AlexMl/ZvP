@@ -62,7 +62,7 @@ public class Lobby {
 			
 		lobbyConfig.set("lobby.Location.world", centerLoc.getWorld().getName());
 		lobbyConfig.set("lobby.Location.X", centerLoc.getBlockX());
-		lobbyConfig.set("lobby.Location.y", centerLoc.getBlockY());
+		lobbyConfig.set("lobby.Location.Y", centerLoc.getBlockY());
 		lobbyConfig.set("lobby.Location.Z", centerLoc.getBlockZ());
 			
 		lobbyConfig.save(lobbyFile);			
