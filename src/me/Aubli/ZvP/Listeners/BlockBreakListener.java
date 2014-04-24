@@ -39,9 +39,11 @@ public class BlockBreakListener implements Listener{
 					
 					if(success){
 						//TODO Message
+						eventPlayer.sendMessage("successfully removed");
 						return;
 					}else{
 						//TODO Message
+						eventPlayer.sendMessage("error");
 						return;
 					}					
 				}else{
