@@ -72,6 +72,8 @@ public class InteractSign {
 		this.signFile = signFile;
 		this.signConfig = YamlConfiguration.loadConfiguration(signFile);
 		
+		this.type = SignType.INTERACT_SIGN;
+		
 		this.ID = signConfig.getInt("sign.ID");
 		this.signLoc = new Location(
 				Bukkit.getWorld(UUID.fromString(signConfig.getString("sign.Location.world"))),

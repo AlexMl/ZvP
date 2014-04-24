@@ -75,6 +75,8 @@ public class InfoSign {
 		this.signFile = signFile;
 		this.signConfig = YamlConfiguration.loadConfiguration(signFile);
 		
+		this.type = SignType.INFO_SIGN;
+		
 		this.ID = signConfig.getInt("sign.ID");
 		this.signLoc = new Location(
 				Bukkit.getWorld(UUID.fromString(signConfig.getString("sign.Location.world"))),

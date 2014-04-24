@@ -80,16 +80,15 @@ public class SignManager {
 	}	
 	
 	public SignType getType(Location signLoc){
-		
-		for(InfoSign infS : getInfoSigns()){
-			if(infS.getLocation().equals(signLoc.clone())){
-				return infS.getType();
+		for(InfoSign s : getInfoSigns()){
+			if(s.getLocation().equals(signLoc)){
+				return s.getType();
 			}
 		}
 		
-		for(InteractSign intS : getInteractSigns()){
-			if(intS.getLocation().equals(signLoc.clone())){
-				return intS.getType();
+		for(InteractSign s : getInteractSigns()){
+			if(s.getLocation().equals(signLoc)){
+				return s.getType();
 			}
 		}
 		return null;
