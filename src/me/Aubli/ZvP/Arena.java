@@ -80,7 +80,7 @@ public class Arena {
 		
 		this.arenaID = arenaConfig.getInt("arena.ID");
 		this.maxPlayers = arenaConfig.getInt("arena.maxPlayers");
-		this.maxPlayers = arenaConfig.getInt("arena.minPlayers");
+		this.minPlayers = arenaConfig.getInt("arena.minPlayers");
 		
 		this.maxRounds = arenaConfig.getInt("arena.rounds");
 		this.maxWaves = arenaConfig.getInt("arena.waves");
