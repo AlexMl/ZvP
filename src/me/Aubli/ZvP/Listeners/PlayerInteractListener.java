@@ -72,7 +72,7 @@ public class PlayerInteractListener implements Listener{
 			}
 		}
 		
-		
+		/*
 		if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
 		
 			FileConfiguration messageFileConfiguration = YamlConfiguration.loadConfiguration(plugin.messageFile);
@@ -836,7 +836,7 @@ public class PlayerInteractListener implements Listener{
 				}
 			}			
 			}	
-		}
+		}*/
 	}		
 	private ZvP plugin;
 }
