@@ -16,10 +16,6 @@ import org.bukkit.event.block.SignChangeEvent;
 
 public class SignChangelistener implements Listener{
 
-	public SignChangelistener(ZvP plugin){
-		this.plugin = plugin;
-	}
-	
 	@EventHandler
 	public void onSignChange(SignChangeEvent event){
 		
@@ -75,7 +71,11 @@ public class SignChangelistener implements Listener{
 									boolean success = SignManager.getManager().createSign(SignType.INFO_SIGN, event.getBlock().getLocation().clone(), a, l);
 									
 									if(success){
-										SignManager.getManager().getInfoSign(event.getBlock().getLocation()).update();
+										event.setLine(0, ZvP.getPrefix());
+										event.setLine(1, "Arena: " + a.getID());
+										event.setLine(2, ChatColor.AQUA + "" + a.getPlayers().length + ChatColor.RESET + " / " + ChatColor.DARK_RED + a.getMaxPlayers());
+										event.setLine(3, ChatColor.BLUE + "" + a.getRound() + ":" + a.getWave() + ChatColor.RESET + " / " + ChatColor.DARK_RED + a.getMaxRounds() + ":" + a.getMaxWaves());
+										
 										//TODO Message
 										return;
 									}else{
@@ -142,7 +142,7 @@ public class SignChangelistener implements Listener{
 		
 		
 		
-		
+		/*
 		
 		String materialLine = "";
 		String[] materialLineArray;
@@ -245,7 +245,6 @@ public class SignChangelistener implements Listener{
 					}
 				}
 			}
-		}
+		}*/
 	}	
-	private ZvP plugin;
 }

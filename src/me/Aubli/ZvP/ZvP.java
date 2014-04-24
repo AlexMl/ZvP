@@ -155,7 +155,7 @@ public class ZvP extends JavaPlugin{
 		
 		pm.registerEvents(new EntityDeathListener(this), this);
 		pm.registerEvents(new PlayerInteractListener(this), this);
-		pm.registerEvents(new SignChangelistener(this), this);
+		pm.registerEvents(new SignChangelistener(), this);
 		pm.registerEvents(new PlayerQuitListener(this), this);
 		pm.registerEvents(new BlockBreakListener(), this);
 		pm.registerEvents(new PlayerDeathListener(this), this);
