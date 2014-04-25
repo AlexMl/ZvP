@@ -19,6 +19,8 @@ public class ZvPCommands implements CommandExecutor {
 	 * - zvp save
 	 * - zvp reload
 	 *  
+	 * - zvp leave
+	 *  
 	 * - zvp add Arena 
 	 * - zvp add Lobby
 	 * - zvp remove Arena
@@ -98,6 +100,28 @@ public class ZvPCommands implements CommandExecutor {
 					}
 				}
 				
+				if(args[0].equalsIgnoreCase("leave")){
+					if(playerSender.hasPermission("zvp.play")){
+						ZvPPlayer p = game.getPlayer(playerSender);
+						if(p!=null){
+							boolean success = game.removePlayer(p);
+							
+							if(success){
+								playerSender.sendMessage("You left Arena " + p.getArena().getID());
+								return true;
+							}else{
+								playerSender.sendMessage("You were not found in a game"); //TODO Message
+								return true;
+							}
+						}else{
+							playerSender.sendMessage("not in a game"); //TODO Message
+							return true;
+						}
+					}else{
+						//TODO permision
+						return true;
+					}
+				}				
 				if(args[0].equalsIgnoreCase("stop")){
 					if(playerSender.hasPermission("zvp.stop.all")){
 						

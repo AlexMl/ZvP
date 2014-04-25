@@ -167,6 +167,17 @@ public class GameManager {
 		return null;
 	}
 	
+	public ZvPPlayer getPlayer(Player player){
+		for(Arena a : getArenas()){
+			for(ZvPPlayer zp : a.getPlayers()){
+				if(zp.getUuid().equals(player.getUniqueId())){
+					return zp;
+				}
+			}
+		}
+		return null;
+	}
+	
 	
 	public boolean addArena(Location min, Location max){		
 		
@@ -244,6 +255,12 @@ public class GameManager {
 		}else{
 			return false;
 		}		
+	}
+	
+	public boolean removePlayer(ZvPPlayer player){
+		boolean success = player.getArena().removePlayer(player);
+		player.reset();
+		return success;
 	}
 	
 	
