@@ -114,34 +114,6 @@ public class SignChangelistener implements Listener{
 				return;
 			}
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		/*
 		
 		String materialLine = "";
