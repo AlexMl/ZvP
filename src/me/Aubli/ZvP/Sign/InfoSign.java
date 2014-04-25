@@ -44,7 +44,6 @@ public class InfoSign {
 		
 		this.arena = arena;
 		this.lobby = lobby;
-		this.lobby.addSign(this);
 		
 		try{
 			signFile.createNewFile();
@@ -87,12 +86,10 @@ public class InfoSign {
 		
 		this.arena = GameManager.getManager().getArena(signConfig.getInt("sign.Arena"));
 		this.lobby = GameManager.getManager().getLobby(signConfig.getInt("sign.Lobby"));
-		this.lobby.addSign(this);
 		update();
 	}
 	
 	void delete(){
-		this.lobby.removeSign(this);
 		this.signFile.delete();
 	}
 	

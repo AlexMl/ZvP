@@ -137,6 +137,7 @@ public class SignManager {
 		return null;
 	}
 	
+	
 	public boolean isZVPSign(Location loc){
 		if(getInteractSign(loc)!=null || getInfoSign(loc)!=null){
 			return true;
@@ -203,4 +204,41 @@ public class SignManager {
 		}
 		return false;
 	}
+
+	
+	public void updateSigns(){
+		for(InfoSign s : getInfoSigns()){
+			s.update();
+		}
+		for(InteractSign s : getInteractSigns()){
+			s.update();
+		}
+	}
+	
+	public void updateSigns(Lobby lobby){
+		for(InfoSign s : getInfoSigns()){
+			if(s.getLobby().equals(lobby)){
+				s.update();
+			}
+		}
+		for(InteractSign s : getInteractSigns()){
+			if(s.getLobby().equals(lobby)){
+				s.update();
+			}
+		}
+	}
+	
+	public void updateSigns(Arena arena){
+		for(InfoSign s : getInfoSigns()){
+			if(s.getArena().equals(arena)){
+				s.update();
+			}
+		}
+		for(InteractSign s : getInteractSigns()){
+			if(s.getArena().equals(arena)){
+				s.update();
+			}
+		}
+	}
+
 }

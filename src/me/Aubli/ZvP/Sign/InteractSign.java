@@ -118,4 +118,9 @@ public class InteractSign {
 	public Lobby getLobby(){
 		return lobby;
 	}
+	
+	
+	public void update(){
+		
+	}
 }

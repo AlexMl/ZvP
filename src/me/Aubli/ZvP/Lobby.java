@@ -2,9 +2,6 @@ package me.Aubli.ZvP;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-
-import me.Aubli.ZvP.Sign.InfoSign;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,9 +18,6 @@ public class Lobby {
 	
 	private Location centerLoc;
 	
-	private ArrayList<InfoSign> signs;
-	
-	
 	public Lobby(int lobbyID, String lobbyPath, Location loc){
 		
 		this.lobbyID = lobbyID;
@@ -32,8 +26,6 @@ public class Lobby {
 		
 		this.lobbyFile = new File(lobbyPath + "/" + lobbyID + ".yml");
 		this.lobbyConfig = YamlConfiguration.loadConfiguration(lobbyFile);
-		
-		this.signs = new ArrayList<InfoSign>();
 		
 		try {
 			lobbyFile.createNewFile();
@@ -52,8 +44,7 @@ public class Lobby {
 				Bukkit.getWorld(lobbyConfig.getString("lobby.Location.world")),
 				lobbyConfig.getInt("lobby.Location.X"),
 				lobbyConfig.getInt("lobby.Location.Y"),
-				lobbyConfig.getInt("lobby.Location.Z"));
-		this.signs = new ArrayList<InfoSign>();
+				lobbyConfig.getInt("lobby.Location.Z"));		
 	}
 	
 	
@@ -85,26 +76,17 @@ public class Lobby {
 		return centerLoc;
 	}
 	
-	public InfoSign[] getSigns(){
-		InfoSign[] s = new InfoSign[signs.size()];		
-		for(int i=0;i<signs.size();i++){
-			s[i] = signs.get(i);
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof Lobby){
+			Lobby otherLobby = (Lobby) obj;
+			if(otherLobby.getID()==this.getID()){
+				if(otherLobby.getLocation().equals(this.getLocation())){
+					return true;
+				}
+			}
 		}
-		return s;
-	}
-	
-	
-	public void addSign(InfoSign sign){
-		signs.add(sign);
-	}
-	
-	public void removeSign(InfoSign sign){
-		signs.remove(sign);
-	}
-	
-	public void updateSigns(){
-		for(InfoSign sign : getSigns()){
-			sign.update();
-		}
+		return false;
 	}
 }

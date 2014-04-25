@@ -250,7 +250,8 @@ public class GameManager {
 		
 		if(!arena.isFull() && (arena.getStatus()==ArenaStatus.WAITING)){
 			new ZvPPlayer(player, arena, lobby);
-			lobby.updateSigns();
+			SignManager.getManager().updateSigns(lobby);	
+			SignManager.getManager().updateSigns(arena);
 			return true;
 		}else{
 			return false;
@@ -267,8 +268,8 @@ public class GameManager {
 	public void startGame(Arena a, Lobby l, int rounds, int waves){
 		
 		a.start(rounds, waves);
-		l.updateSigns();
-		
+		SignManager.getManager().updateSigns(l);	
+		SignManager.getManager().updateSigns(a);
 	}
 	
 	public void stopGame(Arena a){

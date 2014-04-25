@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.Aubli.ZvP.GameManager.ArenaStatus;
+import me.Aubli.ZvP.Sign.SignManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -300,6 +301,7 @@ public class Arena {
 		if(players.contains(player)){
 			this.full = false;
 			players.remove(player);
+			SignManager.getManager().updateSigns(this);
 			return true;
 		}
 		return false;
@@ -330,7 +332,8 @@ public class Arena {
 		this.round = 0;
 		this.wave = 0;
 		
-		clearArena();		
+		clearArena();	
+		
 	}
 	
 	public void clearArena(){		
@@ -339,5 +342,19 @@ public class Arena {
 				e.remove();
 			}			
 		}
+	}
+	
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof Arena){
+			Arena a = (Arena)obj;
+			if(a.getID() == this.getID()){
+				if(a.getMin().equals(this.getMin()) && a.getMax().equals(this.getMax())){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
