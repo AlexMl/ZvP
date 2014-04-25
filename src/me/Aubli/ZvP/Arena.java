@@ -267,13 +267,13 @@ public class Arena {
 	public boolean addPlayer(ZvPPlayer player){
 		if(!players.contains(player)){
 			
-			player.setStartPosition(null);
+			player.setStartPosition(getMax());
 			
 			try{
 				player.getReady();
 			}catch(Exception e){
 				e.printStackTrace();
-				player.setStartPosition(null);
+				player.setStartPosition(getMin());
 				addPlayer(player);
 				return false;
 			}
