@@ -126,6 +126,7 @@ public class ZvPPlayer {
 	}
 	
 	
+	@SuppressWarnings("deprecation")
 	public void getReady() throws Exception{
 		
 		if(getStartLocation()!=null){
@@ -136,6 +137,7 @@ public class ZvPPlayer {
 			player.getInventory().setBoots(null);
 			
 			player.setTotalExperience(0);
+			player.setLevel(0);
 			player.setGameMode(GameMode.SURVIVAL);
 			player.resetPlayerTime();
 			player.resetPlayerWeather();
@@ -147,6 +149,8 @@ public class ZvPPlayer {
 			player.setFlying(false);
 			player.setWalkSpeed((float) 0.2);
 			player.setFlySpeed((float) 0.2);
+			
+			player.updateInventory();
 			
 			player.teleport(getStartLocation(), TeleportCause.PLUGIN);			
 		}else{
