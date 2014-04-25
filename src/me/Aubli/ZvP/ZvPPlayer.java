@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 	
@@ -15,6 +16,8 @@ public class ZvPPlayer {
 		
 	private Lobby lobby;
 	private Arena arena;
+	
+	private Location startPosition;
 	
 	private int zombieKills;
 	private int deaths;
@@ -43,6 +46,8 @@ public class ZvPPlayer {
 		this.totalXP = player.getTotalExperience();
 		this.mode = player.getGameMode();
 		
+		this.startPosition = null;
+		
 		arena.addPlayer(this);
 	}
 		
@@ -65,6 +70,10 @@ public class ZvPPlayer {
 	
 	public Location getLocation(){
 		return player.getLocation();
+	}
+	
+	public Location getStartLocation(){
+		return startPosition;
 	}
 	
 	public String getName(){
@@ -112,10 +121,40 @@ public class ZvPPlayer {
 		this.kit = kit;
 	}
 	
+	public void setStartPosition(Location position){
+		this.startPosition = position.clone();
+	}
 	
 	
-	public void reset(){
+	public void getReady() throws Exception{
 		
+		if(getStartLocation()!=null){
+			player.getInventory().clear();
+			player.getInventory().setHelmet(null);
+			player.getInventory().setChestplate(null);
+			player.getInventory().setLeggings(null);
+			player.getInventory().setBoots(null);
+			
+			player.setTotalExperience(0);
+			player.setGameMode(GameMode.SURVIVAL);
+			player.resetPlayerTime();
+			player.resetPlayerWeather();
+			
+			player.setHealth(20D);
+			player.setFoodLevel(20);
+			player.resetMaxHealth();
+			
+			player.setFlying(false);
+			player.setWalkSpeed((float) 0.2);
+			player.setFlySpeed((float) 0.2);
+			
+			player.teleport(getStartLocation(), TeleportCause.PLUGIN);			
+		}else{
+			throw new Exception("Startlocation is null!");
+		}		
+	}
+	
+	public void reset(){		
 		player.getInventory().clear();
 		
 		player.teleport(lobby.getLocation());
@@ -128,10 +167,8 @@ public class ZvPPlayer {
 		player.setTotalExperience(totalXP);
 		
 		player.getInventory().setArmorContents(armorContents);		
-		player.getInventory().setContents(contents);
-		
+		player.getInventory().setContents(contents);		
 	}
-	
 	
 	
 	@Override

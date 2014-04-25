@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.Aubli.ZvP.GameManager.ArenaStatus;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -24,6 +26,8 @@ public class Arena {
 	
 	private int arenaID;
 	
+	private ArenaStatus status;
+	
 	private int maxPlayers;
 	private int minPlayers;
 	private int maxRounds;
@@ -35,8 +39,9 @@ public class Arena {
 	private Location minLoc;
 	private Location maxLoc;
 	
-	private boolean isOnline;
+	private boolean online;
 	private boolean running;
+	private boolean full;
 	
 	private ArrayList<ZvPPlayer> players;
 	
@@ -55,8 +60,11 @@ public class Arena {
 		this.minLoc = min.clone();
 		this.maxLoc = max.clone();
 		
-		this.isOnline = true;
+		this.status = ArenaStatus.WAITING;
+		
+		this.online = true;
 		this.running = false;
+		this.full = false;
 		
 		this.round = 0;
 		this.wave = 0;
@@ -85,8 +93,15 @@ public class Arena {
 		this.maxRounds = arenaConfig.getInt("arena.rounds");
 		this.maxWaves = arenaConfig.getInt("arena.waves");
 		
-		this.isOnline = arenaConfig.getBoolean("arena.Online");
+		this.online = arenaConfig.getBoolean("arena.Online");
 		this.running = false;
+		this.full = false;
+		
+		if(online){
+			this.status = ArenaStatus.WAITING;
+		}else{
+			this.status = ArenaStatus.STOPED;
+		}
 		
 		this.arenaWorld = Bukkit.getWorld(arenaConfig.getString("arena.Location.world"));		
 		this.minLoc = new Location(arenaWorld, 
@@ -104,7 +119,7 @@ public class Arena {
 	
 	void save() throws IOException{	
 		arenaConfig.set("arena.ID", arenaID);	
-		arenaConfig.set("arena.Online", isOnline);
+		arenaConfig.set("arena.Online", online);
 		
 		arenaConfig.set("arena.minPlayers", minPlayers);
 		arenaConfig.set("arena.maxPlayers", maxPlayers);
@@ -128,8 +143,17 @@ public class Arena {
 	}
 	
 	
+	public void setStatus(ArenaStatus status){
+		this.status = status;
+	}	
+	
+	
 	public int getID(){
 		return arenaID;
+	}
+	
+	public ArenaStatus getStatus(){
+		return status;
 	}
 	
 	public int getMaxPlayers(){
@@ -218,11 +242,15 @@ public class Arena {
 	
 	
 	public boolean isOnline(){
-		return isOnline;
+		return online;
 	}
 	
 	public boolean isRunning(){
 		return running;
+	}
+	
+	public boolean isFull(){
+		return full;
 	}
 	
 	
@@ -238,10 +266,29 @@ public class Arena {
 	
 	public boolean addPlayer(ZvPPlayer player){
 		if(!players.contains(player)){
+			
+			player.setStartPosition(null);
+			
+			try{
+				player.getReady();
+			}catch(Exception e){
+				e.printStackTrace();
+				player.setStartPosition(null);
+				addPlayer(player);
+				return false;
+			}
+			
 			players.add(player);
 			
 			if(players.size()>=minPlayers){
 				start();
+			}
+			
+			if(players.size()==maxPlayers){
+				this.full = true;
+				if(!isRunning()){
+					start();
+				}
 			}
 			
 			return true;
@@ -251,6 +298,7 @@ public class Arena {
 	
 	public boolean removePlayer(ZvPPlayer player){
 		if(players.contains(player)){
+			this.full = false;
 			players.remove(player);
 			return true;
 		}
@@ -276,10 +324,13 @@ public class Arena {
 			zp.reset();
 			removePlayer(zp);
 		}
-		clearArena();
+		
 		this.running = false;
+		this.full = false;
 		this.round = 0;
 		this.wave = 0;
+		
+		clearArena();		
 	}
 	
 	public void clearArena(){		

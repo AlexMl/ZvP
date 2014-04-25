@@ -13,6 +13,13 @@ import org.bukkit.entity.Player;
 
 public class GameManager {
 	
+	public enum ArenaStatus{
+		RUNNING,
+		WAITING,
+		STOPED,
+		;
+	}
+	
 	private static GameManager manager;
 	private ZvP plugin;
 	
@@ -226,7 +233,18 @@ public class GameManager {
 		lobbys.remove(lobby);
 		lobby.delete();
 	}
-
+	
+	
+	public boolean createPlayer(Player player, Arena arena, Lobby lobby){
+		
+		if(!arena.isFull() && (arena.getStatus()==ArenaStatus.WAITING)){
+			new ZvPPlayer(player, arena, lobby);	
+			return true;
+		}else{
+			return false;
+		}		
+	}
+	
 	
 	public void startGame(Arena a, Lobby l, int rounds, int waves){
 		

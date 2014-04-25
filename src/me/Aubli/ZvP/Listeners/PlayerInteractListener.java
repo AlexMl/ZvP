@@ -4,24 +4,16 @@ import java.util.HashMap;
 
 import me.Aubli.ZvP.GameManager;
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Sign.InteractSign;
+import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Sign.SignManager.SignType;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Sign;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 public class PlayerInteractListener implements Listener{
 	
@@ -33,6 +25,7 @@ public class PlayerInteractListener implements Listener{
 	
 	private HashMap<Action, Location> clickLoc = new HashMap<Action, Location>();
 	
+	private SignManager sm = SignManager.getManager();
 	
 	public PlayerInteractListener(ZvP plugin){
 		this.plugin = plugin;
@@ -70,6 +63,38 @@ public class PlayerInteractListener implements Listener{
 					return;
 				}
 			}
+		}
+		
+		
+		if(event.getAction()==Action.RIGHT_CLICK_BLOCK){
+			if(sm.isZVPSign(event.getClickedBlock().getLocation())){
+				if(sm.getType(event.getClickedBlock().getLocation())==SignType.INTERACT_SIGN){
+					if(!GameManager.getManager().isInGame(eventPlayer)){
+						if(eventPlayer.hasPermission("zvp.play")){
+							
+							InteractSign sign = sm.getInteractSign(event.getClickedBlock().getLocation());
+							boolean success = GameManager.getManager().createPlayer(eventPlayer, sign.getArena(), sign.getLobby());
+							
+							if(success){
+								eventPlayer.sendMessage("You joined Arena " + sign.getArena().getID());
+								return;
+							}else{
+								event.setCancelled(true);
+								eventPlayer.sendMessage("arena full or running"); //TODO message
+								return;
+							}							
+						}else{
+							event.setCancelled(true);
+							eventPlayer.sendMessage("No permissions"); //TODO Permission Message
+							return;						
+						}
+					}else{
+						event.setCancelled(true);
+						eventPlayer.sendMessage("already in game"); //TODO message
+						return;
+					}
+				}
+			}		
 		}
 		
 		/*
