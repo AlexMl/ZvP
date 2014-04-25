@@ -73,16 +73,22 @@ public class PlayerInteractListener implements Listener{
 						if(eventPlayer.hasPermission("zvp.play")){
 							
 							InteractSign sign = sm.getInteractSign(event.getClickedBlock().getLocation());
-							boolean success = GameManager.getManager().createPlayer(eventPlayer, sign.getArena(), sign.getLobby());
-							
-							if(success){
-								eventPlayer.sendMessage("You joined Arena " + sign.getArena().getID());
-								return;
+							if(sign.getArena().isOnline()){
+								boolean success = GameManager.getManager().createPlayer(eventPlayer, sign.getArena(), sign.getLobby());
+								
+								if(success){
+									eventPlayer.sendMessage("You joined Arena " + sign.getArena().getID());
+									return;
+								}else{
+									event.setCancelled(true);
+									eventPlayer.sendMessage("arena full or running"); //TODO message
+									return;
+								}
 							}else{
 								event.setCancelled(true);
-								eventPlayer.sendMessage("arena full or running"); //TODO message
+								eventPlayer.sendMessage("arena offline"); //TODO message
 								return;
-							}							
+							}
 						}else{
 							event.setCancelled(true);
 							eventPlayer.sendMessage("No permissions"); //TODO Permission Message
