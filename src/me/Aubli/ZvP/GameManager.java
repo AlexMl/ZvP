@@ -238,7 +238,8 @@ public class GameManager {
 	public boolean createPlayer(Player player, Arena arena, Lobby lobby){
 		
 		if(!arena.isFull() && (arena.getStatus()==ArenaStatus.WAITING)){
-			new ZvPPlayer(player, arena, lobby);	
+			new ZvPPlayer(player, arena, lobby);
+			lobby.updateSigns();
 			return true;
 		}else{
 			return false;
