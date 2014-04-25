@@ -158,6 +158,7 @@ public class ZvPPlayer {
 		}		
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void reset(){		
 		player.getInventory().clear();
 		
@@ -172,6 +173,8 @@ public class ZvPPlayer {
 		
 		player.getInventory().setArmorContents(armorContents);		
 		player.getInventory().setContents(contents);		
+		
+		player.updateInventory();
 	}
 	
 	
