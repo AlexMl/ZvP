@@ -19,6 +19,7 @@ zvp.tool
 zvp.reload
 zvp.save
 
+zvp.play						Allow the Player to play the game
 
 zvp.manage.arena
 zvp.manage.lobby
