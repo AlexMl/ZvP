@@ -39,7 +39,7 @@ public class SignChangelistener implements Listener{
 									if(success){
 										event.setLine(0, ZvP.getPrefix());
 										event.setLine(1, "Arena: " + arenaID);
-										event.setLine(2, "[JOIN]");
+										event.setLine(2, ChatColor.YELLOW + "[WAITING]");
 										event.setLine(3, "ID: " + SignManager.getManager().getInteractSign(event.getBlock().getLocation()).getID());
 										
 										//TODO Message

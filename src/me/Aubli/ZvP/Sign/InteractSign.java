@@ -6,10 +6,13 @@ import java.util.UUID;
 
 import me.Aubli.ZvP.Arena;
 import me.Aubli.ZvP.GameManager;
+import me.Aubli.ZvP.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Lobby;
+import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Sign;
@@ -65,7 +68,7 @@ public class InteractSign {
 			delete();
 			throw new Exception("Location is not a Sign!");
 		}
-		
+		update();
 	}
 	
 	public InteractSign(File signFile){
@@ -84,6 +87,7 @@ public class InteractSign {
 		
 		this.arena = GameManager.getManager().getArena(signConfig.getInt("sign.Arena"));
 		this.lobby = GameManager.getManager().getLobby(signConfig.getInt("sign.Lobby"));
+		update();
 	}
 	
 	void delete(){
@@ -121,6 +125,30 @@ public class InteractSign {
 	
 	
 	public void update(){
-		
+		if(arena!=null){
+			sign.setLine(0, ZvP.getPrefix());
+			sign.setLine(1, "Arena: " + arena.getID());
+			
+			if(getArena().getStatus()==ArenaStatus.RUNNING){
+				sign.setLine(2, ChatColor.DARK_GREEN + "Running");
+				sign.setLine(3, ChatColor.DARK_RED + "Can't Join!");				
+			}
+			if(getArena().getStatus()==ArenaStatus.WAITING){
+				sign.setLine(2, ChatColor.YELLOW + "Waiting");
+				sign.setLine(3, ChatColor.GREEN + "[JOIN]");	
+			}
+			if(getArena().getStatus()==ArenaStatus.STOPED){
+				sign.setLine(2, ChatColor.DARK_RED + "Stoped");
+				sign.setLine(3, ChatColor.DARK_RED + "Can't Join!");	
+			}
+			
+			sign.update(true);
+		}else{
+			sign.setLine(0, ZvP.getPrefix());
+			sign.setLine(1, "");
+			sign.setLine(2, ChatColor.DARK_RED + "Arena is not");
+			sign.setLine(3, ChatColor.DARK_RED + "available!");
+			sign.update(true);
+		}
 	}
 }
