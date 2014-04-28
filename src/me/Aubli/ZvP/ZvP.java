@@ -94,9 +94,8 @@ public class ZvP extends JavaPlugin{
 		
 		for(Player p: Bukkit.getOnlinePlayers()){
 			removeTool(p);
-		}
-		
-		
+		}		
+		GameManager.getManager().stopGames();
 		GameManager.getManager().saveConfig();
 		log.info("[ZombieVsPlayer] Plugin is disabled!");
 	}
