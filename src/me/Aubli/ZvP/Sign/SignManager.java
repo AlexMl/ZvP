@@ -46,12 +46,16 @@ public class SignManager {
 		
 		for(File f : info.listFiles()){
 			InfoSign sign = new InfoSign(f);
-			infoSigns.add(sign);
+			if(sign.getWorld()!=null){
+				infoSigns.add(sign);
+			}
 		}		
 		
 		for(File f : interact.listFiles()){
 			InteractSign sign = new InteractSign(f);
-			interactSigns.add(sign);
+			if(sign.getWorld()!=null){
+				interactSigns.add(sign);
+			}
 		}		
 	}
 	
