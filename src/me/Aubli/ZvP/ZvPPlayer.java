@@ -30,7 +30,7 @@ public class ZvPPlayer {
 	
 	private ZvPKit kit;
 	
-	public ZvPPlayer(Player player, Arena arena, Lobby lobby){
+	public ZvPPlayer(Player player, Arena arena, Lobby lobby) throws Exception{
 		this.player = player;
 		this.playerUUID = player.getUniqueId();
 		
@@ -48,7 +48,9 @@ public class ZvPPlayer {
 		
 		this.startPosition = null;
 		
-		arena.addPlayer(this);
+		if(arena.addPlayer(this)==false){
+			throw new Exception();
+		}
 	}
 		
 	

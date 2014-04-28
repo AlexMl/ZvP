@@ -249,10 +249,15 @@ public class GameManager {
 	public boolean createPlayer(Player player, Arena arena, Lobby lobby){
 		
 		if(!arena.isFull() && (arena.getStatus()==ArenaStatus.WAITING)){
-			new ZvPPlayer(player, arena, lobby);
-			SignManager.getManager().updateSigns(lobby);	
-			SignManager.getManager().updateSigns(arena);
-			return true;
+			try{
+				new ZvPPlayer(player, arena, lobby);
+				SignManager.getManager().updateSigns(lobby);	
+				SignManager.getManager().updateSigns(arena);
+				return true;
+			}catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
 		}else{
 			return false;
 		}		
