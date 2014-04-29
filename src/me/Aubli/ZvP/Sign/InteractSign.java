@@ -83,11 +83,15 @@ public class InteractSign {
 				signConfig.getDouble("sign.Location.X"),
 				signConfig.getDouble("sign.Location.Y"), 
 				signConfig.getDouble("sign.Location.Z"));
-		this.sign = (Sign) signLoc.getBlock().getState();
 		
-		this.arena = GameManager.getManager().getArena(signConfig.getInt("sign.Arena"));
-		this.lobby = GameManager.getManager().getLobby(signConfig.getInt("sign.Lobby"));
-		update();
+		if(signLoc.getWorld()!=null){
+		
+			this.sign = (Sign) signLoc.getBlock().getState();
+			
+			this.arena = GameManager.getManager().getArena(signConfig.getInt("sign.Arena"));
+			this.lobby = GameManager.getManager().getLobby(signConfig.getInt("sign.Lobby"));
+			update();
+		}
 	}
 	
 	void delete(){
