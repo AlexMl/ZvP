@@ -318,7 +318,7 @@ public class Arena {
 		this.round = 0;
 		this.wave = 0;
 		
-		
+		new GameRunnable(this, ZvP.getStartDelay()).runTaskTimer(ZvP.getInstance(), 20L, 1*20L);
 	}
 	
 	public void stop(){		
