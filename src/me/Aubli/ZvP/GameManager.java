@@ -270,8 +270,7 @@ public class GameManager {
 	}
 	
 	
-	public void startGame(Arena a, Lobby l, int rounds, int waves){
-		
+	public void startGame(Arena a, Lobby l, int rounds, int waves){		
 		a.start(rounds, waves);
 		SignManager.getManager().updateSigns(l);	
 		SignManager.getManager().updateSigns(a);
