@@ -107,7 +107,7 @@ public class ZvPCommands implements CommandExecutor {
 							boolean success = game.removePlayer(p);
 							
 							if(success){
-								playerSender.sendMessage("You left Arena " + p.getArena().getID());
+								playerSender.sendMessage("You left Arena " + p.getArena().getID()); //TODO Message
 								return true;
 							}else{
 								playerSender.sendMessage("You were not found in a game"); //TODO Message
@@ -124,10 +124,7 @@ public class ZvPCommands implements CommandExecutor {
 				}				
 				if(args[0].equalsIgnoreCase("stop")){
 					if(playerSender.hasPermission("zvp.stop.all")){
-						
-						for(Arena a : game.getArenas()){
-							a.stop();
-						}
+						game.stopGames();
 						//TODO Message
 						return true;
 					}else{
