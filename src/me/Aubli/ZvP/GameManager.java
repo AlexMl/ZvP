@@ -20,6 +20,14 @@ public class GameManager {
 		;
 	}
 	
+	public enum RunningStatus{
+		WAITING_OF_PLAYERS,
+		START_COUNDOWN,
+		WAITING_NEXT_WAVE,
+		WAITING_NEXT_ROUND,
+		;
+	}
+	
 	private static GameManager manager;
 	private ZvP plugin;
 	
