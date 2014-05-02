@@ -98,25 +98,14 @@ public class ZvP extends JavaPlugin{
 		}		
 		GameManager.getManager().stopGames();
 		GameManager.getManager().saveConfig();
+		Bukkit.getScheduler().cancelTasks(this);
 		log.info("[ZombieVsPlayer] Plugin is disabled!");
 	}
 	
 	@Override
 	public void onEnable() {
 		
-		instance = this;
-		loadConfig();
-		
-		new MessageManager();
-		new GameManager();
-		new SignManager();
-		
-		setTool();
-		
-		registerListeners();
-		getCommand("zvp").setExecutor(new ZvPCommands());
-		getCommand("test").setExecutor(new ZvPCommands());
-		
+		initialize();
 		
 		if(this.getConfig().getString("config.misc.language")!=null){
 			language = this.getConfig().getString("config.misc.language");
@@ -129,14 +118,27 @@ public class ZvP extends JavaPlugin{
 		Konto=0;
 		start=false;
 		Runde = 1;
-		
-		//registerEvent();
-		
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
 		Obj = board.getObjective("customm");
 		if(Obj==null){
 			Obj = board.registerNewObjective("showkills", "customm");
-		}
+		}		
+		log.info("[ZombieVsPlayer] Plugin is enabled!");
+	}
+	
+	
+	private void initialize(){
+		instance = this;
+		loadConfig();		
+		setTool();
+		
+		new MessageManager();
+		new GameManager();
+		new SignManager();	
+		
+		registerListeners();
+		getCommand("zvp").setExecutor(new ZvPCommands());
+		getCommand("test").setExecutor(new ZvPCommands());
 		
 		if(useMetrics==true){
 			try {
@@ -146,9 +148,8 @@ public class ZvP extends JavaPlugin{
 			   log.info("[ZombieVsPlayer] Can't start Metrics! Skip!");
 			}
 		}
-		
-		log.info("[ZombieVsPlayer] Plugin is enabled!");
 	}
+	
 	
 	private void registerListeners(){
 		PluginManager pm = Bukkit.getPluginManager();
