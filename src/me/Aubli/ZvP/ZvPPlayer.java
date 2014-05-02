@@ -49,7 +49,7 @@ public class ZvPPlayer {
 		this.startPosition = null;
 		
 		if(arena.addPlayer(this)==false){
-			throw new Exception();
+			throw new Exception("Player already joined!");
 		}
 	}
 		
