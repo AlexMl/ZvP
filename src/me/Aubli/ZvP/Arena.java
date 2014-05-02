@@ -282,13 +282,13 @@ public class Arena {
 			players.add(player);
 			
 			if(players.size()>=minPlayers){
-				start();
+				GameManager.getManager().startGame(this, player.getLobby(), getMaxRounds(), getMaxWaves());
 			}
 			
 			if(players.size()==maxPlayers){
 				this.full = true;
 				if(!isRunning()){
-					start();
+					GameManager.getManager().startGame(this, player.getLobby(), getMaxRounds(), getMaxWaves());
 				}
 			}
 			
@@ -307,19 +307,16 @@ public class Arena {
 		return false;
 	}
 	
-	public void start(int rounds, int waves){
+	public int start(int rounds, int waves){
 		this.maxRounds = rounds;
 		this.maxWaves = waves;
-		start();
-	}
-	
-	public void start(){
+		
 		this.running = true;		
 		this.round = 0;
 		this.wave = 0;
 		
-		new GameRunnable(this, ZvP.getStartDelay()).runTaskTimer(ZvP.getInstance(), 20L, 1*20L);
-	}
+		return new GameRunnable(this, ZvP.getStartDelay()).runTaskTimer(ZvP.getInstance(), 20L, 1*20L).getTaskId();
+	}	
 	
 	public void stop(){		
 		for(ZvPPlayer zp : getPlayers()){
@@ -332,8 +329,7 @@ public class Arena {
 		this.round = 0;
 		this.wave = 0;
 		
-		clearArena();	
-		
+		clearArena();		
 	}
 	
 	public void clearArena(){		

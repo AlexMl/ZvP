@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import me.Aubli.ZvP.Sign.SignManager;
 
@@ -29,6 +30,7 @@ public class GameManager {
 	private ArrayList<Lobby> lobbys;
 	private ArrayList<Arena> arenas;
 	
+	private HashMap<Arena, Integer> gameTasks; 
 	
 	public GameManager(){
 		manager = this;
@@ -36,6 +38,8 @@ public class GameManager {
 		
 		arenaPath = plugin.getDataFolder().getPath() + "/Arenas";
 		lobbyPath = plugin.getDataFolder().getPath() + "/Lobbys";
+		
+		gameTasks = new HashMap<Arena, Integer>();
 		
 		loadConfig();
 	}
@@ -166,6 +170,7 @@ public class GameManager {
 		}
 		return null;
 	}
+
 	
 	public ZvPPlayer getPlayer(Player player){
 		for(Arena a : getArenas()){
@@ -271,19 +276,29 @@ public class GameManager {
 	
 	
 	public void startGame(Arena a, Lobby l, int rounds, int waves){		
-		a.start(rounds, waves);
+		int taskID = a.start(rounds, waves);
 		SignManager.getManager().updateSigns(l);	
 		SignManager.getManager().updateSigns(a);
+		
+		gameTasks.put(a, taskID);
 	}
 	
-	public void stopGame(Arena a){
-		a.stop();
+	public void stopGame(Arena a) throws Exception{
+		if(a.isRunning() && gameTasks.containsKey(a)){
+			a.stop();
+			Bukkit.getScheduler().cancelTask(gameTasks.get(a));
+			gameTasks.remove(a);
+		}else{
+			throw new Exception("Arena is not running!");
+		}
 	}
 	
 	public void stopGames(){
 		for(Arena a : getArenas()){
-			a.stop();
+			a.stop();			
 		}
+		Bukkit.getScheduler().cancelTasks(ZvP.getInstance());
+		gameTasks.clear();
 	}
 	
 	public boolean isInGame(Player player){		
