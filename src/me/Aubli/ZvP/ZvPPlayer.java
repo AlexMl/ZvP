@@ -180,6 +180,10 @@ public class ZvPPlayer {
 	}
 	
 	
+	public String getMemAdress(){
+		return super.toString();
+	}
+	
 	@Override
 	public String toString(){
 		return getName();
@@ -188,13 +192,11 @@ public class ZvPPlayer {
 	@Override
 	public boolean equals(Object zvpPlayer){		
 		if(zvpPlayer instanceof ZvPPlayer){
-			ZvPPlayer zp = (ZvPPlayer)zvpPlayer;			
-			if(zp.getUuid().equals(zp.getUuid())){
+			ZvPPlayer zp = (ZvPPlayer)zvpPlayer;
+			if(this.getUuid().equals(zp.getUuid())){
 				return true;
 			}
 		}
 		return false;		
-	}
-	
-	
+	}	
 }
