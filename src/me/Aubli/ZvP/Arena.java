@@ -36,6 +36,8 @@ public class Arena {
 	private int round;
 	private int wave;	
 	
+	private int TaskId;
+	
 	private World arenaWorld;
 	private Location minLoc;
 	private Location maxLoc;
@@ -181,6 +183,10 @@ public class Arena {
 		return wave;
 	}
 	
+	public int getTaskId(){
+		return TaskId;
+	}
+	
 	public World getWorld(){
 		return arenaWorld;
 	}
@@ -265,10 +271,10 @@ public class Arena {
 	}
 	
 	
-	public boolean addPlayer(ZvPPlayer player){
-		if(!players.contains(player)){
-			
-			player.setStartPosition(getMax());
+	public boolean addPlayer(ZvPPlayer player){		
+		
+		if(!players.contains(player)){			
+			player.setStartPosition(getMax()); //TODO Random Startposition
 			
 			try{
 				player.getReady();
@@ -290,8 +296,7 @@ public class Arena {
 				if(!isRunning()){
 					GameManager.getManager().startGame(this, player.getLobby(), getMaxRounds(), getMaxWaves());
 				}
-			}
-			
+			}			
 			return true;
 		}
 		return false;
@@ -307,7 +312,7 @@ public class Arena {
 		return false;
 	}
 	
-	public int start(int rounds, int waves){
+	public void start(int rounds, int waves){
 		this.maxRounds = rounds;
 		this.maxWaves = waves;
 		
@@ -315,7 +320,7 @@ public class Arena {
 		this.round = 0;
 		this.wave = 0;
 		
-		return new GameRunnable(this, ZvP.getStartDelay()).runTaskTimer(ZvP.getInstance(), 20L, 1*20L).getTaskId();
+		TaskId = new GameRunnable(this, ZvP.getStartDelay()).runTaskTimer(ZvP.getInstance(), 20L, 1*20L).getTaskId();
 	}	
 	
 	public void stop(){		
@@ -329,7 +334,8 @@ public class Arena {
 		this.round = 0;
 		this.wave = 0;
 		
-		clearArena();		
+		clearArena();	
+		Bukkit.getScheduler().cancelTask(getTaskId());
 	}
 	
 	public void clearArena(){		
