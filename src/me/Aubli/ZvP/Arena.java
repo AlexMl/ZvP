@@ -10,6 +10,7 @@ import me.Aubli.ZvP.Sign.SignManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -320,7 +321,11 @@ public class Arena {
 		this.round = 0;
 		this.wave = 0;
 		
+		getWorld().setDifficulty(Difficulty.NORMAL);
+		getWorld().setTime(15000);
+		
 		TaskId = new GameRunnable(this, ZvP.getStartDelay()).runTaskTimer(ZvP.getInstance(), 20L, 1*20L).getTaskId();
+		//TODO Start message
 	}	
 	
 	public void stop(){		
