@@ -79,23 +79,21 @@ public class ZvPCommands implements CommandExecutor {
 				}	
 				if(args[0].equalsIgnoreCase("save")){
 					if(playerSender.hasPermission("zvp.save")){
-						GameManager.getManager().saveConfig();
-						//TODO message
-						playerSender.sendMessage("saved");
+						GameManager.getManager().saveConfig();						
+						playerSender.sendMessage("saved");//TODO message
 						return true;
 					}else{
-						//TODO message
+						commandDenied(playerSender);
 						return true;
 					}
 				}
 				if(args[0].equalsIgnoreCase("reload")){
 					if(playerSender.hasPermission("zvp.reload")){
-						GameManager.getManager().loadConfig();
-						//TODO message
-						playerSender.sendMessage("reloaded");
+						GameManager.getManager().loadConfig();						
+						playerSender.sendMessage("reloaded");//TODO message
 						return true;
 					}else{
-						//TODO message
+						commandDenied(playerSender);
 						return true;
 					}
 				}
@@ -118,7 +116,7 @@ public class ZvPCommands implements CommandExecutor {
 							return true;
 						}
 					}else{
-						//TODO permision
+						commandDenied(playerSender);
 						return true;
 					}
 				}				
@@ -128,7 +126,7 @@ public class ZvPCommands implements CommandExecutor {
 						//TODO Message
 						return true;
 					}else{
-						//TODO permision
+						commandDenied(playerSender);
 						return true;
 					}
 				}
@@ -145,7 +143,7 @@ public class ZvPCommands implements CommandExecutor {
 							playerSender.getInventory().addItem(ZvP.tool);
 							return true;
 						}else{
-							//TODO permision
+							commandDenied(playerSender);
 							return true;
 						}
 					}
@@ -156,7 +154,7 @@ public class ZvPCommands implements CommandExecutor {
 							playerSender.sendMessage("Lobby created!"); //TODO Message		
 							return true;
 						}else{
-							//TODO permision
+							commandDenied(playerSender);
 							return true;
 						}
 					}					
@@ -176,7 +174,7 @@ public class ZvPCommands implements CommandExecutor {
 							return true;
 						}
 					}else{
-						//TODO Permissions
+						commandDenied(playerSender);
 						return true;
 					}
 				}
@@ -193,7 +191,7 @@ public class ZvPCommands implements CommandExecutor {
 							playerSender.sendMessage("Arena removed"); //TODO message
 							return true;
 						}else{
-							//TODO permision
+							commandDenied(playerSender);
 							return true;
 						}
 					}
@@ -204,7 +202,7 @@ public class ZvPCommands implements CommandExecutor {
 							playerSender.sendMessage("Lobby removed"); //TODO message
 							return true;
 						}else{
-							//TODO permision
+							commandDenied(playerSender);
 							return true;
 						}
 					}
@@ -249,8 +247,12 @@ public class ZvPCommands implements CommandExecutor {
 			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop [Arena-ID]");
 			
 		}else{
-			//TODO permission
+			commandDenied(player);
 		}
+	}
+	
+	private void commandDenied(Player player) {
+		player.sendMessage("Permission needed!"); //TODO Permission message
 	}
 	
 	/*@Override
