@@ -262,7 +262,7 @@ public class Arena {
 	}
 	
 	
-	public boolean containsPlayer(Player player){		
+	public boolean containsPlayer(Player player){
 		for(ZvPPlayer zp : getPlayers()){
 			if(zp.getUuid() == player.getUniqueId()){
 				return true;
@@ -275,6 +275,12 @@ public class Arena {
 		return ((location.getX()<=getMax().getX() && location.getX()>=getMin().getX()) && (location.getZ()<=getMax().getZ() && location.getZ()>=getMin().getZ()));
 	}
 	
+	
+	public void setPlayerLevel(int level) {
+		for(ZvPPlayer p : getPlayers()) {
+			p.setXPLevel(level);
+		}
+	}
 	
 	public void sendMessage(String message) {
 		for(ZvPPlayer p : getPlayers()) {

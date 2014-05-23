@@ -123,6 +123,10 @@ public class ZvPPlayer {
 		this.kit = kit;
 	}
 	
+	public void setXPLevel(int level) {
+		getPlayer().setLevel(level);
+	}
+	
 	public void setStartPosition(Location position){
 		this.startPosition = position.clone();
 	}
