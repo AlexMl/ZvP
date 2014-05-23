@@ -17,6 +17,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -48,6 +49,8 @@ public class Arena {
 	private boolean running;
 	private boolean full;
 	
+	private Random rand;
+	
 	private ArrayList<ZvPPlayer> players;
 	
 	
@@ -78,6 +81,8 @@ public class Arena {
 		arenaConfig = YamlConfiguration.loadConfiguration(arenaFile);
 		
 		players = new ArrayList<ZvPPlayer>();
+		
+		this.rand = new Random();
 		
 		try {
 			arenaFile.createNewFile();
@@ -119,6 +124,7 @@ public class Arena {
 				arenaConfig.getInt("arena.Location.max.Z"));
 		
 		this.players = new ArrayList<ZvPPlayer>();
+		this.rand = new Random();
 	}
 	
 	
@@ -208,10 +214,8 @@ public class Arena {
 		int y;
 		int z;
 		
-		Random rand = new Random();
-		
 		x = rand.nextInt((getMax().getBlockX()-getMin().getBlockX()-1)) + getMin().getBlockX() + 1;
-		y = getMin().getBlockY();
+		y = getWorld().getHighestBlockYAt(minLoc)+1;
 		z = rand.nextInt((getMax().getBlockZ()-getMin().getBlockZ()-1)) + getMin().getBlockZ() + 1;
 		
 		Location startLoc = new Location(getWorld(), x, y, z);
@@ -222,6 +226,10 @@ public class Arena {
 			return getNewRandomLocation();
 		}
 		
+	}
+	
+	public ZvPPlayer getRandomPlayer() {		
+		return getPlayers()[rand.nextInt(getPlayers().length)];
 	}
 	
 	public ZvPPlayer[] getPlayers(){
@@ -353,6 +361,60 @@ public class Arena {
 		}
 		return false;
 	}
+	
+	private void customizeEntity(Entity zombie) {
+		Zombie z = (Zombie)zombie;
+		
+		z.setRemoveWhenFarAway(false);
+		z.setTarget(getRandomPlayer().getPlayer());
+		
+		switch (rand.nextInt(4)) {
+		case 1:
+			z.setBaby(true);
+			z.setCanPickupItems(true);
+			z.setVillager(false);			
+			z.setHealth(20D);
+			
+			break;			
+		case 2:
+			z.setBaby(false);
+			z.setCanPickupItems(true);
+			z.setVillager(true);
+			z.setHealth(15D);
+			
+			
+			break;			
+		case 3:
+			z.setBaby(false);
+			z.setCanPickupItems(true);
+			z.setVillager(false);
+			z.setHealth(15D);
+			
+			
+			break;			
+		case 4:
+			z.setBaby(false);
+			z.setCanPickupItems(false);
+			z.setVillager(false);
+			z.setMaxHealth(30D);
+			
+			
+			break;
+		default:
+			z.setBaby(false);
+			z.setCanPickupItems(false);
+			z.setVillager(false);
+			z.setHealth(20D);
+			break;
+		}
+	}
+	
+	public void spawnZombies(int amount) {
+		for(int i=0;i<amount;i++) {
+			customizeEntity(getWorld().spawnEntity(getNewRandomLocation(), EntityType.ZOMBIE));
+		}
+	}
+	
 	
 	public void start(int rounds, int waves){
 		this.maxRounds = rounds;
