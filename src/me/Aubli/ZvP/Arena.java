@@ -271,6 +271,10 @@ public class Arena {
 		return false;
 	}
 	
+	public boolean containsLocation(Location location) {
+		return ((location.getX()<=getMax().getX() && location.getX()>=getMin().getX()) && (location.getZ()<=getMax().getZ() && location.getZ()>=getMin().getZ()));
+	}
+	
 	
 	public boolean addPlayer(ZvPPlayer player){		
 		
