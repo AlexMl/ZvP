@@ -148,6 +148,7 @@ public class ZvPPlayer {
 			player.getInventory().setBoots(null);
 			
 			player.setTotalExperience(0);
+			player.setExp(0F);
 			player.setLevel(0);
 			player.setGameMode(GameMode.SURVIVAL);
 			player.resetPlayerTime();
