@@ -52,6 +52,14 @@ public class GameManager {
 		return manager;
 	}
 	
+	
+	public void shutdown() {
+		stopGames();
+		saveConfig();
+	}
+	
+	
+	
 	public void loadConfig(){
 		
 		if(!new File(arenaPath).exists() || !new File(lobbyPath).exists()){
