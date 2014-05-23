@@ -9,12 +9,7 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 import me.Aubli.ZvP.Listeners.BlockBreakListener;
-import me.Aubli.ZvP.Listeners.EntityDeathListener;
-import me.Aubli.ZvP.Listeners.InventoryCloseListener;
-import me.Aubli.ZvP.Listeners.PlayerDeathListener;
 import me.Aubli.ZvP.Listeners.PlayerInteractListener;
-import me.Aubli.ZvP.Listeners.PlayerQuitListener;
-import me.Aubli.ZvP.Listeners.PlayerRespawnListener;
 import me.Aubli.ZvP.Listeners.SignChangelistener;
 import me.Aubli.ZvP.Sign.SignManager;
 
@@ -148,20 +143,14 @@ public class ZvP extends JavaPlugin{
 			   log.info("[ZombieVsPlayer] Can't start Metrics! Skip!");
 			}
 		}
-	}
-	
+	}	
 	
 	private void registerListeners(){
 		PluginManager pm = Bukkit.getPluginManager();
 		
-		pm.registerEvents(new EntityDeathListener(this), this);
 		pm.registerEvents(new PlayerInteractListener(this), this);
-		pm.registerEvents(new SignChangelistener(), this);
-		pm.registerEvents(new PlayerQuitListener(this), this);
-		pm.registerEvents(new BlockBreakListener(), this);
-		pm.registerEvents(new PlayerDeathListener(this), this);
-		pm.registerEvents(new PlayerRespawnListener(this), this);
-		pm.registerEvents(new InventoryCloseListener(this), this);		
+		pm.registerEvents(new SignChangelistener(), this);		
+		pm.registerEvents(new BlockBreakListener(), this);				
 	}
 	
 	private void setTool(){
@@ -170,12 +159,20 @@ public class ZvP extends JavaPlugin{
 		List<String> lore = new ArrayList<String>();
 		
 		ItemMeta toolMeta = tool.getItemMeta();
-		toolMeta.setDisplayName(pluginPrefix + "Tool");
+		toolMeta.setDisplayName(pluginPrefix + ChatColor.BOLD + "Tool");
 		toolMeta.addEnchant(Enchantment.DURABILITY, 5, true);
 		lore.add("Use this tool to add an Arena!");
 		toolMeta.setLore(lore);
 		
 		tool.setItemMeta(toolMeta);
+	}
+	
+	public boolean removeTool(Player player){		
+		if(player.getInventory().contains(tool)){
+			player.getInventory().removeItem(tool);
+			return true;
+		}
+		return false;		
 	}
 	
 	
@@ -204,14 +201,7 @@ public class ZvP extends JavaPlugin{
 	}
 	
 	
- 	public boolean removeTool(Player player){
-		
-		if(player.getInventory().contains(tool)){
-			player.getInventory().removeItem(tool);
-			return true;
-		}
-		return false;		
-	}
+ 	
 	
 	
  	public void zomStart(final Player Sender,final int Runden){
