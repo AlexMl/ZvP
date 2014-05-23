@@ -150,6 +150,7 @@ public class Arena {
 	
 	public void setStatus(ArenaStatus status){
 		this.status = status;
+		SignManager.getManager().updateSigns(this);
 	}	
 	
 	
@@ -364,7 +365,7 @@ public class Arena {
 		getWorld().setDifficulty(Difficulty.NORMAL);
 		getWorld().setTime(15000);
 		
-		TaskId = new GameRunnable(this, ZvP.getStartDelay()).runTaskTimer(ZvP.getInstance(), 20L, 1*20L).getTaskId();
+		TaskId = new GameRunnable(this, ZvP.getStartDelay()).runTaskTimer(ZvP.getInstance(), 0L, 1*10L).getTaskId();
 		//TODO Start message
 	}	
 	
