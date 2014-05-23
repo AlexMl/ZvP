@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import me.Aubli.ZvP.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Sign.SignManager;
@@ -200,6 +201,28 @@ public class Arena {
 		return maxLoc;
 	}	
 	
+	public Location getNewRandomLocation() {
+		
+		int x;
+		int y;
+		int z;
+		
+		Random rand = new Random();
+		
+		x = rand.nextInt((getMax().getBlockX()-getMin().getBlockX()-1)) + getMin().getBlockX() + 1;
+		y = getMin().getBlockY();
+		z = rand.nextInt((getMax().getBlockZ()-getMin().getBlockZ()-1)) + getMin().getBlockZ() + 1;
+		
+		Location startLoc = new Location(getWorld(), x, y, z);
+		
+		if(containsLocation(startLoc)) {
+			return startLoc.clone();
+		}else {
+			return getNewRandomLocation();
+		}
+		
+	}
+	
 	public ZvPPlayer[] getPlayers(){
 		
 		ZvPPlayer[] parray = new ZvPPlayer[players.size()];
@@ -292,20 +315,20 @@ public class Arena {
 	public boolean addPlayer(ZvPPlayer player){		
 		
 		if(!players.contains(player)){			
-			player.setStartPosition(getMax()); //TODO Random Startposition
+			player.setStartPosition(getNewRandomLocation()); 
 			
 			try{
 				player.getReady();
 			}catch(Exception e){
 				e.printStackTrace();
-				player.setStartPosition(getMin());
+				player.setStartPosition(getNewRandomLocation());
 				addPlayer(player);
 				return false;
 			}
 			
 			players.add(player);
 			
-			if(players.size()>=minPlayers){
+			if(players.size()==minPlayers){
 				GameManager.getManager().startGame(this, player.getLobby(), getMaxRounds(), getMaxWaves());
 			}
 			
