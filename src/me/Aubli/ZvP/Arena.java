@@ -276,6 +276,13 @@ public class Arena {
 	}
 	
 	
+	public void sendMessage(String message) {
+		for(ZvPPlayer p : getPlayers()) {
+			p.sendMessage(message);
+		}
+	}
+	
+	
 	public boolean addPlayer(ZvPPlayer player){		
 		
 		if(!players.contains(player)){			

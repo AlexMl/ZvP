@@ -128,6 +128,11 @@ public class ZvPPlayer {
 	}
 	
 	
+	public void sendMessage(String message) {
+		getPlayer().sendMessage(message);
+	}
+	
+	
 	@SuppressWarnings("deprecation")
 	public void getReady() throws Exception{
 		
