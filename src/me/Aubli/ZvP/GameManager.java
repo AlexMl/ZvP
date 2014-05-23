@@ -17,11 +17,12 @@ public class GameManager {
 		RUNNING,
 		WAITING,
 		STOPED,
+		SUSPEND,
 		;
 	}
 	
 	public enum RunningStatus{
-		WAITING_OF_PLAYERS,
+		WAITING_FOR_PLAYERS,
 		START_COUNDOWN,
 		WAITING_NEXT_WAVE,
 		WAITING_NEXT_ROUND,
