@@ -159,6 +159,14 @@ public class Arena {
 		SignManager.getManager().updateSigns(this);
 	}	
 	
+	public void setRound(int round) {
+		this.round = round;
+	}
+	
+	public void setWave(int wave) {
+		this.wave = wave;
+	}
+	
 	
 	public int getID(){
 		return arenaID;
