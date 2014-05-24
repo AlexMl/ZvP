@@ -55,6 +55,7 @@ public class ZvP extends JavaPlugin{
 	private static int DEFAULT_ROUNDS;
 	private static int DEFAULT_WAVES;
 	private static int START_DELAY;
+	private static int ZOMBIE_SPAWN_RATE;
 	
 	public HashMap<Player, String> kills = new HashMap<Player, String>();
 	public HashMap<Player, String> deaths = new HashMap<Player, String>();
@@ -199,6 +200,9 @@ public class ZvP extends JavaPlugin{
 		return START_DELAY;
 	}
 	
+	public static int getSpawnRate() {
+		return ZOMBIE_SPAWN_RATE;
+	}
 	
  	
 	
@@ -855,6 +859,9 @@ public class ZvP extends JavaPlugin{
 		
 		this.getConfig().addDefault("config.joinTime", 15);
 		
+		this.getConfig().addDefault("config.spawnRate", 30);
+		
+		
 		this.getConfig().addDefault("config.misc.ZombieCash", 0.2);
 		this.getConfig().addDefault("config.misc.PlayerCash", 2.5);
 		this.getConfig().addDefault("config.misc.language", "en");
@@ -908,6 +915,8 @@ public class ZvP extends JavaPlugin{
 		DEFAULT_WAVES = getConfig().getInt("config.waves");
 		
 		START_DELAY = getConfig().getInt("config.joinTime");
+		
+		ZOMBIE_SPAWN_RATE = getConfig().getInt("config.spawnRate");
 		
 		zombieCash = this.getConfig().getDouble("config.misc.ZombieCash");
 		playerCash = this.getConfig().getDouble("config.misc.PlayerCash");

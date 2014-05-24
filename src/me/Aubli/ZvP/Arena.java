@@ -278,7 +278,7 @@ public class Arena {
 		return entities;
 	}
 	
-	public int getZombies(){
+	public int getLivingZombies(){
 		int zombies = 0;
 		for(Entity e : getEntities()){
 			if(e instanceof Zombie){
@@ -435,7 +435,7 @@ public class Arena {
 		getWorld().setDifficulty(Difficulty.NORMAL);
 		getWorld().setTime(15000);
 		
-		TaskId = new GameRunnable(this, ZvP.getStartDelay()).runTaskTimer(ZvP.getInstance(), 0L, 1*10L).getTaskId();
+		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 1*10L).getTaskId();
 		//TODO Start message
 	}	
 	
