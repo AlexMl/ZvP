@@ -322,13 +322,8 @@ public class ZvP extends JavaPlugin{
 					if(zombieSpawn==true){
 						this.zombieLoc = victim.getLocation();
 						
-						if(randInt.nextBoolean()){
-							x = randInt.nextInt(7)-randInt.nextInt(5)*-1;
-							z = (randInt.nextInt(7)*-1)-randInt.nextInt(4)*-1;
-						}else{
-							x = (randInt.nextInt(7)*-1)-randInt.nextInt(4)*-1;
-							z = randInt.nextInt(7)-randInt.nextInt(5)*-1;
-						}
+						x = randInt.nextInt(7)-randInt.nextInt(5)*-1;
+						z = (randInt.nextInt(7)*-1)-randInt.nextInt(4)*-1;
 						
 						this.zombieLoc.add(x, 0, z);
 						this.zombieLocEye = zombieLoc.clone();
@@ -341,12 +336,10 @@ public class ZvP extends JavaPlugin{
 						}else{
 							welt.spawnEntity(victim.getLocation(), EntityType.ZOMBIE);
 							zombieCount++;
-							
 						}
-										
-						
+					
 						if(zombieCount>=Runde*Welle*30){
-							zombieSpawn=false;
+							zombieSpawn = false;
 							firstSpawn = false;
 							Sender.sendMessage(ChatColor.DARK_GRAY + "//DEBUG// Limit reached: " + ChatColor.DARK_PURPLE + zombieCount);					
 						}
@@ -360,64 +353,7 @@ public class ZvP extends JavaPlugin{
 						}
 					}
 					
-					if(zombies == 7 && zombieSpawn == false && welle == true){
-						rest = (Runde*Welle*30)-(gesammtKill+7);
-						
-						if(rest<zombies&&rest>0){
-							if(imSpiel.size()==0){
-								victim = Sender;
-							}else{
-								userIndex = randInt.nextInt(imSpiel.size());
-								victim = imSpiel.get(userIndex);
-							}
-							zombieLoc = victim.getLocation();
-							zombieLoc.add(2,0,-3);
-							
-							this.zombieLocEye = zombieLoc.clone();
-							this.zombieLocEye.setY(zombieLoc.getY()+1);
-							Block b1 = zombieLocEye.getBlock();
-							
-							if(b1.getType().equals(Material.AIR)){
-								for(int i=0;i<rest;i++){
-									welt.spawnEntity(zombieLoc, EntityType.ZOMBIE);
-								}
-							}else{
-								for(int i=0;i<rest;i++){
-									welt.spawnEntity(victim.getLocation(), EntityType.ZOMBIE);
-								}					
-							}
-						}
-					}
-					
-					if(zombies == 3 && zombieSpawn == false && welle == true){
-						rest = (Runde*Welle*30)-(gesammtKill+3);
-						
-						if(rest<zombies&&rest>0){
-							if(imSpiel.size()==0){
-								victim = Sender;
-							}else{
-								userIndex = randInt.nextInt(imSpiel.size());
-								victim = imSpiel.get(userIndex);
-							}
-							zombieLoc = victim.getLocation();
-							zombieLoc.add(2,0,-3);
-							
-							this.zombieLocEye = zombieLoc.clone();
-							this.zombieLocEye.setY(zombieLoc.getY()+1);
-							Block b1 = zombieLocEye.getBlock();
-							
-							if(b1.getType().equals(Material.AIR)){
-								for(int i=0;i<rest;i++){
-									welt.spawnEntity(zombieLoc, EntityType.ZOMBIE);
-								}
-							}else{
-								for(int i=0;i<rest;i++){
-									welt.spawnEntity(victim.getLocation(), EntityType.ZOMBIE);
-								}					
-							}
-						}
-					}
-					
+										
 					if(zombies == 0 && zombieSpawn == false && welle == true){
 						rest = (Runde*Welle*30)-gesammtKill;
 						if(imSpiel.size()==0){
@@ -572,66 +508,6 @@ public class ZvP extends JavaPlugin{
 		Bukkit.getScheduler().cancelAllTasks();
 		
 		World welt = Sender.getWorld();
-		
-		if(storeExp==true){
-			if(experience!=null){
-				for(int i =0;i<playerVote.size();i++){
-					playerVote.get(i).setLevel(0);
-					playerVote.get(i).setLevel(experience.get(playerVote.get(i)));			
-				}
-			}
-		}
-		
-		if(storeInventory==true){
-			if(playerInventory!=null){
-				
-				for(int i = 0;i<playerVote.size();i++){
-					playerVote.get(i).getInventory().clear();
-					playerVote.get(i).getInventory().setHelmet(null);
-					playerVote.get(i).getInventory().setChestplate(null);
-					playerVote.get(i).getInventory().setLeggings(null);
-					playerVote.get(i).getInventory().setBoots(null);
-					
-					playerVote.get(i).getInventory().setContents(playerInventory.get(playerVote.get(i)));
-					
-					if(playerHelmet.get(playerVote.get(i))!=null){
-						playerVote.get(i).getInventory().setHelmet(playerHelmet.get(playerVote.get(i)));
-					}
-					if(playerChestplate.get(playerVote.get(i))!=null){
-						playerVote.get(i).getInventory().setChestplate(playerChestplate.get(playerVote.get(i)));
-					}
-					if(playerLeggings.get(playerVote.get(i))!=null){
-						playerVote.get(i).getInventory().setLeggings(playerLeggings.get(playerVote.get(i)));
-					}
-					if(playerBoots.get(playerVote.get(i))!=null){
-						playerVote.get(i).getInventory().setBoots(playerBoots.get(playerVote.get(i)));
-					}
-					playerVote.get(i).updateInventory();
-					playerVote.get(i).sendMessage(ChatColor.GREEN + messageFileConfiguration.getString("config.messages.inventory_back"));
-					}
-				}
-			}
-		
-		for(int i=0;i<playerVote.size();i++){
-			playerVote.get(i).removePotionEffect(PotionEffectType.HEAL);
-			playerVote.get(i).removePotionEffect(PotionEffectType.SPEED);
-			playerVote.get(i).removePotionEffect(PotionEffectType.REGENERATION);
-			playerVote.get(i).removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-			//playerVote.get(i).removePotionEffect(PotionEffectType.);
-			
-			playerVote.get(i).setHealth(20);
-			playerVote.get(i).setFoodLevel(20);
-		}
-		
-		if(portOnJoin==true){
-			if(playerLoc.size()!=0){
-				for(int i=0;i<playerVote.size();i++){
-					if(playerLoc.get(playerVote.get(i))!=null){
-						playerVote.get(i).teleport(playerLoc.get(playerVote.get(i)));
-					}
-				}
-			}
-		}				
 		
 		if(scoreboardSet==true){
 			board.clearSlot(DisplaySlot.SIDEBAR);
