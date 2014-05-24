@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 	
 public class ZvPPlayer {	
@@ -185,6 +186,11 @@ public class ZvPPlayer {
 		
 		player.getInventory().setArmorContents(armorContents);		
 		player.getInventory().setContents(contents);		
+		
+		player.removePotionEffect(PotionEffectType.HEAL);
+		player.removePotionEffect(PotionEffectType.SPEED);
+		player.removePotionEffect(PotionEffectType.REGENERATION);
+		player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
 		
 		player.updateInventory();
 	}
