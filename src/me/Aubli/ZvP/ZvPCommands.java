@@ -46,7 +46,7 @@ public class ZvPCommands implements CommandExecutor {
 		if(cmd.getName().equalsIgnoreCase("test")){
 		
 			Arena a = game.getArena(Integer.parseInt(args[0]));
-			Bukkit.broadcastMessage(a.getZombies() + " Zombies");
+			Bukkit.broadcastMessage(a.getLivingZombies() + " Zombies");
 			a.clearArena();
 			
 		}
