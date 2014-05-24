@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 	
 public class ZvPPlayer {	
@@ -132,6 +133,9 @@ public class ZvPPlayer {
 		this.startPosition = position.clone();
 	}
 	
+	public void setScoreboard(Scoreboard board) {
+		getPlayer().setScoreboard(board);
+	}
 	
 	public void sendMessage(String message) {
 		getPlayer().sendMessage(message);
