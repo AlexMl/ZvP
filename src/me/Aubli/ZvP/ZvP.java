@@ -1,6 +1,5 @@
 package me.Aubli.ZvP;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,9 +19,6 @@ import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -42,10 +38,8 @@ public class ZvP extends JavaPlugin{
 
 	public static final Logger log = Bukkit.getLogger();
 	private static ZvP instance;
-	public Location zombieZvpStartLoc;
-	public File messageFile;
-	public FileConfiguration messageFileConfiguration;
 	
+	public Location zombieZvpStartLoc;	
 	
 	public static ItemStack tool;
 	
@@ -69,10 +63,7 @@ public class ZvP extends JavaPlugin{
 	public HashMap<Player, ItemStack> playerBoots = new HashMap<Player, ItemStack>();
 	public ArrayList<Player> imSpiel = new ArrayList<Player>();
 	public ArrayList<Player> playerVote = new ArrayList<Player>(); 
-	
-	public String language = "";
-	public String starterKitName = "";
-	
+		
 	public boolean voteZeit = false;
 	public boolean start, portOnJoin, storeInventory, changeToSpectator, storeExp, enableKit;
 	public boolean welle = false;
@@ -101,19 +92,8 @@ public class ZvP extends JavaPlugin{
 	@Override
 	public void onEnable() {
 		
-		initialize();
+		initialize();		
 		
-		if(this.getConfig().getString("config.misc.language")!=null){
-			language = this.getConfig().getString("config.misc.language");
-		}else{language = "en";}	
-		
-		messageFile = new File("plugins/ZombieVsPlayer/" + language + "_messages.yml");
-		messageFileConfiguration = YamlConfiguration.loadConfiguration(messageFile);
-		portOnJoin = false;
-				
-		Konto=0;
-		start=false;
-		Runde = 1;
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
 		Obj = board.getObjective("customm");
 		if(Obj==null){
@@ -235,36 +215,19 @@ public class ZvP extends JavaPlugin{
 		welt.setMonsterSpawnLimit(0);
 		this.getServer().getWorld(welt.getName()).setDifficulty(Difficulty.NORMAL);
 		this.getServer().getWorld(welt.getName()).setTime(15000);		
-		
-		//Bukkit.getScheduler().runTaskTimer(this, new ZombieRunnableLogic(Sender, welt, Runden, this), 2L, 20L);
-		
+	
 		Bukkit.getScheduler().runTaskTimer(this, new BukkitRunnable() {
-			
-			String broadcastMessage = messageFileConfiguration.getString("config.messages.starting_zombie_event"); 
-			String zombieKillmessage = messageFileConfiguration.getString("config.messages.zombie_killed_message");
-			String nextWave = messageFileConfiguration.getString("config.messages.zombie_event_nextwave");
-			String timeLeft = messageFileConfiguration.getString("config.messages.zombie_event_timeleft");
-			String waveSurvived = messageFileConfiguration.getString("config.messages.wave_survived");
-			
-			String[] broadcastMessageResult = broadcastMessage.split("%seconds%");
-			String[] broadcastMessageJoin = broadcastMessageResult[1].split("<newLine>");
-			String[] zombieKillMessageArray = zombieKillmessage.split("%zombie_kills%");
-			String[] nextWaveArray = nextWave.split("%seconds%");
-			String[] timeLeftArray = timeLeft.split("%seconds%");
-			String[] waveSurvivedArray = waveSurvived.split("%round%");
-			String[] waveSurvivedArrayWaves = waveSurvivedArray[1].split("%wave%");
-			
+							
 			private Player victim, messagePlayer;
 			private World welt = Sender.getWorld();
 			
 			private Location zombieLoc;
-			private Location zombieLocEye;
 			
 			Random randInt = new Random();
 			
 			int x, z;
 			int sekunden = 30;
-			//int counter = 0;
+			
 			int count = 0;
 			int zombies = 0;
 			int rest = 0;
@@ -281,23 +244,23 @@ public class ZvP extends JavaPlugin{
 					voteZeit=true;
 					
 					if(sekunden==30){
-						Bukkit.getServer().broadcastMessage(ChatColor.GOLD + broadcastMessageResult[0] + ChatColor.DARK_PURPLE + "30" + ChatColor.GOLD + broadcastMessageJoin[0] + "\n" + ChatColor.GREEN + broadcastMessageJoin[1]);
+					//	Bukkit.getServer().broadcastMessage(ChatColor.GOLD + broadcastMessageResult[0] + ChatColor.DARK_PURPLE + "30" + ChatColor.GOLD + broadcastMessageJoin[0] + "\n" + ChatColor.GREEN + broadcastMessageJoin[1]);
 					}
 					if(sekunden==20){
-						Bukkit.getServer().broadcastMessage(ChatColor.GOLD + broadcastMessageResult[0] + ChatColor.DARK_PURPLE + "20" + ChatColor.GOLD + broadcastMessageJoin[0] + "\n" + ChatColor.GREEN + broadcastMessageJoin[1]);
+					//	Bukkit.getServer().broadcastMessage(ChatColor.GOLD + broadcastMessageResult[0] + ChatColor.DARK_PURPLE + "20" + ChatColor.GOLD + broadcastMessageJoin[0] + "\n" + ChatColor.GREEN + broadcastMessageJoin[1]);
 					}
 					if(sekunden==10){
-						Bukkit.getServer().broadcastMessage(ChatColor.GOLD + broadcastMessageResult[0] + ChatColor.DARK_PURPLE + "10" + ChatColor.GOLD + broadcastMessageJoin[0] + "\n" + ChatColor.GREEN + broadcastMessageJoin[1]);
+					//	Bukkit.getServer().broadcastMessage(ChatColor.GOLD + broadcastMessageResult[0] + ChatColor.DARK_PURPLE + "10" + ChatColor.GOLD + broadcastMessageJoin[0] + "\n" + ChatColor.GREEN + broadcastMessageJoin[1]);
 					}
 					if(sekunden<6&&sekunden>1){
-						Bukkit.getServer().broadcastMessage(ChatColor.GOLD + broadcastMessageResult[0] + ChatColor.DARK_PURPLE + sekunden + ChatColor.GOLD + broadcastMessageJoin[0]);
+//						Bukkit.getServer().broadcastMessage(ChatColor.GOLD + broadcastMessageResult[0] + ChatColor.DARK_PURPLE + sekunden + ChatColor.GOLD + broadcastMessageJoin[0]);
 						voteZeit=false;
 					}
 					if(sekunden==1){
-						Bukkit.getServer().broadcastMessage(ChatColor.GOLD + broadcastMessageResult[0] + ChatColor.DARK_PURPLE + "1" + ChatColor.GOLD + broadcastMessageJoin[0]);
+//						Bukkit.getServer().broadcastMessage(ChatColor.GOLD + broadcastMessageResult[0] + ChatColor.DARK_PURPLE + "1" + ChatColor.GOLD + broadcastMessageJoin[0]);
 					}
 					if(sekunden==0){
-						Bukkit.getServer().broadcastMessage(ChatColor.GOLD + messageFileConfiguration.getString("config.messages.starting_zombie_event_now"));
+//						Bukkit.getServer().broadcastMessage(ChatColor.GOLD + messageFileConfiguration.getString("config.messages.starting_zombie_event_now"));
 						status = true;
 						welle = true;
 						
@@ -333,18 +296,11 @@ public class ZvP extends JavaPlugin{
 						z = (randInt.nextInt(7)*-1)-randInt.nextInt(4)*-1;
 						
 						this.zombieLoc.add(x, 0, z);
-						this.zombieLocEye = zombieLoc.clone();
-						this.zombieLocEye.setY(zombieLoc.getY()+1);
-						Block b1 = zombieLocEye.getBlock();
+						zombieLoc.setY(welt.getHighestBlockYAt(zombieLoc));
 						
-						if(b1.getType().equals(Material.AIR)){
-							welt.spawnEntity(zombieLoc, EntityType.ZOMBIE);
-							zombieCount++;
-						}else{
-							welt.spawnEntity(victim.getLocation(), EntityType.ZOMBIE);
-							zombieCount++;
-						}
-					
+						welt.spawnEntity(zombieLoc, EntityType.ZOMBIE);
+						zombieCount++;
+						
 						if(zombieCount>=Runde*Welle*30){
 							zombieSpawn = false;
 							firstSpawn = false;
@@ -358,8 +314,7 @@ public class ZvP extends JavaPlugin{
 						if(welt.getEntities().get(i).toString().equalsIgnoreCase("craftzombie")){
 							zombies++;
 						}
-					}
-					
+					}					
 										
 					if(zombies == 0 && zombieSpawn == false && welle == true){
 						rest = (Runde*Welle*30)-gesammtKill;
@@ -374,25 +329,15 @@ public class ZvP extends JavaPlugin{
 						
 						zombieLoc = victim.getLocation();
 						zombieLoc.add(2,0,-3);
+						zombieLoc.setY(welt.getHighestBlockYAt(zombieLoc));
 						
-						this.zombieLocEye = zombieLoc.clone();
-						this.zombieLocEye.setY(zombieLoc.getY()+1);
-						Block b1 = zombieLocEye.getBlock();
-						
-						if(b1.getType().equals(Material.AIR)){
-							for(int i=0;i<rest;i++){
-								welt.spawnEntity(zombieLoc, EntityType.ZOMBIE);
-							}
-						}else{
-							for(int i=0;i<rest;i++){
-								welt.spawnEntity(victim.getLocation(), EntityType.ZOMBIE);
-							}					
-						}				
+						for(int i=0;i<rest;i++){
+							welt.spawnEntity(zombieLoc, EntityType.ZOMBIE);
+						}										
 					}
 					
 					
-					if(gesammtKill >= zombieCount){
-						
+					if(gesammtKill >= zombieCount){						
 						welle = false;
 						Bukkit.getServer().getWorld(welt.getName()).setDifficulty(Difficulty.PEACEFUL);
 						
@@ -404,14 +349,14 @@ public class ZvP extends JavaPlugin{
 									
 									for(int y=0; y<playerVote.size();y++){
 										messagePlayer = playerVote.get(y);
-										messagePlayer.sendMessage(ChatColor.GOLD + waveSurvivedArray[0] + ChatColor.DARK_PURPLE + Runde + ChatColor.GOLD + waveSurvivedArrayWaves[0] + ChatColor.DARK_PURPLE + Welle + ChatColor.GOLD + waveSurvivedArrayWaves[1]);
-										messagePlayer.sendMessage(ChatColor.DARK_GREEN + messageFileConfiguration.getString("config.messages.zombie_event_won"));
+//										messagePlayer.sendMessage(ChatColor.GOLD + waveSurvivedArray[0] + ChatColor.DARK_PURPLE + Runde + ChatColor.GOLD + waveSurvivedArrayWaves[0] + ChatColor.DARK_PURPLE + Welle + ChatColor.GOLD + waveSurvivedArrayWaves[1]);
+//										messagePlayer.sendMessage(ChatColor.DARK_GREEN + messageFileConfiguration.getString("config.messages.zombie_event_won"));
 									}
 									
 									welt.setMonsterSpawnLimit(-1);
-									Bukkit.getServer().getWorld(welt.getName()).setDifficulty(Difficulty.PEACEFUL);
-									Bukkit.getServer().getWorld(welt.getName()).setTime(0);
-									Bukkit.getServer().getWorld(welt.getName()).setWeatherDuration(0);
+									welt.setDifficulty(Difficulty.PEACEFUL);
+									welt.setTime(0);
+									welt.setWeatherDuration(0);
 									Bukkit.getScheduler().cancelAllTasks();
 									zomStop(Sender);
 									//Das Zombie event wurde gestoppt
@@ -420,23 +365,23 @@ public class ZvP extends JavaPlugin{
 									Bukkit.getServer().getWorld(welt.getName()).setTime(15000);
 									
 									// Runde 1 in Welle 2 überstanden
-									sendMessageJoinedPlayers(ChatColor.GOLD + waveSurvivedArray[0] + ChatColor.DARK_PURPLE + Runde + ChatColor.GOLD + waveSurvivedArrayWaves[0] + ChatColor.DARK_PURPLE + Welle + ChatColor.GOLD + waveSurvivedArrayWaves[1], Sender);
+//									sendMessageJoinedPlayers(ChatColor.GOLD + waveSurvivedArray[0] + ChatColor.DARK_PURPLE + Runde + ChatColor.GOLD + waveSurvivedArrayWaves[0] + ChatColor.DARK_PURPLE + Welle + ChatColor.GOLD + waveSurvivedArrayWaves[1], Sender);
 									
 									//Kontostand beträgt:
-									sendMessageJoinedPlayers(ChatColor.DARK_GREEN + messageFileConfiguration.getString("config.messages.bank_balance_message") + " " +  ChatColor.DARK_PURPLE + (int) Konto + ChatColor.DARK_GREEN + "$", Sender);
+//									sendMessageJoinedPlayers(ChatColor.DARK_GREEN + messageFileConfiguration.getString("config.messages.bank_balance_message") + " " +  ChatColor.DARK_PURPLE + (int) Konto + ChatColor.DARK_GREEN + "$", Sender);
 									
 									//Zombie Kill ausgabe
 									for(int y=0; y<playerVote.size();y++){
 										messagePlayer = playerVote.get(y);
 										kills.get(messagePlayer);
-										messagePlayer.sendMessage(ChatColor.GOLD + zombieKillMessageArray[0] + ChatColor.GRAY + (kills.get(messagePlayer)) + ChatColor.GOLD + zombieKillMessageArray[1]);
+//										messagePlayer.sendMessage(ChatColor.GOLD + zombieKillMessageArray[0] + ChatColor.GRAY + (kills.get(messagePlayer)) + ChatColor.GOLD + zombieKillMessageArray[1]);
 									}			
 									
 									//Der kampf geht in die nächste Runde
-									sendMessageJoinedPlayers(ChatColor.GOLD + messageFileConfiguration.getString("config.messages.zombie_event_nextround"), Sender);
+//									sendMessageJoinedPlayers(ChatColor.GOLD + messageFileConfiguration.getString("config.messages.zombie_event_nextround"), Sender);
 									
 									//Die nächste Welle startet in ...
-									sendMessageJoinedPlayers(ChatColor.GRAY + nextWaveArray[0] + 60 + nextWaveArray[1], Sender);
+//									sendMessageJoinedPlayers(ChatColor.GRAY + nextWaveArray[0] + 60 + nextWaveArray[1], Sender);
 									
 									Runde++;
 									Welle=1;
@@ -444,21 +389,21 @@ public class ZvP extends JavaPlugin{
 								}else{
 									Bukkit.getServer().getWorld(welt.getName()).setTime(15000);
 									// Runde 1 in Welle 2 überstanden
-									sendMessageJoinedPlayers(ChatColor.GOLD + waveSurvivedArray[0] + ChatColor.DARK_PURPLE + Runde + ChatColor.GOLD + waveSurvivedArrayWaves[0] + ChatColor.DARK_PURPLE + Welle + ChatColor.GOLD + waveSurvivedArrayWaves[1], Sender);
+//									sendMessageJoinedPlayers(ChatColor.GOLD + waveSurvivedArray[0] + ChatColor.DARK_PURPLE + Runde + ChatColor.GOLD + waveSurvivedArrayWaves[0] + ChatColor.DARK_PURPLE + Welle + ChatColor.GOLD + waveSurvivedArrayWaves[1], Sender);
 									
 									//Kontostand beträgt:
-									sendMessageJoinedPlayers(ChatColor.DARK_GREEN + messageFileConfiguration.getString("config.messages.bank_balance_message") + " " + ChatColor.DARK_PURPLE + (int) Konto + ChatColor.DARK_GREEN + "$", Sender);
+//									sendMessageJoinedPlayers(ChatColor.DARK_GREEN + messageFileConfiguration.getString("config.messages.bank_balance_message") + " " + ChatColor.DARK_PURPLE + (int) Konto + ChatColor.DARK_GREEN + "$", Sender);
 									
 									//Zombie Kill ausgabe
 								for(int y=0; y<playerVote.size();y++){
 									playerVote.get(y).setHealth(20);
 									messagePlayer = playerVote.get(y);
 									kills.get(messagePlayer);
-									messagePlayer.sendMessage(ChatColor.GOLD + zombieKillMessageArray[0] + ChatColor.GRAY + (kills.get(messagePlayer)) + ChatColor.GOLD + zombieKillMessageArray[1]);
+//									messagePlayer.sendMessage(ChatColor.GOLD + zombieKillMessageArray[0] + ChatColor.GRAY + (kills.get(messagePlayer)) + ChatColor.GOLD + zombieKillMessageArray[1]);
 								}			
 								
 								//Die nächste Welle startet in ...
-								sendMessageJoinedPlayers(ChatColor.GRAY + nextWaveArray[0] + 60 + nextWaveArray[1], Sender);	
+//								sendMessageJoinedPlayers(ChatColor.GRAY + nextWaveArray[0] + 60 + nextWaveArray[1], Sender);	
 								Welle ++;
 								}	
 							//count = 59;
@@ -466,17 +411,17 @@ public class ZvP extends JavaPlugin{
 
 						if(count == 40){
 							//nur noch 20 sec
-							sendMessageJoinedPlayers(ChatColor.GRAY + timeLeftArray[0] + "20" + timeLeftArray[1], Sender);
+//							sendMessageJoinedPlayers(ChatColor.GRAY + timeLeftArray[0] + "20" + timeLeftArray[1], Sender);
 						}
 						
 						if(count == 50){
 							//nur noch 10 sec
-							sendMessageJoinedPlayers(ChatColor.GRAY + timeLeftArray[0] + "10" + timeLeftArray[1], Sender);
+//							sendMessageJoinedPlayers(ChatColor.GRAY + timeLeftArray[0] + "10" + timeLeftArray[1], Sender);
 						}
 						
 						if(count > 54&& count < 60){
 							//nur noch Sekunden
-							sendMessageJoinedPlayers(ChatColor.GRAY + timeLeftArray[0] + (60-count) + timeLeftArray[1], Sender);
+//							sendMessageJoinedPlayers(ChatColor.GRAY + timeLeftArray[0] + (60-count) + timeLeftArray[1], Sender);
 						}
 						
 						if(count == 60){
@@ -493,9 +438,9 @@ public class ZvP extends JavaPlugin{
 							firstSpawn = true;
 							welle = true;
 							count =0;
-							Bukkit.getServer().getWorld(welt.getName()).setDifficulty(Difficulty.NORMAL);
+							welt.setDifficulty(Difficulty.NORMAL);
 							
-							sendMessageJoinedPlayers(ChatColor.GRAY + messageFileConfiguration.getString("config.messages.zombie_event_nextwavearrived"), Sender);
+//							sendMessageJoinedPlayers(ChatColor.GRAY + messageFileConfiguration.getString("config.messages.zombie_event_nextwavearrived"), Sender);
 							
 						}
 					count++;
@@ -507,7 +452,7 @@ public class ZvP extends JavaPlugin{
 	}, 2L, 20L);
 		
 		//Das Zombie event wurde gestartet
-		this.getServer().broadcastMessage(ChatColor.AQUA + messageFileConfiguration.getString("config.messages.zombie_event_started"));
+//		this.getServer().broadcastMessage(ChatColor.AQUA + messageFileConfiguration.getString("config.messages.zombie_event_started"));
 	}
 	
 	public void zomStop(Player Sender){
@@ -516,6 +461,7 @@ public class ZvP extends JavaPlugin{
 		
 		World welt = Sender.getWorld();
 		
+		//INTRESTING
 		if(scoreboardSet==true){
 			board.clearSlot(DisplaySlot.SIDEBAR);
 			board.getTeam("zvpteam").unregister();
@@ -553,9 +499,10 @@ public class ZvP extends JavaPlugin{
 		this.getServer().getWorld(welt.getName()).setWeatherDuration(0);
 		
 		//Das Zombie event wurde gestoppt
-		this.getServer().broadcastMessage(ChatColor.AQUA + messageFileConfiguration.getString("config.messages.zombie_event_stopped"));	
+//		this.getServer().broadcastMessage(ChatColor.AQUA + messageFileConfiguration.getString("config.messages.zombie_event_stopped"));	
 	}
 	
+	//INTRESTING
 	public void setScoreboard(){
 
 		//Scoreboard setzen
@@ -611,11 +558,11 @@ public class ZvP extends JavaPlugin{
 
 		if(imSpiel.contains(playerSender)){
 			//Du bist bereits im Spiel
-			playerSender.sendMessage(ChatColor.RED + messageFileConfiguration.getString("config.error_messages.error_already_loged_in"));
+//			playerSender.sendMessage(ChatColor.RED + messageFileConfiguration.getString("config.error_messages.error_already_loged_in"));
 		}else{						
 			if(playerVote.contains(playerSender)){
 				//Du bist bereits im Spiel
-				playerSender.sendMessage(ChatColor.RED + messageFileConfiguration.getString("config.error_messages.error_already_loged_in"));
+//				playerSender.sendMessage(ChatColor.RED + messageFileConfiguration.getString("config.error_messages.error_already_loged_in"));
 			
 			}else{
 				playerVote.add(playerSender);
@@ -657,7 +604,7 @@ public class ZvP extends JavaPlugin{
 							playerLoc.put(playerSender, playerSender.getLocation());
 							playerSender.teleport(zombiePvpLoc);
 							// Du wurdest teleportiert
-							playerSender.sendMessage(ChatColor.GREEN + messageFileConfiguration.getString("config.messages.porting_message"));
+//							playerSender.sendMessage(ChatColor.GREEN + messageFileConfiguration.getString("config.messages.porting_message"));
 						}
 					}
 				}
@@ -667,57 +614,9 @@ public class ZvP extends JavaPlugin{
 					playerSender.setExp(0);
 					playerSender.setLevel(0);									
 				}
-				
-				if(enableKit == true){
-					if(starterKitName != ""){
-						
-						String skItemString = this.getConfig().getString("config.starterkit." + starterKitName);
-						String[] skItemStringArray;
-						
-						if(skItemString.contains(" ") || skItemString.contains(",")){							
-							
-							if(skItemString.contains(" ")){
-								skItemStringArray = skItemString.split(" ");
-								if(skItemString.contains(",")){
-									String skItemsOhneLeerzeichen = "";
-									
-									for(int i=0; i<skItemStringArray.length;i++){
-										skItemsOhneLeerzeichen += skItemStringArray[i];
-									}
-									skItemStringArray = skItemsOhneLeerzeichen.split(",");
-								}
-							}else if(skItemString.contains(",")){
-								skItemStringArray = skItemString.split(",");
-							}else{
-								log.info("[ZombieVsPlayer] StarterKit settings incorrect!");
-								enableKit = false;
-								return;
-							}
-							
-							ItemStack[] skItems = new ItemStack[skItemStringArray.length];
-							String[] anzahl;
-							
-							for(int i=0; i<skItemStringArray.length;i++){
-								if(skItemStringArray[i].contains("x")){
-									anzahl = skItemStringArray[i].split("x");	
-									
-									skItems[i] = new ItemStack(Material.getMaterial(anzahl[1]),Integer.parseInt(anzahl[0]));
-								}else{
-								skItems[i] = new ItemStack(Material.getMaterial(skItemStringArray[i]));	
-								}
-							}						
-							playerSender.getInventory().addItem(skItems);
-							
-						}		
-						playerSender.updateInventory();
-					}else{
-						log.info("[ZombieVsPlayer] StarterKit settings incorrect!");
-						enableKit = false;
-					}
-				}				
-				
+								
 				//Du bist im Spiel
-				playerSender.sendMessage(ChatColor.DARK_GREEN + messageFileConfiguration.getString("config.messages.successfull_joined"));
+//				playerSender.sendMessage(ChatColor.DARK_GREEN + messageFileConfiguration.getString("config.messages.successfull_joined"));
 			}
 		}
 	}
@@ -760,7 +659,7 @@ public class ZvP extends JavaPlugin{
 					playerSender.getInventory().setBoots(playerBoots.get(playerSender));
 				}
 				playerSender.updateInventory();
-				playerSender.sendMessage(ChatColor.GREEN + messageFileConfiguration.getString("config.messages.inventory_back"));
+//				playerSender.sendMessage(ChatColor.GREEN + messageFileConfiguration.getString("config.messages.inventory_back"));
 			}
 		}
 		
@@ -803,7 +702,7 @@ public class ZvP extends JavaPlugin{
 		experience.remove(playerSender);
 		imSpiel.remove(playerSender);
 		
-		playerSender.sendMessage(ChatColor.GREEN + messageFileConfiguration.getString("config.messages.player_leave"));
+//		playerSender.sendMessage(ChatColor.GREEN + messageFileConfiguration.getString("config.messages.player_leave"));
 	}
 	
 	public void addKit(Player playerSender, String kitName){
@@ -819,7 +718,7 @@ public class ZvP extends JavaPlugin{
 			playerSender.openInventory(kitInv);		
 		}else{
 			//Kit schon vorhanden
-			playerSender.sendMessage(ChatColor.RED + messageFileConfiguration.getString("config.error_messages.error_kit_already exists"));
+//			playerSender.sendMessage(ChatColor.RED + messageFileConfiguration.getString("config.error_messages.error_kit_already exists"));
 		}
 	}
 
@@ -843,14 +742,6 @@ public class ZvP extends JavaPlugin{
 		
 		this.getConfig().options().header("\n" +
 				"This is the main config file for PlayerVsZombies.\n" +
-				"The ZombieCash option describe the money that you earn when you kill a Zombie!\n" +
-				"The PlayerCash option describe the money that you lose when you was killed by a Zombie!\n" +
-				"If you enable portOnJoinGame, ZvP will port you to the startposition.\n" +
-				"If storeInventory is set to true, ZvP saves your Inventory and give it back to you after the game\n" +
-				"storeEXPLevel is exactly the same as storeInventory only with your Level\n" +
-				"changetToSpectatorAfterDeath is a interesting option. If you die, ZvP port you to an Spectator Room that you can set Ingame.\n" +
-				"After Death you will be teleported to this place. You're not longer in the game\n" +
-				"The options under 'price:' are the different prices for any items!\n" +
 				"If you want more items that you can sell or buy. Write a comemnt or an ticket on the bukkit-dev site:\n" +
 				"http://dev.bukkit.org/bukkit-mods/zombievsplayer/\n");
 		
@@ -921,86 +812,7 @@ public class ZvP extends JavaPlugin{
 		START_DELAY = getConfig().getInt("config.joinTime");
 		TIME_BETWEEN_WAVES = getConfig().getInt("config.saveTime");
 		
-		ZOMBIE_SPAWN_RATE = getConfig().getInt("config.spawnRate");
-		
-		zombieCash = this.getConfig().getDouble("config.misc.ZombieCash");
-		playerCash = this.getConfig().getDouble("config.misc.PlayerCash");
-		language = this.getConfig().getString("config.misc.language");
-		portOnJoin = this.getConfig().getBoolean("config.misc.portOnJoinGame");
-		changeToSpectator = this.getConfig().getBoolean("config.misc.changeToSpectatorAfterDeath");
-		storeInventory = this.getConfig().getBoolean("config.misc.storeInventory");
-		storeExp = this.getConfig().getBoolean("config.misc.storeEXPLevel");
-		enableKit = this.getConfig().getBoolean("config.starterkit.enable");
-		
-		
-		if(enableKit == true){
-			starterKitName = this.getConfig().getString("config.starterkit.whichkit");
-		}
-		
-		
-		/*messageFileConfiguration.options().header("This file contains all output from the Zombie versus Player Plugin.\n" +
-				"Some translations are already available in the language-pack.\n" +
-				"If you customize this file, don't edit the <newLine> tag or something in characters like %keyWord%\n" +
-				"If you want to add your own language, copy this file and name it like 'language-tag_messages.yml'\n" +
-				"Now edit your copy and save it." +
-				"Edit the main config.yml. Set the language-tag in front of the `language:` line.\n" +
-				"en=english\n" +
-				"de=german\n" +
-				"fr=french\n" +
-				"...\n");
-		
-		messageFileConfiguration.addDefault("config.messages.starting_zombie_event", "The event will start in %seconds% seconds!<newLine>Type `/zvpjoin` to join the game!");
-		messageFileConfiguration.addDefault("config.messages.starting_zombie_event_now", "The event will start now!");
-		messageFileConfiguration.addDefault("config.messages.zombie_event_started", "The Zombie Vs Player-event has started!");
-		messageFileConfiguration.addDefault("config.messages.zombie_event_stopped", "The Zombie Vs Player-event has stopped!");
-		messageFileConfiguration.addDefault("config.messages.zombie_event_won", "You've fought bravely and defeated the Zombie Apocalypse, congratulation!");
-		messageFileConfiguration.addDefault("config.messages.zombie_event_lost", "You have lost the ZvP match!");
-		messageFileConfiguration.addDefault("config.messages.zombie_event_nextround", "The fight goes into the next Round!");
-		messageFileConfiguration.addDefault("config.messages.zombie_event_nextwave", "The next wave arrives in %seconds% Seconds!");
-		messageFileConfiguration.addDefault("config.messages.wave_survived", "You survived the %round%. round in wave %wave% !");
-		messageFileConfiguration.addDefault("config.messages.zombie_event_timeleft", "Only %seconds% seconds left! Hurry up!");
-		messageFileConfiguration.addDefault("config.messages.zombie_event_nextwavearrived", "The next Wave is arrived!");
-		messageFileConfiguration.addDefault("config.messages.zombies_left_message", "Only %zombies% Zombies left!");
-		messageFileConfiguration.addDefault("config.messages.zombie_killed_message", "You've fought %zombie_kills% Zombies!");
-		messageFileConfiguration.addDefault("config.messages.zombie_killed_first_message", "You've fought your first Zombie. Everyone starts small :)");
-		messageFileConfiguration.addDefault("config.messages.die_by_zombie", "You died %deaths% times!");
-		messageFileConfiguration.addDefault("config.messages.successfull_joined", "You've joined the Game!");
-		messageFileConfiguration.addDefault("config.messages.player_leave", "You've left the game!");
-		messageFileConfiguration.addDefault("config.messages.porting_message", "You were teleported to the startposition!");
-		messageFileConfiguration.addDefault("config.messages.bank_balance_message", "Your bank balance is:");
-		messageFileConfiguration.addDefault("config.messages.spawn_set_message", "Spawn was set!");
-		messageFileConfiguration.addDefault("config.messages.restart", "Plugin successfully restarted!");
-		messageFileConfiguration.addDefault("config.messages.kit_created", "Starterkit successfull created!");
-		messageFileConfiguration.addDefault("config.messages.player_died", "%player% died!");
-		messageFileConfiguration.addDefault("config.messages.player_leaves_during_game", "Some stupid coward have left the game!");
-		messageFileConfiguration.addDefault("config.messages.inventory_back", "Here is your Inventory!");
-		
-		messageFileConfiguration.addDefault("config.error_messages.error_missing_permissions", "You don't have permissions to perform this command!");
-		messageFileConfiguration.addDefault("config.error_messages.error_console_command", "This command can only performed by a Player!");
-		messageFileConfiguration.addDefault("config.error_messages.error_invalid_sign", "This sign is invalid!");
-		messageFileConfiguration.addDefault("config.error_messages.error_no_number", "You must enter a NUMBER!");
-		messageFileConfiguration.addDefault("config.error_messages.error_number_less_than_1", "Your number have to be greater than 0!");
-		messageFileConfiguration.addDefault("config.error_messages.error_no_rounds_entered", "You must enter an amount of Rounds!");
-		messageFileConfiguration.addDefault("config.error_messages.error_no_event_started", "You must start an event first!");
-		messageFileConfiguration.addDefault("config.error_messages.error_trading_time_over", "Sorry, You haven't got time to trade yet!");
-		messageFileConfiguration.addDefault("config.error_messages.error_event_already_started", "The event is already running!");
-		messageFileConfiguration.addDefault("config.error_messages.error_not_loged_in", "You must join a game first!");
-		messageFileConfiguration.addDefault("config.error_messages.error_login_time_over", "The login time is over :( !");
-		messageFileConfiguration.addDefault("config.error_messages.error_already_loged_in", "You're already loged in!");
-		messageFileConfiguration.addDefault("config.error_messages.error_spectator_place_not_set", "You don't set a spectator place yet!<newLine>Do it or disable it in config file!");
-		messageFileConfiguration.addDefault("config.error_messages.error_to_many_args", "To many arguments!");
-		messageFileConfiguration.addDefault("config.error_messages.error_not_enoug_args", "Not enough arguments!");
-		messageFileConfiguration.addDefault("config.error_messages.error_to_long_name", "Your name is to long!");
-		messageFileConfiguration.addDefault("config.error_messages.error_kit_already exists", "That kit already exists! Choose another name.");
-		messageFileConfiguration.addDefault("config.error_messages.error_full_inventory", "Your inventory is overcrowded!");
-		messageFileConfiguration.addDefault("config.error_messages.error_empty_bank_account", "You don't have enough money on your bank account!");
-		
-		try {
-			messageFileConfiguration.options().copyDefaults(true);
-			messageFileConfiguration.save(messageFile);			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
+		ZOMBIE_SPAWN_RATE = getConfig().getInt("config.spawnRate");		
 		
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
