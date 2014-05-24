@@ -331,7 +331,7 @@ public class Arena {
 	}
 	
 	
-	public boolean addPlayer(ZvPPlayer player){		
+	public boolean addPlayer(ZvPPlayer player){
 		
 		if(!players.contains(player)){			
 			player.setStartPosition(getNewRandomLocation()); 
@@ -437,11 +437,11 @@ public class Arena {
 		getWorld().setDifficulty(Difficulty.NORMAL);
 		getWorld().setTime(15000);
 		
-		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 1*10L).getTaskId();
+		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSaveTime(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 1*10L).getTaskId();
 		//TODO Start message
 	}	
 	
-	public void stop(){		
+	public void stop(){
 		for(ZvPPlayer zp : getPlayers()){
 			zp.reset();
 			removePlayer(zp);
@@ -453,10 +453,26 @@ public class Arena {
 		this.wave = 0;
 		
 		clearArena();	
+		setStatus(ArenaStatus.WAITING);
 		Bukkit.getScheduler().cancelTask(getTaskId());
 	}
 	
-	public void clearArena(){		
+	public boolean next() {		
+		if(getWave()==getMaxWaves()) {			
+			if(getRound()==getMaxRounds()) {
+				stop();
+				return true;
+			}
+			setRound(getRound() +1);
+			setWave(1);	
+			return false;
+		}
+		setWave(getWave() +1);
+		
+		return false;
+	}
+	
+	public void clearArena(){
 		for(Entity e : getEntities()){
 			if(e instanceof Zombie || e instanceof Item || e instanceof ExperienceOrb){
 				e.remove();

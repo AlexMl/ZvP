@@ -55,6 +55,7 @@ public class ZvP extends JavaPlugin{
 	private static int DEFAULT_ROUNDS;
 	private static int DEFAULT_WAVES;
 	private static int START_DELAY;
+	private static int TIME_BETWEEN_WAVES;
 	private static int ZOMBIE_SPAWN_RATE;
 	
 	public HashMap<Player, String> kills = new HashMap<Player, String>();
@@ -204,7 +205,9 @@ public class ZvP extends JavaPlugin{
 		return ZOMBIE_SPAWN_RATE;
 	}
 	
- 	
+ 	public static int getSaveTime() {
+ 		return TIME_BETWEEN_WAVES;
+ 	}
 	
 	
  	public void zomStart(final Player Sender,final int Runden){
@@ -414,50 +417,50 @@ public class ZvP extends JavaPlugin{
 									//Das Zombie event wurde gestoppt
 									//Bukkit.getServer().broadcastMessage(ChatColor.AQUA + messageFileConfiguration.getString("config.messages.zombie_event_stopped"));
 								}else{
-								Bukkit.getServer().getWorld(welt.getName()).setTime(15000);
-								
-								// Runde 1 in Welle 2 überstanden
-								sendMessageJoinedPlayers(ChatColor.GOLD + waveSurvivedArray[0] + ChatColor.DARK_PURPLE + Runde + ChatColor.GOLD + waveSurvivedArrayWaves[0] + ChatColor.DARK_PURPLE + Welle + ChatColor.GOLD + waveSurvivedArrayWaves[1], Sender);
-								
-								//Kontostand beträgt:
-								sendMessageJoinedPlayers(ChatColor.DARK_GREEN + messageFileConfiguration.getString("config.messages.bank_balance_message") + " " +  ChatColor.DARK_PURPLE + (int) Konto + ChatColor.DARK_GREEN + "$", Sender);
-								
-								//Zombie Kill ausgabe
+									Bukkit.getServer().getWorld(welt.getName()).setTime(15000);
+									
+									// Runde 1 in Welle 2 überstanden
+									sendMessageJoinedPlayers(ChatColor.GOLD + waveSurvivedArray[0] + ChatColor.DARK_PURPLE + Runde + ChatColor.GOLD + waveSurvivedArrayWaves[0] + ChatColor.DARK_PURPLE + Welle + ChatColor.GOLD + waveSurvivedArrayWaves[1], Sender);
+									
+									//Kontostand beträgt:
+									sendMessageJoinedPlayers(ChatColor.DARK_GREEN + messageFileConfiguration.getString("config.messages.bank_balance_message") + " " +  ChatColor.DARK_PURPLE + (int) Konto + ChatColor.DARK_GREEN + "$", Sender);
+									
+									//Zombie Kill ausgabe
+									for(int y=0; y<playerVote.size();y++){
+										messagePlayer = playerVote.get(y);
+										kills.get(messagePlayer);
+										messagePlayer.sendMessage(ChatColor.GOLD + zombieKillMessageArray[0] + ChatColor.GRAY + (kills.get(messagePlayer)) + ChatColor.GOLD + zombieKillMessageArray[1]);
+									}			
+									
+									//Der kampf geht in die nächste Runde
+									sendMessageJoinedPlayers(ChatColor.GOLD + messageFileConfiguration.getString("config.messages.zombie_event_nextround"), Sender);
+									
+									//Die nächste Welle startet in ...
+									sendMessageJoinedPlayers(ChatColor.GRAY + nextWaveArray[0] + 60 + nextWaveArray[1], Sender);
+									
+									Runde++;
+									Welle=1;
+									}
+								}else{
+									Bukkit.getServer().getWorld(welt.getName()).setTime(15000);
+									// Runde 1 in Welle 2 überstanden
+									sendMessageJoinedPlayers(ChatColor.GOLD + waveSurvivedArray[0] + ChatColor.DARK_PURPLE + Runde + ChatColor.GOLD + waveSurvivedArrayWaves[0] + ChatColor.DARK_PURPLE + Welle + ChatColor.GOLD + waveSurvivedArrayWaves[1], Sender);
+									
+									//Kontostand beträgt:
+									sendMessageJoinedPlayers(ChatColor.DARK_GREEN + messageFileConfiguration.getString("config.messages.bank_balance_message") + " " + ChatColor.DARK_PURPLE + (int) Konto + ChatColor.DARK_GREEN + "$", Sender);
+									
+									//Zombie Kill ausgabe
 								for(int y=0; y<playerVote.size();y++){
+									playerVote.get(y).setHealth(20);
 									messagePlayer = playerVote.get(y);
 									kills.get(messagePlayer);
 									messagePlayer.sendMessage(ChatColor.GOLD + zombieKillMessageArray[0] + ChatColor.GRAY + (kills.get(messagePlayer)) + ChatColor.GOLD + zombieKillMessageArray[1]);
 								}			
 								
-								//Der kampf geht in die nächste Runde
-								sendMessageJoinedPlayers(ChatColor.GOLD + messageFileConfiguration.getString("config.messages.zombie_event_nextround"), Sender);
-								
 								//Die nächste Welle startet in ...
-								sendMessageJoinedPlayers(ChatColor.GRAY + nextWaveArray[0] + 60 + nextWaveArray[1], Sender);
-								
-								Runde++;
-								Welle=1;
-								}
-							}else{
-								Bukkit.getServer().getWorld(welt.getName()).setTime(15000);
-								// Runde 1 in Welle 2 überstanden
-								sendMessageJoinedPlayers(ChatColor.GOLD + waveSurvivedArray[0] + ChatColor.DARK_PURPLE + Runde + ChatColor.GOLD + waveSurvivedArrayWaves[0] + ChatColor.DARK_PURPLE + Welle + ChatColor.GOLD + waveSurvivedArrayWaves[1], Sender);
-								
-								//Kontostand beträgt:
-								sendMessageJoinedPlayers(ChatColor.DARK_GREEN + messageFileConfiguration.getString("config.messages.bank_balance_message") + " " + ChatColor.DARK_PURPLE + (int) Konto + ChatColor.DARK_GREEN + "$", Sender);
-								
-								//Zombie Kill ausgabe
-							for(int y=0; y<playerVote.size();y++){
-								playerVote.get(y).setHealth(20);
-								messagePlayer = playerVote.get(y);
-								kills.get(messagePlayer);
-								messagePlayer.sendMessage(ChatColor.GOLD + zombieKillMessageArray[0] + ChatColor.GRAY + (kills.get(messagePlayer)) + ChatColor.GOLD + zombieKillMessageArray[1]);
-							}			
-							
-							//Die nächste Welle startet in ...
-							sendMessageJoinedPlayers(ChatColor.GRAY + nextWaveArray[0] + 60 + nextWaveArray[1], Sender);	
-							Welle ++;
-							}	
+								sendMessageJoinedPlayers(ChatColor.GRAY + nextWaveArray[0] + 60 + nextWaveArray[1], Sender);	
+								Welle ++;
+								}	
 							//count = 59;
 							}
 
@@ -858,6 +861,7 @@ public class ZvP extends JavaPlugin{
 		this.getConfig().addDefault("config.waves", 5);
 		
 		this.getConfig().addDefault("config.joinTime", 15);
+		this.getConfig().addDefault("config.saveTime", 30);
 		
 		this.getConfig().addDefault("config.spawnRate", 30);
 		
@@ -915,6 +919,7 @@ public class ZvP extends JavaPlugin{
 		DEFAULT_WAVES = getConfig().getInt("config.waves");
 		
 		START_DELAY = getConfig().getInt("config.joinTime");
+		TIME_BETWEEN_WAVES = getConfig().getInt("config.saveTime");
 		
 		ZOMBIE_SPAWN_RATE = getConfig().getInt("config.spawnRate");
 		
