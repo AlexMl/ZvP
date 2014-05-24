@@ -161,10 +161,12 @@ public class Arena {
 	
 	public void setRound(int round) {
 		this.round = round;
+		SignManager.getManager().updateSigns(this);
 	}
 	
 	public void setWave(int wave) {
 		this.wave = wave;
+		SignManager.getManager().updateSigns(this);
 	}
 	
 	
