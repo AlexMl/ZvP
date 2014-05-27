@@ -23,14 +23,6 @@ public class PlayerDeathListener implements Listener{
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event){
 		
-		FileConfiguration messageFileConfiguration = YamlConfiguration.loadConfiguration(plugin.messageFile);
-		
-		String diedByZombie = messageFileConfiguration.getString("config.messages.die_by_zombie");
-		String playerDied = messageFileConfiguration.getString("config.messages.player_died");
-		
-		String[] diedByZombieArray = diedByZombie.split("%deaths%");
-		String[] playerDiedArray = playerDied.split("%player%");
-		
 		Location specZvpLoc = null;
 		Location zombieZvpLoc = null;
 		World specZvpLocWorld, zombieZvpLocWorld;
@@ -87,7 +79,7 @@ public class PlayerDeathListener implements Listener{
 						}
 						
 						plugin.playerVote.remove(eventPlayer);
-						plugin.sendMessageJoinedPlayers(ChatColor.DARK_BLUE + playerDiedArray[0] + ChatColor.GRAY + eventPlayer.getName() + ChatColor.DARK_BLUE + playerDiedArray[1], eventPlayer);
+//						plugin.sendMessageJoinedPlayers(ChatColor.DARK_BLUE + playerDiedArray[0] + ChatColor.GRAY + eventPlayer.getName() + ChatColor.DARK_BLUE + playerDiedArray[1], eventPlayer);
 						plugin.playerVote.add(eventPlayer);
 						
 						event.setDroppedExp(0);
@@ -123,7 +115,7 @@ public class PlayerDeathListener implements Listener{
 							deaths++;
 							plugin.deaths.put(eventPlayer, (Integer.toString(deaths)));
 							//sooft gestorben
-							eventPlayer.sendMessage(ChatColor.GOLD + diedByZombieArray[0] + deaths + diedByZombieArray[1]);
+//							eventPlayer.sendMessage(ChatColor.GOLD + diedByZombieArray[0] + deaths + diedByZombieArray[1]);
 							
 							if(plugin.Konto < plugin.playerCash){
 								plugin.Konto = 0;

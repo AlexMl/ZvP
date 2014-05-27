@@ -3,11 +3,8 @@ package me.Aubli.ZvP.Listeners;
 import me.Aubli.ZvP.ZvP;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,8 +19,7 @@ public class PlayerRespawnListener implements Listener{
 	public void onPlayerRespawn(PlayerRespawnEvent event){
 		
 		Player eventPlayer = event.getPlayer();
-		FileConfiguration messageFileConfiguration = YamlConfiguration.loadConfiguration(plugin.messageFile);
-		
+	
 		if(plugin.start == true){
 			
 			Location specZvpLoc = null;
@@ -77,7 +73,7 @@ public class PlayerRespawnListener implements Listener{
 					eventPlayer.updateInventory();						
 					
 					if(plugin.imSpiel.size()==0){
-						plugin.sendMessageJoinedPlayers(ChatColor.DARK_GRAY + messageFileConfiguration.getString("config.messages.zombie_event_lost"), eventPlayer);
+//						plugin.sendMessageJoinedPlayers(ChatColor.DARK_GRAY + messageFileConfiguration.getString("config.messages.zombie_event_lost"), eventPlayer);
 						
 						if(plugin.portOnJoin==true){
 							if(plugin.playerLoc.size()!=0){

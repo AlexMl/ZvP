@@ -20,14 +20,12 @@ public class PlayerQuitListener implements Listener{
 	public void onPlayerQuit(PlayerQuitEvent event){
 		Player eventPlayer = event.getPlayer();
 		
-		FileConfiguration messageFileConfiguration = YamlConfiguration.loadConfiguration(plugin.messageFile);
-		
 		if(plugin.start==true){
 			if(plugin.playerVote.contains(eventPlayer)){
 				plugin.imSpiel.remove(eventPlayer);
 				plugin.playerVote.remove(eventPlayer);
 			
-				plugin.sendMessageJoinedPlayers(ChatColor.DARK_BLUE + messageFileConfiguration.getString("config.messages.player_leaves_during_game"), eventPlayer);
+				//plugin.sendMessageJoinedPlayers(ChatColor.DARK_BLUE + messageFileConfiguration.getString("config.messages.player_leaves_during_game"), eventPlayer);
 			}
 		}
 	}

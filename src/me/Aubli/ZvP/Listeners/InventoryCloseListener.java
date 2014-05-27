@@ -20,7 +20,7 @@ public class InventoryCloseListener implements Listener{
 	public void onInventoryClose(InventoryCloseEvent event){
 		
 		if(event.getInventory().getTitle().contains("ZvP-Kit")&&event.getInventory().getSize()==9){	
-			FileConfiguration messageFileConfiguration = YamlConfiguration.loadConfiguration(plugin.messageFile);
+			
 			Inventory eventInv = event.getInventory();
 			Player eventPlayer = (Player)event.getPlayer();
 			String[] kitName = eventInv.getTitle().split("ZvP-Kit: ");
@@ -47,8 +47,8 @@ public class InventoryCloseListener implements Listener{
 				plugin.getConfig().set("config.starterkit.whichkit", kitName[1]);
 				plugin.getConfig().set("config.starterkit." + kitName[1], sk);
 				plugin.saveConfig();
-				plugin.starterKitName = kitName[1];
-				eventPlayer.sendMessage(ChatColor.GREEN + messageFileConfiguration.getString("config.messages.kit_created"));
+				
+//				eventPlayer.sendMessage(ChatColor.GREEN + messageFileConfiguration.getString("config.messages.kit_created"));
 			}
 			
 		}else{
