@@ -1,6 +1,7 @@
 package me.Aubli.ZvP.Listeners;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Sign.SignManager;
 
 import org.bukkit.Location;
@@ -9,14 +10,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 
-public class BlockBreakListener implements Listener{
+public class BlockListener implements Listener{
+	
+	private Player eventPlayer;
+	private GameManager game = GameManager.getManager();
+	private SignManager sm = SignManager.getManager();
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event){
 		
-		Player eventPlayer = event.getPlayer();
-		SignManager sm = SignManager.getManager();		
+		eventPlayer = event.getPlayer();
 		
 		if(eventPlayer.getItemInHand()!=null){
 			if(eventPlayer.getItemInHand().equals(ZvP.tool)){
@@ -26,6 +31,7 @@ public class BlockBreakListener implements Listener{
 				}else{
 					//TODO permission message
 					ZvP.getInstance().removeTool(eventPlayer);
+					event.setCancelled(true);
 					return;
 				}
 			}
@@ -53,5 +59,15 @@ public class BlockBreakListener implements Listener{
 			}
 		}
 		
-	}	
+	}
+	
+	@EventHandler
+	public void onBlockPlace(BlockPlaceEvent event){
+		eventPlayer = event.getPlayer();		
+		
+		if(game.isInGame(eventPlayer)){
+			event.setCancelled(true);
+			return;
+		}
+	}
 }
