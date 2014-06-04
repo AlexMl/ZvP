@@ -1,9 +1,9 @@
 package me.Aubli.ZvP.Listeners;
 
-import me.Aubli.ZvP.Arena;
-import me.Aubli.ZvP.GameManager;
-import me.Aubli.ZvP.Lobby;
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.GameManager;
+import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
 

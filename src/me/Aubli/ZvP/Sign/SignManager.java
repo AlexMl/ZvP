@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 
-import me.Aubli.ZvP.Arena;
-import me.Aubli.ZvP.GameManager;
-import me.Aubli.ZvP.Lobby;
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.GameManager;
+import me.Aubli.ZvP.Game.Lobby;
 
 public class SignManager {
 	

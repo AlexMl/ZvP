@@ -1,5 +1,9 @@
 package me.Aubli.ZvP;
 
+import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.GameManager;
+import me.Aubli.ZvP.Game.ZvPPlayer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

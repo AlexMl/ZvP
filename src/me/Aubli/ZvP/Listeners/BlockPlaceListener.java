@@ -1,6 +1,6 @@
 package me.Aubli.ZvP.Listeners;
 
-import me.Aubli.ZvP.GameManager;
+import me.Aubli.ZvP.Game.GameManager;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

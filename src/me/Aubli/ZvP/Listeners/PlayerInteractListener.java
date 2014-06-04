@@ -2,8 +2,8 @@ package me.Aubli.ZvP.Listeners;
 
 import java.util.HashMap;
 
-import me.Aubli.ZvP.GameManager;
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Sign.InteractSign;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
