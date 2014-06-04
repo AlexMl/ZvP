@@ -44,12 +44,34 @@ public class ZvPCommands implements CommandExecutor {
 		GameManager game = GameManager.getManager();
 		
 		if(cmd.getName().equalsIgnoreCase("test")){
-		
-			Arena a = game.getArena(Integer.parseInt(args[0]));
-			int round = Integer.parseInt(args[1].split(":")[0]);
-			int wave = Integer.parseInt(args[1].split(":")[1]);
-			a.setRound(round);
-			a.setWave(wave);
+			if(args.length==2) {
+				
+				if(args[0].equalsIgnoreCase("k")) {
+					int kills = Integer.parseInt(args[1]);
+					GameManager.getManager().getPlayer(playerSender).setKills(kills);
+				}else if(args[0].equalsIgnoreCase("d")) {
+					int deaths = Integer.parseInt(args[1]);
+					GameManager.getManager().getPlayer(playerSender).setDeaths(deaths);					
+				}else {
+				
+					Arena a = game.getArena(Integer.parseInt(args[0]));
+					int round = Integer.parseInt(args[1].split(":")[0]);
+					int wave = Integer.parseInt(args[1].split(":")[1]);
+					a.setRound(round);
+					a.setWave(wave);
+				}
+					
+					
+			}else if(args.length==3) {
+				ZvPPlayer zp = GameManager.getManager().getPlayer(Bukkit.getPlayer(args[0]));
+				if(args[1].equalsIgnoreCase("k")) {
+					int kills = Integer.parseInt(args[2]);
+					zp.setKills(kills);
+				}else if(args[1].equalsIgnoreCase("d")) {
+					int deaths = Integer.parseInt(args[2]);
+					zp.setDeaths(deaths);	
+				}
+			}
 		}
 		
 		
