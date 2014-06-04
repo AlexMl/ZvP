@@ -8,8 +8,11 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 import me.Aubli.ZvP.Game.GameManager;
-import me.Aubli.ZvP.Listeners.BlockBreakListener;
+import me.Aubli.ZvP.Listeners.BlockListener;
+import me.Aubli.ZvP.Listeners.DeathListener;
 import me.Aubli.ZvP.Listeners.PlayerInteractListener;
+import me.Aubli.ZvP.Listeners.PlayerQuitListener;
+import me.Aubli.ZvP.Listeners.PlayerRespawnListener;
 import me.Aubli.ZvP.Listeners.SignChangelistener;
 import me.Aubli.ZvP.Sign.SignManager;
 
@@ -95,11 +98,6 @@ public class ZvP extends JavaPlugin{
 		
 		initialize();		
 		
-		board = Bukkit.getScoreboardManager().getNewScoreboard();
-		Obj = board.getObjective("customm");
-		if(Obj==null){
-			Obj = board.registerNewObjective("showkills", "customm");
-		}		
 		log.info("[ZombieVsPlayer] Plugin is enabled!");
 	}
 	
@@ -130,9 +128,15 @@ public class ZvP extends JavaPlugin{
 	private void registerListeners(){
 		PluginManager pm = Bukkit.getPluginManager();
 		
+		pm.registerEvents(new BlockListener(), this);	
+		pm.registerEvents(new DeathListener(), this);
 		pm.registerEvents(new PlayerInteractListener(this), this);
+		pm.registerEvents(new PlayerQuitListener(), this);
+		pm.registerEvents(new PlayerRespawnListener(), this);
 		pm.registerEvents(new SignChangelistener(), this);		
-		pm.registerEvents(new BlockBreakListener(), this);				
+				
+		
+		
 	}
 	
 	private void setTool(){
