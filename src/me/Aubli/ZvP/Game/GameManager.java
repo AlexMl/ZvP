@@ -317,8 +317,10 @@ public class GameManager {
 	}
 	
 	public boolean isInGame(Player player){		
-		for(Arena a : getArenas()){
-			return a.containsPlayer(player);
+		for(Arena a : getArenas()){			
+			if(a.containsPlayer(player)) {
+				return true;
+			}					
 		}
 		return false;
 	}
