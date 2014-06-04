@@ -244,8 +244,7 @@ public class Arena {
 		return getPlayers()[rand.nextInt(getPlayers().length)];
 	}
 	
-	public ZvPPlayer[] getPlayers(){
-		
+	public ZvPPlayer[] getPlayers(){		
 		ZvPPlayer[] parray = new ZvPPlayer[players.size()];
 		
 		for(int i=0;i<players.size();i++){
@@ -306,9 +305,9 @@ public class Arena {
 	}
 	
 	
-	public boolean containsPlayer(Player player){
-		for(ZvPPlayer zp : getPlayers()){
-			if(zp.getUuid() == player.getUniqueId()){
+	public boolean containsPlayer(Player player){		
+		for(ZvPPlayer zp : getPlayers()){			
+			if(zp.getUuid() == player.getUniqueId()){				
 				return true;
 			}
 		}
@@ -387,7 +386,10 @@ public class Arena {
 		if(players.contains(player)){
 			this.full = false;
 			players.remove(player);
+			updatePlayerBoards();
 			SignManager.getManager().updateSigns(this);
+			sendMessage(player.getName() + " has left!");
+			player.sendMessage("You have left!");
 			return true;
 		}
 		return false;

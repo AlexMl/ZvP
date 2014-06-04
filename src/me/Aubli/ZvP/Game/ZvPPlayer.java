@@ -125,12 +125,12 @@ public class ZvPPlayer {
 		this.lobby = lobby;
 	}
 	
-	public void setKills(int kills){
+	private void setKills(int kills){
 		this.zombieKills = kills;
 		getArena().updatePlayerBoards();
 	}
 	
-	public void setDeaths(int deaths){
+	private void setDeaths(int deaths){
 		this.deaths = deaths;
 		getArena().updatePlayerBoards();
 	}
@@ -160,13 +160,21 @@ public class ZvPPlayer {
 	}
 	
 	
+	public void addKill() {
+		setKills(getKills() + 1);
+	}
+	
+	public void die() {
+		setDeaths(getDeaths() + 1);
+	}
+	
+	
 	public void removeScoreboard() {
 		getBoard().clearSlot(DisplaySlot.SIDEBAR);
 		getBoard().clearSlot(DisplaySlot.BELOW_NAME);
 		getBoard().clearSlot(DisplaySlot.PLAYER_LIST);
 		setPlayerBoard();
 	}
-	
 	
 	@SuppressWarnings("deprecation")
 	public void updateScoreboard() {
@@ -241,6 +249,9 @@ public class ZvPPlayer {
 	
 	@SuppressWarnings("deprecation")
 	public void reset(){		
+		
+		removeScoreboard();
+		
 		player.getInventory().clear();
 		
 		player.teleport(lobby.getLocation());
@@ -263,11 +274,7 @@ public class ZvPPlayer {
 		player.updateInventory();
 	}
 	
-	
-	public String getMemAdress(){
-		return super.toString();
-	}
-	
+
 	@Override
 	public String toString(){
 		return getName();
