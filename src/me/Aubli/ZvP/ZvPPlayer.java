@@ -2,12 +2,16 @@ package me.Aubli.ZvP;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 	
@@ -29,6 +33,8 @@ public class ZvPPlayer {
 	
 	private int totalXP;
 	private GameMode mode;	
+	
+	private Scoreboard board;
 	
 	private ZvPKit kit;
 	
@@ -104,6 +110,10 @@ public class ZvPPlayer {
 		return kit;
 	}
 	
+	public Scoreboard getBoard() {
+		return board;
+	}
+	
 	
 	public void setArena(Arena arena){
 		this.arena = arena;
@@ -115,10 +125,12 @@ public class ZvPPlayer {
 	
 	public void setKills(int kills){
 		this.zombieKills = kills;
+		getArena().updatePlayerBoards();
 	}
 	
 	public void setDeaths(int deaths){
 		this.deaths = deaths;
+		getArena().updatePlayerBoards();
 	}
 	
 	public void setKit(ZvPKit kit){
@@ -134,11 +146,61 @@ public class ZvPPlayer {
 	}
 	
 	public void setScoreboard(Scoreboard board) {
-		getPlayer().setScoreboard(board);
+		this.board = board;
+	}
+	
+	private void setPlayerBoard() {
+		getPlayer().setScoreboard(getBoard());
 	}
 	
 	public void sendMessage(String message) {
 		getPlayer().sendMessage(message);
+	}
+	
+	
+	public void removeScoreboard() {
+		getBoard().clearSlot(DisplaySlot.SIDEBAR);
+		getBoard().clearSlot(DisplaySlot.BELOW_NAME);
+		getBoard().clearSlot(DisplaySlot.PLAYER_LIST);
+		setPlayerBoard();
+	}
+	
+	
+	@SuppressWarnings("deprecation")
+	public void updateScoreboard() {
+		
+		for(String e : getBoard().getEntries()) {
+			getBoard().resetScores(e);
+		}
+		
+		Objective obj = getBoard().getObjective("zvp-main");
+		if(obj==null) {
+			obj = getBoard().registerNewObjective("zvp-main", "custom");				
+		}
+		obj.setDisplayName(ChatColor.GREEN + "Arena: " + ChatColor.GOLD + getArena().getID());
+		obj.setDisplaySlot(DisplaySlot.SIDEBAR);		
+		
+		obj.getScore(Bukkit.getOfflinePlayer("")).setScore(15);
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.BLUE + "Players: " + ChatColor.RED + getArena().getPlayers().length)).setScore(14);
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GRAY + "R: " + ChatColor.AQUA + getArena().getRound() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getMaxRounds())).setScore(13);
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GRAY + "W: " + ChatColor.AQUA + getArena().getWave() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getMaxWaves())).setScore(12);
+		obj.getScore(Bukkit.getOfflinePlayer("")).setScore(11);		
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Kills: " + getKills())).setScore(10);
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_PURPLE + "Deaths: " + getDeaths())).setScore(9);
+				
+		
+		Objective belowObj = getBoard().getObjective("zvp-kills");		
+		if(belowObj==null) {
+			belowObj = getBoard().registerNewObjective("zvp-kills", "custom");
+		}		
+		belowObj.setDisplayName(ChatColor.GOLD + "Kills");
+		belowObj.setDisplaySlot(DisplaySlot.BELOW_NAME);
+		
+		for(ZvPPlayer p : arena.getPlayers()) {
+			belowObj.getScore(Bukkit.getOfflinePlayer(p.getUuid())).setScore(p.getKills());
+		}
+		//System.out.println(getName() + " " + belowObj.getScore(Bukkit.getOfflinePlayer(getUuid())).getScore());
+		setPlayerBoard();		
 	}
 	
 	

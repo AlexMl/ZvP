@@ -9,7 +9,7 @@ public class GameRunnable extends BukkitRunnable{
 	
 	public GameRunnable(Arena arena, int startDelay, int saveTime, int magicSpawnRate){
 		this.arena = arena;
-		this.startDelay = 5;//startDelay;
+		this.startDelay = 15;//startDelay;
 		this.spawnRate = magicSpawnRate;
 		this.saveTime = saveTime;
 	}
@@ -37,6 +37,10 @@ public class GameRunnable extends BukkitRunnable{
 			firstSpawn = true;
 		}else if(seconds > startDelay) {
 			if(arena.getRound()==0 && arena.getWave()==0) { //start
+				arena.setPlayerBoards();
+				arena.removePlayerBoards();
+				arena.updatePlayerBoards();
+				
 				arena.setStatus(ArenaStatus.RUNNING);			
 				arena.setPlayerLevel(0);
 				arena.setRound(1);

@@ -10,7 +10,6 @@ import me.Aubli.ZvP.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Sign.SignManager;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
@@ -23,9 +22,6 @@ import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
 
 public class Arena {
 
@@ -35,8 +31,6 @@ public class Arena {
 	private int arenaID;
 	
 	private ArenaStatus status;
-	
-	private Scoreboard board;
 	
 	private int maxPlayers;
 	private int minPlayers;
@@ -168,17 +162,13 @@ public class Arena {
 	public void setRound(int round) {
 		this.round = round;
 		SignManager.getManager().updateSigns(this);
-		updateScoreboard();
+		updatePlayerBoards();
 	}
 	
 	public void setWave(int wave) {
 		this.wave = wave;
 		SignManager.getManager().updateSigns(this);
-		updateScoreboard();
-	}
-	
-	public void setScoreboard(Scoreboard board) {
-		this.board = board;	
+		updatePlayerBoards();
 	}
 	
 	public int getID(){
@@ -188,11 +178,7 @@ public class Arena {
 	public ArenaStatus getStatus(){
 		return status;
 	}
-	
-	public Scoreboard getArenaBoard() {
-		return board;
-	}
-	
+		
 	public int getMaxPlayers(){
 		return maxPlayers;
 	}
@@ -332,48 +318,25 @@ public class Arena {
 		return ((location.getX()<=getMax().getX() && location.getX()>=getMin().getX()) && (location.getZ()<=getMax().getZ() && location.getZ()>=getMin().getZ()));
 	}
 	
-	@SuppressWarnings("deprecation")
-	public void updateScoreboard() {
-		
-		//removeScoreboard();
-		
-		Objective obj = getArenaBoard().getObjective("zvp");
-		if(obj==null) {
-			obj = getArenaBoard().registerNewObjective("zvp", "custom");				
-		}
-		obj.setDisplayName(ChatColor.GREEN + "Arena:         " + ChatColor.GOLD + getID());
-		obj.setDisplaySlot(DisplaySlot.SIDEBAR);	
-		
-		
-		for(String e : getArenaBoard().getEntries()) {
-			getArenaBoard().resetScores(e);
-		}
-		
-		obj.getScore(Bukkit.getOfflinePlayer("")).setScore(15);
-		obj.getScore(Bukkit.getOfflinePlayer("Players: " + getPlayers().length)).setScore(14);
-		obj.getScore(Bukkit.getOfflinePlayer("Round: " + getRound())).setScore(13);
-		obj.getScore(Bukkit.getOfflinePlayer("Wave: " + getWave())).setScore(12);
-		
-		
-		/*obj.getScore(Bukkit.getOfflinePlayer("Kills Top5:")).setScore(14);
-		
-		for(int i=0;i<getPlayers().length;i++) {
-			obj.getScore(Bukkit.getOfflinePlayer(getPlayers()[i].getName() + " " + getPlayers()[i].getKills())).setScore(13-i);
-		}		
-		*/
-		setScoreboard();
-	}
 	
-	public void removeScoreboard() {
-		getArenaBoard().clearSlot(DisplaySlot.SIDEBAR);
-		setScoreboard();
-	}
-	
-	private void setScoreboard() {
+	public void setPlayerBoards() {
 		for(ZvPPlayer p : getPlayers()) {
-			p.setScoreboard(getArenaBoard());
+			p.setScoreboard(GameManager.getManager().getNewBoard());
 		}
 	}
+	
+	public void updatePlayerBoards() {
+		for(ZvPPlayer p : getPlayers()) {
+			p.updateScoreboard();
+		}
+	}
+	
+	public void removePlayerBoards() {
+		for(ZvPPlayer p : getPlayers()) {
+			p.removeScoreboard();
+		}
+	}	
+	
 	
 	public void setPlayerLevel(int level) {
 		for(ZvPPlayer p : getPlayers()) {
@@ -494,8 +457,6 @@ public class Arena {
 		getWorld().setDifficulty(Difficulty.NORMAL);
 		getWorld().setTime(15000);
 		
-		updateScoreboard();
-		
 		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSaveTime(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 1*10L).getTaskId();
 		//TODO Start message
 	}	
@@ -503,10 +464,9 @@ public class Arena {
 	public void stop(){
 		for(ZvPPlayer zp : getPlayers()){
 			zp.reset();
+			zp.removeScoreboard();
 			removePlayer(zp);
 		}
-		
-		removeScoreboard();
 		
 		this.running = false;
 		this.full = false;

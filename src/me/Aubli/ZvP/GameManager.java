@@ -10,6 +10,7 @@ import me.Aubli.ZvP.Sign.SignManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 public class GameManager {
@@ -91,7 +92,6 @@ public class GameManager {
 			
 			if(arena.getWorld()!=null){
 				arenas.add(arena);
-				registerScoreboard(arena);
 			}			
 		}
 	}
@@ -116,11 +116,6 @@ public class GameManager {
 		for(int i=0;i<getLobbys().length;i++){
 			getLobbys()[i].save();
 		}
-	}
-	
-	
-	private void registerScoreboard(Arena arena) {
-		arena.setScoreboard(boardman.getNewScoreboard());
 	}
 	
 	
@@ -196,6 +191,15 @@ public class GameManager {
 			}
 		}
 		return null;
+	}
+	
+	
+	public ScoreboardManager getBoardManager() {
+		return boardman;
+	}
+	
+	public Scoreboard getNewBoard() {
+		return getBoardManager().getNewScoreboard();
 	}
 	
 	
