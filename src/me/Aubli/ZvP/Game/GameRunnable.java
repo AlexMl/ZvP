@@ -1,6 +1,6 @@
-package me.Aubli.ZvP;
+package me.Aubli.ZvP.Game;
 
-import me.Aubli.ZvP.GameManager.ArenaStatus;
+import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;

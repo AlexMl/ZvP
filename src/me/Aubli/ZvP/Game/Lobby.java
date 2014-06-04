@@ -1,4 +1,4 @@
-package me.Aubli.ZvP;
+package me.Aubli.ZvP.Game;
 
 import java.io.File;
 import java.io.IOException;

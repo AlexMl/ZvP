@@ -1,6 +1,8 @@
-package me.Aubli.ZvP;
+package me.Aubli.ZvP.Game;
 
 import java.util.UUID;
+
+import me.Aubli.ZvP.Kits.ZvPKit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
