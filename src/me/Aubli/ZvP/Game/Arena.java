@@ -481,8 +481,7 @@ public class Arena {
 	
 	public boolean next() {		
 		if(getWave()==getMaxWaves()) {			
-			if(getRound()==getMaxRounds()) {
-				stop();
+			if(getRound()==getMaxRounds()) {				
 				return true;
 			}
 			setRound(getRound() +1);

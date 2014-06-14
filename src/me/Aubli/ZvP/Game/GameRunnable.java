@@ -65,9 +65,11 @@ public class GameRunnable extends BukkitRunnable{
 					}else if(spawn-arena.getLivingZombies() >= ((int)(spawn*0.12)) && (int)(spawn*0.06)>0) {
 						arena.spawnZombies((int)(spawn*0.06));
 						System.out.println("6% " + (int)(spawn*0.06));						
-					}else  if(spawn-arena.getLivingZombies() >= ((int)(spawn*0.08)) && (int)(spawn*0.02)>0) {
+					}else if(spawn-arena.getLivingZombies() >= ((int)(spawn*0.08)) && (int)(spawn*0.02)>0) {
 						arena.spawnZombies((int)(spawn*0.02));
 						System.out.println("2% " + (int)(spawn*0.02));
+					}else if(spawn-arena.getLivingZombies() > spawnRate) {
+						arena.spawnZombies((int)spawnRate/2);
 					}else {
 						arena.spawnZombies(1);	
 						System.out.println(1);
@@ -83,13 +85,24 @@ public class GameRunnable extends BukkitRunnable{
 					if(seconds2<=saveTime) {					
 						arena.sendMessage(saveTime-seconds2 + " Seconds left!");
 						seconds2++;
-					}else {
-						arena.sendMessage("next wave!");
-						arena.next();
-						firstSpawn = true;
-						seconds2 = 0;
+					}else {						
+						boolean stop = arena.next();
+						
+						if(!stop) {
+							arena.sendMessage("next wave!");
+							firstSpawn = true;
+							seconds2 = 0;
+						}else {							
+							//TODO Get the winner
+							//End of the event
+							arena.stop();
+						}
 					}
 				}
+			}
+			
+			if(arena.getPlayers().length<1) {
+				arena.stop();
 			}
 			
 		}
