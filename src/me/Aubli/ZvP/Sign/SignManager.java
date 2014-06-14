@@ -16,6 +16,7 @@ public class SignManager {
 	public enum SignType{
 		INFO_SIGN,
 		INTERACT_SIGN,
+		SHOP_SIGN,
 		;
 	}	
 	
@@ -23,6 +24,7 @@ public class SignManager {
 	
 	private File interact;
 	private File info;
+	private File shop;
 	
 	private ArrayList<ISign> signs;
 
@@ -33,13 +35,15 @@ public class SignManager {
 		
 		interact = new File(ZvP.getInstance().getDataFolder().getPath() + "/Signs/Interact");
 		info = new File(ZvP.getInstance().getDataFolder().getPath() + "/Signs/Info");		
+		shop = new File(ZvP.getInstance().getDataFolder().getPath() + "/Signs/Shop");
 		reloadConfig();
 	}		
 	
 	public void reloadConfig(){
-		if(!interact.exists() || !info.exists()){
+		if(!interact.exists() || !info.exists() || !shop.exists()){
 			info.mkdirs();
 			interact.mkdirs();
+			shop.mkdirs();
 		}
 		loadSigns();
 	}
@@ -60,7 +64,14 @@ public class SignManager {
 			if(sign.getWorld()!=null){			
 				signs.add(sign);
 			}
-		}		
+		}	
+		
+		for(File f : shop.listFiles()){
+			ShopSign sign = new ShopSign(f);
+			if(sign.getWorld()!=null){			
+				signs.add(sign);
+			}
+		}
 	}
 		
 	public static SignManager getManager(){
@@ -119,6 +130,17 @@ public class SignManager {
 				try{
 					String path = interact.getPath();
 					ISign s = new InteractSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby);
+					signs.add(s);	
+					return true;
+				}catch(Exception e){
+					e.printStackTrace();
+					return false;
+				}
+			}
+			if(type==SignType.SHOP_SIGN){
+				try{
+					String path = shop.getPath();
+					ISign s = new ShopSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby);
 					signs.add(s);	
 					return true;
 				}catch(Exception e){
