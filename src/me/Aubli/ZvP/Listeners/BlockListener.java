@@ -59,6 +59,10 @@ public class BlockListener implements Listener{
 			}
 		}
 		
+		if(game.isInGame(eventPlayer)){
+			event.setCancelled(true);
+			return;
+		}
 	}
 	
 	@EventHandler
