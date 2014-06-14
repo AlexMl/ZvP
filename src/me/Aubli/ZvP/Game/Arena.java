@@ -21,6 +21,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 
@@ -456,7 +457,9 @@ public class Arena {
 		this.wave = 0;
 		
 		getWorld().setDifficulty(Difficulty.NORMAL);
-		getWorld().setTime(15000);
+		getWorld().setTime(15000L);
+		getWorld().setMonsterSpawnLimit(0);
+		clearArena();
 		
 		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSaveTime(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 1*5L).getTaskId();
 		//TODO Start message
@@ -472,6 +475,9 @@ public class Arena {
 		this.full = false;
 		this.round = 0;
 		this.wave = 0;
+		
+		getWorld().setMonsterSpawnLimit(-1);
+		getWorld().setTime(5000L);
 		
 		clearArena();	
 		setStatus(ArenaStatus.WAITING);
@@ -494,7 +500,7 @@ public class Arena {
 	
 	public void clearArena(){
 		for(Entity e : getEntities()){
-			if(e instanceof Zombie || e instanceof Item || e instanceof ExperienceOrb){
+			if(e instanceof Monster || e instanceof Item || e instanceof ExperienceOrb){
 				e.remove();
 			}			
 		}
