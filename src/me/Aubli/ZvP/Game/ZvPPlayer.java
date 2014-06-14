@@ -250,7 +250,9 @@ public class ZvPPlayer {
 	@SuppressWarnings("deprecation")
 	public void reset(){		
 		
-		removeScoreboard();
+		if(getBoard()!=null) {
+			removeScoreboard();
+		}
 		
 		player.getInventory().clear();
 		
