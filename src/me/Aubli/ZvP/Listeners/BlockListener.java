@@ -41,7 +41,7 @@ public class BlockListener implements Listener{
 			Location signLoc = event.getBlock().getLocation().clone();
 			if(sm.isZVPSign(signLoc)){
 				if(eventPlayer.hasPermission("zvp.manage.sign")){					
-					boolean success = sm.removeSign(sm.getType(signLoc), signLoc);					
+					boolean success = sm.removeSign(signLoc);					
 					if(success){
 						//TODO Message
 						eventPlayer.sendMessage("successfully removed");

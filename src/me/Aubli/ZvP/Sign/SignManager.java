@@ -24,40 +24,22 @@ public class SignManager {
 	private File interact;
 	private File info;
 	
-	private ArrayList<InteractSign> interactSigns;
-	private ArrayList<InfoSign> infoSigns;
+	private ArrayList<ISign> signs;
+	//private ArrayList<InteractSign> interactSigns;
+	//private ArrayList<InfoSign> infoSigns;
 	
 	
 	public SignManager(){
 		instance = this;
 		
-		interactSigns = new ArrayList<InteractSign>();
-		infoSigns = new ArrayList<InfoSign>();
+		signs = new ArrayList<ISign>();
+		//interactSigns = new ArrayList<InteractSign>();
+		//infoSigns = new ArrayList<InfoSign>();
 		
 		interact = new File(ZvP.getInstance().getDataFolder().getPath() + "/Signs/Interact");
 		info = new File(ZvP.getInstance().getDataFolder().getPath() + "/Signs/Info");		
 		reloadConfig();
 	}		
-	
-	private void loadSigns(){		
-		
-		interactSigns = new ArrayList<InteractSign>();
-		infoSigns = new ArrayList<InfoSign>();
-		
-		for(File f : info.listFiles()){
-			InfoSign sign = new InfoSign(f);
-			if(sign.getWorld()!=null){
-				infoSigns.add(sign);
-			}
-		}		
-		
-		for(File f : interact.listFiles()){
-			InteractSign sign = new InteractSign(f);
-			if(sign.getWorld()!=null){
-				interactSigns.add(sign);
-			}
-		}		
-	}
 	
 	public void reloadConfig(){
 		if(!interact.exists() || !info.exists()){
@@ -67,11 +49,33 @@ public class SignManager {
 		loadSigns();
 	}
 	
-	
+	private void loadSigns(){		
+		
+		signs = new ArrayList<ISign>();
+		//interactSigns = new ArrayList<InteractSign>();
+		//infoSigns = new ArrayList<InfoSign>();
+		
+		for(File f : info.listFiles()){
+			InfoSign sign = new InfoSign(f);
+			if(sign.getWorld()!=null){
+				//infoSigns.add(sign);
+				signs.add(sign);
+			}
+		}		
+		
+		for(File f : interact.listFiles()){
+			InteractSign sign = new InteractSign(f);
+			if(sign.getWorld()!=null){
+			//	interactSigns.add(sign);
+				signs.add(sign);
+			}
+		}		
+	}
+		
 	public static SignManager getManager(){
 		return instance;
 	}
-	
+	/*
 	public InfoSign[] getInfoSigns(){
 		InfoSign[] infSigns = new InfoSign[infoSigns.size()];
 		
@@ -88,23 +92,37 @@ public class SignManager {
 			intSigns[i] = interactSigns.get(i);
 		}
 		return intSigns;	
-	}	
+	}	*/
 	
 	public SignType getType(Location signLoc){
-		for(InfoSign s : getInfoSigns()){
-			if(s.getLocation().equals(signLoc)){
-				return s.getType();
-			}
-		}
 		
-		for(InteractSign s : getInteractSigns()){
-			if(s.getLocation().equals(signLoc)){
+		for(ISign s : signs) {
+			if(s.getLocation().equals(signLoc)) {
 				return s.getType();
 			}
 		}
 		return null;
 	}
 	
+	
+	public ISign getSign(int ID) {
+		for(ISign s : signs) {
+			if(s.getID()==ID) {
+				return s;
+			}
+		}
+		return null;
+	}
+	
+	public ISign getSign(Location signLoc) {
+		for(ISign s : signs) {
+			if(s.getLocation().equals(signLoc)) {
+				return s;
+			}
+		}
+		return null;
+	}
+	/*
 	public InfoSign getInfoSign(int ID){
 		for(InfoSign infS : getInfoSigns()){
 			if(infS.getID() == ID){
@@ -140,10 +158,10 @@ public class SignManager {
 		}
 		return null;
 	}
-	
+	*/
 	
 	public boolean isZVPSign(Location loc){
-		if(getInteractSign(loc)!=null || getInfoSign(loc)!=null){
+		if(getSign(loc)!=null){
 			return true;
 		}
 		return false;
@@ -154,8 +172,8 @@ public class SignManager {
 			if(type==SignType.INFO_SIGN){
 				try{
 					String path = info.getPath();
-					InfoSign s = new InfoSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby);					
-					infoSigns.add(s);	
+					ISign s = new InfoSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby);					
+					signs.add(s);	
 					return true;
 				}catch(Exception e){
 					e.printStackTrace();
@@ -165,8 +183,8 @@ public class SignManager {
 			if(type==SignType.INTERACT_SIGN){
 				try{
 					String path = interact.getPath();
-					InteractSign intSign = new InteractSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby);
-					interactSigns.add(intSign);
+					ISign s = new InteractSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby);
+					signs.add(s);	
 					return true;
 				}catch(Exception e){
 					e.printStackTrace();
@@ -177,7 +195,15 @@ public class SignManager {
 		return false;
 	}
 	
-	public boolean removeSign(SignType type, Location signLoc){
+	public boolean removeSign(Location signLoc){
+		
+		if(getSign(signLoc)!=null) {
+			getSign(signLoc).delete();
+			signs.remove(getSign(signLoc));
+			return true;
+		}
+		
+		/*
 		if(type==SignType.INFO_SIGN){
 			InfoSign s = getInfoSign(signLoc);
 			infoSigns.remove(s);			
@@ -189,12 +215,19 @@ public class SignManager {
 			interactSigns.remove(s);
 			s.delete();
 			return true;
-		}
+		}*/
 		return false;
 	}
 	
-	public boolean removeSign(SignType type, int signID){
-		if(type==SignType.INFO_SIGN){
+	public boolean removeSign(int signID){		
+		
+		if(getSign(signID)!=null) {
+			getSign(signID).delete();
+			signs.remove(getSign(signID));
+			return true;
+		}		
+		
+		/*if(type==SignType.INFO_SIGN){
 			InfoSign s = getInfoSign(signID);
 			infoSigns.remove(s);
 			s.delete();
@@ -205,22 +238,34 @@ public class SignManager {
 			interactSigns.remove(s);
 			s.delete();
 			return true;
-		}
+		}*/
 		return false;
 	}
 
 	
 	public void updateSigns(){
-		for(InfoSign s : getInfoSigns()){
+		
+		for(ISign s : signs) {
+			s.update();
+		}
+		
+		/*for(InfoSign s : getInfoSigns()){
 			s.update();
 		}
 		for(InteractSign s : getInteractSigns()){
 			s.update();
-		}
+		}*/
 	}
 	
 	public void updateSigns(Lobby lobby){
-		for(InfoSign s : getInfoSigns()){
+		
+		for(ISign s : signs) {
+			if(s.getLobby().equals(lobby)) {
+				s.update();
+			}
+		}
+		
+		/*for(InfoSign s : getInfoSigns()){
 			if(s.getLobby().equals(lobby)){
 				s.update();
 			}
@@ -229,11 +274,18 @@ public class SignManager {
 			if(s.getLobby().equals(lobby)){
 				s.update();
 			}
-		}
+		}*/
 	}
 	
 	public void updateSigns(Arena arena){
-		for(InfoSign s : getInfoSigns()){
+		
+		for(ISign s : signs) {
+			if(s.getArena().equals(arena)) {
+				s.update();
+			}
+		}
+		
+		/*for(InfoSign s : getInfoSigns()){
 			if(s.getArena().equals(arena)){
 				s.update();
 			}
@@ -242,7 +294,7 @@ public class SignManager {
 			if(s.getArena().equals(arena)){
 				s.update();
 			}
-		}
+		}*/
 	}
 
 }

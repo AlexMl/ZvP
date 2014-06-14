@@ -18,7 +18,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class InfoSign {
+public class InfoSign implements ISign{
 	
 	private int ID;
 	
@@ -92,7 +92,7 @@ public class InfoSign {
 		}
 	}
 	
-	void delete(){
+	public void delete(){
 		this.signFile.delete();
 	}
 	

@@ -62,7 +62,7 @@ public class PlayerInteractListener implements Listener{
 					if(!GameManager.getManager().isInGame(eventPlayer)){
 						if(eventPlayer.hasPermission("zvp.play")){
 							
-							InteractSign sign = sm.getInteractSign(event.getClickedBlock().getLocation());
+							InteractSign sign = (InteractSign)sm.getSign(event.getClickedBlock().getLocation());
 							if(sign.getArena().isOnline()){
 								boolean success = GameManager.getManager().createPlayer(eventPlayer, sign.getArena(), sign.getLobby());
 								
