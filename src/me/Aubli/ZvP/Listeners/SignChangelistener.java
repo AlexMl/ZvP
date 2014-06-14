@@ -25,23 +25,42 @@ public class SignChangelistener implements Listener{
 			if(eventPlayer.hasPermission("zvp.manage.sign")){
 				if(!event.getLine(1).isEmpty()){
 					if(!event.getLine(2).isEmpty()){
-						if(event.getLine(3).equalsIgnoreCase("interact")){
+						if(event.getLine(3).equalsIgnoreCase("interact") || event.getLine(3).equalsIgnoreCase("info") || event.getLine(3).equalsIgnoreCase("shop")){
 							int arenaID = Integer.parseInt(event.getLine(1));
 							int lobbyID = Integer.parseInt(event.getLine(2));
 							
 							Arena a = GameManager.getManager().getArena(arenaID);
 							Lobby l = GameManager.getManager().getLobby(lobbyID);
 							
+							SignType type;
+							
+							if(event.getLine(3).equalsIgnoreCase("interact")) {
+								type = SignType.INTERACT_SIGN;
+							}else if(event.getLine(3).equalsIgnoreCase("info")) {
+								type = SignType.INFO_SIGN;
+							}else if(event.getLine(3).equalsIgnoreCase("shop")) {
+								type = SignType.SHOP_SIGN;
+							}else {
+								return;
+							}							
+							
 							if(a!=null){
 								if(l!=null){
-									boolean success = SignManager.getManager().createSign(SignType.INTERACT_SIGN, event.getBlock().getLocation().clone(), a, l);
+									boolean success = SignManager.getManager().createSign(type, event.getBlock().getLocation().clone(), a, l);
 									
 									if(success){
 										event.setLine(0, ZvP.getPrefix());
 										event.setLine(1, "Arena: " + arenaID);
-										event.setLine(2, ChatColor.YELLOW + "Waiting");
-										event.setLine(3, ChatColor.GREEN + "[JOIN]");	
 										
+										if(type==SignType.INFO_SIGN) {
+											event.setLine(2, ChatColor.AQUA + "" + a.getPlayers().length + ChatColor.RESET + " / " + ChatColor.DARK_RED + a.getMaxPlayers());
+											event.setLine(3, ChatColor.BLUE + "" + a.getRound() + ":" + a.getWave() + ChatColor.RESET + " / " + ChatColor.DARK_RED + a.getMaxRounds() + ":" + a.getMaxWaves());
+										}else if(type==SignType.INTERACT_SIGN) {
+											event.setLine(2, ChatColor.YELLOW + "Waiting");
+											event.setLine(3, ChatColor.GREEN + "[JOIN]");	
+										}else if(type==SignType.SHOP_SIGN) {
+											//Do something
+										}
 										//TODO Message
 										return;
 									}else{
@@ -59,39 +78,6 @@ public class SignChangelistener implements Listener{
 								event.setCancelled(true);
 								return;
 							}	
-						}else if(event.getLine(3).equalsIgnoreCase("info")){
-							int arenaID = Integer.parseInt(event.getLine(1));
-							int lobbyID = Integer.parseInt(event.getLine(2));
-							
-							Arena a = GameManager.getManager().getArena(arenaID);
-							Lobby l = GameManager.getManager().getLobby(lobbyID);
-							
-							if(a!=null){
-								if(l!=null){
-									boolean success = SignManager.getManager().createSign(SignType.INFO_SIGN, event.getBlock().getLocation().clone(), a, l);
-									
-									if(success){
-										event.setLine(0, ZvP.getPrefix());
-										event.setLine(1, "Arena: " + a.getID());
-										event.setLine(2, ChatColor.AQUA + "" + a.getPlayers().length + ChatColor.RESET + " / " + ChatColor.DARK_RED + a.getMaxPlayers());
-										event.setLine(3, ChatColor.BLUE + "" + a.getRound() + ":" + a.getWave() + ChatColor.RESET + " / " + ChatColor.DARK_RED + a.getMaxRounds() + ":" + a.getMaxWaves());
-										
-										//TODO Message
-										return;
-									}else{
-										//TODO MESSAGE
-										return;
-									}								
-								}else{
-									//TODO message
-									event.setCancelled(true);
-									return;
-								}
-							}else{
-								//TODO message
-								event.setCancelled(true);
-								return;
-							}
 						}else{
 							//TODO message				
 							event.setCancelled(true);
