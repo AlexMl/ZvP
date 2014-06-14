@@ -209,7 +209,6 @@ public class ZvPPlayer {
 		for(ZvPPlayer p : arena.getPlayers()) {
 			belowObj.getScore(Bukkit.getOfflinePlayer(p.getUuid())).setScore(p.getKills());
 		}
-		//System.out.println(getName() + " " + belowObj.getScore(Bukkit.getOfflinePlayer(getUuid())).getScore());
 		setPlayerBoard();		
 	}
 	
