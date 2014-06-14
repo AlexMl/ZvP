@@ -47,10 +47,6 @@ public class Arena {
 	private Location minLoc;
 	private Location maxLoc;
 	
-	private boolean online;
-	private boolean running;
-	private boolean full;
-	
 	private Random rand;
 	
 	private ArrayList<ZvPPlayer> players;
@@ -70,11 +66,7 @@ public class Arena {
 		this.minLoc = min.clone();
 		this.maxLoc = max.clone();
 		
-		this.status = ArenaStatus.WAITING;
-		
-		this.online = true;
-		this.running = false;
-		this.full = false;
+		this.status = ArenaStatus.WAITING;		
 		
 		this.round = 0;
 		this.wave = 0;
@@ -103,13 +95,9 @@ public class Arena {
 		this.minPlayers = arenaConfig.getInt("arena.minPlayers");
 		
 		this.maxRounds = arenaConfig.getInt("arena.rounds");
-		this.maxWaves = arenaConfig.getInt("arena.waves");
+		this.maxWaves = arenaConfig.getInt("arena.waves");		
 		
-		this.online = arenaConfig.getBoolean("arena.Online");
-		this.running = false;
-		this.full = false;
-		
-		if(online){
+		if(arenaConfig.getBoolean("arena.Online")){
 			this.status = ArenaStatus.WAITING;
 		}else{
 			this.status = ArenaStatus.STOPED;
@@ -132,7 +120,7 @@ public class Arena {
 	
 	void save() throws IOException{	
 		arenaConfig.set("arena.ID", arenaID);	
-		arenaConfig.set("arena.Online", online);
+		arenaConfig.set("arena.Online", !(getStatus()==ArenaStatus.STOPED));
 		
 		arenaConfig.set("arena.minPlayers", minPlayers);
 		arenaConfig.set("arena.maxPlayers", maxPlayers);
@@ -294,15 +282,15 @@ public class Arena {
 	
 	
 	public boolean isOnline(){
-		return online;
+		return !(getStatus()==ArenaStatus.STOPED);
 	}
 	
 	public boolean isRunning(){
-		return running;
+		return getStatus()==ArenaStatus.RUNNING;
 	}
 	
 	public boolean isFull(){
-		return full;
+		return getPlayers().length==getMaxPlayers();
 	}
 	
 	
@@ -373,7 +361,6 @@ public class Arena {
 			}
 			
 			if(players.size()==maxPlayers){
-				this.full = true;
 				if(!isRunning()){
 					GameManager.getManager().startGame(this, player.getLobby(), getMaxRounds(), getMaxWaves());
 				}
@@ -384,8 +371,7 @@ public class Arena {
 	}
 	
 	public boolean removePlayer(ZvPPlayer player){
-		if(players.contains(player)){
-			this.full = false;
+		if(players.contains(player)){			
 			players.remove(player);
 			updatePlayerBoards();
 			SignManager.getManager().updateSigns(this);
@@ -452,7 +438,6 @@ public class Arena {
 		this.maxRounds = rounds;
 		this.maxWaves = waves;
 		
-		this.running = true;		
 		this.round = 0;
 		this.wave = 0;
 		
@@ -470,9 +455,7 @@ public class Arena {
 			zp.reset();
 			removePlayer(zp);
 		}
-		
-		this.running = false;
-		this.full = false;
+	
 		this.round = 0;
 		this.wave = 0;
 		
@@ -484,7 +467,7 @@ public class Arena {
 		Bukkit.getScheduler().cancelTask(getTaskId());
 	}
 	
-	public boolean next() {		
+	public boolean next() {
 		if(getWave()==getMaxWaves()) {			
 			if(getRound()==getMaxRounds()) {				
 				return true;
