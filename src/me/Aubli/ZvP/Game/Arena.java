@@ -465,7 +465,6 @@ public class Arena {
 	public void stop(){
 		for(ZvPPlayer zp : getPlayers()){
 			zp.reset();
-			zp.removeScoreboard();
 			removePlayer(zp);
 		}
 		
