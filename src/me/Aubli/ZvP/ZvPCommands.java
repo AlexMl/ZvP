@@ -4,7 +4,6 @@ import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -49,37 +48,13 @@ public class ZvPCommands implements CommandExecutor {
 		
 		if(cmd.getName().equalsIgnoreCase("test")){
 			if(args.length==2) {
-				
-				if(args[0].equalsIgnoreCase("k")) {
-					int kills = Integer.parseInt(args[1]);
-					GameManager.getManager().getPlayer(playerSender).setKills(kills);
-				}else if(args[0].equalsIgnoreCase("d")) {
-					int deaths = Integer.parseInt(args[1]);
-					GameManager.getManager().getPlayer(playerSender).setDeaths(deaths);					
-				}else {
-				
-					Arena a = game.getArena(Integer.parseInt(args[0]));
-					int round = Integer.parseInt(args[1].split(":")[0]);
-					int wave = Integer.parseInt(args[1].split(":")[1]);
-					a.setRound(round);
-					a.setWave(wave);
-				}
-					
-					
-			}else if(args.length==3) {
-				ZvPPlayer zp = GameManager.getManager().getPlayer(Bukkit.getPlayer(args[0]));
-				if(args[1].equalsIgnoreCase("k")) {
-					int kills = Integer.parseInt(args[2]);
-					zp.setKills(kills);
-				}else if(args[1].equalsIgnoreCase("d")) {
-					int deaths = Integer.parseInt(args[2]);
-					zp.setDeaths(deaths);	
-				}
+				Arena a = game.getArena(Integer.parseInt(args[0]));
+				int round = Integer.parseInt(args[1].split(":")[0]);
+				int wave = Integer.parseInt(args[1].split(":")[1]);
+				a.setRound(round);
+				a.setWave(wave);				
 			}
 		}
-		
-		
-		
 		
 		
 		
@@ -129,10 +104,12 @@ public class ZvPCommands implements CommandExecutor {
 					if(playerSender.hasPermission("zvp.play")){
 						ZvPPlayer p = game.getPlayer(playerSender);
 						if(p!=null){
+							Arena a = p.getArena();
 							boolean success = game.removePlayer(p);
 							
 							if(success){
 								playerSender.sendMessage("You left Arena " + p.getArena().getID()); //TODO Message
+								a.sendMessage(playerSender.getName() + " has left!");
 								return true;
 							}else{
 								playerSender.sendMessage("You were not found in a game"); //TODO Message

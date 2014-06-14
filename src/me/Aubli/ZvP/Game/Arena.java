@@ -388,8 +388,6 @@ public class Arena {
 			players.remove(player);
 			updatePlayerBoards();
 			SignManager.getManager().updateSigns(this);
-			sendMessage(player.getName() + " has left!");
-			player.sendMessage("You have left!");
 			return true;
 		}
 		return false;
@@ -460,7 +458,7 @@ public class Arena {
 		getWorld().setDifficulty(Difficulty.NORMAL);
 		getWorld().setTime(15000);
 		
-		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSaveTime(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 1*10L).getTaskId();
+		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSaveTime(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 1*5L).getTaskId();
 		//TODO Start message
 	}	
 	
