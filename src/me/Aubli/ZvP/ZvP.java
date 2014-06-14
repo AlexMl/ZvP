@@ -44,9 +44,7 @@ public class ZvP extends JavaPlugin{
 
 	public static final Logger log = Bukkit.getLogger();
 	private static ZvP instance;
-	
-	public Location zombieZvpStartLoc;	
-	
+		
 	public static ItemStack tool;
 	
 	private static String pluginPrefix = ChatColor.DARK_GREEN + "[" + ChatColor.DARK_RED + "Z" + ChatColor.DARK_GRAY + "v" + ChatColor.DARK_RED + "P" + ChatColor.DARK_GREEN + "]"  + ChatColor.RESET + " ";
@@ -59,30 +57,9 @@ public class ZvP extends JavaPlugin{
 	private static int START_DELAY;
 	private static int TIME_BETWEEN_WAVES;
 	private static int ZOMBIE_SPAWN_RATE;
-	
-	public HashMap<Player, String> kills = new HashMap<Player, String>();
-	public HashMap<Player, String> deaths = new HashMap<Player, String>();
-	public HashMap<Player, Location> playerLoc = new HashMap<Player, Location>();
-	public HashMap<Player, Integer> experience = new HashMap<Player, Integer>();
-	public HashMap<Player, ItemStack[]> playerInventory = new HashMap<Player, ItemStack[]>();
-	public HashMap<Player, ItemStack> playerHelmet = new HashMap<Player, ItemStack>();
-	public HashMap<Player, ItemStack> playerChestplate = new HashMap<Player, ItemStack>();
-	public HashMap<Player, ItemStack> playerLeggings = new HashMap<Player, ItemStack>();
-	public HashMap<Player, ItemStack> playerBoots = new HashMap<Player, ItemStack>();
-	public ArrayList<Player> imSpiel = new ArrayList<Player>();
-	public ArrayList<Player> playerVote = new ArrayList<Player>(); 
 		
-	public boolean voteZeit = false;
-	public boolean start, portOnJoin, storeInventory, changeToSpectator, storeExp, enableKit;
-	public boolean welle = false;
 	private boolean useMetrics = false;
-	private boolean scoreboardSet = false;
 	
-	public double zombieCash, playerCash, Konto;
-	public int gesammtKill =0;
-	public int Runde = 1;
-	public int Welle = 1;
-	public int zombieCount = 0;
 	public Scoreboard board;
 	public Objective Obj;
 	
@@ -134,12 +111,10 @@ public class ZvP extends JavaPlugin{
 		
 		pm.registerEvents(new BlockListener(), this);	
 		pm.registerEvents(new DeathListener(), this);
-		pm.registerEvents(new PlayerInteractListener(this), this);
+		pm.registerEvents(new PlayerInteractListener(), this);
 		pm.registerEvents(new PlayerQuitListener(), this);
 		pm.registerEvents(new PlayerRespawnListener(), this);
 		pm.registerEvents(new SignChangelistener(), this);		
-				
-		
 		
 	}
 	
@@ -483,25 +458,7 @@ public class ZvP extends JavaPlugin{
 				}
 			}
 		}
-		
-		start=false;
-		Konto = 0;
-		kills.clear();
-		deaths.clear();
-		imSpiel.clear();
-		gesammtKill = 0;
-		playerVote.clear();
-		playerInventory.clear();
-		playerHelmet.clear();
-		playerChestplate.clear();
-		playerLeggings.clear();
-		playerBoots.clear();
-		experience.clear();
-		zombieCount = 0;
-		
-		Runde = 1;
-		Welle = 1;
-		
+				
 		welt.setMonsterSpawnLimit(-1);
 		this.getServer().getWorld(welt.getName()).setDifficulty(Difficulty.PEACEFUL);
 		this.getServer().getWorld(welt.getName()).setTime(0);
@@ -513,164 +470,13 @@ public class ZvP extends JavaPlugin{
 	
 	//INTRESTING
 	public void setScoreboard(){
-
-		//Scoreboard setzen
-		board.clearSlot(DisplaySlot.SIDEBAR);
-		
-		Obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-		Obj.setDisplayName(ChatColor.RED + "Kills");
-		
-		Team team = board.registerNewTeam("zvpteam");
-		
-		
-		for(int i=0;i<playerVote.size();i++){
-			if(playerVote.get(i)!=null){
-				team.addPlayer(playerVote.get(i));
-				Obj.getScore(playerVote.get(i)).setScore(0);				
-			}
-		}	
-		for(int i=0;i<playerVote.size();i++){
-			if(playerVote.get(i)!=null){
-				playerVote.get(i).setScoreboard(board);				
-			}
-		}	
-		
 		team.setAllowFriendlyFire(false);
 		team.setCanSeeFriendlyInvisibles(true);
 		team.setPrefix(ChatColor.DARK_RED + "");	
 		
-		scoreboardSet = true;
 	}
-	
-	public void zomjoin(Player playerSender){
 		
-		Location zombiePvpLoc = null;
-		World zombieZvpLocWorld;
-		double zombieZvpLocX, zombieZvpLocY, zombieZvpLocZ;
-		float zombieZvpLocYaw, zombieZvpLocPitch; 
-		
-		if(this.getConfig().getString("config.mem.zombieZvPlocation")!=null){	
-			
-			zombieZvpLocWorld = Bukkit.getServer().getWorld(this.getConfig().getString("config.mem.zombieZvPlocation.world"));
-			zombieZvpLocX = this.getConfig().getDouble("config.mem.zombieZvPlocation.x");
-			zombieZvpLocY = this.getConfig().getDouble("config.mem.zombieZvPlocation.y");
-			zombieZvpLocZ = this.getConfig().getDouble("config.mem.zombieZvPlocation.z");
-			zombieZvpLocPitch = (float) this.getConfig().getDouble("config.mem.zombieZvPlocation.pitch");
-			zombieZvpLocYaw = (float) this.getConfig().getDouble("config.mem.zombieZvPlocation.yaw");
-			
-			zombiePvpLoc = new Location(zombieZvpLocWorld, zombieZvpLocX, zombieZvpLocY, zombieZvpLocZ);
-			zombiePvpLoc.setYaw(zombieZvpLocYaw);
-			zombiePvpLoc.setPitch(zombieZvpLocPitch);
-		}else{
-			zombiePvpLoc = zombieZvpStartLoc;
-		}
-
-		if(imSpiel.contains(playerSender)){
-			//Du bist bereits im Spiel
-//			playerSender.sendMessage(ChatColor.RED + messageFileConfiguration.getString("config.error_messages.error_already_loged_in"));
-		}else{						
-			if(playerVote.contains(playerSender)){
-				//Du bist bereits im Spiel
-//				playerSender.sendMessage(ChatColor.RED + messageFileConfiguration.getString("config.error_messages.error_already_loged_in"));
-			
-			}else{
-				playerVote.add(playerSender);
-				imSpiel.add(playerSender);
-				
-				playerSender.setHealth(20);	
-				playerSender.setFoodLevel(20);			
-				
-				if(storeInventory==true){	
-					if(playerSender.getInventory().getContents()!=null){
-						
-						if(playerSender.getInventory().getHelmet()!=null){
-							playerHelmet.put(playerSender, playerSender.getInventory().getHelmet());
-							playerSender.getInventory().setHelmet(null);
-						}
-						if(playerSender.getInventory().getChestplate()!=null){
-							playerChestplate.put(playerSender, playerSender.getInventory().getChestplate());
-							playerSender.getInventory().setChestplate(null);
-						}
-						if(playerSender.getInventory().getLeggings()!=null){
-							playerLeggings.put(playerSender, playerSender.getInventory().getLeggings());
-							playerSender.getInventory().setLeggings(null);
-						}
-						if(playerSender.getInventory().getBoots()!=null){
-							playerBoots.put(playerSender, playerSender.getInventory().getBoots());
-							playerSender.getInventory().setBoots(null);
-						}
-						
-						ItemStack[] is = playerSender.getInventory().getContents();
-						playerInventory.put(playerSender, is);
-						playerSender.getInventory().clear();
-						playerSender.updateInventory();
-					}
-				}
-				
-				if(portOnJoin == true){
-					if(zombiePvpLoc != null){
-						if(playerSender.getLocation() != zombiePvpLoc){
-							playerLoc.put(playerSender, playerSender.getLocation());
-							playerSender.teleport(zombiePvpLoc);
-							// Du wurdest teleportiert
-//							playerSender.sendMessage(ChatColor.GREEN + messageFileConfiguration.getString("config.messages.porting_message"));
-						}
-					}
-				}
-				
-				if(storeExp==true){
-					experience.put(playerSender, playerSender.getLevel());
-					playerSender.setExp(0);
-					playerSender.setLevel(0);									
-				}
-								
-				//Du bist im Spiel
-//				playerSender.sendMessage(ChatColor.DARK_GREEN + messageFileConfiguration.getString("config.messages.successfull_joined"));
-			}
-		}
-	}
-	
 	public void leave(Player playerSender){
-		
-		if(playerVote.size()==1&&playerVote.get(0).equals(playerSender)){
-			zomStop(playerSender);
-			return;
-		}	
-		
-		if(storeExp==true){
-			if(experience!=null){				
-				playerSender.setLevel(0);
-				playerSender.setLevel(experience.get(playerSender));				
-			}
-		}
-		
-		if(storeInventory==true){
-			if(playerInventory!=null){				
-				
-				playerSender.getInventory().clear();
-				playerSender.getInventory().setHelmet(null);
-				playerSender.getInventory().setChestplate(null);
-				playerSender.getInventory().setLeggings(null);
-				playerSender.getInventory().setBoots(null);
-					
-				playerSender.getInventory().setContents(playerInventory.get(playerSender));
-					
-				if(playerHelmet.get(playerSender)!=null){
-					playerSender.getInventory().setHelmet(playerHelmet.get(playerSender));
-				}
-				if(playerChestplate.get(playerSender)!=null){
-					playerSender.getInventory().setChestplate(playerChestplate.get(playerSender));
-				}
-				if(playerLeggings.get(playerSender)!=null){
-					playerSender.getInventory().setLeggings(playerLeggings.get(playerSender));
-				}
-				if(playerBoots.get(playerSender)!=null){
-					playerSender.getInventory().setBoots(playerBoots.get(playerSender));
-				}
-				playerSender.updateInventory();
-//				playerSender.sendMessage(ChatColor.GREEN + messageFileConfiguration.getString("config.messages.inventory_back"));
-			}
-		}
 		
 		
 		playerSender.removePotionEffect(PotionEffectType.HEAL);
@@ -680,15 +486,7 @@ public class ZvP extends JavaPlugin{
 			
 		playerSender.setHealth(20);
 		playerSender.setFoodLevel(20);
-		
-		
-		if(portOnJoin==true){
-			if(playerLoc.size()!=0){				
-				if(playerLoc.get(playerSender)!=null){
-					playerSender.teleport(playerLoc.get(playerSender));
-				}				
-			}
-		}				
+					
 		
 		if(scoreboardSet==true){
 			board.clearSlot(DisplaySlot.SIDEBAR);
@@ -698,27 +496,13 @@ public class ZvP extends JavaPlugin{
 			
 			playerSender.setScoreboard(board);			
 		}
-		
-		playerVote.remove(playerSender);
-		playerBoots.remove(playerSender);
-		playerChestplate.remove(playerSender);
-		playerLeggings.remove(playerSender);
-		playerHelmet.remove(playerSender);
-		playerLoc.remove(playerSender);
-		playerInventory.remove(playerSender);
-		kills.remove(playerSender);
-		deaths.remove(playerSender);
-		experience.remove(playerSender);
-		imSpiel.remove(playerSender);
-		
-//		playerSender.sendMessage(ChatColor.GREEN + messageFileConfiguration.getString("config.messages.player_leave"));
 	}
 	
 	public void addKit(Player playerSender, String kitName){
 		
 		if(this.getConfig().getBoolean("config.starterkit.enable")==false){
 			this.getConfig().set("config.starterkit.enable", true);
-			enableKit = true;
+			
 			this.saveConfig();	
 		}	
 		
@@ -729,22 +513,6 @@ public class ZvP extends JavaPlugin{
 			//Kit schon vorhanden
 //			playerSender.sendMessage(ChatColor.RED + messageFileConfiguration.getString("config.error_messages.error_kit_already exists"));
 		}
-	}
-
-	public void sendMessageJoinedPlayers(String message, Player Sender){
-		
-		Player messagePlayer;
-		
-		if(playerVote.size()==0){
-			Sender.sendMessage(message);
-		}
-		
-		if(playerVote.size()>0){
-			for(int y=0; y<playerVote.size();y++){
-				messagePlayer = playerVote.get(y);
-				messagePlayer.sendMessage(message);
-			}
-		}			
 	}
 
 	private void loadConfig(){

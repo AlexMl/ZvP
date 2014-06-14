@@ -17,19 +17,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class PlayerInteractListener implements Listener{
 	
-	int eisenSchwertPreis, steinSchwertPreis, holzSchwertPreis, steinAxtPreis, bogenPreis, pfeilPreis64, pfeilPreis32;
-	int braustandPreis;
-	int potionRegenPreis, potionStrenghtPreis, potionHealPreis, potionSpeedPreis;
-	int lederHelmPreis, lederBrustpanzerPreis, lederBeinschutzPreis, lederStiefelPreis;
-	int eisenHelmPreis, eisenBrustpanzerPreis, eisenBeinschutzPreis, eisenStiefelPreis;
-	
 	private HashMap<Action, Location> clickLoc = new HashMap<Action, Location>();
 	
 	private SignManager sm = SignManager.getManager();
-	
-	public PlayerInteractListener(ZvP plugin){
-		this.plugin = plugin;
-	}	
 		
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event){
@@ -59,7 +49,7 @@ public class PlayerInteractListener implements Listener{
 					}
 				}else{
 					//TODO Permissions
-					plugin.removeTool(eventPlayer);
+					ZvP.getInstance().removeTool(eventPlayer);
 					return;
 				}
 			}
@@ -869,5 +859,4 @@ public class PlayerInteractListener implements Listener{
 			}	
 		}*/
 	}		
-	private ZvP plugin;
 }
