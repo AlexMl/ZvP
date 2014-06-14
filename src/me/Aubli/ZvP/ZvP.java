@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -15,6 +16,7 @@ import me.Aubli.ZvP.Listeners.PlayerQuitListener;
 import me.Aubli.ZvP.Listeners.PlayerRespawnListener;
 import me.Aubli.ZvP.Listeners.SignChangelistener;
 import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.util.Metrics.Metrics;
 import org.bukkit.Bukkit;
@@ -48,6 +50,8 @@ public class ZvP extends JavaPlugin{
 	public static ItemStack tool;
 	
 	private static String pluginPrefix = ChatColor.DARK_GREEN + "[" + ChatColor.DARK_RED + "Z" + ChatColor.DARK_GRAY + "v" + ChatColor.DARK_RED + "P" + ChatColor.DARK_GREEN + "]"  + ChatColor.RESET + " ";
+	
+	private static Locale locale;
 	
 	private static int maxPlayers;
 	private static int DEFAULT_ROUNDS;
@@ -107,7 +111,7 @@ public class ZvP extends JavaPlugin{
 		loadConfig();		
 		setTool();
 		
-		new MessageManager();
+		new MessageManager(locale);
 		new GameManager();
 		new SignManager();	
 		
@@ -761,6 +765,7 @@ public class ZvP extends JavaPlugin{
 		
 		this.getConfig().addDefault("config.spawnRate", 30);
 		
+		this.getConfig().addDefault("config.Locale", "en");
 		
 		this.getConfig().addDefault("config.misc.ZombieCash", 0.2);
 		this.getConfig().addDefault("config.misc.PlayerCash", 2.5);
@@ -818,6 +823,8 @@ public class ZvP extends JavaPlugin{
 		TIME_BETWEEN_WAVES = getConfig().getInt("config.saveTime");
 		
 		ZOMBIE_SPAWN_RATE = getConfig().getInt("config.spawnRate");		
+		
+		locale = new Locale(getConfig().getString("config.Locale"));
 		
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
