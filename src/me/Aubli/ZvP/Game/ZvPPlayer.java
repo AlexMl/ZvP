@@ -2,7 +2,7 @@ package me.Aubli.ZvP.Game;
 
 import java.util.UUID;
 
-import me.Aubli.ZvP.Kits.ZvPKit;
+import me.Aubli.ZvP.Kits.IZvPKit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -38,7 +38,7 @@ public class ZvPPlayer {
 	
 	private Scoreboard board;
 	
-	private ZvPKit kit;
+	private IZvPKit kit;
 	
 	public ZvPPlayer(Player player, Arena arena, Lobby lobby) throws Exception{
 		this.player = player;
@@ -108,7 +108,7 @@ public class ZvPPlayer {
 		return deaths;
 	}
 	
-	public ZvPKit getKit(){
+	public IZvPKit getKit(){
 		return kit;
 	}
 	
@@ -135,7 +135,7 @@ public class ZvPPlayer {
 		getArena().updatePlayerBoards();
 	}
 	
-	public void setKit(ZvPKit kit){
+	public void setKit(IZvPKit kit){
 		this.kit = kit;
 	}
 	

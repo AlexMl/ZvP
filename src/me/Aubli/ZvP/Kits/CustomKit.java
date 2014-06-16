@@ -11,7 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-public class CustomKit implements ZvPKit{
+public class CustomKit implements IZvPKit{
 
 	
 	private final File kitFile;

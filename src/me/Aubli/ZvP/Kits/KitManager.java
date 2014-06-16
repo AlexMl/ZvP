@@ -13,13 +13,13 @@ public class KitManager {
 	
 	private File kitPath;
 	
-	private ArrayList<ZvPKit> kits;
+	private ArrayList<IZvPKit> kits;
 	
 	public KitManager() {
 		
 		instance = this;
 		
-		kits = new ArrayList<ZvPKit>();
+		kits = new ArrayList<IZvPKit>();
 		kitPath = new File(ZvP.getInstance().getDataFolder().getPath() + "/Kits");
 				
 		loadKits();
@@ -33,17 +33,17 @@ public class KitManager {
 	
 	public void loadKits() {
 		
-		kits = new ArrayList<ZvPKit>();
+		kits = new ArrayList<IZvPKit>();
 		kitPath.mkdirs();			
 		
-		ZvPKit bowKit = new BowKit(kitPath.getAbsolutePath());
-		ZvPKit swordKit = new SwordKit(kitPath.getAbsolutePath());
+		IZvPKit bowKit = new BowKit(kitPath.getAbsolutePath());
+		IZvPKit swordKit = new SwordKit(kitPath.getAbsolutePath());
 		
 		kits.add(bowKit);
 		kits.add(swordKit);
 		
 		for(File f : kitPath.listFiles()) {
-			ZvPKit kit = new CustomKit(f);
+			IZvPKit kit = new CustomKit(f);
 			kits.add(kit);
 		}
 		
@@ -51,8 +51,8 @@ public class KitManager {
 	
 	
 	
-	public ZvPKit getKit(String kitName) {
-		for(ZvPKit k : kits) {
+	public IZvPKit getKit(String kitName) {
+		for(IZvPKit k : kits) {
 			if(k.getName().equals(kitName)) {
 				return k;
 			}
@@ -66,7 +66,7 @@ public class KitManager {
 	
 	
 	public void addKit(String kitName, ItemStack[] items) {
-		ZvPKit kit = new CustomKit(kitPath.getAbsolutePath(), kitName, items);
+		IZvPKit kit = new CustomKit(kitPath.getAbsolutePath(), kitName, items);
 		kits.add(kit);
 	}
 	

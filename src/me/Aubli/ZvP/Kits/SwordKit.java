@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionType;
 
-public class SwordKit implements ZvPKit{
+public class SwordKit implements IZvPKit{
 
 	private final String name;
 	
