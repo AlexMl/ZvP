@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 import me.Aubli.ZvP.Game.GameManager;
+import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Listeners.BlockListener;
 import me.Aubli.ZvP.Listeners.DeathListener;
 import me.Aubli.ZvP.Listeners.PlayerInteractListener;
@@ -90,6 +91,7 @@ public class ZvP extends JavaPlugin{
 		
 		new MessageManager(locale);
 		new GameManager();
+		new KitManager();
 		new SignManager();	
 		
 		registerListeners();

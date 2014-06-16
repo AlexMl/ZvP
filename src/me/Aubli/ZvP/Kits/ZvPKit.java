@@ -1,5 +1,16 @@
 package me.Aubli.ZvP.Kits;
 
-public class ZvPKit {
+import org.bukkit.inventory.ItemStack;
 
+public interface ZvPKit {
+
+
+	void delete();
+	
+	
+	
+	public String getName();
+
+	public ItemStack[] getContents();	
+	
 }
