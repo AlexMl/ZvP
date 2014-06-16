@@ -12,6 +12,7 @@ import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Listeners.BlockListener;
 import me.Aubli.ZvP.Listeners.DeathListener;
+import me.Aubli.ZvP.Listeners.InventoryCloseListener;
 import me.Aubli.ZvP.Listeners.PlayerInteractListener;
 import me.Aubli.ZvP.Listeners.PlayerQuitListener;
 import me.Aubli.ZvP.Listeners.PlayerRespawnListener;
@@ -117,6 +118,7 @@ public class ZvP extends JavaPlugin{
 		pm.registerEvents(new PlayerQuitListener(), this);
 		pm.registerEvents(new PlayerRespawnListener(), this);
 		pm.registerEvents(new SignChangelistener(), this);		
+		pm.registerEvents(new InventoryCloseListener(), this);
 		
 	}
 	
