@@ -4,14 +4,14 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-public class BowKit implements IZvPKit{
+public class KBowKit implements IZvPKit{
 
 	private final String name;
 	
 	private final ItemStack[] items;
 	
 	
-	public BowKit(String path) {
+	public KBowKit(String path) {
 		
 		this.name = "Bow-Kit";
 		this.items = new ItemStack[8];

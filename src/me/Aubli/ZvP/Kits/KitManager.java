@@ -36,14 +36,14 @@ public class KitManager {
 		kits = new ArrayList<IZvPKit>();
 		kitPath.mkdirs();			
 		
-		IZvPKit bowKit = new BowKit(kitPath.getAbsolutePath());
-		IZvPKit swordKit = new SwordKit(kitPath.getAbsolutePath());
+		IZvPKit bowKit = new KBowKit(kitPath.getAbsolutePath());
+		IZvPKit swordKit = new KSwordKit(kitPath.getAbsolutePath());
 		
 		kits.add(bowKit);
 		kits.add(swordKit);
 		
 		for(File f : kitPath.listFiles()) {
-			IZvPKit kit = new CustomKit(f);
+			IZvPKit kit = new KCustomKit(f);
 			kits.add(kit);
 		}
 		
@@ -66,7 +66,7 @@ public class KitManager {
 	
 	
 	public void addKit(String kitName, ItemStack[] items) {
-		IZvPKit kit = new CustomKit(kitPath.getAbsolutePath(), kitName, items);
+		IZvPKit kit = new KCustomKit(kitPath.getAbsolutePath(), kitName, items);
 		kits.add(kit);
 	}
 	

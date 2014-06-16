@@ -6,14 +6,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionType;
 
-public class SwordKit implements IZvPKit{
+public class KSwordKit implements IZvPKit{
 
 	private final String name;
 	
 	private final ItemStack[] items;
 	
 	
-	public SwordKit(String path) {
+	public KSwordKit(String path) {
 		
 		this.name = "Sword-Kit";
 		this.items = new ItemStack[7];

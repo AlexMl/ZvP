@@ -11,7 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-public class CustomKit implements IZvPKit{
+public class KCustomKit implements IZvPKit{
 
 	
 	private final File kitFile;
@@ -21,7 +21,7 @@ public class CustomKit implements IZvPKit{
 	private final ItemStack[] items;
 	
 	
-	public CustomKit(String path, String name, ItemStack[] content) {	
+	public KCustomKit(String path, String name, ItemStack[] content) {	
 		this.name = name;
 		this.items = content;
 	
@@ -65,7 +65,7 @@ public class CustomKit implements IZvPKit{
 		}
 	}
 	
-	public CustomKit(File kitFile) {
+	public KCustomKit(File kitFile) {
 		
 		this.kitFile = kitFile;
 		FileConfiguration kitConfig = YamlConfiguration.loadConfiguration(kitFile);
