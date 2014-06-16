@@ -3,12 +3,15 @@ package me.Aubli.ZvP;
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.ZvPPlayer;
+import me.Aubli.ZvP.Kits.KitManager;
+import me.Aubli.ZvP.Kits.ZvPKit;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class ZvPCommands implements CommandExecutor {
 	
@@ -47,7 +50,34 @@ public class ZvPCommands implements CommandExecutor {
 		GameManager game = GameManager.getManager();
 		
 		if(cmd.getName().equalsIgnoreCase("test")){
+		
+			if(args.length==1) {
+				String kitName = args[0];
+				
+				ItemStack[] content = playerSender.getInventory().getContents();
+				
+				KitManager.getManager().addKit(kitName, content);
+			}
+			
 			if(args.length==2) {
+				
+				if(args[0].equalsIgnoreCase("kit")) {
+				
+					String kit = args[1];
+					
+					if(KitManager.getManager().getKit(kit)!=null) {
+						
+						ZvPKit zKit = KitManager.getManager().getKit(kit);
+						
+						for(ItemStack item : zKit.getContents()) {
+							playerSender.getInventory().addItem(item);
+						}
+					}
+					return true;
+				}
+				
+				
+				
 				Arena a = game.getArena(Integer.parseInt(args[0]));
 				int round = Integer.parseInt(args[1].split(":")[0]);
 				int wave = Integer.parseInt(args[1].split(":")[1]);
@@ -89,7 +119,7 @@ public class ZvPCommands implements CommandExecutor {
 						return true;
 					}
 				}
-				if(args[0].equalsIgnoreCase("reload")){
+				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
 					if(playerSender.hasPermission("zvp.reload")){
 						GameManager.getManager().loadConfig();						
 						playerSender.sendMessage("reloaded");//TODO message
