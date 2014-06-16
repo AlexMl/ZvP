@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Sign.SignManager;
 
 import org.bukkit.Bukkit;
@@ -75,6 +76,12 @@ public class GameManager {
 		if(SignManager.getManager()!=null){
 			SignManager.getManager().reloadConfig();
 		}
+		
+		
+		if(KitManager.getManager()!=null){
+			KitManager.getManager().loadKits();
+		}
+		
 	}
 	
 	public void saveConfig(){

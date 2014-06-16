@@ -31,7 +31,7 @@ public class KitManager {
 	}
 	
 	
-	private void loadKits() {
+	public void loadKits() {
 		
 		kits = new ArrayList<ZvPKit>();
 		kitPath.mkdirs();			
