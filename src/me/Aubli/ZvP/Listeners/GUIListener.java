@@ -18,18 +18,17 @@ public class GUIListener implements Listener{
 	
 	@EventHandler
 	public void onClick(InventoryClickEvent event) {
-		
 		if(event.getWhoClicked().hasPermission("zvp.play")) {
 			if(event.getInventory().getTitle().equalsIgnoreCase("Select your Kit!")) {
 				event.setCancelled(true);
 				event.getWhoClicked().closeInventory();
 				
-				String kitName = event.getCurrentItem().getItemMeta().getDisplayName();
-				
+				String kitName = event.getCurrentItem().getItemMeta().getDisplayName();				
 				ZvPPlayer player = GameManager.getManager().getPlayer((Player)event.getWhoClicked());
 				
 				if(KitManager.getManager().getKit(kitName)!=null && player!=null) {
 					player.setKit(KitManager.getManager().getKit(kitName));
+					System.out.println(player.getName() + " took the " + player.getKit().getName() + " Kit");
 					return;
 				}
 			}
