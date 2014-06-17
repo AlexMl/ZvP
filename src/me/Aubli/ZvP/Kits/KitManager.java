@@ -84,7 +84,7 @@ public class KitManager {
 	
 	
 	public void openSelectKitGUI(ZvPPlayer player) {
-		Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int)Math.ceil(((double)getKits()/9.0)))*9, "Select your Kit");
+		Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int)Math.ceil(((double)getKits()/9.0)))*9, "Select your Kit!");
 		
 		for(IZvPKit kit : kits) {
 			ItemStack kitItem = kit.getIcon();
