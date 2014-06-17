@@ -7,6 +7,8 @@ import org.bukkit.inventory.ItemStack;
 public class KBowKit implements IZvPKit{
 
 	private final String name;
+
+	private final ItemStack icon;
 	
 	private final ItemStack[] items;
 	
@@ -14,8 +16,9 @@ public class KBowKit implements IZvPKit{
 	public KBowKit(String path) {
 		
 		this.name = "Bow-Kit";
-		this.items = new ItemStack[8];
-
+		this.icon = new ItemStack(Material.BOW);
+		this.items = new ItemStack[8];		
+		
 		items[0] = new ItemStack(Material.BOW);
 		items[0].addEnchantment(Enchantment.ARROW_INFINITE, 1);
 
@@ -51,8 +54,12 @@ public class KBowKit implements IZvPKit{
 	}
 
 	@Override
-	public ItemStack[] getContents() {
-		return items.clone();
+	public ItemStack getIcon() {
+		return icon;
 	}
 
+	@Override
+	public ItemStack[] getContents() {
+		return items.clone();
+	}	
 }

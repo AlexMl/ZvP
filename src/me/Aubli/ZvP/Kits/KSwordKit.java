@@ -10,12 +10,15 @@ public class KSwordKit implements IZvPKit{
 
 	private final String name;
 	
+	private final ItemStack icon;
+	
 	private final ItemStack[] items;
 	
 	
 	public KSwordKit(String path) {
 		
 		this.name = "Sword-Kit";
+		this.icon = new ItemStack(Material.WOOD_SWORD);
 		this.items = new ItemStack[7];
 
 		items[0] = new ItemStack(Material.IRON_SWORD);
@@ -53,8 +56,12 @@ public class KSwordKit implements IZvPKit{
 	}
 
 	@Override
+	public ItemStack getIcon() {
+		return icon;
+	}
+
+	@Override
 	public ItemStack[] getContents() {
 		return items.clone();
 	}
-
 }

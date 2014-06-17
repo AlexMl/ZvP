@@ -11,6 +11,8 @@ public interface IZvPKit {
 	
 	public String getName();
 
+	public ItemStack getIcon();
+	
 	public ItemStack[] getContents();	
 	
 }

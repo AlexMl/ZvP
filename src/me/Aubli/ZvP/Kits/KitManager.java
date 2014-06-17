@@ -3,9 +3,16 @@ package me.Aubli.ZvP.Kits;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Game.ZvPPlayer;
 
 public class KitManager {
 
@@ -65,8 +72,8 @@ public class KitManager {
 	}
 	
 	
-	public void addKit(String kitName, ItemStack[] items) {
-		IZvPKit kit = new KCustomKit(kitPath.getAbsolutePath(), kitName, items);
+	public void addKit(String kitName, ItemStack icon, ItemStack[] items) {
+		IZvPKit kit = new KCustomKit(kitPath.getAbsolutePath(), kitName, icon, items);
 		kits.add(kit);
 	}
 	
@@ -74,4 +81,28 @@ public class KitManager {
 		getKit(kitName).delete();
 		kits.remove(getKit(kitName));
 	}
+	
+	
+	public void openSelectKitGUI(ZvPPlayer player) {
+		Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int)Math.ceil(((double)getKits()/9.0)))*9, "Select your Kit");
+		
+		for(IZvPKit kit : kits) {
+			ItemStack kitItem = kit.getIcon();
+			ItemMeta kitMeta = kitItem.getItemMeta();
+			
+			kitMeta.setDisplayName(kit.getName());
+			kitMeta.addEnchant(Enchantment.DURABILITY, 1, true);
+			kitItem.setItemMeta(kitMeta);
+						
+			kitInventory.addItem(kitItem);
+		}
+		player.openInventory(kitInventory);		
+	}
+	
+	public void openAddKitGUI(Player player, String kitName) {
+		Inventory kitInv = Bukkit.createInventory(player, 9, ChatColor.DARK_BLUE + "ZvP-Kit: " + ChatColor.RED + kitName);
+		player.closeInventory();
+		player.openInventory(kitInv);
+	}
+	
 } 

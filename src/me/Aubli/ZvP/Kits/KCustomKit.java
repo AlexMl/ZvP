@@ -18,11 +18,14 @@ public class KCustomKit implements IZvPKit{
 	
 	private final String name;
 	
+	private final ItemStack icon;
+	
 	private final ItemStack[] items;
 	
 	
-	public KCustomKit(String path, String name, ItemStack[] content) {	
+	public KCustomKit(String path, String name, ItemStack icon, ItemStack[] content) {	
 		this.name = name;
+		this.icon = icon;
 		this.items = content;
 	
 		kitFile = new File(path + "/" + name + ".yml");
@@ -56,6 +59,7 @@ public class KCustomKit implements IZvPKit{
 		// - { id: IRON_SWORD, amount: 1, data: 0, ench: {DAMAGE_ALL:1} }
 		
 		kitConfig.set("name", name);
+		kitConfig.set("icon", icon.getType().toString());
 		kitConfig.set("items", itemList);
 
 		try {
@@ -71,10 +75,8 @@ public class KCustomKit implements IZvPKit{
 		FileConfiguration kitConfig = YamlConfiguration.loadConfiguration(kitFile);
 		
 		this.name = kitConfig.getString("name");
-		
-		List<?> items = kitConfig.getList("items"); 
-		
-		this.items = parseItemStack(items);
+		this.icon = parseIcon(kitConfig.getString("icon"));
+		this.items = parseItemStack(kitConfig.getList("items"));
 	}	
 	
 	private ItemStack[] parseItemStack(List<?> itemList) {
@@ -125,6 +127,10 @@ public class KCustomKit implements IZvPKit{
 		return returnStack;
 	}
 	
+	private ItemStack parseIcon(String itemString) {
+		return new ItemStack(Material.getMaterial(itemString));
+	}
+	
 	
 	@Override
 	public void delete() {
@@ -134,6 +140,11 @@ public class KCustomKit implements IZvPKit{
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public ItemStack getIcon() {
+		return icon;
 	}
 
 	@Override
