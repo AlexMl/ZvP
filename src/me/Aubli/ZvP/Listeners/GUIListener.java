@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
-public class InventoryCloseListener implements Listener{
+public class GUIListener implements Listener{
 	
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event){
@@ -16,7 +16,7 @@ public class InventoryCloseListener implements Listener{
 			
 			Inventory eventInv = event.getInventory();
 			String kitName = eventInv.getTitle().split("ZvP-Kit: ")[1];
-		
+			
 			KitManager.getManager().addKit(kitName, eventInv.getContents());
 			
 		}else{
