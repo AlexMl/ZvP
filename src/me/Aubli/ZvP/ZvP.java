@@ -12,7 +12,7 @@ import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Listeners.BlockListener;
 import me.Aubli.ZvP.Listeners.DeathListener;
-import me.Aubli.ZvP.Listeners.InventoryCloseListener;
+import me.Aubli.ZvP.Listeners.GUIListener;
 import me.Aubli.ZvP.Listeners.PlayerInteractListener;
 import me.Aubli.ZvP.Listeners.PlayerQuitListener;
 import me.Aubli.ZvP.Listeners.PlayerRespawnListener;
@@ -118,7 +118,7 @@ public class ZvP extends JavaPlugin{
 		pm.registerEvents(new PlayerQuitListener(), this);
 		pm.registerEvents(new PlayerRespawnListener(), this);
 		pm.registerEvents(new SignChangelistener(), this);		
-		pm.registerEvents(new InventoryCloseListener(), this);
+		pm.registerEvents(new GUIListener(), this);
 		
 	}
 	
@@ -443,82 +443,28 @@ public class ZvP extends JavaPlugin{
 //		this.getServer().broadcastMessage(ChatColor.AQUA + messageFileConfiguration.getString("config.messages.zombie_event_started"));
 	}
 	
-	public void zomStop(Player Sender){
+ 	//INTRESTING
+	/* 
+	 * 
+	 * team.setAllowFriendlyFire(false);
+	 * team.setCanSeeFriendlyInvisibles(true);
+	 * team.setPrefix(ChatColor.DARK_RED + "");	
+	 * 
+	 * 
+	 * playerSender.removePotionEffect(PotionEffectType.HEAL);
+	 * playerSender.removePotionEffect(PotionEffectType.SPEED);
+	 * playerSender.removePotionEffect(PotionEffectType.REGENERATION);
+	 * playerSender.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+	 * 
+	 * playerSender.setHealth(20);
+	 * playerSender.setFoodLevel(20);
+	 * 
+	 * board.clearSlot(DisplaySlot.SIDEBAR);
+	 * if(board.getTeam("zvpteam").hasPlayer(playerSender)){
+	 * 		board.getTeam("zvpteam").removePlayer(playerSender);
+	 * }
+	 */
 	
-		Bukkit.getScheduler().cancelAllTasks();
-		
-		World welt = Sender.getWorld();
-		
-		//INTRESTING
-		if(scoreboardSet==true){
-			board.clearSlot(DisplaySlot.SIDEBAR);
-			board.getTeam("zvpteam").unregister();
-	
-			if(playerVote.size()==1){
-				Sender.setScoreboard(board);
-			}else{
-				for(int i=0;i<playerVote.size();i++){
-					playerVote.get(i).setScoreboard(board);
-				}
-			}
-		}
-				
-		welt.setMonsterSpawnLimit(-1);
-		this.getServer().getWorld(welt.getName()).setDifficulty(Difficulty.PEACEFUL);
-		this.getServer().getWorld(welt.getName()).setTime(0);
-		this.getServer().getWorld(welt.getName()).setWeatherDuration(0);
-		
-		//Das Zombie event wurde gestoppt
-//		this.getServer().broadcastMessage(ChatColor.AQUA + messageFileConfiguration.getString("config.messages.zombie_event_stopped"));	
-	}
-	
-	//INTRESTING
-	public void setScoreboard(){
-		team.setAllowFriendlyFire(false);
-		team.setCanSeeFriendlyInvisibles(true);
-		team.setPrefix(ChatColor.DARK_RED + "");	
-		
-	}
-		
-	public void leave(Player playerSender){
-		
-		
-		playerSender.removePotionEffect(PotionEffectType.HEAL);
-		playerSender.removePotionEffect(PotionEffectType.SPEED);
-		playerSender.removePotionEffect(PotionEffectType.REGENERATION);
-		playerSender.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-			
-		playerSender.setHealth(20);
-		playerSender.setFoodLevel(20);
-					
-		
-		if(scoreboardSet==true){
-			board.clearSlot(DisplaySlot.SIDEBAR);
-			if(board.getTeam("zvpteam").hasPlayer(playerSender)){
-				board.getTeam("zvpteam").removePlayer(playerSender);
-			}
-			
-			playerSender.setScoreboard(board);			
-		}
-	}
-	
-	public void addKit(Player playerSender, String kitName){
-		
-		if(this.getConfig().getBoolean("config.starterkit.enable")==false){
-			this.getConfig().set("config.starterkit.enable", true);
-			
-			this.saveConfig();	
-		}	
-		
-		if(this.getConfig().get("config.starterkit." + kitName)==null){			
-			Inventory kitInv = Bukkit.createInventory(playerSender, 9,ChatColor.DARK_BLUE + "ZvP-Kit: " + kitName);
-			playerSender.openInventory(kitInv);		
-		}else{
-			//Kit schon vorhanden
-//			playerSender.sendMessage(ChatColor.RED + messageFileConfiguration.getString("config.error_messages.error_kit_already exists"));
-		}
-	}
-
 	private void loadConfig(){
 		
 		this.getConfig().options().header("\n" +
