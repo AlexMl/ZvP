@@ -3,6 +3,7 @@ package me.Aubli.ZvP.Game;
 import java.util.UUID;
 
 import me.Aubli.ZvP.Kits.IZvPKit;
+import me.Aubli.ZvP.Kits.KitManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -10,6 +11,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -61,6 +63,8 @@ public class ZvPPlayer {
 		if(arena.addPlayer(this)==false){
 			throw new Exception("Player already joined!");
 		}
+		
+		KitManager.getManager().openSelectKitGUI(this);
 	}
 		
 	
@@ -155,8 +159,14 @@ public class ZvPPlayer {
 		getPlayer().setScoreboard(getBoard());
 	}
 	
+	
 	public void sendMessage(String message) {
 		getPlayer().sendMessage(message);
+	}
+	
+	public void openInventory(Inventory inv) {
+		getPlayer().closeInventory();
+		getPlayer().openInventory(inv);
 	}
 	
 	
