@@ -59,12 +59,14 @@ public class ZvPPlayer {
 		this.mode = player.getGameMode();
 		
 		this.startPosition = null;
-		
-		if(arena.addPlayer(this)==false){
-			throw new Exception("Player already joined!");
-		}
+		this.kit = null;
 		
 		KitManager.getManager().openSelectKitGUI(this);
+	
+		if(arena.addPlayer(this)==false){
+			System.out.println("Exception");
+			//	throw new Exception("Player is waiting!");
+		}
 	}
 		
 	
@@ -160,6 +162,11 @@ public class ZvPPlayer {
 	}
 	
 	
+	public boolean hasKit() {
+		return getKit()!=null;
+	}
+	
+	
 	public void sendMessage(String message) {
 		getPlayer().sendMessage(message);
 	}
@@ -232,6 +239,9 @@ public class ZvPPlayer {
 			player.getInventory().setChestplate(null);
 			player.getInventory().setLeggings(null);
 			player.getInventory().setBoots(null);
+			
+			player.getInventory().setContents(getKit().getContents());
+			
 			
 			player.setTotalExperience(0);
 			player.setExp(0F);

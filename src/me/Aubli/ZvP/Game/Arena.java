@@ -340,7 +340,27 @@ public class Arena {
 	}
 	
 	
-	public boolean addPlayer(ZvPPlayer player){
+	public boolean addPlayer(final ZvPPlayer player){
+	
+		System.out.println("add " + containsPlayer(player.getPlayer()) + " Kit: " + player.hasKit());
+		
+		if(!player.hasKit()) {		
+			
+			if(!containsPlayer(player.getPlayer())) {
+				players.add(player);
+			}
+			
+			Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
+				
+				@Override
+				public void run() {
+					addPlayer(player);
+				}
+			}, 20L);
+			return true;
+		}else if(player.hasKit() && containsPlayer(player.getPlayer())) {
+			players.remove(player);		
+		}		
 		
 		if(!players.contains(player)){			
 			player.setStartPosition(getNewRandomLocation()); 
@@ -356,15 +376,20 @@ public class Arena {
 			
 			players.add(player);
 			
-			if(players.size()==minPlayers){
+			if(players.size()>=minPlayers && !isRunning()){
+				
+				for(ZvPPlayer p : players) {
+					if(p.hasKit()==false) {
+						for(ZvPPlayer p2 : players) {
+							if(p2.hasKit()) {
+								p2.sendMessage("waiting for players ..."); //TODO message
+							}
+						}
+						return false;
+					}
+				}				
 				GameManager.getManager().startGame(this, player.getLobby(), getMaxRounds(), getMaxWaves());
 			}
-			
-			if(players.size()==maxPlayers){
-				if(!isRunning()){
-					GameManager.getManager().startGame(this, player.getLobby(), getMaxRounds(), getMaxWaves());
-				}
-			}			
 			return true;
 		}
 		return false;
