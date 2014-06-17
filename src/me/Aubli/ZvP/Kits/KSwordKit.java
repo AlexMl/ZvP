@@ -15,7 +15,7 @@ public class KSwordKit implements IZvPKit{
 	private final ItemStack[] items;
 	
 	
-	public KSwordKit(String path) {
+	public KSwordKit() {
 		
 		this.name = "Sword-Kit";
 		this.icon = new ItemStack(Material.WOOD_SWORD);

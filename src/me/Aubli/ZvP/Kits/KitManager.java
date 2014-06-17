@@ -43,11 +43,14 @@ public class KitManager {
 		kits = new ArrayList<IZvPKit>();
 		kitPath.mkdirs();			
 		
-		IZvPKit bowKit = new KBowKit(kitPath.getAbsolutePath());
-		IZvPKit swordKit = new KSwordKit(kitPath.getAbsolutePath());
+		IZvPKit bowKit = new KBowKit();
+		IZvPKit swordKit = new KSwordKit();
+		IZvPKit nullKit = new KNullKit();
+		
 		
 		kits.add(bowKit);
 		kits.add(swordKit);
+		kits.add(nullKit);
 		
 		for(File f : kitPath.listFiles()) {
 			IZvPKit kit = new KCustomKit(f);
@@ -84,7 +87,7 @@ public class KitManager {
 	
 	
 	public void openSelectKitGUI(ZvPPlayer player) {
-		Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int)Math.ceil(((double)getKits()/9.0)))*9, "Select your Kit!");
+		Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int)Math.ceil(((double)getKits()+1.0/9.0)))*9, "Select your Kit!");
 		
 		for(IZvPKit kit : kits) {
 			ItemStack kitItem = kit.getIcon();
@@ -96,6 +99,7 @@ public class KitManager {
 						
 			kitInventory.addItem(kitItem);
 		}
+		
 		player.openInventory(kitInventory);		
 	}
 	

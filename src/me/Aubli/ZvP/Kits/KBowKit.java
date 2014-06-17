@@ -13,7 +13,7 @@ public class KBowKit implements IZvPKit{
 	private final ItemStack[] items;
 	
 	
-	public KBowKit(String path) {
+	public KBowKit() {
 		
 		this.name = "Bow-Kit";
 		this.icon = new ItemStack(Material.BOW);
