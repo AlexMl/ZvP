@@ -7,6 +7,7 @@ import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Kits.IZvPKit;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -56,7 +57,7 @@ public class ZvPCommands implements CommandExecutor {
 				
 				ItemStack[] content = playerSender.getInventory().getContents();
 				
-				KitManager.getManager().addKit(kitName, content);
+				KitManager.getManager().addKit(kitName, new ItemStack(Material.ITEM_FRAME), content);
 			}
 			
 			if(args.length==2) {
