@@ -171,6 +171,21 @@ public class ZvPCommands implements CommandExecutor {
 			}
 			
 			if(args.length==2){
+				if(args[0].equalsIgnoreCase("addkit")) {
+					if(playerSender.hasPermission("zvp.manage.kit")) {
+						if(KitManager.getManager().getKit(args[1])==null) {
+							KitManager.getManager().openAddKitGUI(playerSender, args[1]);
+							return true;
+						}else {
+							//TODO message kit already exists
+							return true;
+						}
+					}else {
+						//TODO permission
+						return true;
+					}
+				}
+				
 				if(args[0].equalsIgnoreCase("add")){
 					if(args[1].equalsIgnoreCase("arena")){
 						if(playerSender.hasPermission("zvp.manage.arena")){

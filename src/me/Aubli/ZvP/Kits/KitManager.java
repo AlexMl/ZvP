@@ -47,16 +47,14 @@ public class KitManager {
 		IZvPKit swordKit = new KSwordKit();
 		IZvPKit nullKit = new KNullKit();
 		
-		
 		kits.add(bowKit);
 		kits.add(swordKit);
-		kits.add(nullKit);
 		
 		for(File f : kitPath.listFiles()) {
 			IZvPKit kit = new KCustomKit(f);
 			kits.add(kit);
 		}
-		
+		kits.add(nullKit);
 	}
 	
 	
@@ -87,8 +85,8 @@ public class KitManager {
 	
 	
 	public void openSelectKitGUI(ZvPPlayer player) {
-		Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int)Math.ceil(((double)getKits()+1.0/9.0)))*9, "Select your Kit!");
-		
+		Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int)Math.ceil(((double)getKits()/9.0)))*9, "Select your Kit!");
+
 		for(IZvPKit kit : kits) {
 			ItemStack kitItem = kit.getIcon();
 			ItemMeta kitMeta = kitItem.getItemMeta();
@@ -107,6 +105,12 @@ public class KitManager {
 		Inventory kitInv = Bukkit.createInventory(player, 9, ChatColor.DARK_BLUE + "ZvP-Kit: " + ChatColor.RED + kitName);
 		player.closeInventory();
 		player.openInventory(kitInv);
+	}
+	
+	public void openAddKitIconGUI(Player player) {
+		Inventory inv = Bukkit.createInventory(player, 9, "Place Kit icon here");
+		player.closeInventory();
+		player.openInventory(inv);
 	}
 	
 } 
