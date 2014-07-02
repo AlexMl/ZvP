@@ -59,7 +59,7 @@ public class GameManager {
 	}
 	
 	
-	
+	//Config
 	public void loadConfig(){
 		
 		if(!new File(arenaPath).exists() || !new File(lobbyPath).exists()){
@@ -94,7 +94,8 @@ public class GameManager {
 	}
 	
 	
-	private void loadArenas(){		
+	//Load and save
+	private void loadArenas(){
 		for(int i=0;i<new File(arenaPath).listFiles().length;i++){			
 			Arena arena = new Arena(new File(arenaPath).listFiles()[i]);
 			
@@ -127,6 +128,7 @@ public class GameManager {
 	}
 	
 	
+	//Method to get new UIDs
 	public int getNewID(String path){
 		
 		File folder = new File(path);
@@ -153,6 +155,7 @@ public class GameManager {
 	}
 	
 	
+	//arena, lobby getter methods
 	public Arena[] getArenas(){
 		Arena[] array = new Arena[arenas.size()];
 		
@@ -190,6 +193,7 @@ public class GameManager {
 	}
 
 	
+	//get ZvPPlayer from Player
 	public ZvPPlayer getPlayer(Player player){
 		for(Arena a : getArenas()){
 			for(ZvPPlayer zp : a.getPlayers()){
@@ -202,6 +206,7 @@ public class GameManager {
 	}
 	
 	
+	//Scoreboard manager
 	public ScoreboardManager getBoardManager() {
 		return boardman;
 	}
@@ -211,7 +216,8 @@ public class GameManager {
 	}
 	
 	
-	public boolean addArena(Location min, Location max){		
+	//Manage Arenas and Lobbys
+	public boolean addArena(Location min, Location max){
 		
 		if(min.getWorld().equals(max.getWorld())){
 			
@@ -266,7 +272,6 @@ public class GameManager {
 		lobbys.add(l);
 	}
 	
-	
 	public void removeArena(Arena arena){
 		arenas.remove(arena);
 		arena.delete();
@@ -278,6 +283,7 @@ public class GameManager {
 	}
 	
 	
+	//Manage Players
 	public boolean createPlayer(Player player, Arena arena, Lobby lobby){
 		
 		if(!arena.isFull() && (arena.getStatus()==ArenaStatus.WAITING)){
@@ -302,7 +308,8 @@ public class GameManager {
 	}
 	
 	
-	public void startGame(Arena a, Lobby l, int rounds, int waves){		
+	//Game control
+	public void startGame(Arena a, Lobby l, int rounds, int waves){
 		a.start(rounds, waves);
 		SignManager.getManager().updateSigns(l);	
 		SignManager.getManager().updateSigns(a);
@@ -331,6 +338,5 @@ public class GameManager {
 		}
 		return false;
 	}
-	
 	
 }
