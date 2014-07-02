@@ -72,7 +72,7 @@ public class GameRunnable extends BukkitRunnable{
 						arena.spawnZombies((int)spawnRate/2);
 					}else {
 						arena.spawnZombies(1);	
-						System.out.println(1);
+					//	System.out.println(1);
 					}
 				}else {
 					spawnZombies = false;
@@ -107,7 +107,9 @@ public class GameRunnable extends BukkitRunnable{
 			
 		}
 
-		if(arena.getLivingZombies()>0)arena.sendMessage("Arena: " + arena.getID() + " : " + ChatColor.RED + arena.getStatus().toString() + "; " + ChatColor.RESET + arena.getRound() + ":" + arena.getWave() + " Z:" + arena.getLivingZombies());
+		if(arena.getLivingZombies()>0) {
+			arena.sendMessage("Arena: " + arena.getID() + " : " + ChatColor.RED + arena.getStatus().toString() + "; " + ChatColor.RESET + arena.getRound() + ":" + arena.getWave() + " Z:" + arena.getLivingZombies() + ":" + arena.getKilledZombies());
+		}
 		arena.getWorld().setTime(15000L);
 		seconds++;
 	}
