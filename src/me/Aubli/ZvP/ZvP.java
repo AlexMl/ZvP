@@ -160,6 +160,10 @@ public class ZvP extends JavaPlugin{
  	public static int getSaveTime() {
  		return TIME_BETWEEN_WAVES;
  	}
+ 	
+ 	public static int getDefaultDistance() {		
+		return 10;
+	}
 	
  	//INTRESTING
 	/* 
@@ -200,6 +204,7 @@ public class ZvP extends JavaPlugin{
 		this.getConfig().addDefault("config.saveTime", 30);
 		
 		this.getConfig().addDefault("config.spawnRate", 30);
+		this.getConfig().addDefault("config.saveRadius", 3);
 		
 		this.getConfig().addDefault("config.Locale", "en");
 		
@@ -264,5 +269,6 @@ public class ZvP extends JavaPlugin{
 		
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
-	}		
+	}
+		
 }

@@ -208,12 +208,12 @@ public class Arena {
 	public Location getMax(){
 		return maxLoc;
 	}	
-	
+
 	public Location getNewRandomLocation() {
 		
 		int x;
 		int y;
-		int z;
+		int z;		
 		
 		x = rand.nextInt((getMax().getBlockX()-getMin().getBlockX()-1)) + getMin().getBlockX() + 1;
 		y = getWorld().getHighestBlockYAt(minLoc)+1;
@@ -225,6 +225,27 @@ public class Arena {
 			return startLoc.clone();
 		}else {
 			return getNewRandomLocation();
+		}
+		
+	}
+	
+	public Location getNewSaveLocation() {
+		
+		final int distance = ZvP.getDefaultDistance();
+		
+		final Location spawnLoc = getNewRandomLocation();
+		
+		for(ZvPPlayer p : getPlayers()) {
+			
+			if(p.getLocation().distance(spawnLoc)<=distance) {
+				return getNewSaveLocation();
+			}
+		}
+		
+		if(containsLocation(spawnLoc)) {
+			return spawnLoc.clone();
+		}else {
+			return getNewSaveLocation();
 		}
 		
 	}
@@ -462,7 +483,7 @@ public class Arena {
 	
 	public void spawnZombies(int amount) {
 		for(int i=0;i<amount;i++) {
-			customizeEntity(getWorld().spawnEntity(getNewRandomLocation(), EntityType.ZOMBIE));
+			customizeEntity(getWorld().spawnEntity(getNewSaveLocation(), EntityType.ZOMBIE));
 		}
 		updatePlayerBoards();
 	}
@@ -480,7 +501,7 @@ public class Arena {
 		getWorld().setMonsterSpawnLimit(0);
 		clearArena();
 		
-		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSaveTime(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 10L).getTaskId();
+		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSaveTime(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 1L).getTaskId();
 		//TODO Start message
 	}	
 	
