@@ -51,7 +51,7 @@ public class KCustomKit implements IZvPKit{
 				enchString += "}";
 				
 				String itemString = "id: " + item.getType().toString() + ", amount: " + item.getAmount() + ", data: " + item.getDurability() + ", " + enchString;
-				System.out.println(itemString);
+			//	System.out.println(itemString);
 				itemList.add(itemString);		
 			}
 		}
@@ -83,48 +83,57 @@ public class KCustomKit implements IZvPKit{
 		
 		ArrayList<ItemStack> itemArray = new ArrayList<ItemStack>();
 		
-		for(Object listObject : itemList) {
+		try {
 			
-			String itemString = (String) listObject;
-			
-			Material m = Material.getMaterial(itemString.split(", ")[0].split("id: ")[1]);
-			
-			int amount = Integer.parseInt(itemString.split(", ")[1].split("amount: ")[1]);
-			
-			short data = Short.parseShort(itemString.split(", ")[2].split("data: ")[1]);
-			
-			String enchString = itemString.split("ench: ")[1].replace("{", "").replace("}", "");
-			
-			String[] enchantments = enchString.split(", ");
-			
-			ItemStack item = new ItemStack(m, amount, data);
-			
-			if(enchantments.length>0) {
-				for(String ench : enchantments) {
-					if(!ench.isEmpty()) {
-						System.out.println("E: " + ench);
-						Enchantment itemEnchantment = Enchantment.getByName(ench.split(":")[0]);
-						int level = Integer.parseInt(ench.split(":")[1]);
-						item.addUnsafeEnchantment(itemEnchantment, level);
+			for(Object listObject : itemList) {
+				
+				String itemString = (String) listObject;
+				
+				Material m = Material.getMaterial(itemString.split(", ")[0].split("id: ")[1]);
+				
+				int amount = Integer.parseInt(itemString.split(", ")[1].split("amount: ")[1]);
+				
+				short data = Short.parseShort(itemString.split(", ")[2].split("data: ")[1]);
+				
+				String enchString = itemString.split("ench: ")[1].replace("{", "").replace("}", "");
+				
+				String[] enchantments = enchString.split(", ");
+				
+				ItemStack item = new ItemStack(m, amount, data);
+				
+				if(enchantments.length>0) {
+					for(String ench : enchantments) {
+						if(!ench.isEmpty()) {
+							//System.out.println("E: " + ench);
+							Enchantment itemEnchantment = Enchantment.getByName(ench.split(":")[0]);
+							int level = Integer.parseInt(ench.split(":")[1]);
+							item.addUnsafeEnchantment(itemEnchantment, level);
+						}
 					}
 				}
+				
+			//	System.out.println(item);
+				
+				itemArray.add(item);
 			}
 			
-			System.out.println(item);
+			// - { id: IRON_SWORD, amount: 1, data: 0, ench: {DAMAGE_ALL:1} }
 			
-			itemArray.add(item);
+			
+			
+			ItemStack[] returnStack = new ItemStack[itemArray.size()];
+			
+			for (int i = 0; i < returnStack.length; i++) {
+				returnStack[i] = itemArray.get(i);
+			}	
+			
+			return returnStack;
+			
+		}catch(Exception e) {
+			System.out.println("Error while loading Custom Kit: " + getName() + "  Error: " + e.getMessage() + " in File " + kitFile.getPath());			
 		}
 		
-		// - { id: IRON_SWORD, amount: 1, data: 0, ench: {DAMAGE_ALL:1} }
-		
-		
-		
-		ItemStack[] returnStack = new ItemStack[itemArray.size()];
-		
-		for (int i = 0; i < returnStack.length; i++) {
-			returnStack[i] = itemArray.get(i);
-		}				
-		return returnStack;
+		return null;
 	}
 	
 	private ItemStack parseIcon(String itemString) {
