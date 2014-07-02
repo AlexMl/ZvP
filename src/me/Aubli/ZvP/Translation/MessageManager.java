@@ -23,7 +23,7 @@ public class MessageManager {
 	
 	public MessageManager(Locale loc){
 		
-		this.languageFile = new File(ZvP.getInstance().getDataFolder().getPath() + "/messages/" + loc.toString() + ".yml");	
+		this.languageFile = new File(ZvP.getInstance().getDataFolder().getPath() + "/Messages/" + loc.toString() + ".yml");	
 		this.langConfig = YamlConfiguration.loadConfiguration(languageFile);
 		
 		this.loc = loc;
