@@ -231,7 +231,7 @@ public class Arena {
 	
 	public Location getNewSaveLocation() {
 		
-		final int distance = ZvP.getDefaultDistance();
+		final double distance = ZvP.getDefaultDistance();
 		
 		final Location spawnLoc = getNewRandomLocation();
 		

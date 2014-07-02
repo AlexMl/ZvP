@@ -46,7 +46,9 @@ public class ZvP extends JavaPlugin{
 	private static int START_DELAY;
 	private static int TIME_BETWEEN_WAVES;
 	private static int ZOMBIE_SPAWN_RATE;
-		
+	private static double SAVE_RADIUS;	
+	
+	
 	private boolean useMetrics = false;
 
 	@Override	
@@ -161,8 +163,8 @@ public class ZvP extends JavaPlugin{
  		return TIME_BETWEEN_WAVES;
  	}
  	
- 	public static int getDefaultDistance() {		
-		return 10;
+ 	public static double getDefaultDistance() {		
+		return SAVE_RADIUS;
 	}
 	
  	//INTRESTING
@@ -204,7 +206,7 @@ public class ZvP extends JavaPlugin{
 		this.getConfig().addDefault("config.saveTime", 30);
 		
 		this.getConfig().addDefault("config.spawnRate", 30);
-		this.getConfig().addDefault("config.saveRadius", 3);
+		this.getConfig().addDefault("config.saveRadius", 3.0);
 		
 		this.getConfig().addDefault("config.Locale", "en");
 		
@@ -264,6 +266,8 @@ public class ZvP extends JavaPlugin{
 		TIME_BETWEEN_WAVES = getConfig().getInt("config.saveTime");
 		
 		ZOMBIE_SPAWN_RATE = getConfig().getInt("config.spawnRate");		
+		
+		SAVE_RADIUS = getConfig().getDouble("config.saveRadius");
 		
 		locale = new Locale(getConfig().getString("config.Locale"));
 		
