@@ -233,7 +233,7 @@ public class Arena {
 		return getPlayers()[rand.nextInt(getPlayers().length)];
 	}
 	
-	public ZvPPlayer[] getPlayers(){		
+	public ZvPPlayer[] getPlayers() {		
 		ZvPPlayer[] parray = new ZvPPlayer[players.size()];
 		
 		for(int i=0;i<players.size();i++){
@@ -242,7 +242,7 @@ public class Arena {
 		return parray;
 	}
 	
-	private Entity[] getEntities(){
+	private Entity[] getEntities() {
 		List<Entity> eList = new ArrayList<Entity>();
 		Entity[] entities;
 		
@@ -270,7 +270,7 @@ public class Arena {
 		return entities;
 	}
 	
-	public int getLivingZombies(){
+	public int getLivingZombies() {
 		int zombies = 0;
 		for(Entity e : getEntities()){
 			if(e instanceof Zombie){
@@ -278,6 +278,14 @@ public class Arena {
 			}
 		}
 		return zombies;
+	}
+	
+	public int getKilledZombies() {
+		int kills = 0;
+		for(ZvPPlayer p : getPlayers()) {
+			kills += p.getKills();
+		}
+		return kills;
 	}
 	
 	
@@ -456,6 +464,7 @@ public class Arena {
 		for(int i=0;i<amount;i++) {
 			customizeEntity(getWorld().spawnEntity(getNewRandomLocation(), EntityType.ZOMBIE));
 		}
+		updatePlayerBoards();
 	}
 	
 	
@@ -471,7 +480,7 @@ public class Arena {
 		getWorld().setMonsterSpawnLimit(0);
 		clearArena();
 		
-		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSaveTime(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 1*5L).getTaskId();
+		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSaveTime(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 10L).getTaskId();
 		//TODO Start message
 	}	
 	
