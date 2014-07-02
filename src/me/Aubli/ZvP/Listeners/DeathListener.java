@@ -1,8 +1,10 @@
 package me.Aubli.ZvP.Listeners;
 
+import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
@@ -24,9 +26,17 @@ public class DeathListener implements Listener{
 				eventPlayer = event.getEntity().getKiller();
 				
 				if(game.isInGame(eventPlayer)) {
-					ZvPPlayer player = game.getPlayer(eventPlayer);
+					final ZvPPlayer player = game.getPlayer(eventPlayer);
+					event.getEntity().remove();
 					
-					player.addKill();
+					Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
+						
+						@Override
+						public void run() {
+							player.addKill();
+						}
+					}, 5L);
+					
 					return;
 				}
 			}
