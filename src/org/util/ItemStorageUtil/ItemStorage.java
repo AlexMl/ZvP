@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class ItemStorage {
 	
-	public static void saveToFile(File saveFile, String configSection, ItemStack[] content) {
+	public static void saveItemsToFile(File saveFile, String configSection, ItemStack[] content) {
 		
 		FileConfiguration fileConfig = YamlConfiguration.loadConfiguration(saveFile);
 		
@@ -54,7 +54,7 @@ public class ItemStorage {
 	}
 	
 	
-	public static ItemStack[] getFromFile(List<?> itemList) throws Exception {
+	public static ItemStack[] getItemsFromFile(List<?> itemList) throws Exception {
 		
 		ArrayList<ItemStack> itemArray = new ArrayList<ItemStack>();
 		

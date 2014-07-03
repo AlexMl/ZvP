@@ -35,7 +35,7 @@ public class KCustomKit implements IZvPKit{
 			
 		kitConfig.set("name", name);
 		kitConfig.set("icon", icon.getType().toString());
-		ItemStorage.saveToFile(kitFile, "items", content);
+		ItemStorage.saveItemsToFile(kitFile, "items", content);
 		
 		try {
 			kitConfig.save(kitFile);
@@ -56,7 +56,7 @@ public class KCustomKit implements IZvPKit{
 	
 	private ItemStack[] parseItemStack(List<?> itemList) {
 		try {
-			return ItemStorage.getFromFile(itemList);
+			return ItemStorage.getItemsFromFile(itemList);
 		} catch (Exception e) {
 			ZvP.log.log(Level.WARNING, "Error while loading Custom Kit: " + getName() + "  Error: " + e.getMessage() + " in File " + kitFile.getPath(), e);			
 		}
