@@ -13,6 +13,13 @@ import org.bukkit.inventory.ItemStack;
 
 public class ItemStorage {
 	
+	/**
+	 * Save an Array of ItemStacks to an specific file in a specific config section.
+	 * 
+	 * @param saveFile			The file to save
+	 * @param configSection		The config section
+	 * @param content			The Array of ItemStacks
+	 */
 	public static void saveItemsToFile(File saveFile, String configSection, ItemStack[] content) {
 		
 		FileConfiguration fileConfig = YamlConfiguration.loadConfiguration(saveFile);
@@ -53,7 +60,13 @@ public class ItemStorage {
 		}
 	}
 	
-	
+	/**
+	 * Get an Array of ItemStacks from an List of items. Used in cooperation with the saveItemsToFile method.
+	 *  
+	 * @param itemList				The list of items
+	 * @return {@link ItemStack[]} 	The array of {@link ItemStack}s with data, {@link Enchantment}, amount
+	 * @throws Exception			Throws {@link Exception} if a listentry is not correct.
+	 */
 	public static ItemStack[] getItemsFromFile(List<?> itemList) throws Exception {
 		
 		ArrayList<ItemStack> itemArray = new ArrayList<ItemStack>();
