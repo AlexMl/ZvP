@@ -13,6 +13,14 @@ import org.util.ItemStorageUtil.ItemStorage;
 
 public class ShopManager {
 
+	public enum ItemCategory {		
+		FOOD,
+		ARMOR,
+		WEAPONS,
+		MISC,
+		;		
+	}	
+	
 	private File itemFile;
 	private FileConfiguration itemConfig;
 	
@@ -53,7 +61,6 @@ public class ShopManager {
 	}
 	
 	
-	//Shop control
 	public ItemStack[] getItems() {
 		
 		return null;

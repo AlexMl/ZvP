@@ -1,5 +1,7 @@
 package me.Aubli.ZvP.Shop;
 
+import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -9,9 +11,11 @@ public class ShopItem {
 
 	private double price;
 	
+	private final ItemCategory category;
 	
-	public ShopItem(ItemStack item, double price) {
+	public ShopItem(ItemStack item, ItemCategory cat, double price) {
 		this.item = item.clone();
+		this.category = cat;
 		this.price = price;
 	}
 	
@@ -28,7 +32,10 @@ public class ShopItem {
 	public ItemStack getItem() {
 		return this.item;
 	}
-
+	
+	public ItemCategory getCategory() {
+		return this.category;
+	}
 
 	public Material getType() {
 		return getItem().getType();

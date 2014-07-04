@@ -3,11 +3,10 @@ package org.util.ItemStorageUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import me.Aubli.ZvP.Shop.ShopItem;
+import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -118,7 +117,7 @@ public class ItemStorage {
 	 */
 	public static ShopItem[] getShopItemsFromFile(List<?> itemList) throws Exception {
 		
-		Map<ItemStack, Double> itemMap = new HashMap<ItemStack, Double>();
+		ArrayList<ShopItem> items = new ArrayList<ShopItem>();
 		
 		for(Object listObject : itemList) {
 
@@ -129,15 +128,17 @@ public class ItemStorage {
 				int amount = parseAmount(itemString);
 				short data = parseData(itemString);				
 				double price = parsePrice(itemString);
+				ItemCategory cat = parseCategory(itemString);
 				
 				ItemStack item = new ItemStack(m, amount, data);
 				applyEnchantment(item, itemString);
-				itemMap.put(item, price);				
+				
+				items.add(toShopItem(item, cat, price));				
 			}catch(Exception e) {
 				throw new Exception(e.getMessage() + " in Object: " + (String)listObject);
 			}
 		}		
-		return toShopItems(itemMap);
+		return toShopArray(items);
 	}
 	
 	private static String generateItemString(String enchString, ItemStack item) {
@@ -145,7 +146,7 @@ public class ItemStorage {
 	}
 	
 	private static String generateShopItemString(String enchString, ShopItem item) {
-		return "id: " + item.getType().toString() + ", amount: " + item.getItem().getAmount() + ", data: " + item.getItem().getDurability() + ", Price: " + item.getPrice() + ", " + enchString;
+		return "id: " + item.getType().toString() + ", amount: " + item.getItem().getAmount() + ", data: " + item.getItem().getDurability() + ", category: " + item.getCategory().toString() + ", price: " + item.getPrice() + ", " + enchString;
 	}
 	
 	private static String translateEnchantment(ItemStack item) {
@@ -181,8 +182,12 @@ public class ItemStorage {
 		return Short.parseShort(itemString.split(", ")[2].split("data: ")[1]);
 	}
 	
+	private static ItemCategory parseCategory(String itemString) throws Exception {
+		return ItemCategory.valueOf(itemString.split(", ")[3].split("category: ")[1]);
+	}
+	
 	private static double parsePrice(String itemString) throws NumberFormatException {
-		return Double.parseDouble(itemString.split(", ")[3].split("Price: ")[1]);
+		return Double.parseDouble(itemString.split(", ")[4].split("price: ")[1]);
 	}
 	
 	private static ItemStack applyEnchantment(ItemStack item, String itemString) throws Exception {
@@ -213,15 +218,16 @@ public class ItemStorage {
 		return returnStack;
 	}
 
-	private static ShopItem[] toShopItems(Map<ItemStack, Double> items) {
+	private static ShopItem toShopItem(ItemStack item, ItemCategory cat, double price) {
+		return new ShopItem(item, cat, price);
+	}
+	
+	private static ShopItem[] toShopArray(ArrayList<ShopItem> items) {			
 		
-		ShopItem[] shopItems = new ShopItem[items.size()];		
+		ShopItem[] shopItems = new ShopItem[items.size()];	
 		
-		int i = 0;
-		
-		for(ItemStack item : items.keySet()) {
-			shopItems[i] = new ShopItem(item, items.get(item));
-			i++;
+		for(int i=0;i<items.size();i++) {
+			shopItems[i] = items.get(i);		
 		}
 		
 		return shopItems;
