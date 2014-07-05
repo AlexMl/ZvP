@@ -33,7 +33,7 @@ public class ItemStorage {
 			if(item!=null && item.getType()!=Material.AIR) {
 				String enchString = translateEnchantment(item);				
 				String itemString = generateItemString(enchString, item);
-				System.out.println(itemString);
+				//System.out.println(itemString);
 				itemList.add(itemString);		
 			}
 		}
@@ -61,10 +61,10 @@ public class ItemStorage {
 		List<String> itemList = new ArrayList<String>();
 		
 		for(ShopItem item : content) {
-			if(item.getItem()!=null && item.getType()!=Material.AIR) {
+			if(item!=null && item.getItem()!=null && item.getItem().getType()!=Material.AIR) {
 				String enchString = translateEnchantment(item.getItem());				
 				String itemString = generateShopItemString(enchString, item);
-				System.out.println(itemString);
+				//System.out.println(itemString);
 				itemList.add(itemString);		
 			}
 		}
@@ -135,7 +135,7 @@ public class ItemStorage {
 				
 				items.add(toShopItem(item, cat, price));				
 			}catch(Exception e) {
-				throw new Exception(e.getMessage() + " in Object: " + (String)listObject);
+				throw new Exception(e.getMessage() + " in Object:\n" + (String)listObject);
 			}
 		}		
 		return toShopArray(items);
@@ -198,7 +198,7 @@ public class ItemStorage {
 		if(enchantments.length>0) {
 			for(String ench : enchantments) {
 				if(!ench.isEmpty()) {
-					System.out.println("E: " + ench);
+				//	System.out.println("E: " + ench);
 					Enchantment itemEnchantment = Enchantment.getByName(ench.split(":")[0]);
 					int level = Integer.parseInt(ench.split(":")[1]);
 					item.addUnsafeEnchantment(itemEnchantment, level);
