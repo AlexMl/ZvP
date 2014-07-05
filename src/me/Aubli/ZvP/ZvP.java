@@ -15,6 +15,7 @@ import me.Aubli.ZvP.Listeners.PlayerInteractListener;
 import me.Aubli.ZvP.Listeners.PlayerQuitListener;
 import me.Aubli.ZvP.Listeners.PlayerRespawnListener;
 import me.Aubli.ZvP.Listeners.SignChangelistener;
+import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Translation.MessageManager;
 
@@ -64,7 +65,6 @@ public class ZvP extends JavaPlugin{
 	
 	@Override
 	public void onEnable() {
-		
 		initialize();		
 		
 		log.info("[ZombieVsPlayer] Plugin is enabled!");
@@ -79,7 +79,8 @@ public class ZvP extends JavaPlugin{
 		new MessageManager(locale);
 		new GameManager();
 		new KitManager();
-		new SignManager();	
+		new ShopManager();
+		new SignManager();
 		
 		registerListeners();
 		getCommand("zvp").setExecutor(new ZvPCommands());

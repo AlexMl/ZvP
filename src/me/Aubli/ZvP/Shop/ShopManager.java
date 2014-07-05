@@ -17,10 +17,12 @@ public class ShopManager {
 	public enum ItemCategory {		
 		FOOD,
 		ARMOR,
-		WEAPONS,
+		WEAPON,
 		MISC,
 		;		
 	}	
+	
+	private static ShopManager instance;
 	
 	private File itemFile;
 	private FileConfiguration itemConfig;
@@ -28,11 +30,11 @@ public class ShopManager {
 	private ShopItem[] items;
 	
 	
-	public ShopManager() {
+	public ShopManager() {	
+		instance = this;
 		
 		itemFile = new File(ZvP.getInstance().getDataFolder().getPath() + "/Shop/items.yml");
-		itemConfig = YamlConfiguration.loadConfiguration(itemFile);
-		
+
 		if(!itemFile.exists()) {
 			try {
 				itemFile.getParentFile().mkdirs();			
@@ -42,6 +44,8 @@ public class ShopManager {
 				e.printStackTrace();
 			}
 		}
+		
+		itemConfig = YamlConfiguration.loadConfiguration(itemFile);		
 		
 		items = loadItems();
 	}
@@ -123,7 +127,7 @@ public class ShopManager {
 		
 		
 		//weapons
-		cat = ItemCategory.WEAPONS;
+		cat = ItemCategory.WEAPON;
 		item = new ItemStack(Material.DIAMOND_AXE);
 		defaultItems[27] = new ShopItem(item, cat, 9.0);
 		item = new ItemStack(Material.DIAMOND_SWORD);
@@ -145,22 +149,21 @@ public class ShopManager {
 		try {
 			return ItemStorage.getShopItemsFromFile(itemConfig.getList("items"));
 		} catch (Exception e) {
-			ZvP.log.log(Level.WARNING, "Error while loading Item from shop configuration!\nError: " + e.getMessage() + " in File " + itemFile.getPath(), e);			
+			ZvP.log.log(Level.WARNING, "Error while loading Item from shop configuration!\nError: " + e.getMessage() + " in File " + itemFile.getPath(), e);
 		}
 		return null;
 	}
 	
 	
-	public ItemStack[] getItems() {
-		
-		return null;
+	public static ShopManager getManager() {
+		return instance;
 	}
 	
-	
+	public ShopItem[] getItems() {
+		return items;
+	}
 	
 	public double getPrice(ItemStack item) {
 		return 0;
 	}
-	
-	
 }
