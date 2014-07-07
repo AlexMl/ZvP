@@ -48,6 +48,7 @@ public class InfoSign implements ISign{
 		try{
 			signFile.createNewFile();
 			signConfig.set("sign.ID", ID);
+			signConfig.set("sign.Type", getType().toString());
 			signConfig.set("sign.Arena", arena.getID());
 			signConfig.set("sign.Lobby", lobby.getID());
 			

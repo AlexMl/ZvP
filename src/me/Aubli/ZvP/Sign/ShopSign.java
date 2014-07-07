@@ -8,6 +8,7 @@ import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.Lobby;
+import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
 
 import org.bukkit.Bukkit;
@@ -33,7 +34,9 @@ public class ShopSign implements ISign{
 	private Arena arena;
 	private Lobby lobby;
 	
-	public ShopSign(Location signLoc, int ID, String path, Arena arena, Lobby lobby) throws Exception{
+	private ItemCategory cat;
+	
+	public ShopSign(Location signLoc, int ID, String path, Arena arena, Lobby lobby, ItemCategory cat) throws Exception{
 		this.ID = ID;
 		this.signLoc = signLoc.clone();
 		
@@ -45,11 +48,15 @@ public class ShopSign implements ISign{
 		this.arena = arena;
 		this.lobby = lobby;
 		
+		this.cat = cat;
+		
 		try{
 			signFile.createNewFile();
 			signConfig.set("sign.ID", ID);
+			signConfig.set("sign.Type", getType().toString());
 			signConfig.set("sign.Arena", arena.getID());
 			signConfig.set("sign.Lobby", lobby.getID());
+			signConfig.set("sign.Category", cat.toString());
 			
 			signConfig.set("sign.Location.world", signLoc.getWorld().getUID().toString());
 			signConfig.set("sign.Location.X", signLoc.getBlockX());
@@ -75,6 +82,8 @@ public class ShopSign implements ISign{
 		this.signConfig = YamlConfiguration.loadConfiguration(signFile);
 		
 		this.type = SignType.SHOP_SIGN;
+		
+		this.cat = ItemCategory.valueOf(signConfig.getString("sign.Category"));
 		
 		this.ID = signConfig.getInt("sign.ID");
 		this.signLoc = new Location(
@@ -125,13 +134,23 @@ public class ShopSign implements ISign{
 		return lobby;
 	}
 	
+	public ItemCategory getCategory() {
+		return cat;
+	}
+	
 	
 	public void update(){		
-		if(arena!=null){
+		if(arena!=null && cat!=null){
 			sign.setLine(0, ZvP.getPrefix());
-			sign.setLine(1, "AXE");
-			sign.setLine(2, ChatColor.AQUA + "7$");
-			sign.setLine(3, "s:axe");
+			sign.setLine(1, ChatColor.LIGHT_PURPLE + "Item Shop");
+			sign.setLine(2, ChatColor.RED + "Category:");
+			sign.setLine(3, ChatColor.BLUE + getCategory().toString());
+			sign.update(true);
+		}else if(arena!=null && cat==null) {
+			sign.setLine(0, ZvP.getPrefix());
+			sign.setLine(1, "");
+			sign.setLine(2, ChatColor.DARK_RED + "No category");
+			sign.setLine(3, ChatColor.DARK_RED + "set!");
 			sign.update(true);
 		}else{
 			sign.setLine(0, ZvP.getPrefix());
