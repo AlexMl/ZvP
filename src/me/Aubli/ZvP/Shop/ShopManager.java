@@ -22,6 +22,7 @@ public class ShopManager {
 		ARMOR,
 		WEAPON,
 		MISC,
+		NULL,
 		;		
 	}	
 	
