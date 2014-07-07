@@ -4,15 +4,20 @@ import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.Lobby;
+import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class SignChangelistener implements Listener{
 
@@ -46,7 +51,7 @@ public class SignChangelistener implements Listener{
 							
 							if(a!=null){
 								if(l!=null){
-									boolean success = SignManager.getManager().createSign(type, event.getBlock().getLocation().clone(), a, l);
+									boolean success = SignManager.getManager().createSign(type, event.getBlock().getLocation().clone(), a, l, null);
 									
 									if(success){
 										event.setLine(0, ZvP.getPrefix());
@@ -60,6 +65,41 @@ public class SignChangelistener implements Listener{
 											event.setLine(3, ChatColor.GREEN + "[JOIN]");	
 										}else if(type==SignType.SHOP_SIGN) {
 											//Do something
+											//Start gui 
+											//select ItemCategory
+											//create sign;
+											
+											Inventory catSelect = Bukkit.createInventory(eventPlayer, 9, "Select Category " + SignManager.getManager().getSign(event.getBlock().getLocation()).getID());
+											
+											ItemStack foodIcon = new ItemStack(Material.APPLE);
+											ItemStack armorIcon = new ItemStack(Material.IRON_HELMET);
+											ItemStack weaponIcon = new ItemStack(Material.WOOD_SWORD);
+											ItemStack miscIcon = new ItemStack(Material.BUCKET);
+											
+											ItemMeta meta = foodIcon.getItemMeta();
+											meta.setDisplayName(ItemCategory.FOOD.toString());
+											foodIcon.setItemMeta(meta);
+											
+											meta = armorIcon.getItemMeta();
+											meta.setDisplayName(ItemCategory.ARMOR.toString());
+											armorIcon.setItemMeta(meta);
+											
+											meta = weaponIcon.getItemMeta();
+											meta.setDisplayName(ItemCategory.WEAPON.toString());
+											weaponIcon.setItemMeta(meta);
+											
+											meta = miscIcon.getItemMeta();
+											meta.setDisplayName(ItemCategory.MISC.toString());
+											miscIcon.setItemMeta(meta);
+											
+											catSelect.addItem(foodIcon);
+											catSelect.addItem(armorIcon);
+											catSelect.addItem(weaponIcon);
+											catSelect.addItem(miscIcon);
+											
+											eventPlayer.closeInventory();
+											eventPlayer.openInventory(catSelect);
+											return;
 										}
 										//TODO Message
 										return;

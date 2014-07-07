@@ -1,12 +1,21 @@
 package me.Aubli.ZvP.Listeners;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
+import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Kits.KitManager;
+import me.Aubli.ZvP.Shop.ShopItem;
+import me.Aubli.ZvP.Shop.ShopManager;
+import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
+import me.Aubli.ZvP.Sign.ShopSign;
+import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Sign.SignManager.SignType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,8 +30,8 @@ public class GUIListener implements Listener{
 	@EventHandler
 	public void onClick(InventoryClickEvent event) {
 		if(event.getWhoClicked().hasPermission("zvp.play")) {
-			if(event.getInventory().getTitle().equalsIgnoreCase("Select your Kit!")) {
-				if(event.getCurrentItem()!=null && event.getCurrentItem().getType()!=Material.AIR) {
+			if(event.getCurrentItem()!=null && event.getCurrentItem().getType()!=Material.AIR) {
+				if(event.getInventory().getTitle().equalsIgnoreCase("Select your Kit!")) {				
 					event.setCancelled(true);
 					event.getWhoClicked().closeInventory();
 					
@@ -35,7 +44,37 @@ public class GUIListener implements Listener{
 						return;
 					}
 				}
-			}
+				if(event.getInventory().getTitle().contains("Select Category")) {					
+					event.setCancelled(true);
+					event.getWhoClicked().closeInventory();
+					
+					int signID = Integer.parseInt(event.getInventory().getTitle().split("Category ")[1]);
+					ItemCategory cat = ItemCategory.valueOf(event.getCurrentItem().getItemMeta().getDisplayName());
+					
+					if(cat!=null && SignManager.getManager().getSign(signID)!=null) {
+						ShopSign sign = (ShopSign)SignManager.getManager().getSign(signID);
+						
+						Arena a = sign.getArena();
+						Lobby l = sign.getLobby();
+						Location lo = sign.getLocation();
+						
+						SignManager.getManager().removeSign(signID);						
+						SignManager.getManager().createSign(SignType.SHOP_SIGN, lo, a, l, cat);
+					}
+				}
+				if(event.getInventory().getTitle().contains("Items: ")) {
+					event.setCancelled(true);
+					event.getWhoClicked().closeInventory();
+					
+					ItemCategory cat = ItemCategory.valueOf(event.getInventory().getTitle().split("s: ")[1]);
+					
+					ShopItem item = ShopManager.getManager().getItem(cat, event.getCurrentItem());
+					
+					Bukkit.broadcastMessage(item.getType() + ": " + item.getCategory() + " - " + item.getPrice());
+					event.getWhoClicked().getInventory().addItem(item.getItem());
+					return;
+				}
+			}			
 		}
 	}
 	
@@ -58,7 +97,7 @@ public class GUIListener implements Listener{
 				public void run() {
 					KitManager.getManager().openAddKitIconGUI(eventPlayer);			
 				}
-			}, 1*15L);
+			}, 1*10L);
 		}
 		
 		if(event.getInventory().getTitle().equalsIgnoreCase("Select your Kit!")) {

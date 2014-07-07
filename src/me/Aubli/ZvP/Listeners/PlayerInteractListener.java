@@ -1,19 +1,31 @@
 package me.Aubli.ZvP.Listeners;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.GameManager;
+import me.Aubli.ZvP.Shop.ShopItem;
+import me.Aubli.ZvP.Shop.ShopManager;
+import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 import me.Aubli.ZvP.Sign.InteractSign;
+import me.Aubli.ZvP.Sign.ShopSign;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class PlayerInteractListener implements Listener{
 	
@@ -58,25 +70,30 @@ public class PlayerInteractListener implements Listener{
 		
 		if(event.getAction()==Action.RIGHT_CLICK_BLOCK){
 			if(sm.isZVPSign(event.getClickedBlock().getLocation())){
-				if(sm.getType(event.getClickedBlock().getLocation())==SignType.INTERACT_SIGN){
+				if(sm.getType(event.getClickedBlock().getLocation())==SignType.INTERACT_SIGN) {
 					if(!GameManager.getManager().isInGame(eventPlayer)){
 						if(eventPlayer.hasPermission("zvp.play")){
-							
-							InteractSign sign = (InteractSign)sm.getSign(event.getClickedBlock().getLocation());
-							if(sign.getArena().isOnline()){
-								boolean success = GameManager.getManager().createPlayer(eventPlayer, sign.getArena(), sign.getLobby());
-								
-								if(success){
-									eventPlayer.sendMessage("You joined Arena " + sign.getArena().getID());
-									return;
+							if(eventPlayer.getInventory().getItemInHand().getType()==Material.AIR) {
+								InteractSign sign = (InteractSign)sm.getSign(event.getClickedBlock().getLocation());
+								if(sign.getArena().isOnline()){
+									boolean success = GameManager.getManager().createPlayer(eventPlayer, sign.getArena(), sign.getLobby());
+									
+									if(success){
+										eventPlayer.sendMessage("You joined Arena " + sign.getArena().getID()); //TODO message
+										return;
+									}else{
+										event.setCancelled(true);
+										eventPlayer.sendMessage("arena full or running"); //TODO message
+										return;
+									}
 								}else{
 									event.setCancelled(true);
-									eventPlayer.sendMessage("arena full or running"); //TODO message
+									eventPlayer.sendMessage("arena offline"); //TODO message
 									return;
 								}
-							}else{
+							}else {
 								event.setCancelled(true);
-								eventPlayer.sendMessage("arena offline"); //TODO message
+								eventPlayer.sendMessage("You have something in your hand"); //TODO message
 								return;
 							}
 						}else{
@@ -89,40 +106,47 @@ public class PlayerInteractListener implements Listener{
 						eventPlayer.sendMessage("already in game"); //TODO message
 						return;
 					}
+				}else if(sm.getType(event.getClickedBlock().getLocation())==SignType.SHOP_SIGN) {
+					if(GameManager.getManager().isInGame(eventPlayer)){
+						if(eventPlayer.hasPermission("zvp.play")){
+							
+							ShopSign shopSign = (ShopSign)sm.getSign(event.getClickedBlock().getLocation());
+							ShopManager shop = ShopManager.getManager();
+							
+							ItemCategory cat = shopSign.getCategory();
+							Inventory shopInv = Bukkit.createInventory(eventPlayer, ((int)Math.ceil((double)shop.getItems(cat).size()/9.0))*9, "Items: " + cat.toString());
+							
+							for(ShopItem shopItem : shop.getItems(cat)) {
+								
+								ItemStack item = shopItem.getItem();
+								ItemMeta meta = item.getItemMeta();
+								List<String> lore = new ArrayList<String>();
+								
+								lore.add("Category: " + shopItem.getCategory().toString());
+								lore.add(ChatColor.RED + "Price: " + shopItem.getPrice());
+								
+								meta.setLore(lore);
+								item.setItemMeta(meta);
+								shopInv.addItem(item);
+							}
+							eventPlayer.closeInventory();
+							eventPlayer.openInventory(shopInv);
+							return;
+						}else{
+							event.setCancelled(true);
+							eventPlayer.sendMessage("No permissions"); //TODO Permission Message
+							return;						
+						}
+					}else{
+						event.setCancelled(true);
+						eventPlayer.sendMessage("not in game"); //TODO message
+						return;
+					}					
 				}
 			}		
 		}
 		
-		/*
-		if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
-		
-			FileConfiguration messageFileConfiguration = YamlConfiguration.loadConfiguration(plugin.messageFile);
-		
-			
-			PlayerInventory inv = eventPlayer.getInventory();
-			
-			String specNotSet = messageFileConfiguration.getString("config.error_messages.error_spectator_place_not_set");
-			String[] specNotSetArray = specNotSet.split("<newLine>");
-			
-			Location zombiePvpLoc = null;
-			World zombieZvpLocWorld;
-			double zombieZvpLocX, zombieZvpLocY, zombieZvpLocZ;
-			float zombieZvpLocYaw, zombieZvpLocPitch; 
-			
-			if(plugin.getConfig().getString("config.mem.zombieZvPlocation")!=null){	
-				
-				zombieZvpLocWorld = Bukkit.getServer().getWorld(plugin.getConfig().getString("config.mem.zombieZvPlocation.world"));
-				zombieZvpLocX = plugin.getConfig().getDouble("config.mem.zombieZvPlocation.x");
-				zombieZvpLocY = plugin.getConfig().getDouble("config.mem.zombieZvPlocation.y");
-				zombieZvpLocZ = plugin.getConfig().getDouble("config.mem.zombieZvPlocation.z");
-				zombieZvpLocPitch = (float) plugin.getConfig().getDouble("config.mem.zombieZvPlocation.pitch");
-				zombieZvpLocYaw = (float) plugin.getConfig().getDouble("config.mem.zombieZvPlocation.yaw");
-				
-				zombiePvpLoc = new Location(zombieZvpLocWorld, zombieZvpLocX, zombieZvpLocY, zombieZvpLocZ);
-				zombiePvpLoc.setYaw(zombieZvpLocYaw);
-				zombiePvpLoc.setPitch(zombieZvpLocPitch);
-			}
-			
+		/*		
 			eisenSchwertPreis = plugin.getConfig().getInt("config.price.buy.ironSword");//i:sword
 			steinSchwertPreis = plugin.getConfig().getInt("config.price.buy.stoneSword");//s:sword
 			holzSchwertPreis = plugin.getConfig().getInt("config.price.buy.woodenSword");//w:sword
