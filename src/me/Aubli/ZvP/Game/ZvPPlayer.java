@@ -219,8 +219,6 @@ public class ZvPPlayer {
 		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RESET + "-------------")).setScore(8);
 		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Kills: " + getKills())).setScore(7);
 		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_PURPLE + "Deaths: " + getDeaths())).setScore(6);
-				
-		System.out.println("sb");
 		
 		Objective belowObj = getBoard().getObjective("zvp-kills");		
 		if(belowObj==null) {
