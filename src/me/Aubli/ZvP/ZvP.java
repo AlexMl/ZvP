@@ -39,7 +39,7 @@ public class ZvP extends JavaPlugin{
 	
 	private static String pluginPrefix = ChatColor.DARK_GREEN + "[" + ChatColor.DARK_RED + "Z" + ChatColor.DARK_GRAY + "v" + ChatColor.DARK_RED + "P" + ChatColor.DARK_GREEN + "]"  + ChatColor.RESET + " ";
 	
-	private static Locale locale;
+	private Locale locale;
 	
 	private static int maxPlayers;
 	private static int DEFAULT_ROUNDS;
@@ -49,13 +49,12 @@ public class ZvP extends JavaPlugin{
 	private static int ZOMBIE_SPAWN_RATE;
 	private static double SAVE_RADIUS;	
 	
-	
 	private boolean useMetrics = false;
 
 	@Override	
 	public void onDisable() {
 		
-		for(Player p: Bukkit.getOnlinePlayers()){
+		for(Player p : Bukkit.getOnlinePlayers()){
 			removeTool(p);
 		}		
 		GameManager.getManager().shutdown();
