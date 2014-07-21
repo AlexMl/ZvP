@@ -2,14 +2,17 @@ package me.Aubli.ZvP.Kits;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.Potion;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.ZvPPlayer;
@@ -84,15 +87,38 @@ public class KitManager {
 	}
 	
 	
+	@SuppressWarnings("deprecation")
 	public void openSelectKitGUI(ZvPPlayer player) {
 		Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int)Math.ceil(((double)getKits()/9.0)))*9, "Select your Kit!");
 
 		for(IZvPKit kit : kits) {
 			ItemStack kitItem = kit.getIcon();
 			ItemMeta kitMeta = kitItem.getItemMeta();
+		
+			ArrayList<String> lore = new ArrayList<String>();
+			lore.add(ChatColor.GREEN + "Content:");
+			
+			for(ItemStack stack : kit.getContents()) {
+				
+				lore.add(ChatColor.GREEN + "" + stack.getAmount() + "x " + stack.getType().toString());
+				
+				if(stack.getType()==Material.POTION) {
+					Potion p = Potion.fromDamage(stack.getDurability());					
+					lore.add(ChatColor.DARK_BLUE + "  -" + p.getType() + " L" + p.getLevel());
+				}			
+				
+				Map<Enchantment, Integer> enchs = stack.getEnchantments();						
+				if(enchs.size()>0) {	
+					for(Enchantment e : enchs.keySet()) {
+						lore.add(ChatColor.DARK_RED + "  -" + e.getName() + " L" + enchs.get(e));
+					}
+				}			
+			}
 			
 			kitMeta.setDisplayName(kit.getName());
+			kitMeta.setLore(lore);
 			kitMeta.addEnchant(Enchantment.DURABILITY, 1, true);
+			
 			kitItem.setItemMeta(kitMeta);
 						
 			kitInventory.addItem(kitItem);
