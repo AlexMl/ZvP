@@ -144,6 +144,11 @@ public class PlayerInteractListener implements Listener{
 					}					
 				}
 			}		
+		}else if(event.getAction()==Action.LEFT_CLICK_BLOCK) {
+			if(GameManager.getManager().isInGame(eventPlayer)) {
+				event.setCancelled(true);
+				return;
+			}
 		}
 		
 		/*		

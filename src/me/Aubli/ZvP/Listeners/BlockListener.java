@@ -23,6 +23,11 @@ public class BlockListener implements Listener{
 		
 		eventPlayer = event.getPlayer();
 		
+		if(game.isInGame(eventPlayer)){
+			event.setCancelled(true);
+			return;
+		}
+		
 		if(eventPlayer.getItemInHand()!=null){
 			if(eventPlayer.getItemInHand().equals(ZvP.tool)){
 				if(eventPlayer.hasPermission("zvp.tool")){
@@ -57,12 +62,7 @@ public class BlockListener implements Listener{
 					return;
 				}
 			}
-		}
-		
-		if(game.isInGame(eventPlayer)){
-			event.setCancelled(true);
-			return;
-		}
+		}	
 	}
 	
 	@EventHandler
