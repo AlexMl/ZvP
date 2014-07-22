@@ -76,9 +76,14 @@ public class GUIListener implements Listener{
 					if(player!=null && GameManager.getManager().isInGame((Player)event.getWhoClicked())){
 						
 						if(player.getArena().getBalance()>=item.getPrice()) {
+							
+							ItemStack boughtItem = new ItemStack(item.getItem().getType(), item.getItem().getAmount());
+							boughtItem.addUnsafeEnchantments(item.getItem().getEnchantments());
+							boughtItem.setDurability(item.getItem().getDurability());
+							
 							player.getArena().subtractBalance(item.getPrice());
-							player.getPlayer().getInventory().addItem(item.getItem());
-							player.getArena().sendMessage("Player " + player.getName() + " bought " + item.getItem().toString()); // TODO message
+							player.getPlayer().getInventory().addItem(boughtItem);
+							player.getArena().sendMessage("Player " + player.getName() + " bought " + boughtItem.toString()); // TODO message
 							return;
 						}else {
 							player.sendMessage("not enough money"); //TODO Message
