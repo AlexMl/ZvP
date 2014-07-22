@@ -204,7 +204,7 @@ public class ZvP extends JavaPlugin{
 		
 		this.getConfig().options().header("\n" +
 				"This is the main config file for PlayerVsZombies.\n" +
-				"For more items write a comemnt or a ticket on the bukkit-dev website:\n" +
+				"For more items write a coment or a ticket on the bukkit-dev website:\n" +
 				"http://dev.bukkit.org/bukkit-plugins/zombievsplayer/\n");
 		
 		this.getConfig().addDefault("config.enableMetrics", true);
@@ -227,47 +227,7 @@ public class ZvP extends JavaPlugin{
 		
 		this.getConfig().addDefault("config.misc.language", "en");
 		this.getConfig().addDefault("config.misc.portOnJoinGame", true);
-		this.getConfig().addDefault("config.misc.storeInventory", true);
-		this.getConfig().addDefault("config.misc.storeEXPLevel", true);
 		this.getConfig().addDefault("config.misc.changeToSpectatorAfterDeath", false);
-		
-		
-		this.getConfig().addDefault("config.starterkit.enable", true);
-		this.getConfig().addDefault("config.starterkit.whichkit", "standardKit");
-		this.getConfig().addDefault("config.starterkit.standardKit", "1xSTONE_SWORD, 2xGOLDEN_APPLE, 1xLEATHER_HELMET, 1xLEATHER_LEGGINGS, 1xLEATHER_BOOTS");
-		this.getConfig().addDefault("config.starterkit.armorKit", "1xWOOD_SWORD, 1xIRON_CHESTPLATE, 1xIRON_LEGGINGS, 1xIRON_BOOTS, 2xGOLDEN_APPLE");
-		this.getConfig().addDefault("config.starterkit.bowKit", "1xBOW, 64xARROW, 64xARROW, 1xLEATHER_HELMET, 1xLEATHER_CHESTPLATE, 1xLEATHER_LEGGINGS, 1xLEATHER_BOOTS, 2xGOLDEN_APPLE");		
-		
-		this.getConfig().addDefault("config.price.sell.potato", 8);
-		this.getConfig().addDefault("config.price.sell.carrot", 7);
-		this.getConfig().addDefault("config.price.sell.ironingot", 4);
-		this.getConfig().addDefault("config.price.sell.arrow64", 5); 
-		this.getConfig().addDefault("config.price.sell.arrow32", 2);
-		this.getConfig().addDefault("config.price.sell.rottenflesh64", 1);
-		
-		this.getConfig().addDefault("config.price.buy.ironSword", 13);
-		this.getConfig().addDefault("config.price.buy.stoneSword", 8);
-		this.getConfig().addDefault("config.price.buy.woodenSword", 5);
-		this.getConfig().addDefault("config.price.buy.stoneAxe", 7); 
-		this.getConfig().addDefault("config.price.buy.bow", 12);
-		this.getConfig().addDefault("config.price.buy.arrow64", 10);
-		this.getConfig().addDefault("config.price.buy.arrow32", 5);
-		
-		this.getConfig().addDefault("config.price.buy.brewingStand", 20);
-		
-		this.getConfig().addDefault("config.price.buy.potionStrenght", 15);
-		this.getConfig().addDefault("config.price.buy.potionRegeneration", 15);
-		this.getConfig().addDefault("config.price.buy.potionHealing", 15);
-		this.getConfig().addDefault("config.price.buy.potionSpeed", 15);
-		
-		this.getConfig().addDefault("config.price.buy.leatherHelmet", 4);
-		this.getConfig().addDefault("config.price.buy.leatherChestplate", 8);
-		this.getConfig().addDefault("config.price.buy.leatherLeggings", 7);
-		this.getConfig().addDefault("config.price.buy.leatherBoots", 4);
-		this.getConfig().addDefault("config.price.buy.ironHelmet", 6);
-		this.getConfig().addDefault("config.price.buy.ironChestplate", 11);
-		this.getConfig().addDefault("config.price.buy.ironLeggings", 9);
-		this.getConfig().addDefault("config.price.buy.ironBoots", 6);
 		
 		maxPlayers = getConfig().getInt("config.maximal_Players");
 		useMetrics = getConfig().getBoolean("config.enableMetrics");
