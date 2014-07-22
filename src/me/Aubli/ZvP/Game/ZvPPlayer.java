@@ -1,7 +1,9 @@
 package me.Aubli.ZvP.Game;
 
+import java.text.DecimalFormat;
 import java.util.UUID;
 
+import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Kits.IZvPKit;
 import me.Aubli.ZvP.Kits.KitManager;
 
@@ -179,10 +181,12 @@ public class ZvPPlayer {
 	
 	public void addKill() {
 		setKills(getKills() + 1);
+		getArena().addBalance(ZvP.getZombieFund());
 	}
 	
 	public void die() {
 		setDeaths(getDeaths() + 1);
+		getArena().subtractBalance(ZvP.getDeathFee());
 	}
 	
 	
@@ -211,14 +215,17 @@ public class ZvPPlayer {
 		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.BLUE + "Players: " + ChatColor.RED + getArena().getPlayers().length)).setScore(14);
 		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GRAY + "R: " + ChatColor.AQUA + getArena().getRound() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getMaxRounds())).setScore(13);
 		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GRAY + "W: " + ChatColor.AQUA + getArena().getWave() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getMaxWaves())).setScore(12);
+	
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE + "-------------")).setScore(11);	
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Money: " + new DecimalFormat("#0.00").format(arena.getBalance()))).setScore(10);
 		
-		obj.getScore(Bukkit.getOfflinePlayer("-------------")).setScore(11);	
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "Left:  " + ChatColor.GREEN + getArena().getLivingZombies())).setScore(10);
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "Killed: " + ChatColor.GREEN + getArena().getKilledZombies())).setScore(9);
+		obj.getScore(Bukkit.getOfflinePlayer("-------------")).setScore(9);	
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "Left:  " + ChatColor.GREEN + getArena().getLivingZombies())).setScore(8);
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "Killed: " + ChatColor.GREEN + getArena().getKilledZombies())).setScore(7);
 		
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RESET + "-------------")).setScore(8);
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Kills: " + getKills())).setScore(7);
-		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_PURPLE + "Deaths: " + getDeaths())).setScore(6);
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RESET + "-------------")).setScore(6);
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Kills: " + getKills())).setScore(5);
+		obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_PURPLE + "Deaths: " + getDeaths())).setScore(4);
 		
 		Objective belowObj = getBoard().getObjective("zvp-kills");		
 		if(belowObj==null) {

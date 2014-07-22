@@ -48,6 +48,8 @@ public class ZvP extends JavaPlugin{
 	private static int TIME_BETWEEN_WAVES;
 	private static int ZOMBIE_SPAWN_RATE;
 	private static double SAVE_RADIUS;	
+	private static double ZOMBIE_FUND;
+	private static double DEATH_FEE;
 	
 	private boolean useMetrics = false;
 
@@ -166,6 +168,15 @@ public class ZvP extends JavaPlugin{
  	public static double getDefaultDistance() {		
 		return SAVE_RADIUS;
 	}
+ 	
+ 	public static double getZombieFund() {
+ 		return ZOMBIE_FUND;
+ 	}
+ 	
+	public static double getDeathFee() {
+ 		return DEATH_FEE;
+ 	}
+ 	
 	
  	//INTRESTING
 	/* 
@@ -210,8 +221,10 @@ public class ZvP extends JavaPlugin{
 		
 		this.getConfig().addDefault("config.Locale", "en");
 		
-		this.getConfig().addDefault("config.misc.ZombieCash", 0.2);
-		this.getConfig().addDefault("config.misc.PlayerCash", 2.5);
+		this.getConfig().addDefault("config.ZombieFund", 0.37);
+		this.getConfig().addDefault("config.DeathFee", 3);
+		
+		
 		this.getConfig().addDefault("config.misc.language", "en");
 		this.getConfig().addDefault("config.misc.portOnJoinGame", true);
 		this.getConfig().addDefault("config.misc.storeInventory", true);
@@ -270,6 +283,9 @@ public class ZvP extends JavaPlugin{
 		SAVE_RADIUS = getConfig().getDouble("config.saveRadius");
 		
 		locale = new Locale(getConfig().getString("config.Locale"));
+		
+		ZOMBIE_FUND = getConfig().getDouble("config.ZombieFund");
+		DEATH_FEE = getConfig().getDouble("config.DeathFee");
 		
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();

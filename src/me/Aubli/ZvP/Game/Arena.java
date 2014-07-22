@@ -49,6 +49,8 @@ public class Arena {
 	
 	private Random rand;
 	
+	private double teamBalance;
+	
 	private ArrayList<ZvPPlayer> players;
 	
 	
@@ -70,6 +72,8 @@ public class Arena {
 		
 		this.round = 0;
 		this.wave = 0;
+		
+		this.teamBalance = 0.0;
 		
 		arenaFile = new File(arenaPath + "/" + ID + ".yml");
 		arenaConfig = YamlConfiguration.loadConfiguration(arenaFile);
@@ -102,6 +106,10 @@ public class Arena {
 		}else{
 			this.status = ArenaStatus.STOPED;
 		}
+		
+		this.round = 0;
+		this.wave = 0;
+		this.teamBalance = 0.0;
 		
 		this.arenaWorld = Bukkit.getWorld(arenaConfig.getString("arena.Location.world"));		
 		this.minLoc = new Location(arenaWorld, 
@@ -195,6 +203,10 @@ public class Arena {
 	
 	public int getTaskId(){
 		return TaskId;
+	}
+	
+	public double getBalance() {
+		return teamBalance;
 	}
 	
 	public World getWorld(){
@@ -337,11 +349,33 @@ public class Arena {
 	}
 	
 	
+	public void addBalance(double sum) {
+		this.teamBalance += sum;
+		updatePlayerBoards();
+	}
+	
+	public void subtractBalance(double sum) {
+		if(sum>getBalance()) {
+			this.teamBalance = 0.0;
+		}else {
+			this.teamBalance -= sum;
+		}
+		updatePlayerBoards();
+	}
+	
+	
 	public void setPlayerBoards() {
 		for(ZvPPlayer p : getPlayers()) {
 			p.setScoreboard(GameManager.getManager().getNewBoard());
 		}
 	}
+	
+	public void setPlayerLevel(int level) {
+		for(ZvPPlayer p : getPlayers()) {
+			p.setXPLevel(level);
+		}
+	}
+	
 	
 	public void updatePlayerBoards() {
 		for(ZvPPlayer p : getPlayers()) {
@@ -352,13 +386,6 @@ public class Arena {
 	public void removePlayerBoards() {
 		for(ZvPPlayer p : getPlayers()) {
 			p.removeScoreboard();
-		}
-	}	
-	
-	
-	public void setPlayerLevel(int level) {
-		for(ZvPPlayer p : getPlayers()) {
-			p.setXPLevel(level);
 		}
 	}
 	
@@ -495,6 +522,7 @@ public class Arena {
 		
 		this.round = 0;
 		this.wave = 0;
+		this.teamBalance = 0.0;
 		
 		getWorld().setDifficulty(Difficulty.NORMAL);
 		getWorld().setTime(15000L);
@@ -513,6 +541,7 @@ public class Arena {
 	
 		this.round = 0;
 		this.wave = 0;
+		this.teamBalance = 0.0;
 		
 		getWorld().setMonsterSpawnLimit(-1);
 		getWorld().setTime(5000L);

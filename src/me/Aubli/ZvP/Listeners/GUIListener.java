@@ -70,9 +70,21 @@ public class GUIListener implements Listener{
 					
 					ShopItem item = ShopManager.getManager().getItem(cat, event.getCurrentItem());
 					
+					ZvPPlayer player = GameManager.getManager().getPlayer((Player)event.getWhoClicked());
 					Bukkit.broadcastMessage(item.getType() + ": " + item.getCategory() + " - " + item.getPrice());
-					event.getWhoClicked().getInventory().addItem(item.getItem());
-					return;
+					
+					if(player!=null && GameManager.getManager().isInGame((Player)event.getWhoClicked())){
+						
+						if(player.getArena().getBalance()>=item.getPrice()) {
+							player.getArena().subtractBalance(item.getPrice());
+							player.getPlayer().getInventory().addItem(item.getItem());
+							player.getArena().sendMessage("Player " + player.getName() + " bought " + item.getItem().toString()); // TODO message
+							return;
+						}else {
+							player.sendMessage("not enough money"); //TODO Message
+							return;
+						}						
+					}
 				}
 			}			
 		}
