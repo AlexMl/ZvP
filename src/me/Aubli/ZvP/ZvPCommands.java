@@ -77,6 +77,11 @@ public class ZvPCommands implements CommandExecutor {
 					return true;
 				}
 				
+				if(args[0].equalsIgnoreCase("m")) {
+					Double sum = Double.parseDouble(args[1]);
+					game.getPlayer(playerSender).getArena().addBalance(sum);
+					return true;
+				}
 				
 				
 				Arena a = game.getArena(Integer.parseInt(args[0]));
