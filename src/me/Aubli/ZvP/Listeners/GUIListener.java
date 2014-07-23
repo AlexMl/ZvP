@@ -66,32 +66,92 @@ public class GUIListener implements Listener{
 					event.setCancelled(true);
 					event.getWhoClicked().closeInventory();
 					
-					ItemCategory cat = ItemCategory.valueOf(event.getInventory().getTitle().split("s: ")[1]);
-					
-					ShopItem item = ShopManager.getManager().getItem(cat, event.getCurrentItem());
-					
-					ZvPPlayer player = GameManager.getManager().getPlayer((Player)event.getWhoClicked());
-					Bukkit.broadcastMessage(item.getType() + ": " + item.getCategory() + " - " + item.getPrice());
-					
-					if(player!=null && GameManager.getManager().isInGame((Player)event.getWhoClicked())){
+					if(event.getCurrentItem()!=null) {
 						
-						if(player.getArena().getBalance()>=item.getPrice()) {
+						ItemCategory cat = ItemCategory.valueOf(event.getInventory().getTitle().split("s: ")[1]);						
+						ShopItem item = ShopManager.getManager().getItem(cat, event.getCurrentItem());
+						ZvPPlayer player = GameManager.getManager().getPlayer((Player)event.getWhoClicked());
 							
-							ItemStack boughtItem = new ItemStack(item.getItem().getType(), item.getItem().getAmount());
-							boughtItem.addUnsafeEnchantments(item.getItem().getEnchantments());
-							boughtItem.setDurability(item.getItem().getDurability());
+						if(item !=null && player!=null && GameManager.getManager().isInGame(player.getPlayer())){
+						
+						//	Bukkit.broadcastMessage(item.getType() + ": " + item.getCategory() + " - " + item.getPrice());
 							
-							player.getArena().subtractBalance(item.getPrice());
-							player.getPlayer().getInventory().addItem(boughtItem);
-							player.getArena().sendMessage("Player " + player.getName() + " bought " + boughtItem.toString()); // TODO message
-							return;
-						}else {
-							player.sendMessage("not enough money"); //TODO Message
-							return;
-						}						
+							switch (event.getClick()) {
+							case LEFT: //Buy
+								if(player.getArena().getBalance()>=item.getPrice()) {
+																		
+									ItemStack boughtItem = new ItemStack(item.getItem().getType(), item.getItem().getAmount());
+									boughtItem.addUnsafeEnchantments(item.getItem().getEnchantments());
+									boughtItem.setDurability(item.getItem().getDurability());
+									
+									player.getArena().subtractBalance(item.getPrice());
+									player.getPlayer().getInventory().addItem(boughtItem);
+									player.getArena().sendMessage("Player " + player.getName() + " bought " + boughtItem.toString()); // TODO message
+								}else {
+									player.sendMessage("not enough money"); //TODO Message
+								}	
+								break;
+							case SHIFT_LEFT: //Buy all
+								if(player.getArena().getBalance()>=item.getPrice()) {
+									
+									int amount = (int) (player.getArena().getBalance()/item.getPrice())<64 ? (int) (player.getArena().getBalance()/item.getPrice()):64;
+									
+									ItemStack boughtItem = new ItemStack(item.getItem().getType(), amount);
+									boughtItem.addUnsafeEnchantments(item.getItem().getEnchantments());
+									boughtItem.setDurability(item.getItem().getDurability());
+									
+									player.getArena().subtractBalance(item.getPrice()*amount);
+									player.getPlayer().getInventory().addItem(boughtItem);
+									player.getArena().sendMessage("Player " + player.getName() + " bought " + boughtItem.toString() + " " + amount + " times."); // TODO message
+								}else {
+									player.sendMessage("not enough money"); //TODO Message
+								}	
+								break;
+							case RIGHT: //Sell
+								
+								ItemStack stack = new ItemStack(item.getItem().getType());
+								stack.setDurability(item.getItem().getDurability());
+								stack.addUnsafeEnchantments(item.getItem().getEnchantments());
+								
+								if(player.getPlayer().getInventory().containsAtLeast(stack, 1)) {
+									player.getPlayer().getInventory().removeItem(stack);
+									player.getArena().addBalance(item.getPrice());
+									player.getArena().sendMessage("Player " + player.getName() + " sold " + stack.toString()); // TODO message
+								}
+								
+								break;
+							case SHIFT_RIGHT: //sell all
+								
+								ItemStack stack1 = new ItemStack(item.getItem().getType());
+								stack1.setDurability(item.getItem().getDurability());
+								stack1.addUnsafeEnchantments(item.getItem().getEnchantments());
+								
+								int amount = 0;
+								
+								if(player.getPlayer().getInventory().containsAtLeast(stack1, 1)) {
+									for(int i=0;i<player.getPlayer().getInventory().getSize();i++) {
+										ItemStack invItem = player.getPlayer().getInventory().getItem(i);
+										
+										if(invItem!=null && invItem.getType()!=Material.AIR) {
+											if(invItem.getType() == stack1.getType() && invItem.getDurability() == stack1.getDurability() && invItem.getEnchantments().equals(stack1.getEnchantments())) {
+												amount += invItem.getAmount();
+												player.getPlayer().getInventory().clear(i);
+											}
+										}
+									}
+									
+									player.getArena().addBalance(item.getPrice() * amount);
+									player.getArena().sendMessage("Sold " + stack1.toString() + " x" + amount + " " + amount*item.getPrice() + "/" + item.getPrice()); // TODO message
+								}
+								
+								break;
+							default:
+								break;
+							}
+						}
 					}
 				}
-			}			
+			}
 		}
 	}
 	
