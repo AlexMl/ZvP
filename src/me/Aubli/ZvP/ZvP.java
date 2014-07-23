@@ -185,15 +185,6 @@ public class ZvP extends JavaPlugin{
 	 * team.setCanSeeFriendlyInvisibles(true);
 	 * team.setPrefix(ChatColor.DARK_RED + "");	
 	 * 
-	 * 
-	 * playerSender.removePotionEffect(PotionEffectType.HEAL);
-	 * playerSender.removePotionEffect(PotionEffectType.SPEED);
-	 * playerSender.removePotionEffect(PotionEffectType.REGENERATION);
-	 * playerSender.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-	 * 
-	 * playerSender.setHealth(20);
-	 * playerSender.setFoodLevel(20);
-	 * 
 	 * board.clearSlot(DisplaySlot.SIDEBAR);
 	 * if(board.getTeam("zvpteam").hasPlayer(playerSender)){
 	 * 		board.getTeam("zvpteam").removePlayer(playerSender);
@@ -207,45 +198,45 @@ public class ZvP extends JavaPlugin{
 				"For more items write a coment or a ticket on the bukkit-dev website:\n" +
 				"http://dev.bukkit.org/bukkit-plugins/zombievsplayer/\n");
 		
-		this.getConfig().addDefault("config.enableMetrics", true);
-		this.getConfig().addDefault("config.maximal_Players", 20);
+		this.getConfig().addDefault("plugin.enableMetrics", true);
+		this.getConfig().addDefault("plugin.Locale", "en");
 		
-		this.getConfig().addDefault("config.rounds", 3);
-		this.getConfig().addDefault("config.waves", 5);
-		
-		this.getConfig().addDefault("config.joinTime", 15);
-		this.getConfig().addDefault("config.saveTime", 30);
-		
-		this.getConfig().addDefault("config.spawnRate", 30);
-		this.getConfig().addDefault("config.saveRadius", 3.0);
-		
-		this.getConfig().addDefault("config.Locale", "en");
-		
-		this.getConfig().addDefault("config.ZombieFund", 0.37);
-		this.getConfig().addDefault("config.DeathFee", 3);
+		useMetrics = getConfig().getBoolean("plugin.enableMetrics");
+		locale = new Locale(getConfig().getString("plugin.Locale"));
 		
 		
-		this.getConfig().addDefault("config.misc.language", "en");
-		this.getConfig().addDefault("config.misc.portOnJoinGame", true);
-		this.getConfig().addDefault("config.misc.changeToSpectatorAfterDeath", false);
+		this.getConfig().addDefault("game.maximal_Players", 25);		
+		this.getConfig().addDefault("game.default_rounds", 3);
+		this.getConfig().addDefault("game.default_waves", 5);
 		
-		maxPlayers = getConfig().getInt("config.maximal_Players");
-		useMetrics = getConfig().getBoolean("config.enableMetrics");
+		maxPlayers = getConfig().getInt("game.maximal_Players");
+		DEFAULT_ROUNDS = getConfig().getInt("game.default_rounds");
+		DEFAULT_WAVES = getConfig().getInt("game.default_waves");
 		
-		DEFAULT_ROUNDS = getConfig().getInt("config.rounds");
-		DEFAULT_WAVES = getConfig().getInt("config.waves");
 		
-		START_DELAY = getConfig().getInt("config.joinTime");
-		TIME_BETWEEN_WAVES = getConfig().getInt("config.saveTime");
+		this.getConfig().addDefault("times.joinTime", 15);
+		this.getConfig().addDefault("times.saveTime", 30);
 		
-		ZOMBIE_SPAWN_RATE = getConfig().getInt("config.spawnRate");		
+		START_DELAY = getConfig().getInt("times.joinTime");
+		TIME_BETWEEN_WAVES = getConfig().getInt("times.saveTime");
 		
-		SAVE_RADIUS = getConfig().getDouble("config.saveRadius");
 		
-		locale = new Locale(getConfig().getString("config.Locale"));
+		this.getConfig().addDefault("zombies.spawnRate", 30);
+		this.getConfig().addDefault("zombies.saveRadius", 3.0);	
 		
-		ZOMBIE_FUND = getConfig().getDouble("config.ZombieFund");
-		DEATH_FEE = getConfig().getDouble("config.DeathFee");
+		ZOMBIE_SPAWN_RATE = getConfig().getInt("zombies.spawnRate");		
+		SAVE_RADIUS = getConfig().getDouble("zombies.saveRadius");
+		
+		
+		this.getConfig().addDefault("money.ZombieFund", 0.37);
+		this.getConfig().addDefault("money.DeathFee", 3);	
+		
+		ZOMBIE_FUND = getConfig().getDouble("money.ZombieFund");
+		DEATH_FEE = getConfig().getDouble("money.DeathFee");
+		
+
+	//	this.getConfig().addDefault("config.misc.portOnJoinGame", true);
+	//	this.getConfig().addDefault("config.misc.changeToSpectatorAfterDeath", false);
 		
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
