@@ -529,7 +529,7 @@ public class Arena {
 		getWorld().setMonsterSpawnLimit(0);
 		clearArena();
 		
-		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSaveTime(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 1L).getTaskId();
+		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSaveTime(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
 		//TODO Start message
 	}	
 	
