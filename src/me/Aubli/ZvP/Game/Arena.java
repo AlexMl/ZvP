@@ -467,37 +467,37 @@ public class Arena {
 		z.setRemoveWhenFarAway(false);
 		z.setTarget(getRandomPlayer().getPlayer());
 		
-		switch (rand.nextInt(4)) {
+		switch (rand.nextInt(7)) {
+		case 0:
+			z.setBaby(false);
+			z.setCanPickupItems(true);
+			z.setMaxHealth(40D);
+			z.setVelocity(z.getVelocity().multiply(1.5D));
+			break;
 		case 1:
 			z.setBaby(true);
 			z.setCanPickupItems(true);
 			z.setVillager(false);			
 			z.setHealth(20D);
-			
+			z.setVelocity(z.getVelocity().multiply(0.75D));			
 			break;			
 		case 2:
 			z.setBaby(false);
 			z.setCanPickupItems(true);
 			z.setVillager(true);
-			z.setHealth(15D);
-			
-			
+			z.setHealth(10D);
 			break;			
 		case 3:
 			z.setBaby(false);
 			z.setCanPickupItems(true);
 			z.setVillager(false);
 			z.setHealth(15D);
-			
-			
 			break;			
 		case 4:
 			z.setBaby(false);
 			z.setCanPickupItems(false);
 			z.setVillager(false);
 			z.setMaxHealth(30D);
-			
-			
 			break;
 		default:
 			z.setBaby(false);
