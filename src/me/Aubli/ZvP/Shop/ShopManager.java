@@ -39,24 +39,48 @@ public class ShopManager {
 		instance = this;
 		
 		itemFile = new File(ZvP.getInstance().getDataFolder().getPath() + "/Shop/items.yml");
-
+		itemConfig = YamlConfiguration.loadConfiguration(itemFile);	
+		
 		if(!itemFile.exists()) {
 			try {
-				itemFile.getParentFile().mkdirs();			
+				itemFile.getParentFile().mkdirs();
 				itemFile.createNewFile();
 				writeDefaults();
+				itemConfig = YamlConfiguration.loadConfiguration(itemFile);	
 			} catch (IOException e) {				
 				e.printStackTrace();
 			}
 		}
 		
-		itemConfig = YamlConfiguration.loadConfiguration(itemFile);		
-		
+		if(isOutdated()) {
+			try {	
+				ZvP.log.info("[" + ZvP.getInstance().getName() + "] Found outdated item file! Renaming it!");
+				itemFile.renameTo(new File(itemFile.getParentFile().getPath() + "/items-" + itemConfig.getString("version") + ".yml"));
+				itemFile.delete();
+				itemFile.createNewFile();
+				writeDefaults();
+				itemConfig = YamlConfiguration.loadConfiguration(itemFile);	
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		items = loadItems();
+	}
+	
+	private boolean isOutdated() {	
+		return !ZvP.getInstance().getDescription().getVersion().equals(itemConfig.getString("version"));
 	}
 	
 	
 	private void writeDefaults() {
+		
+		try {
+			itemConfig.set("version", ZvP.getInstance().getDescription().getVersion());
+			itemConfig.save(itemFile);
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
 		
 		ShopItem[] defaultItems = new ShopItem[38];
 		
