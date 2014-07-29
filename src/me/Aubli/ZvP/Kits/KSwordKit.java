@@ -39,8 +39,7 @@ public class KSwordKit implements IZvPKit{
 		
 		items[5] = new ItemStack(Material.COOKED_CHICKEN, 10);
 		
-		Potion p = new Potion(PotionType.INSTANT_HEAL, 2);
-		items[6] = p.toItemStack(2);
+		items[6] = new Potion(PotionType.INSTANT_HEAL, 2).splash().toItemStack(2);
 	}
 	
 	
