@@ -10,8 +10,9 @@ public class GameRunnable extends BukkitRunnable{
 	public GameRunnable(Arena arena, int startDelay, int saveTime, int magicSpawnRate){
 		this.arena = arena;
 		this.startDelay = 15;//startDelay;
-		this.spawnRate = magicSpawnRate;
+		this.magicSpawnNumber = magicSpawnRate;
 		this.saveTime = saveTime;
+		this.spawnRate = 0.45;
 	}
 	
 	private Arena arena;	
@@ -19,10 +20,13 @@ public class GameRunnable extends BukkitRunnable{
 	private final int startDelay;
 	private final int saveTime;
 	
+	private final double spawnRate;
+	
 	private int seconds = 0;
 	private int seconds2 = 0;
+	private int spawnGoal;
 	
-	private int spawnRate;
+	private int magicSpawnNumber;
 	
 	private boolean firstSpawn;
 	private boolean spawnZombies;
@@ -51,27 +55,34 @@ public class GameRunnable extends BukkitRunnable{
 			}
 			
 			if(firstSpawn) {
-				arena.spawnZombies(arena.getRound()*arena.getWave()*spawnRate - (int)(arena.getRound()*arena.getWave()*spawnRate*0.45));
+				arena.spawnZombies(arena.getRound()*arena.getWave()*magicSpawnNumber - (int)(arena.getRound()*arena.getWave()*magicSpawnNumber*spawnRate));
+				spawnGoal = arena.getRound()*arena.getWave()*magicSpawnNumber - (int)(arena.getRound()*arena.getWave()*magicSpawnNumber*spawnRate);
 				firstSpawn = false;
 				spawnZombies = true;
 			}else {
-				if(arena.getLivingZombies()<arena.getRound()*arena.getWave()*spawnRate && spawnZombies) {
-					double spawn = arena.getRound()*arena.getWave()*spawnRate;
+				System.out.println(spawnGoal + " - " + arena.getRound()*arena.getWave()*magicSpawnNumber);
+				if(spawnGoal<arena.getRound()*arena.getWave()*magicSpawnNumber && spawnZombies) {
+					double spawn = arena.getRound()*arena.getWave()*magicSpawnNumber;
 					System.out.println("Missing: " + (spawn-arena.getLivingZombies()));
 						
 					if(spawn-arena.getLivingZombies() >= ((int)(spawn*0.17)) && (int)(spawn*0.10)>0) {
 						arena.spawnZombies((int)(spawn*0.10));
-						System.out.println("10% " + (int)(spawn*0.10));
+						spawnGoal += (int)(spawn*0.10);
+				//		System.out.println("10% " + (int)(spawn*0.10));
 					}else if(spawn-arena.getLivingZombies() >= ((int)(spawn*0.12)) && (int)(spawn*0.06)>0) {
 						arena.spawnZombies((int)(spawn*0.06));
-						System.out.println("6% " + (int)(spawn*0.06));						
+						spawnGoal += (int)(spawn*0.06);
+				//		System.out.println("6% " + (int)(spawn*0.06));						
 					}else if(spawn-arena.getLivingZombies() >= ((int)(spawn*0.08)) && (int)(spawn*0.02)>0) {
 						arena.spawnZombies((int)(spawn*0.02));
-						System.out.println("2% " + (int)(spawn*0.02));
-					}else if(spawn-arena.getLivingZombies() > spawnRate) {
-						arena.spawnZombies((int)spawnRate/2);
+						spawnGoal += (int)(spawn*0.02);
+				//		System.out.println("2% " + (int)(spawn*0.02));
+					}else if(spawn-arena.getLivingZombies() > magicSpawnNumber) {
+						arena.spawnZombies((int)magicSpawnNumber/2);
+						spawnGoal += (int)magicSpawnNumber/2;
 					}else {
 						arena.spawnZombies(1);	
+						spawnGoal++;
 					//	System.out.println(1);
 					}
 				}else {
@@ -82,7 +93,8 @@ public class GameRunnable extends BukkitRunnable{
 			
 			if(firstSpawn==false && spawnZombies==false) {
 				if(arena.getLivingZombies()==0) {
-					if(seconds2<=saveTime) {					
+					if(seconds2<=saveTime) {		
+						arena.setPlayerLevel(saveTime-seconds2);
 						arena.sendMessage(saveTime-seconds2 + " Seconds left!");
 						seconds2++;
 					}else {						
@@ -108,7 +120,7 @@ public class GameRunnable extends BukkitRunnable{
 		}
 
 		if(arena.getLivingZombies()>0) {
-		//	arena.sendMessage("Arena: " + arena.getID() + " : " + ChatColor.RED + arena.getStatus().toString() + "; " + ChatColor.RESET + arena.getRound() + ":" + arena.getWave() + " Z:" + arena.getLivingZombies() + ":" + arena.getKilledZombies());
+			arena.sendMessage("Arena: " + arena.getID() + " : " + ChatColor.RED + arena.getStatus().toString() + "; " + ChatColor.RESET + arena.getRound() + ":" + arena.getWave() + " Z:" + arena.getLivingZombies() + ":" + arena.getKilledZombies());
 		}
 		arena.getWorld().setTime(15000L);
 		seconds++;
