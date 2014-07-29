@@ -20,13 +20,23 @@ import org.util.ItemStorageUtil.ItemStorage;
 public class ShopManager {
 
 	public enum ItemCategory {		
-		FOOD,
-		ARMOR,
-		WEAPON,
-		POTION,
-		MISC,
-		NULL,
+		FOOD(new ItemStack(Material.APPLE)),
+		ARMOR(new ItemStack(Material.IRON_HELMET)),
+		WEAPON(new ItemStack(Material.STONE_SWORD)),
+		POTION(new Potion(PotionType.INSTANT_HEAL, 2).toItemStack(1)),
+		MISC(new ItemStack(Material.BUCKET)),
+		NULL(null),
 		;		
+		
+		private ItemStack icon;
+		
+		private ItemCategory(ItemStack icon) {
+			this.icon = icon;
+		}
+		
+		public ItemStack getIcon() {
+			return this.icon;
+		}
 	}	
 	
 	private static ShopManager instance;
@@ -187,22 +197,23 @@ public class ShopManager {
 		item = new ItemStack(Material.WOOD_SWORD);
 		defaultItems[39] = new ShopItem(item, cat, 2.0);		
 		
+		item = new ItemStack(Material.BOW);
+		defaultItems[40] = new ShopItem(item, cat, 6.0);
+		item = new ItemStack(Material.ARROW);
+		defaultItems[41] = new ShopItem(item, cat, 0.08);		
+		
 		//Enchanted
 		item = new ItemStack(Material.DIAMOND_SWORD);
 		item.addUnsafeEnchantment(Enchantment.KNOCKBACK, 2);
 		item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 10);
 		item.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 3);
 		item.addUnsafeEnchantment(Enchantment.DURABILITY, 5);
-		defaultItems[40] = new ShopItem(item, cat, 25.0);
+		defaultItems[42] = new ShopItem(item, cat, 25.0);
 		
 		//Potions
 		cat = ItemCategory.POTION;
 		item = new Potion(PotionType.FIRE_RESISTANCE, 2).splash().toItemStack(1);
-		defaultItems[41] = new ShopItem(item, cat, 3.5);
-		item = new Potion(PotionType.INSTANT_DAMAGE, 1).splash().toItemStack(1);
-		defaultItems[42] = new ShopItem(item, cat, 3.0);
-		item = new Potion(PotionType.INSTANT_DAMAGE, 2).splash().toItemStack(1);
-		defaultItems[43] = new ShopItem(item, cat, 5.5);
+		defaultItems[43] = new ShopItem(item, cat, 3.5);		
 		item = new Potion(PotionType.REGEN, 2).splash().toItemStack(1);
 		defaultItems[44] = new ShopItem(item, cat, 5.0);
 		item = new Potion(PotionType.INSTANT_HEAL, 2).splash().toItemStack(1);

@@ -64,38 +64,18 @@ public class SignChangelistener implements Listener{
 											event.setLine(2, ChatColor.YELLOW + "Waiting");
 											event.setLine(3, ChatColor.GREEN + "[JOIN]");	
 										}else if(type==SignType.SHOP_SIGN) {
-											//Do something
-											//Start gui 
-											//select ItemCategory
-											//create sign;
-											
-											Inventory catSelect = Bukkit.createInventory(eventPlayer, 9, "Select Category " + SignManager.getManager().getSign(event.getBlock().getLocation()).getID());
-											
-											ItemStack foodIcon = new ItemStack(Material.APPLE);
-											ItemStack armorIcon = new ItemStack(Material.IRON_HELMET);
-											ItemStack weaponIcon = new ItemStack(Material.WOOD_SWORD);
-											ItemStack miscIcon = new ItemStack(Material.BUCKET);
-											
-											ItemMeta meta = foodIcon.getItemMeta();
-											meta.setDisplayName(ItemCategory.FOOD.toString());
-											foodIcon.setItemMeta(meta);
-											
-											meta = armorIcon.getItemMeta();
-											meta.setDisplayName(ItemCategory.ARMOR.toString());
-											armorIcon.setItemMeta(meta);
-											
-											meta = weaponIcon.getItemMeta();
-											meta.setDisplayName(ItemCategory.WEAPON.toString());
-											weaponIcon.setItemMeta(meta);
-											
-											meta = miscIcon.getItemMeta();
-											meta.setDisplayName(ItemCategory.MISC.toString());
-											miscIcon.setItemMeta(meta);
-											
-											catSelect.addItem(foodIcon);
-											catSelect.addItem(armorIcon);
-											catSelect.addItem(weaponIcon);
-											catSelect.addItem(miscIcon);
+										
+											Inventory catSelect = Bukkit.createInventory(eventPlayer, ((int)Math.ceil((ItemCategory.values().length/9.0)))*9, "Select Category " + SignManager.getManager().getSign(event.getBlock().getLocation()).getID());
+																						
+											for(ItemCategory cat : ItemCategory.values()) {
+												if(cat.getIcon()!=null) {
+													ItemStack icon = cat.getIcon().clone();
+													ItemMeta meta = icon.getItemMeta();
+													meta.setDisplayName(cat.name());
+													icon.setItemMeta(meta);
+													catSelect.addItem(icon);
+												}
+											}
 											
 											eventPlayer.closeInventory();
 											eventPlayer.openInventory(catSelect);
