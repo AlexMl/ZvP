@@ -41,4 +41,8 @@ public class ShopItem {
 		return getItem().getType();
 	}
 	
+	@Override
+	public String toString() {
+		return "[ShopItem=(" + getItem().toString() + " ," + getCategory() + " ," + getPrice() + ")]";
+	}
 }
