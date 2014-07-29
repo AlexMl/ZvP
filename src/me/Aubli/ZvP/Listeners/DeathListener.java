@@ -19,16 +19,18 @@ public class DeathListener implements Listener{
 	
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event){	
+		
+		if(event.getEntity().getKiller()!=null) {
 			
-		if(event.getEntity() instanceof Zombie) {
-			if(event.getEntity().getKiller()!=null) {
+			eventPlayer = event.getEntity().getKiller();
+			
+			if(game.isInGame(eventPlayer)) {
+				event.setDroppedExp(0);
+				final ZvPPlayer player = game.getPlayer(eventPlayer);
 				
-				eventPlayer = event.getEntity().getKiller();
-				
-				if(game.isInGame(eventPlayer)) {
-					final ZvPPlayer player = game.getPlayer(eventPlayer);
+				if(event.getEntity() instanceof Zombie) {					
 					event.getEntity().remove();
-					
+						
 					Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
 						
 						@Override
@@ -36,11 +38,11 @@ public class DeathListener implements Listener{
 							player.addKill();
 						}
 					}, 5L);
-					
+						
 					return;
 				}
 			}
-		}	
+		}
 	}
 	
 	@EventHandler
