@@ -96,11 +96,11 @@ public class KitManager {
 			ItemMeta kitMeta = kitItem.getItemMeta();
 		
 			ArrayList<String> lore = new ArrayList<String>();
-			lore.add(ChatColor.GREEN + "Content:");
+			lore.add(ChatColor.GOLD + "Content:");
 			
 			for(ItemStack stack : kit.getContents()) {
 				
-				lore.add(ChatColor.GREEN + "" + stack.getAmount() + "x " + stack.getType().toString());
+				lore.add(ChatColor.DARK_GREEN + "" + stack.getAmount() + "x " + stack.getType().toString());
 				
 				if(stack.getType()==Material.POTION) {
 					Potion p = Potion.fromDamage(stack.getDurability());					
@@ -115,7 +115,7 @@ public class KitManager {
 				}			
 			}
 			
-			kitMeta.setDisplayName(kit.getName());
+			kitMeta.setDisplayName(ChatColor.DARK_GRAY + kit.getName());
 			kitMeta.setLore(lore);
 			
 			kitItem.setItemMeta(kitMeta);
