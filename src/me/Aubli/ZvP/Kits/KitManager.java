@@ -117,7 +117,6 @@ public class KitManager {
 			
 			kitMeta.setDisplayName(kit.getName());
 			kitMeta.setLore(lore);
-			kitMeta.addEnchant(Enchantment.DURABILITY, 1, true);
 			
 			kitItem.setItemMeta(kitMeta);
 						
