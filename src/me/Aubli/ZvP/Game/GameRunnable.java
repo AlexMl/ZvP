@@ -93,6 +93,11 @@ public class GameRunnable extends BukkitRunnable{
 			
 			if(firstSpawn==false && spawnZombies==false) {
 				if(arena.getLivingZombies()==0) {
+					
+					if(seconds2==0) {
+						arena.updatePlayerBoards();
+					}
+					
 					if(seconds2<=saveTime) {		
 						arena.setPlayerLevel(saveTime-seconds2);
 						arena.sendMessage(saveTime-seconds2 + " Seconds left!");
