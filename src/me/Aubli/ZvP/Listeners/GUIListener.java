@@ -35,7 +35,7 @@ public class GUIListener implements Listener{
 					event.setCancelled(true);
 					event.getWhoClicked().closeInventory();
 					
-					String kitName = event.getCurrentItem().getItemMeta().getDisplayName();				
+					String kitName = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());				
 					ZvPPlayer player = GameManager.getManager().getPlayer((Player)event.getWhoClicked());
 					
 					if(KitManager.getManager().getKit(kitName)!=null && player!=null) {
