@@ -143,7 +143,7 @@ public class ShopSign implements ISign{
 		if(arena!=null && cat!=null){
 			sign.setLine(0, ZvP.getPrefix());
 			sign.setLine(1, ChatColor.DARK_BLUE + "Item Shop");
-			sign.setLine(2, ChatColor.LIGHT_PURPLE + "Category:");
+			sign.setLine(2, ChatColor.BLACK + "Category:");
 			sign.setLine(3, ChatColor.DARK_RED + getCategory().toString());
 			sign.update(true);
 		}else if(arena!=null && cat==null) {
