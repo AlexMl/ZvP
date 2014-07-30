@@ -20,7 +20,8 @@ public class GameManager {
 	public enum ArenaStatus{
 		RUNNING,
 		WAITING,
-		STOPED,
+		STANDBY,
+		STOPED,		
 		SUSPEND,
 		;
 	}
@@ -286,7 +287,7 @@ public class GameManager {
 	//Manage Players
 	public boolean createPlayer(Player player, Arena arena, Lobby lobby){
 		
-		if(!arena.isFull() && (arena.getStatus()==ArenaStatus.WAITING)){
+		if(!arena.isFull() && arena.isOnline()){
 			try{
 				new ZvPPlayer(player, arena, lobby);
 				SignManager.getManager().updateSigns(lobby);	

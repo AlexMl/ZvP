@@ -68,7 +68,7 @@ public class Arena {
 		this.minLoc = min.clone();
 		this.maxLoc = max.clone();
 		
-		this.status = ArenaStatus.WAITING;		
+		this.status = ArenaStatus.STANDBY;		
 		
 		this.round = 0;
 		this.wave = 0;
@@ -102,7 +102,7 @@ public class Arena {
 		this.maxWaves = arenaConfig.getInt("arena.waves");		
 		
 		if(arenaConfig.getBoolean("arena.Online")){
-			this.status = ArenaStatus.WAITING;
+			this.status = ArenaStatus.STANDBY;
 		}else{
 			this.status = ArenaStatus.STOPED;
 		}
@@ -262,11 +262,11 @@ public class Arena {
 		
 	}
 	
-	public ZvPPlayer getRandomPlayer() {		
+	public ZvPPlayer getRandomPlayer() {
 		return getPlayers()[rand.nextInt(getPlayers().length)];
 	}
 	
-	public ZvPPlayer[] getPlayers() {		
+	public ZvPPlayer[] getPlayers() {
 		ZvPPlayer[] parray = new ZvPPlayer[players.size()];
 		
 		for(int i=0;i<players.size();i++){
@@ -323,15 +323,28 @@ public class Arena {
 	
 	
 	public boolean isOnline(){
-		return !(getStatus()==ArenaStatus.STOPED);
+		return !(getStatus()==ArenaStatus.STOPED || getStatus()==ArenaStatus.SUSPEND);
 	}
 	
 	public boolean isRunning(){
 		return getStatus()==ArenaStatus.RUNNING;
 	}
 	
+	public boolean isWaiting(){
+		return getStatus()==ArenaStatus.WAITING;
+	}
+	
 	public boolean isFull(){
 		return getPlayers().length==getMaxPlayers();
+	}
+	
+	public boolean isReady() {		
+		for(ZvPPlayer p : players) {
+			if(p.hasKit()==false) {				
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	
@@ -398,9 +411,9 @@ public class Arena {
 	
 	public boolean addPlayer(final ZvPPlayer player){
 	
-		System.out.println("add " + containsPlayer(player.getPlayer()) + " Kit: " + player.hasKit());
+		System.out.println(player.getName() + " added?" + containsPlayer(player.getPlayer()) + " Kit: " + player.hasKit());
 		
-		if(!player.hasKit()) {		
+		if(!player.hasKit()) {
 			
 			if(!containsPlayer(player.getPlayer())) {
 				players.add(player);
@@ -414,6 +427,7 @@ public class Arena {
 				}
 			}, 20L);
 			return true;
+			
 		}else if(player.hasKit() && containsPlayer(player.getPlayer())) {
 			players.remove(player);		
 		}		
@@ -432,7 +446,7 @@ public class Arena {
 			
 			players.add(player);
 			
-			if(players.size()>=minPlayers && !isRunning()){
+			if(players.size()>=minPlayers && !isRunning()) {
 				
 				for(ZvPPlayer p : players) {
 					if(p.hasKit()==false) {
@@ -443,8 +457,11 @@ public class Arena {
 						}
 						return false;
 					}
-				}				
-				GameManager.getManager().startGame(this, player.getLobby(), getMaxRounds(), getMaxWaves());
+				}
+				
+				if(!isWaiting()) {
+					GameManager.getManager().startGame(this, player.getLobby(), getMaxRounds(), getMaxWaves());
+				}
 			}
 			return true;
 		}
@@ -547,7 +564,7 @@ public class Arena {
 		getWorld().setTime(5000L);
 		
 		clearArena();	
-		setStatus(ArenaStatus.WAITING);
+		setStatus(ArenaStatus.STANDBY);
 		Bukkit.getScheduler().cancelTask(getTaskId());
 	}
 	
