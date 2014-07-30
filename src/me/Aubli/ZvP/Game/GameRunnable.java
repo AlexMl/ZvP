@@ -9,7 +9,7 @@ public class GameRunnable extends BukkitRunnable{
 	
 	public GameRunnable(Arena arena, int startDelay, int saveTime, int magicSpawnRate){
 		this.arena = arena;
-		this.startDelay = 15;//startDelay;
+		this.startDelay = startDelay;
 		this.magicSpawnNumber = magicSpawnRate;
 		this.saveTime = saveTime;
 		this.spawnRate = 0.45;
@@ -94,7 +94,6 @@ public class GameRunnable extends BukkitRunnable{
 					}else {
 						arena.spawnZombies(1);	
 						spawnGoal++;
-					//	System.out.println(1);
 					}
 				}else {
 					spawnZombies = false;
@@ -104,27 +103,41 @@ public class GameRunnable extends BukkitRunnable{
 			
 			if(firstSpawn==false && spawnZombies==false) {
 				if(arena.getLivingZombies()==0) {
+					boolean stop = false;
 					
 					if(seconds2==0) {
 						arena.updatePlayerBoards();
+						stop = arena.next();
 					}
 					
-					if(seconds2<=saveTime) {		
-						arena.setPlayerLevel(saveTime-seconds2);
-						arena.sendMessage(saveTime-seconds2 + " Seconds left!");
-						seconds2++;
-					}else {						
-						boolean stop = arena.next();
-						
-						if(!stop) {
+					if(!stop) {
+						if(seconds2<=saveTime) {		
+							arena.setPlayerLevel(saveTime-seconds2);
+					//		arena.sendMessage(saveTime-seconds2 + " Seconds left!");
+							seconds2++;
+						}else {
 							arena.sendMessage("next wave!");
 							firstSpawn = true;
 							seconds2 = 0;
-						}else {							
-							//TODO Get the winner
-							//End of the event
-							arena.stop();
 						}
+					}else {							
+						//End of Game
+						//TODO Get the winner
+						
+						int kills = arena.getKilledZombies();
+						int deaths = 0;
+						double money = arena.getBalance();
+						
+						for(ZvPPlayer p : arena.getPlayers()) {
+							deaths += p.getDeaths();
+						}
+						
+						arena.sendMessage("Grongrats! You won against the Zombies.");
+						arena.sendMessage("You fought against " + kills + " Zombies in " + (arena.getMaxRounds() * arena.getMaxWaves()) + " rounds and have died " + deaths + " times.");					
+						arena.sendMessage("The remains of your acquired money (" + Math.round(money) + ") will be donated to ...");
+						arena.sendMessage("Thanks for playing!");
+						
+						arena.stop();
 					}
 				}
 			}
