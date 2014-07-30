@@ -36,6 +36,17 @@ public class GameRunnable extends BukkitRunnable{
 		//Bukkit.broadcastMessage("\nTaskID: " + this.getTaskId() + "\nArena: " + arena.getID() + "\nPlayers: " + arena.getPlayers().toString() + "\nSeconds: " + seconds);
 		if(seconds<=startDelay){
 			arena.setStatus(ArenaStatus.WAITING);
+			
+			if(!arena.isReady()) {
+				for(ZvPPlayer p : arena.getPlayers()) {
+					if(p.hasKit()) {
+						p.sendMessage("waiting for players to choose a kit"); //TODO message
+					}
+				}
+				seconds = 0;
+				return;
+			}		
+			
 			arena.setPlayerLevel(startDelay-seconds);
 			
 			firstSpawn = true;
