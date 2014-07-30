@@ -490,37 +490,43 @@ public class Arena {
 			z.setCanPickupItems(true);
 			z.setMaxHealth(40D);
 			z.setVelocity(z.getVelocity().multiply(1.5D));
+//			z.setCustomName("0");
 			break;
 		case 1:
 			z.setBaby(true);
 			z.setCanPickupItems(false);
 			z.setVillager(false);			
 			z.setHealth(20D);
-			z.setVelocity(z.getVelocity().multiply(0.75D));			
+			z.setVelocity(z.getVelocity().multiply(0.75D));		
+//			z.setCustomName("1");
 			break;			
 		case 2:
 			z.setBaby(false);
 			z.setCanPickupItems(true);
 			z.setVillager(true);
 			z.setHealth(10D);
+//			z.setCustomName("2");
 			break;			
 		case 3:
 			z.setBaby(false);
 			z.setCanPickupItems(true);
 			z.setVillager(true);
 			z.setHealth(15D);
+//			z.setCustomName("3");
 			break;			
 		case 4:
 			z.setBaby(false);
 			z.setCanPickupItems(true);
 			z.setVillager(false);
 			z.setMaxHealth(30D);
+//			z.setCustomName("4");
 			break;
 		default:
 			z.setBaby(false);
 			z.setCanPickupItems(false);
 			z.setVillager(false);
 			z.setHealth(20D);
+//			z.setCustomName("default");
 			break;
 		}
 	}
