@@ -476,7 +476,7 @@ public class Arena {
 			break;
 		case 1:
 			z.setBaby(true);
-			z.setCanPickupItems(true);
+			z.setCanPickupItems(false);
 			z.setVillager(false);			
 			z.setHealth(20D);
 			z.setVelocity(z.getVelocity().multiply(0.75D));			
@@ -490,12 +490,12 @@ public class Arena {
 		case 3:
 			z.setBaby(false);
 			z.setCanPickupItems(true);
-			z.setVillager(false);
+			z.setVillager(true);
 			z.setHealth(15D);
 			break;			
 		case 4:
 			z.setBaby(false);
-			z.setCanPickupItems(false);
+			z.setCanPickupItems(true);
 			z.setVillager(false);
 			z.setMaxHealth(30D);
 			break;
