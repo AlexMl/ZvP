@@ -49,7 +49,7 @@ public class GUIListener implements Listener{
 					event.getWhoClicked().closeInventory();
 					
 					int signID = Integer.parseInt(event.getInventory().getTitle().split("Category ")[1]);
-					ItemCategory cat = ItemCategory.valueOf(event.getCurrentItem().getItemMeta().getDisplayName());
+					ItemCategory cat = ItemCategory.valueOf(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()));
 					
 					if(cat!=null && SignManager.getManager().getSign(signID)!=null) {
 						ShopSign sign = (ShopSign)SignManager.getManager().getSign(signID);

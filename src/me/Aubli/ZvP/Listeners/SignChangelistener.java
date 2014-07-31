@@ -71,7 +71,7 @@ public class SignChangelistener implements Listener{
 												if(cat.getIcon()!=null) {
 													ItemStack icon = cat.getIcon().clone();
 													ItemMeta meta = icon.getItemMeta();
-													meta.setDisplayName(cat.name());
+													meta.setDisplayName(cat.toString());
 													icon.setItemMeta(meta);
 													catSelect.addItem(icon);
 												}

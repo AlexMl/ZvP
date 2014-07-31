@@ -20,22 +20,29 @@ import org.util.ItemStorageUtil.ItemStorage;
 public class ShopManager {
 
 	public enum ItemCategory {		
-		FOOD(new ItemStack(Material.APPLE)),
-		ARMOR(new ItemStack(Material.IRON_HELMET)),
-		WEAPON(new ItemStack(Material.STONE_SWORD)),
-		POTION(new Potion(PotionType.INSTANT_HEAL, 2).toItemStack(1)),
-		MISC(new ItemStack(Material.BUCKET)),
-		NULL(null),
+		FOOD(new ItemStack(Material.APPLE), "Food"),
+		ARMOR(new ItemStack(Material.IRON_HELMET), "Armor"),
+		WEAPON(new ItemStack(Material.STONE_SWORD), "Weapons"),
+		POTION(new Potion(PotionType.INSTANT_HEAL, 2).toItemStack(1), "Potions"),
+		MISC(new ItemStack(Material.BUCKET), "Misc"),
+		NULL(null, ""),
 		;		
 		
 		private ItemStack icon;
+		private String name;
 		
-		private ItemCategory(ItemStack icon) {
+		private ItemCategory(ItemStack icon, String name) {
 			this.icon = icon;
+			this.name = name;
 		}
 		
 		public ItemStack getIcon() {
 			return this.icon;
+		}
+		
+		@Override
+		public String toString() {
+			return this.name;
 		}
 	}	
 	

@@ -43,6 +43,6 @@ public class ShopItem {
 	
 	@Override
 	public String toString() {
-		return "[ShopItem=(" + getItem().toString() + " ," + getCategory() + " ," + getPrice() + ")]";
+		return "[ShopItem=(" + getItem().toString() + " ," + getCategory().toString() + " ," + getPrice() + ")]";
 	}
 }
