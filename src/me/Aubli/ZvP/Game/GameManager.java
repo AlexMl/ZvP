@@ -7,7 +7,9 @@ import java.util.Arrays;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Kits.KitManager;
+import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -74,10 +76,14 @@ public class GameManager {
 		loadArenas();
 		loadLobbys();
 		
-		if(SignManager.getManager()!=null){
-			SignManager.getManager().reloadConfig();
-		}
+		ZvP.getInstance().reloadConfig();
+		ZvP.getInstance().loadConfig();		
+		new MessageManager(ZvP.getLocale());
+		new ShopManager();
 		
+		if(SignManager.getManager()!=null){
+			SignManager.getManager().reloadConfig();			
+		}
 		
 		if(KitManager.getManager()!=null){
 			KitManager.getManager().loadKits();
