@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import me.Aubli.ZvP.ZvP;
 
@@ -19,7 +21,7 @@ public class MessageManager {
 	private File languageFile;
 	private FileConfiguration conf;
 	
-	private Map<String, String> messages;	
+	private static Map<String, String> messages;	
 	
 	public MessageManager(Locale loc){
 		
@@ -39,7 +41,7 @@ public class MessageManager {
 			}
 		}
 		
-		this.messages = getTranslation();		
+		messages = getTranslation();		
 	}
 	
 	private boolean isOutdated() {
@@ -51,8 +53,14 @@ public class MessageManager {
 		
 		ResourceBundle bundle = ResourceBundle.getBundle("me.Aubli.ZvP.Translation.DefaultTranslation");
 		
+		SortedMap<String, String> sortedBundle = new TreeMap<String, String>();
+		
 		for(String key : bundle.keySet()) {
-			getConfig().addDefault("messages." + key, bundle.getObject(key));
+			sortedBundle.put(key, bundle.getString(key));
+		}
+		
+		for(String key : sortedBundle.keySet()) {
+			getConfig().addDefault("messages." + key, sortedBundle.get(key));
 		}
 		getConfig().options().copyDefaults(true);
 		save();
@@ -85,10 +93,10 @@ public class MessageManager {
 	}
 	
 	
-	public String getMessage(String key) {
+	public static String getMessage(String messageKey) {
 		for(String Key : messages.keySet()) {
 			
-			if(key.equals(key)) {
+			if(Key.equals(messageKey)) {
 				return messages.get(Key);
 			}			
 		}
