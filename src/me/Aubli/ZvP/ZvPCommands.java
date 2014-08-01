@@ -1,5 +1,7 @@
 package me.Aubli.ZvP;
 
+import java.util.HashMap;
+
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.ZvPPlayer;
@@ -7,6 +9,7 @@ import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Kits.IZvPKit;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,6 +41,8 @@ public class ZvPCommands implements CommandExecutor {
 	 * 
 	 *
 	 */
+	
+	private HashMap<String, Location> positions = new HashMap<String, Location>();
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String[] args) {
@@ -182,7 +187,8 @@ public class ZvPCommands implements CommandExecutor {
 						commandDenied(playerSender);
 						return true;
 					}
-				}				
+				}
+				
 				if(args[0].equalsIgnoreCase("stop")){
 					if(playerSender.hasPermission("zvp.stop.all")){
 						game.stopGames();
@@ -193,6 +199,26 @@ public class ZvPCommands implements CommandExecutor {
 						return true;
 					}
 				}
+				
+				if(args[0].equalsIgnoreCase("pos1") || args[0].equalsIgnoreCase("pos2")) {
+					if(playerSender.hasPermission("zvp.manage.arena")){
+						
+						positions.put(args[0].toLowerCase(), playerSender.getLocation());
+						playerSender.sendMessage(args[0].toLowerCase() + " saved!");
+						
+						if(positions.containsKey("pos1") && positions.containsKey("pos2")) {
+							game.addArena(positions.get("pos1"), positions.get("pos2"));
+							playerSender.sendMessage("arena created!"); //TODO Message
+							positions.clear();
+							return true;
+						}
+						return true;
+					}else {
+						commandDenied(playerSender);
+						return true;
+					}
+				}
+				
 				
 				printCommands(playerSender);
 				return true;
