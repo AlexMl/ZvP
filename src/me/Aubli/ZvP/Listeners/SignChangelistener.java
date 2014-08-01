@@ -7,6 +7,7 @@ import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
+import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -65,7 +66,7 @@ public class SignChangelistener implements Listener{
 											event.setLine(3, ChatColor.GREEN + "[JOIN]");	
 										}else if(type==SignType.SHOP_SIGN) {
 										
-											Inventory catSelect = Bukkit.createInventory(eventPlayer, ((int)Math.ceil((ItemCategory.values().length/9.0)))*9, "Select Category " + SignManager.getManager().getSign(event.getBlock().getLocation()).getID());
+											Inventory catSelect = Bukkit.createInventory(eventPlayer, ((int)Math.ceil((ItemCategory.values().length/9.0)))*9, MessageManager.getMessage("inventory:select_category") + " (" + SignManager.getManager().getSign(event.getBlock().getLocation()).getID() + ")");
 																						
 											for(ItemCategory cat : ItemCategory.values()) {
 												if(cat.getIcon()!=null) {

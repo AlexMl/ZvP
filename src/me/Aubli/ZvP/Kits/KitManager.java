@@ -16,6 +16,7 @@ import org.bukkit.potion.Potion;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.ZvPPlayer;
+import me.Aubli.ZvP.Translation.MessageManager;
 
 public class KitManager {
 
@@ -89,7 +90,7 @@ public class KitManager {
 	
 	@SuppressWarnings("deprecation")
 	public void openSelectKitGUI(ZvPPlayer player) {
-		Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int)Math.ceil(((double)getKits()/9.0)))*9, "Select your Kit!");
+		Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int)Math.ceil(((double)getKits()/9.0)))*9, MessageManager.getMessage("inventory:kit_select"));
 
 		for(IZvPKit kit : kits) {
 			ItemStack kitItem = kit.getIcon();
@@ -133,7 +134,7 @@ public class KitManager {
 	}
 	
 	public void openAddKitIconGUI(Player player) {
-		Inventory inv = Bukkit.createInventory(player, 9, "Place Kit icon here");
+		Inventory inv = Bukkit.createInventory(player, 9, MessageManager.getMessage("inventory:place_icon"));
 		player.closeInventory();
 		player.openInventory(inv);
 	}
