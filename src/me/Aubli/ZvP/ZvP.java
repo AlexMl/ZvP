@@ -40,7 +40,7 @@ public class ZvP extends JavaPlugin{
 	
 	private static String pluginPrefix = ChatColor.DARK_GREEN + "[" + ChatColor.DARK_RED + "Z" + ChatColor.DARK_GRAY + "v" + ChatColor.DARK_RED + "P" + ChatColor.DARK_GREEN + "]"  + ChatColor.RESET + " ";
 	
-	private Locale locale;
+	private static Locale locale;
 	
 	private static int maxPlayers;
 	private static int DEFAULT_ROUNDS;
@@ -80,9 +80,9 @@ public class ZvP extends JavaPlugin{
 		
 		new MessageManager(locale);
 		new GameManager();
-		new KitManager();
-		new ShopManager();
 		new SignManager();
+		new ShopManager();
+		new KitManager();
 		
 		registerListeners();
 		getCommand("zvp").setExecutor(new ZvPCommands());
@@ -134,9 +134,13 @@ public class ZvP extends JavaPlugin{
 		return false;		
 	}
 	
-	
+		
 	public static ZvP getInstance(){
 		return instance;
+	}
+	
+	public static Locale getLocale() {
+		return locale;
 	}
 	
 	public static String getPrefix(){
@@ -193,45 +197,45 @@ public class ZvP extends JavaPlugin{
 	 * }
 	 */
 	
-	private void loadConfig(){
+	public void loadConfig(){
 		
-		this.getConfig().options().header("\n" +
+		getConfig().options().header("\n" +
 				"This is the main config file for PlayerVsZombies.\n" +
 				"For more items write a coment or a ticket on the bukkit-dev website:\n" +
 				"http://dev.bukkit.org/bukkit-plugins/zombievsplayer/\n");
 		
-		this.getConfig().addDefault("plugin.enableMetrics", true);
-		this.getConfig().addDefault("plugin.Locale", "en");
+		getConfig().addDefault("plugin.enableMetrics", true);
+		getConfig().addDefault("plugin.Locale", "en");
 		
 		useMetrics = getConfig().getBoolean("plugin.enableMetrics");
 		locale = new Locale(getConfig().getString("plugin.Locale"));
 		
 		
-		this.getConfig().addDefault("game.maximal_Players", 25);		
-		this.getConfig().addDefault("game.default_rounds", 3);
-		this.getConfig().addDefault("game.default_waves", 5);
+		getConfig().addDefault("game.maximal_Players", 25);		
+		getConfig().addDefault("game.default_rounds", 3);
+		getConfig().addDefault("game.default_waves", 5);
 		
 		maxPlayers = getConfig().getInt("game.maximal_Players");
 		DEFAULT_ROUNDS = getConfig().getInt("game.default_rounds");
 		DEFAULT_WAVES = getConfig().getInt("game.default_waves");
 		
 		
-		this.getConfig().addDefault("times.joinTime", 15);
-		this.getConfig().addDefault("times.saveTime", 30);
+		getConfig().addDefault("times.joinTime", 15);
+		getConfig().addDefault("times.saveTime", 30);
 		
 		START_DELAY = getConfig().getInt("times.joinTime");
 		TIME_BETWEEN_WAVES = getConfig().getInt("times.saveTime");
 		
 		
-		this.getConfig().addDefault("zombies.spawnRate", 30);
-		this.getConfig().addDefault("zombies.saveRadius", 3.0);	
+		getConfig().addDefault("zombies.spawnRate", 30);
+		getConfig().addDefault("zombies.saveRadius", 3.0);	
 		
 		ZOMBIE_SPAWN_RATE = getConfig().getInt("zombies.spawnRate");		
 		SAVE_RADIUS = getConfig().getDouble("zombies.saveRadius");
 		
 		
-		this.getConfig().addDefault("money.ZombieFund", 0.37);
-		this.getConfig().addDefault("money.DeathFee", 3);	
+		getConfig().addDefault("money.ZombieFund", 0.37);
+		getConfig().addDefault("money.DeathFee", 3);	
 		
 		ZOMBIE_FUND = getConfig().getDouble("money.ZombieFund");
 		DEATH_FEE = getConfig().getDouble("money.DeathFee");
@@ -240,8 +244,8 @@ public class ZvP extends JavaPlugin{
 	//	this.getConfig().addDefault("config.misc.portOnJoinGame", true);
 	//	this.getConfig().addDefault("config.misc.changeToSpectatorAfterDeath", false);
 		
-		this.getConfig().options().copyDefaults(true);
-		this.saveConfig();
+		getConfig().options().copyDefaults(true);
+		saveConfig();
 	}
 		
 }
