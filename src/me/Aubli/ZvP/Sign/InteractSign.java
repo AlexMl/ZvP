@@ -135,15 +135,15 @@ public class InteractSign implements ISign{
 			sign.setLine(1, "Arena: " + arena.getID());
 			
 			if(getArena().getStatus()==ArenaStatus.RUNNING){
-				sign.setLine(2, ChatColor.DARK_GREEN + "Running");
+				sign.setLine(2, ChatColor.DARK_GREEN + getArena().getStatus().getName());
 				sign.setLine(3, ChatColor.DARK_RED + "Can't Join!");				
 			}
 			if(getArena().getStatus()==ArenaStatus.WAITING || getArena().getStatus()==ArenaStatus.STANDBY){
-				sign.setLine(2, ChatColor.YELLOW + "Waiting");
+				sign.setLine(2, ChatColor.YELLOW + getArena().getStatus().getName());
 				sign.setLine(3, ChatColor.GREEN + "[JOIN]");	
 			}
 			if(getArena().getStatus()==ArenaStatus.STOPED || getArena().getStatus()==ArenaStatus.SUSPEND){
-				sign.setLine(2, ChatColor.DARK_RED + "Stoped");
+				sign.setLine(2, ChatColor.DARK_RED  + getArena().getStatus().getName());
 				sign.setLine(3, ChatColor.DARK_RED + "Can't Join!");	
 			}
 			

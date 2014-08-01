@@ -30,9 +30,14 @@ public class DefaultTranslation extends ListResourceBundle{
 		{"category:potion", "Potions"},
 		{"category:misc", "Misc"},
 		
+		{"status:running", "Running"},
+		{"status:waiting", "Waiting"},
+		{"status:stoped", "Stoped"},
+		
 		{"inventory:kit_select", "Select your Kit!"},
 		{"inventory:place_icon", "Place Kit icon here!"},
-		{"inventory:select_category", "Select Category"},
+		{"inventory:select_category", "Select Category"},		
+		
 	};
 	
 }

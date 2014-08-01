@@ -20,12 +20,22 @@ import org.bukkit.scoreboard.ScoreboardManager;
 public class GameManager {
 	
 	public enum ArenaStatus{
-		RUNNING,
-		WAITING,
-		STANDBY,
-		STOPED,		
-		SUSPEND,
+		RUNNING(MessageManager.getMessage("status:running")),
+		WAITING(MessageManager.getMessage("status:waiting")),
+		STANDBY(MessageManager.getMessage("status:waiting")),
+		STOPED(MessageManager.getMessage("status:stoped")),		
+		SUSPEND(MessageManager.getMessage("status:stoped")),
 		;
+		
+		private String name;
+		
+		private ArenaStatus(String name) {
+			this.name = name;
+		}
+		
+		public String getName() {
+			return this.name;
+		}
 	}
 
 	private static GameManager manager;
