@@ -17,21 +17,22 @@ public class MessageManager {
 	private Locale loc;
 	
 	private File languageFile;
-	private FileConfiguration langConfig;
+	private FileConfiguration conf;
 	
 	private Map<String, String> messages;	
 	
 	public MessageManager(Locale loc){
 		
 		this.languageFile = new File(ZvP.getInstance().getDataFolder().getPath() + "/Messages/" + loc.toString() + ".yml");	
-		this.langConfig = YamlConfiguration.loadConfiguration(languageFile);
+		this.conf = YamlConfiguration.loadConfiguration(languageFile);
 		
 		this.loc = loc;
 		
-		if(!languageFile.exists()) {	
+		if(!languageFile.exists() || isOutdated()) {
 			try {
-				new File(languageFile.getParent()).mkdirs();
-				languageFile.createNewFile();	
+				ZvP.log.info("[" + ZvP.getInstance().getName() + "] Creating new message File!");
+				languageFile.getParentFile().mkdirs();
+				languageFile.createNewFile();
 				writeDefaults();
 			}catch(IOException e) {
 				e.printStackTrace();
@@ -41,12 +42,19 @@ public class MessageManager {
 		this.messages = getTranslation();		
 	}
 	
+	private boolean isOutdated() {
+		return !ZvP.getInstance().getDescription().getVersion().equals(getConfig().getString("Version"));
+	}	
+	
 	private void writeDefaults(){
+		getConfig().set("Version", ZvP.getInstance().getDescription().getVersion());
+		
 		ResourceBundle bundle = ResourceBundle.getBundle("me.Aubli.ZvP.Translation.DefaultTranslation");
 		
 		for(String key : bundle.keySet()) {
-			getConfig().set(key, bundle.getObject(key));
+			getConfig().addDefault("messages." + key, bundle.getObject(key));
 		}
+		getConfig().options().copyDefaults(true);
 		save();
 	}	
 	
@@ -56,19 +64,20 @@ public class MessageManager {
 		ResourceBundle defaultBundle = ResourceBundle.getBundle("me.Aubli.ZvP.Translation.DefaultTranslation");
 		
 		for(String key : defaultBundle.keySet()) {
-			translation.put(key, getConfig().getString(key));
+			translation.put(key, getConfig().getString("messages." + key));
 		}
 		
 		return translation;
 	}
 	
-	private FileConfiguration getConfig() {
-		return langConfig;
+	private FileConfiguration getConfig() {		
+		return this.conf;
 	}
 	
 	
 	private void save() {
 		try {
+			System.out.println(getConfig().getCurrentPath());
 			getConfig().save(languageFile);
 		} catch (IOException e) {
 			e.printStackTrace();
