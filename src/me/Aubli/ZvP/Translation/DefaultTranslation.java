@@ -23,6 +23,16 @@ public class DefaultTranslation extends ListResourceBundle{
 		{"lobby_removed", "Lobby removed from Config!"},
 		{"arena_removed", "Arena removed from Config!"},
 		{"arena_not_available", "This arena is not available!"},		
+		
+		{"category:food", "Food"},
+		{"category:armor", "Armor"},
+		{"category:weapon", "Weapons"},
+		{"category:potion", "Potions"},
+		{"category:misc", "Misc"},
+		
+		{"inventory:kit_select", "Select your Kit!"},
+		{"inventory:place_icon", "Place Kit icon here!"},
+		{"inventory:select_category", "Select Category"},
 	};
 	
 }
