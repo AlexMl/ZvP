@@ -12,6 +12,7 @@ import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 import me.Aubli.ZvP.Sign.ShopSign;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
+import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,7 +32,7 @@ public class GUIListener implements Listener{
 	public void onClick(InventoryClickEvent event) {
 		if(event.getWhoClicked().hasPermission("zvp.play")) {
 			if(event.getCurrentItem()!=null && event.getCurrentItem().getType()!=Material.AIR) {
-				if(event.getInventory().getTitle().equalsIgnoreCase("Select your Kit!")) {				
+				if(event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage("inventory:kit_select"))) {				
 					event.setCancelled(true);
 					event.getWhoClicked().closeInventory();
 					
@@ -44,7 +45,7 @@ public class GUIListener implements Listener{
 						return;
 					}
 				}
-				if(event.getInventory().getTitle().contains("Select Category")) {					
+				if(event.getInventory().getTitle().contains(MessageManager.getMessage("inventory:select_category"))) {					
 					event.setCancelled(true);
 					event.getWhoClicked().closeInventory();
 					
@@ -177,7 +178,7 @@ public class GUIListener implements Listener{
 			}, 1*10L);
 		}
 		
-		if(event.getInventory().getTitle().equalsIgnoreCase("Select your Kit!")) {
+		if(event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage("inventory:kit_select"))) {
 			ZvPPlayer player = GameManager.getManager().getPlayer(eventPlayer);
 			
 			if(player!=null) {
@@ -188,7 +189,7 @@ public class GUIListener implements Listener{
 			}
 		}
 		
-		if(event.getInventory().getTitle().equals("Place Kit icon here")){
+		if(event.getInventory().getTitle().equals(MessageManager.getMessage("inventory:place_icon"))){
 			
 			for(ItemStack item : event.getInventory().getContents()) {
 				if(item!=null && item.getType()!=Material.AIR) {
