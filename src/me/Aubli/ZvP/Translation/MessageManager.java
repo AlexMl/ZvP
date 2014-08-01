@@ -16,19 +16,19 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class MessageManager {
 
-	private Locale loc;
+	private static Locale loc;
 	
 	private File languageFile;
 	private FileConfiguration conf;
 	
 	private static Map<String, String> messages;	
 	
-	public MessageManager(Locale loc){
-		
-		this.languageFile = new File(ZvP.getInstance().getDataFolder().getPath() + "/Messages/" + loc.toString() + ".yml");	
+	public MessageManager(Locale locale){
+
+		this.languageFile = new File(ZvP.getInstance().getDataFolder().getPath() + "/Messages/" + locale.toString() + ".yml");	
 		this.conf = YamlConfiguration.loadConfiguration(languageFile);
 		
-		this.loc = loc;
+		loc = locale;
 		
 		if(!languageFile.exists() || isOutdated()) {
 			try {
@@ -104,7 +104,7 @@ public class MessageManager {
 	}
 	
 	
-	public Locale getLocale() {
+	public static Locale getLocale() {
 		return loc;
 	}
 	
