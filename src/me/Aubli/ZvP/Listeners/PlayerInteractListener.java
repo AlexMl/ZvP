@@ -111,12 +111,11 @@ public class PlayerInteractListener implements Listener{
 						if(eventPlayer.hasPermission("zvp.play")){
 							
 							ShopSign shopSign = (ShopSign)sm.getSign(event.getClickedBlock().getLocation());
-							ShopManager shop = ShopManager.getManager();
-							
+						
 							ItemCategory cat = shopSign.getCategory();
-							Inventory shopInv = Bukkit.createInventory(eventPlayer, ((int)Math.ceil((double)shop.getItems(cat).size()/9.0))*9, "Items: " + cat.toString());
+							Inventory shopInv = Bukkit.createInventory(eventPlayer, ((int)Math.ceil((double)ShopManager.getManager().getItems(cat).size()/9.0))*9, "Items: " + cat.toString());
 							
-							for(ShopItem shopItem : shop.getItems(cat)) {
+							for(ShopItem shopItem : ShopManager.getManager().getItems(cat)) {
 								
 								ItemStack item = shopItem.getItem();
 								ItemMeta meta = item.getItemMeta();
