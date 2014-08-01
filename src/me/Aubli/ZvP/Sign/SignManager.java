@@ -32,8 +32,6 @@ public class SignManager {
 	public SignManager(){
 		instance = this;
 		
-		signs = new ArrayList<ISign>();
-		
 		signFolder = new File(ZvP.getInstance().getDataFolder().getPath() + "/Signs");
 		reloadConfig();
 	}		
@@ -42,7 +40,9 @@ public class SignManager {
 		if(!signFolder.exists()){
 			signFolder.mkdirs();
 		}
+		
 		loadSigns();
+		updateSigns();
 	}
 	
 	private void loadSigns(){		
