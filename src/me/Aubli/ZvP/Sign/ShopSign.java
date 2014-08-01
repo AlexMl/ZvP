@@ -56,7 +56,7 @@ public class ShopSign implements ISign{
 			signConfig.set("sign.Type", getType().toString());
 			signConfig.set("sign.Arena", arena.getID());
 			signConfig.set("sign.Lobby", lobby.getID());
-			signConfig.set("sign.Category", cat.toString());
+			signConfig.set("sign.Category", cat.getEnumName());
 			
 			signConfig.set("sign.Location.world", signLoc.getWorld().getUID().toString());
 			signConfig.set("sign.Location.X", signLoc.getBlockX());

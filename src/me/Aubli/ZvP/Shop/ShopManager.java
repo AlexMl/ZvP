@@ -19,7 +19,7 @@ import org.util.ItemStorageUtil.ItemStorage;
 
 public class ShopManager {
 
-	public enum ItemCategory {		
+	public enum ItemCategory {		//TODO names
 		FOOD(new ItemStack(Material.APPLE), "Food"),
 		ARMOR(new ItemStack(Material.IRON_HELMET), "Armor"),
 		WEAPON(new ItemStack(Material.STONE_SWORD), "Weapons"),
@@ -38,6 +38,21 @@ public class ShopManager {
 		
 		public ItemStack getIcon() {
 			return this.icon;
+		}
+		
+		
+		public static ItemCategory getEnum(String string) {
+
+			for(ItemCategory cat : ItemCategory.values()) {
+				if(cat.toString().equals(string)) {
+					return cat;
+				}
+			}
+			throw new IllegalArgumentException("String '" + string + "' has no enum!");			
+		}
+		
+		public String getEnumName() {
+			return super.toString();
 		}
 		
 		@Override

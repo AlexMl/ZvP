@@ -146,7 +146,7 @@ public class ItemStorage {
 	}
 	
 	private static String generateShopItemString(String enchString, ShopItem item) {
-		return "id: " + item.getType().toString() + ", amount: " + item.getItem().getAmount() + ", data: " + item.getItem().getDurability() + ", category: " + item.getCategory().toString() + ", price: " + item.getPrice() + ", " + enchString;
+		return "id: " + item.getType().toString() + ", amount: " + item.getItem().getAmount() + ", data: " + item.getItem().getDurability() + ", category: " + item.getCategory().getEnumName() + ", price: " + item.getPrice() + ", " + enchString;
 	}
 	
 	private static String translateEnchantment(ItemStack item) {

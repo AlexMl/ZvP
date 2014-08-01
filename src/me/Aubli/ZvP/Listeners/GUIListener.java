@@ -49,7 +49,7 @@ public class GUIListener implements Listener{
 					event.getWhoClicked().closeInventory();
 					
 					int signID = Integer.parseInt(event.getInventory().getTitle().split("Category ")[1]);
-					ItemCategory cat = ItemCategory.valueOf(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()));
+					ItemCategory cat = ItemCategory.getEnum(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()));
 					
 					if(cat!=null && SignManager.getManager().getSign(signID)!=null) {
 						ShopSign sign = (ShopSign)SignManager.getManager().getSign(signID);
@@ -68,7 +68,7 @@ public class GUIListener implements Listener{
 					
 					if(event.getCurrentItem()!=null) {
 						
-						ItemCategory cat = ItemCategory.valueOf(event.getInventory().getTitle().split("s: ")[1]);						
+						ItemCategory cat = ItemCategory.getEnum(event.getInventory().getTitle().split("s: ")[1]);						
 						ShopItem item = ShopManager.getManager().getItem(cat, event.getCurrentItem());
 						ZvPPlayer player = GameManager.getManager().getPlayer((Player)event.getWhoClicked());
 							
