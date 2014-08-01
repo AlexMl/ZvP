@@ -117,7 +117,7 @@ public class ShopManager {
 			e.printStackTrace();
 		}
 		
-		ShopItem[] defaultItems = new ShopItem[49];
+		ShopItem[] defaultItems = new ShopItem[53];
 		
 		ItemStack item;
 		ItemCategory cat;
@@ -202,30 +202,38 @@ public class ShopManager {
 		item = new ItemStack(Material.GOLD_BOOTS);
 		defaultItems[32] = new ShopItem(item, cat, 3.0);
 		
+		item = new ItemStack(Material.DIAMOND_HELMET);
+		defaultItems[33] = new ShopItem(item, cat, 7.0);
+		item = new ItemStack(Material.DIAMOND_CHESTPLATE);
+		defaultItems[34] = new ShopItem(item, cat, 10.0);
+		item = new ItemStack(Material.DIAMOND_LEGGINGS);
+		defaultItems[35] = new ShopItem(item, cat, 9.0);
+		item = new ItemStack(Material.DIAMOND_BOOTS);
+		defaultItems[36] = new ShopItem(item, cat, 6.0);
 		
 		//weapons
 		cat = ItemCategory.WEAPON;
 		item = new ItemStack(Material.DIAMOND_AXE);
-		defaultItems[33] = new ShopItem(item, cat, 9.0);
+		defaultItems[37] = new ShopItem(item, cat, 9.0);
 		item = new ItemStack(Material.DIAMOND_SWORD);
-		defaultItems[34] = new ShopItem(item, cat, 10.0);
+		defaultItems[38] = new ShopItem(item, cat, 10.0);
 		item = new ItemStack(Material.IRON_AXE);
-		defaultItems[35] = new ShopItem(item, cat, 5.0);
+		defaultItems[39] = new ShopItem(item, cat, 5.0);
 		item = new ItemStack(Material.IRON_SWORD);
-		defaultItems[36] = new ShopItem(item, cat, 6.0);
+		defaultItems[40] = new ShopItem(item, cat, 6.0);
 		item = new ItemStack(Material.GOLD_SWORD);
-		defaultItems[37] = new ShopItem(item, cat, 4.0);
+		defaultItems[41] = new ShopItem(item, cat, 4.0);
 		item = new ItemStack(Material.STONE_SWORD);
-		defaultItems[38] = new ShopItem(item, cat, 4.0);
+		defaultItems[42] = new ShopItem(item, cat, 4.0);
 		item = new ItemStack(Material.STONE_AXE);
-		defaultItems[39] = new ShopItem(item, cat, 4.0);
+		defaultItems[43] = new ShopItem(item, cat, 4.0);
 		item = new ItemStack(Material.WOOD_SWORD);
-		defaultItems[40] = new ShopItem(item, cat, 2.0);		
+		defaultItems[44] = new ShopItem(item, cat, 2.0);		
 		
 		item = new ItemStack(Material.BOW);
-		defaultItems[41] = new ShopItem(item, cat, 6.0);
+		defaultItems[45] = new ShopItem(item, cat, 6.0);
 		item = new ItemStack(Material.ARROW);
-		defaultItems[42] = new ShopItem(item, cat, 0.08);		
+		defaultItems[46] = new ShopItem(item, cat, 0.08);		
 		
 		//Enchanted
 		item = new ItemStack(Material.DIAMOND_SWORD);
@@ -233,20 +241,20 @@ public class ShopManager {
 		item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 10);
 		item.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 3);
 		item.addUnsafeEnchantment(Enchantment.DURABILITY, 5);
-		defaultItems[43] = new ShopItem(item, cat, 25.0);
+		defaultItems[47] = new ShopItem(item, cat, 25.0);
 		
 		//Potions
 		cat = ItemCategory.POTION;
 		item = new Potion(PotionType.FIRE_RESISTANCE, 2).splash().toItemStack(1);
-		defaultItems[44] = new ShopItem(item, cat, 3.5);		
+		defaultItems[48] = new ShopItem(item, cat, 3.5);		
 		item = new Potion(PotionType.REGEN, 2).splash().toItemStack(1);
-		defaultItems[45] = new ShopItem(item, cat, 5.0);
+		defaultItems[49] = new ShopItem(item, cat, 5.0);
 		item = new Potion(PotionType.INSTANT_HEAL, 2).splash().toItemStack(1);
-		defaultItems[46] = new ShopItem(item, cat, 3.5);
+		defaultItems[50] = new ShopItem(item, cat, 3.5);
 		item = new Potion(PotionType.SPEED, 2).splash().toItemStack(1);
-		defaultItems[47] = new ShopItem(item, cat, 4.0);
+		defaultItems[51] = new ShopItem(item, cat, 4.0);
 		item = new Potion(PotionType.STRENGTH, 2).splash().toItemStack(1);
-		defaultItems[48] = new ShopItem(item, cat, 5.0);		
+		defaultItems[52] = new ShopItem(item, cat, 5.0);		
 		
 		
 		ItemStorage.saveItemsToFile(itemFile, "items", defaultItems);
