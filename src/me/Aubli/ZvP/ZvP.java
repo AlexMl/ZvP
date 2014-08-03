@@ -227,7 +227,7 @@ public class ZvP extends JavaPlugin{
 		TIME_BETWEEN_WAVES = getConfig().getInt("times.saveTime");
 		
 		
-		getConfig().addDefault("zombies.spawnRate", 30);
+		getConfig().addDefault("zombies.spawnRate", 20);
 		getConfig().addDefault("zombies.saveRadius", 3.0);	
 		
 		ZOMBIE_SPAWN_RATE = getConfig().getInt("zombies.spawnRate");		
