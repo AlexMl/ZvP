@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Kits.KitManager;
+import me.Aubli.ZvP.Listeners.AsyncChatListener;
 import me.Aubli.ZvP.Listeners.BlockListener;
 import me.Aubli.ZvP.Listeners.DeathListener;
 import me.Aubli.ZvP.Listeners.EntityDamageListener;
@@ -108,7 +109,7 @@ public class ZvP extends JavaPlugin{
 		pm.registerEvents(new SignChangelistener(), this);		
 		pm.registerEvents(new GUIListener(), this);
 		pm.registerEvents(new EntityDamageListener(), this);
-		
+		pm.registerEvents(new AsyncChatListener(), this);
 	}
 	
 	private void setTool(){
