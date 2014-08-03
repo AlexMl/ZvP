@@ -32,8 +32,8 @@ public class GameRunnable extends BukkitRunnable{
 	
 	@Override
 	public void run() {
-	
-		if(seconds<=startDelay){
+		
+		if(seconds<=startDelay){	//Waiting for players
 			if(arena.getRound()==0 && arena.getWave()==0) {
 				arena.setStatus(ArenaStatus.WAITING);
 			}
@@ -52,9 +52,12 @@ public class GameRunnable extends BukkitRunnable{
 			
 			firstSpawn = true;
 			spawnZombies = false;
-		}else if(seconds > startDelay) {
+			seconds++;
+			return;
+		}
 		
-			if(arena.getRound()==0 && arena.getWave()==0) { //start
+		if(seconds > startDelay && arena.getPlayers().length>0) {	//game start
+			if(arena.getRound()==0 && arena.getWave()==0) { //set game settings
 				arena.setPlayerBoards();
 				arena.removePlayerBoards();
 				arena.updatePlayerBoards();
@@ -117,9 +120,8 @@ public class GameRunnable extends BukkitRunnable{
 						arena.sendMessage(MessageManager.getMessage("game:vote_request")); // TODO message
 						arena.setStatus(ArenaStatus.VOTING);
 						this.cancel();
-					}else {							
-						//End of Game
-						
+					}else {			//End of Game				
+												
 						int kills = arena.getKilledZombies();
 						int deaths = 0;
 						double money = arena.getBalance();
@@ -138,13 +140,10 @@ public class GameRunnable extends BukkitRunnable{
 					}
 				}
 			}
-			
-			if(arena.getPlayers().length<1) {
-				arena.stop();
-			}
-			
-		}
-
+		}else {
+			arena.stop();
+		}		
+	
 		if(arena.getLivingZombies()>0) {
 			arena.sendMessage("Arena: " + arena.getID() + " : " + ChatColor.RED + arena.getStatus().toString() + "; " + ChatColor.RESET + arena.getRound() + ":" + arena.getWave() + " Z:" + arena.getLivingZombies() + ":" + arena.getKilledZombies());
 		}
