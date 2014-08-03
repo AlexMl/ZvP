@@ -114,6 +114,7 @@ public class GameRunnable extends BukkitRunnable{
 					
 					if(!stop) {
 						arena.sendMessage("type ... to next wave!");
+						arena.setStatus(ArenaStatus.VOTING);
 						this.cancel();
 					/*	if(seconds2<=saveTime) {		
 							arena.setPlayerLevel(saveTime-seconds2);

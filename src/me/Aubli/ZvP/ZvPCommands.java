@@ -81,17 +81,7 @@ public class ZvPCommands implements CommandExecutor {
 		if(cmd.getName().equalsIgnoreCase("test")){
 		
 			if(args.length==1) {	
-				
-				game.getPlayer(playerSender).setVoted(true);
-				
-				Arena a = game.getArena(Integer.parseInt(args[0]));	
-				a.updatePlayerBoards();
-				if(a.hasVoted()) {
-					for(ZvPPlayer p : a.getPlayers()) {
-						p.setVoted(false);
-					}					
-					a.setTaskID(new GameRunnable(a, ZvP.getStartDelay(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
-				}
+			
 				return true;
 			}
 			
