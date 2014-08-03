@@ -7,18 +7,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class GameRunnable extends BukkitRunnable{
 	
-	public GameRunnable(Arena arena, int startDelay, int saveTime, int magicSpawnRate){
+	public GameRunnable(Arena arena, int startDelay, int magicSpawnRate){
 		this.arena = arena;
 		this.startDelay = startDelay;
 		this.magicSpawnNumber = magicSpawnRate;
-		this.saveTime = saveTime;
 		this.spawnRate = 0.45;
 	}
 	
 	private Arena arena;	
 	
 	private final int startDelay;
-	private final int saveTime;
 	
 	private final double spawnRate;
 	
@@ -35,9 +33,11 @@ public class GameRunnable extends BukkitRunnable{
 	public void run() {
 		//Bukkit.broadcastMessage("\nTaskID: " + this.getTaskId() + "\nArena: " + arena.getID() + "\nPlayers: " + arena.getPlayers().toString() + "\nSeconds: " + seconds);
 		if(seconds<=startDelay){
-			arena.setStatus(ArenaStatus.WAITING);
+			if(arena.getRound()==0 && arena.getWave()==0) {
+				arena.setStatus(ArenaStatus.WAITING);
+			}
 			
-			if(!arena.isReady()) {
+			if(!arena.hasKit()) {
 				for(ZvPPlayer p : arena.getPlayers()) {
 					if(p.hasKit()) {
 						p.sendMessage("waiting for players to choose a kit"); //TODO message
@@ -50,7 +50,9 @@ public class GameRunnable extends BukkitRunnable{
 			arena.setPlayerLevel(startDelay-seconds);
 			
 			firstSpawn = true;
+			spawnZombies = false;
 		}else if(seconds > startDelay) {
+		
 			if(arena.getRound()==0 && arena.getWave()==0) { //start
 				arena.setPlayerBoards();
 				arena.removePlayerBoards();
@@ -111,7 +113,9 @@ public class GameRunnable extends BukkitRunnable{
 					}
 					
 					if(!stop) {
-						if(seconds2<=saveTime) {		
+						arena.sendMessage("type ... to next wave!");
+						this.cancel();
+					/*	if(seconds2<=saveTime) {		
 							arena.setPlayerLevel(saveTime-seconds2);
 					//		arena.sendMessage(saveTime-seconds2 + " Seconds left!");
 							seconds2++;
@@ -119,7 +123,7 @@ public class GameRunnable extends BukkitRunnable{
 							arena.sendMessage("next wave!");
 							firstSpawn = true;
 							seconds2 = 0;
-						}
+						}*/
 					}else {							
 						//End of Game
 						//TODO Get the winner

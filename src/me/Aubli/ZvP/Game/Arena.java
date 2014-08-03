@@ -169,6 +169,11 @@ public class Arena {
 		updatePlayerBoards();
 	}
 	
+	public void setTaskID(int ID) {
+		this.TaskId = ID;
+	}
+	
+	
 	public int getID(){
 		return arenaID;
 	}
@@ -338,9 +343,18 @@ public class Arena {
 		return getPlayers().length==getMaxPlayers();
 	}
 	
-	public boolean isReady() {		
+	public boolean hasKit() {		
 		for(ZvPPlayer p : players) {
-			if(p.hasKit()==false) {				
+			if(!p.hasKit()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean hasVoted() {
+		for(ZvPPlayer p : players) {
+			if(!p.hasVoted()) {
 				return false;
 			}
 		}
@@ -552,7 +566,7 @@ public class Arena {
 		getWorld().setMonsterSpawnLimit(0);
 		clearArena();
 		
-		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSaveTime(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
+		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
 		//TODO Start message
 	}	
 	

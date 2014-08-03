@@ -31,6 +31,8 @@ public class ZvPPlayer {
 	
 	private Location startPosition;
 	
+	private boolean voted;
+	
 	private int zombieKills;
 	private int deaths;
 	
@@ -50,6 +52,8 @@ public class ZvPPlayer {
 		
 		this.arena = arena;
 		this.lobby = lobby;
+		
+		this.voted = false;
 		
 		this.zombieKills = 0;
 		this.deaths = 0;
@@ -163,9 +167,17 @@ public class ZvPPlayer {
 		getPlayer().setScoreboard(getBoard());
 	}
 	
+	public void setVoted(boolean voted) {
+		this.voted = voted;
+	}
+	
 	
 	public boolean hasKit() {
 		return getKit()!=null;
+	}
+	
+	public boolean hasVoted() {
+		return voted;
 	}
 	
 	
@@ -229,6 +241,13 @@ public class ZvPPlayer {
 			obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Kills: " + getKills())).setScore(5);
 			obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_PURPLE + "Deaths: " + getDeaths())).setScore(4);
 			
+			Objective voteObj = getBoard().getObjective("zvp-vote");
+			if(voteObj==null) {
+				voteObj = getBoard().registerNewObjective("zvp-vote", "custom");				
+			}
+			voteObj.setDisplayName(ChatColor.GOLD + "Voted");
+			voteObj.setDisplaySlot(DisplaySlot.PLAYER_LIST);			
+				
 			Objective belowObj = getBoard().getObjective("zvp-kills");		
 			if(belowObj==null) {
 				belowObj = getBoard().registerNewObjective("zvp-kills", "custom");
@@ -238,6 +257,7 @@ public class ZvPPlayer {
 			
 			for(ZvPPlayer p : arena.getPlayers()) {
 				belowObj.getScore(Bukkit.getOfflinePlayer(p.getUuid())).setScore(p.getKills());
+				voteObj.getScore(Bukkit.getOfflinePlayer(p.getUuid())).setScore(p.hasVoted() ? 1:0);
 			}
 			setPlayerBoard();		
 		}

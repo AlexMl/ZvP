@@ -46,7 +46,6 @@ public class ZvP extends JavaPlugin{
 	private static int DEFAULT_ROUNDS;
 	private static int DEFAULT_WAVES;
 	private static int START_DELAY;
-	private static int TIME_BETWEEN_WAVES;
 	private static int ZOMBIE_SPAWN_RATE;
 	private static double SAVE_RADIUS;	
 	private static double ZOMBIE_FUND;
@@ -167,10 +166,6 @@ public class ZvP extends JavaPlugin{
 		return ZOMBIE_SPAWN_RATE;
 	}
 	
- 	public static int getSaveTime() {
- 		return TIME_BETWEEN_WAVES;
- 	}
- 	
  	public static double getDefaultDistance() {		
 		return SAVE_RADIUS;
 	}
@@ -221,10 +216,8 @@ public class ZvP extends JavaPlugin{
 		
 		
 		getConfig().addDefault("times.joinTime", 15);
-		getConfig().addDefault("times.saveTime", 30);
 		
 		START_DELAY = getConfig().getInt("times.joinTime");
-		TIME_BETWEEN_WAVES = getConfig().getInt("times.saveTime");
 		
 		
 		getConfig().addDefault("zombies.spawnRate", 20);
