@@ -4,10 +4,10 @@ import java.util.HashMap;
 
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
-import me.Aubli.ZvP.Game.GameRunnable;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Kits.IZvPKit;
+import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -52,11 +52,11 @@ public class ZvPCommands implements CommandExecutor {
 				if(args.length==1) {
 					if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
 						GameManager.getManager().loadConfig();						
-						sender.sendMessage("reloaded");//TODO message
+						sender.sendMessage(MessageManager.getMessage("config:reloaded"));
 						return true;
 					}
 					if(args[0].equalsIgnoreCase("stop-all")) {
-						GameManager.getManager().stopGames();
+						GameManager.getManager().stopGames();						
 						//TODO Message
 						return true;
 					}
@@ -71,7 +71,7 @@ public class ZvPCommands implements CommandExecutor {
 				sender.sendMessage("| /zvp stop-all");
 				return true;
 			}
-			sender.sendMessage("This command is only for Players!");
+			sender.sendMessage(MessageManager.getMessage("commands:only_for_Players"));
 			return true;
 		}
 		
@@ -143,7 +143,7 @@ public class ZvPCommands implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("save")){
 					if(playerSender.hasPermission("zvp.save")){
 						GameManager.getManager().saveConfig();						
-						playerSender.sendMessage("saved");//TODO message
+						playerSender.sendMessage(MessageManager.getMessage("config:saved"));
 						return true;
 					}else{
 						commandDenied(playerSender);
@@ -153,7 +153,7 @@ public class ZvPCommands implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
 					if(playerSender.hasPermission("zvp.reload")){
 						GameManager.getManager().loadConfig();						
-						playerSender.sendMessage("reloaded");//TODO message
+						playerSender.sendMessage(MessageManager.getMessage("config:reloaded"));
 						return true;
 					}else{
 						commandDenied(playerSender);
@@ -169,15 +169,15 @@ public class ZvPCommands implements CommandExecutor {
 							boolean success = game.removePlayer(p);
 							
 							if(success){
-								playerSender.sendMessage("You left Arena " + p.getArena().getID()); //TODO Message
-								a.sendMessage(playerSender.getName() + " has left!");
+								playerSender.sendMessage(String.format(MessageManager.getMessage("game:left"), p.getArena().getID()));
+								a.sendMessage(String.format(MessageManager.getMessage("game:player_left"), playerSender.getName()));
 								return true;
 							}else{
-								playerSender.sendMessage("You were not found in a game"); //TODO Message
+								playerSender.sendMessage(MessageManager.getMessage("game:player_not_found"));
 								return true;
 							}
 						}else{
-							playerSender.sendMessage("not in a game"); //TODO Message
+							playerSender.sendMessage(MessageManager.getMessage("game:not_in_game"));
 							return true;
 						}
 					}else{
@@ -201,11 +201,11 @@ public class ZvPCommands implements CommandExecutor {
 					if(playerSender.hasPermission("zvp.manage.arena")){
 						
 						positions.put(args[0].toLowerCase(), playerSender.getLocation());
-						playerSender.sendMessage(args[0].toLowerCase() + " saved!");
+						playerSender.sendMessage(args[0].toLowerCase() + " saved!"); //TODO Message
 						
 						if(positions.containsKey("pos1") && positions.containsKey("pos2")) {
 							game.addArena(positions.get("pos1"), positions.get("pos2"));
-							playerSender.sendMessage("arena created!"); //TODO Message
+							playerSender.sendMessage(MessageManager.getMessage("manage:arena_saved"));
 							positions.clear();
 							return true;
 						}
@@ -232,7 +232,7 @@ public class ZvPCommands implements CommandExecutor {
 							return true;
 						}
 					}else {
-						//TODO permission
+						commandDenied(playerSender);
 						return true;
 					}
 				}
@@ -252,7 +252,7 @@ public class ZvPCommands implements CommandExecutor {
 					if(args[1].equalsIgnoreCase("lobby")){
 						if(playerSender.hasPermission("zvp.manage.lobby")){	
 							GameManager.getManager().addLobby(playerSender.getLocation().clone());
-							playerSender.sendMessage("Lobby created!"); //TODO Message		
+							playerSender.sendMessage(MessageManager.getMessage("manage:lobby_saved"));
 							return true;
 						}else{
 							commandDenied(playerSender);
@@ -289,7 +289,7 @@ public class ZvPCommands implements CommandExecutor {
 					if(args[1].equalsIgnoreCase("arena")){
 						if(playerSender.hasPermission("zvp.manage.arena")){
 							GameManager.getManager().removeArena(GameManager.getManager().getArena(Integer.parseInt(args[2])));
-							playerSender.sendMessage("Arena removed"); //TODO message
+							playerSender.sendMessage(MessageManager.getMessage("manage:arena_removed"));
 							return true;
 						}else{
 							commandDenied(playerSender);
@@ -300,7 +300,7 @@ public class ZvPCommands implements CommandExecutor {
 					if(args[1].equalsIgnoreCase("lobby")){
 						if(playerSender.hasPermission("zvp.manage.lobby")){
 							GameManager.getManager().removeLobby(GameManager.getManager().getLobby(Integer.parseInt(args[2])));
-							playerSender.sendMessage("Lobby removed"); //TODO message
+							playerSender.sendMessage(MessageManager.getMessage("manage:lobby_removed"));
 							return true;
 						}else{
 							commandDenied(playerSender);
@@ -352,7 +352,7 @@ public class ZvPCommands implements CommandExecutor {
 		}
 	}
 	
-	private void commandDenied(Player player) {
-		player.sendMessage("Permission needed!"); //TODO Permission message
+	public static void commandDenied(Player player) {
+		player.sendMessage(MessageManager.getMessage("commands:missing_Permission"));
 	}
 }

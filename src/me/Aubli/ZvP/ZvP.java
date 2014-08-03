@@ -178,20 +178,7 @@ public class ZvP extends JavaPlugin{
 	public static double getDeathFee() {
  		return DEATH_FEE;
  	}
- 	
-	
- 	//INTRESTING
-	/* 
-	 * 
-	 * team.setAllowFriendlyFire(false);
-	 * team.setCanSeeFriendlyInvisibles(true);
-	 * team.setPrefix(ChatColor.DARK_RED + "");	
-	 * 
-	 * board.clearSlot(DisplaySlot.SIDEBAR);
-	 * if(board.getTeam("zvpteam").hasPlayer(playerSender)){
-	 * 		board.getTeam("zvpteam").removePlayer(playerSender);
-	 * }
-	 */
+ 
 	
 	public void loadConfig(){
 		
@@ -232,8 +219,7 @@ public class ZvP extends JavaPlugin{
 		getConfig().addDefault("money.DeathFee", 3);	
 		
 		ZOMBIE_FUND = getConfig().getDouble("money.ZombieFund");
-		DEATH_FEE = getConfig().getDouble("money.DeathFee");
-		
+		DEATH_FEE = getConfig().getDouble("money.DeathFee");		
 
 	//	this.getConfig().addDefault("config.misc.portOnJoinGame", true);
 	//	this.getConfig().addDefault("config.misc.changeToSpectatorAfterDeath", false);

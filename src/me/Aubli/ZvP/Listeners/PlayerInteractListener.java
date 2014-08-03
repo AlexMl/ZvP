@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.ZvPCommands;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Shop.ShopItem;
 import me.Aubli.ZvP.Shop.ShopManager;
@@ -60,8 +61,8 @@ public class PlayerInteractListener implements Listener{
 						return;
 					}
 				}else{
-					//TODO Permissions
 					ZvP.getInstance().removeTool(eventPlayer);
+					ZvPCommands.commandDenied(eventPlayer);
 					return;
 				}
 			}
@@ -98,7 +99,7 @@ public class PlayerInteractListener implements Listener{
 							}
 						}else{
 							event.setCancelled(true);
-							eventPlayer.sendMessage("No permissions"); //TODO Permission Message
+							ZvPCommands.commandDenied(eventPlayer);
 							return;						
 						}
 					}else{
@@ -134,7 +135,7 @@ public class PlayerInteractListener implements Listener{
 							return;
 						}else{
 							event.setCancelled(true);
-							eventPlayer.sendMessage("No permissions"); //TODO Permission Message
+							ZvPCommands.commandDenied(eventPlayer);
 							return;						
 						}
 					}else{

@@ -1,6 +1,7 @@
 package me.Aubli.ZvP.Listeners;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.ZvPCommands;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Sign.SignManager;
 
@@ -34,9 +35,9 @@ public class BlockListener implements Listener{
 					event.setCancelled(true);
 					return;
 				}else{
-					//TODO permission message
 					ZvP.getInstance().removeTool(eventPlayer);
 					event.setCancelled(true);
+					ZvPCommands.commandDenied(eventPlayer);
 					return;
 				}
 			}
@@ -57,8 +58,8 @@ public class BlockListener implements Listener{
 						return;
 					}					
 				}else{
-					//TODO Permission Message
 					event.setCancelled(true);
+					ZvPCommands.commandDenied(eventPlayer);
 					return;
 				}
 			}

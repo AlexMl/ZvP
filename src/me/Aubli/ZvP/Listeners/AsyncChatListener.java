@@ -6,6 +6,7 @@ import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.GameRunnable;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
+import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -28,7 +29,7 @@ public class AsyncChatListener implements Listener {
 				if(player.getArena().getStatus()==ArenaStatus.VOTING) {
 					if(!player.hasVoted()) {
 						player.setVoted(true);
-						player.sendMessage("You have voted for the next round!"); //TODO message
+						player.sendMessage(MessageManager.getMessage("game:voted_next_round"));
 						
 						Arena a = player.getArena();
 						a.updatePlayerBoards();
@@ -40,10 +41,10 @@ public class AsyncChatListener implements Listener {
 							a.setStatus(ArenaStatus.RUNNING);
 						}
 					}else {
-						player.sendMessage("you voted already");//TODO message
+						player.sendMessage(MessageManager.getMessage("game:already_voted"));
 					}
 				}else {
-					player.sendMessage("You can't vote now!");//TODO message
+					player.sendMessage(MessageManager.getMessage("game:no_voting"));
 				}
 			}else {
 				player.getArena().sendMessage(ChatColor.BLACK + "[" + ChatColor.GOLD + player.getName() + ChatColor.BLACK + "] " + ChatColor.RESET + event.getMessage());

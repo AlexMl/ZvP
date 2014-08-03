@@ -20,7 +20,7 @@ import org.util.ItemStorageUtil.ItemStorage;
 
 public class ShopManager {
 
-	public enum ItemCategory {		//TODO names
+	public enum ItemCategory {
 		FOOD(new ItemStack(Material.APPLE), MessageManager.getMessage("category:food")),
 		ARMOR(new ItemStack(Material.IRON_HELMET), MessageManager.getMessage("category:armor")),
 		WEAPON(new ItemStack(Material.STONE_SWORD), MessageManager.getMessage("category:weapon")),

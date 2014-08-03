@@ -10,18 +10,30 @@ public class DefaultTranslation extends ListResourceBundle{
 	}
 
 	private Object[][] contents = {
-		{"missing_Permission", "You do not have enough permission for that!"},
-		{"config_saved", "Config successfully saved!"},
-		{"config_reloaded", "Config successfully reloaded!"},
-		{"leave_game", "You have left arena %s!"},
-		{"player_left", "Player %s has left the game!"},
-		{"not_in_game", "You are not in a game!"},
-		{"arena_stop_all", "All arenas halted!"},
-		{"arena_stop", "Arena %s stoped!"},
-		{"lobby_created", "Lobby saved!"},
-		{"arena_created", "Arena saved!"},
-		{"lobby_removed", "Lobby removed from Config!"},
-		{"arena_removed", "Arena removed from Config!"},
+		
+		{"config:saved", "Config successfully saved!"},
+		{"config:reloaded", "Config successfully reloaded!"},
+		
+		{"commands:missing_Permission", "You do not have enough permission for that!"},
+		{"commands:only_for_Players", "Only Players can use this command!"},
+		
+		{"game:waiting", "Waiting for players ..."},
+		{"game:left", "You have left arena %s!"},
+		{"game:player_left", "Player %s has left the game!"},
+		{"game:player_not_found", "You were not found in a game (Might be a plugin error)!"},
+		{"game:not_in_game", "You are not in a game!"},
+		{"game:vote_request", "Type 'zvp vote' to vote for the next round!"},
+		{"game:voted_next_round", "You have voted for the next round!"},
+		{"game:already_voted", "You have already voted for the next round!"},
+		{"game:no_voting", "It is not the Time to vote now!"},
+		
+		{"arena:stop_all", "All arenas halted!"},
+		{"arena:stop", "Arena %s stoped!"},
+		
+		{"manage:lobby_saved", "Lobby saved!"},
+		{"manage:arena_saved", "Arena saved!"},
+		{"manage:lobby_removed", "Lobby removed from Config!"},
+		{"manage:arena_removed", "Arena removed from Config!"},
 		{"arena_not_available", "This arena is not available!"},		
 		
 		{"category:food", "Food"},

@@ -1,6 +1,7 @@
 package me.Aubli.ZvP.Game;
 
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
+import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -31,7 +32,7 @@ public class GameRunnable extends BukkitRunnable{
 	
 	@Override
 	public void run() {
-		//Bukkit.broadcastMessage("\nTaskID: " + this.getTaskId() + "\nArena: " + arena.getID() + "\nPlayers: " + arena.getPlayers().toString() + "\nSeconds: " + seconds);
+	
 		if(seconds<=startDelay){
 			if(arena.getRound()==0 && arena.getWave()==0) {
 				arena.setStatus(ArenaStatus.WAITING);
@@ -40,7 +41,7 @@ public class GameRunnable extends BukkitRunnable{
 			if(!arena.hasKit()) {
 				for(ZvPPlayer p : arena.getPlayers()) {
 					if(p.hasKit()) {
-						p.sendMessage("waiting for players to choose a kit"); //TODO message
+						p.sendMessage(MessageManager.getMessage("game:waiting"));
 					}
 				}
 				seconds = 0;
@@ -113,21 +114,11 @@ public class GameRunnable extends BukkitRunnable{
 					}
 					
 					if(!stop) {
-						arena.sendMessage("type ... to next wave!");
+						arena.sendMessage(MessageManager.getMessage("game:vote_request")); // TODO message
 						arena.setStatus(ArenaStatus.VOTING);
 						this.cancel();
-					/*	if(seconds2<=saveTime) {		
-							arena.setPlayerLevel(saveTime-seconds2);
-					//		arena.sendMessage(saveTime-seconds2 + " Seconds left!");
-							seconds2++;
-						}else {
-							arena.sendMessage("next wave!");
-							firstSpawn = true;
-							seconds2 = 0;
-						}*/
 					}else {							
 						//End of Game
-						//TODO Get the winner
 						
 						int kills = arena.getKilledZombies();
 						int deaths = 0;
@@ -137,6 +128,7 @@ public class GameRunnable extends BukkitRunnable{
 							deaths += p.getDeaths();
 						}
 						
+						//TODO Message
 						arena.sendMessage("Grongrats! You won against the Zombies.");
 						arena.sendMessage("You fought against " + kills + " Zombies in " + (arena.getMaxRounds() * arena.getMaxWaves()) + " rounds and have died " + deaths + " times.");					
 						arena.sendMessage("The remains of your acquired money (" + Math.round(money) + ") will be donated to ...");

@@ -9,6 +9,7 @@ import java.util.Random;
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -466,7 +467,7 @@ public class Arena {
 					if(p.hasKit()==false) {
 						for(ZvPPlayer p2 : players) {
 							if(p2.hasKit()) {
-								p2.sendMessage("waiting for players ..."); //TODO message
+								p2.sendMessage(MessageManager.getMessage("game:waiting"));
 							}
 						}
 						return false;
@@ -567,7 +568,6 @@ public class Arena {
 		clearArena();
 		
 		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
-		//TODO Start message
 	}	
 	
 	public void stop(){
