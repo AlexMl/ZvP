@@ -4,13 +4,13 @@ import java.util.HashMap;
 
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
+import me.Aubli.ZvP.Game.GameRunnable;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Kits.IZvPKit;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -80,12 +80,19 @@ public class ZvPCommands implements CommandExecutor {
 		
 		if(cmd.getName().equalsIgnoreCase("test")){
 		
-			if(args.length==1) {
-				String kitName = args[0];
+			if(args.length==1) {	
 				
-				ItemStack[] content = playerSender.getInventory().getContents();
+				game.getPlayer(playerSender).setVoted(true);
 				
-				KitManager.getManager().addKit(kitName, new ItemStack(Material.ITEM_FRAME), content);
+				Arena a = game.getArena(Integer.parseInt(args[0]));	
+				a.updatePlayerBoards();
+				if(a.hasVoted()) {
+					for(ZvPPlayer p : a.getPlayers()) {
+						p.setVoted(false);
+					}					
+					a.setTaskID(new GameRunnable(a, ZvP.getStartDelay(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+				}
+				return true;
 			}
 			
 			if(args.length==2) {
