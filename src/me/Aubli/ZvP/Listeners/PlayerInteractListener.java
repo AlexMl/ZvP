@@ -109,6 +109,7 @@ public class PlayerInteractListener implements Listener{
 				}else if(sm.getType(event.getClickedBlock().getLocation())==SignType.SHOP_SIGN) {
 					if(GameManager.getManager().isInGame(eventPlayer)){
 						if(eventPlayer.hasPermission("zvp.play")){
+							event.setCancelled(true);
 							
 							ShopSign shopSign = (ShopSign)sm.getSign(event.getClickedBlock().getLocation());
 						
