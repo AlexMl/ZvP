@@ -28,7 +28,7 @@ public class AsyncChatListener implements Listener {
 				if(player.getArena().getStatus()==ArenaStatus.VOTING) {
 					if(!player.hasVoted()) {
 						player.setVoted(true);
-						player.sendMessage("You have voted for the next round!");
+						player.sendMessage("You have voted for the next round!"); //TODO message
 						
 						Arena a = player.getArena();
 						a.updatePlayerBoards();
@@ -40,13 +40,13 @@ public class AsyncChatListener implements Listener {
 							a.setStatus(ArenaStatus.RUNNING);
 						}
 					}else {
-						player.sendMessage("you voted already");
+						player.sendMessage("you voted already");//TODO message
 					}
 				}else {
-					player.sendMessage("You can't vote now!");
+					player.sendMessage("You can't vote now!");//TODO message
 				}
 			}else {
-				player.getArena().sendMessage(ChatColor.GOLD + "[" + player.getName() + "] " + ChatColor.RESET + event.getMessage());
+				player.getArena().sendMessage(ChatColor.BLACK + "[" + ChatColor.GOLD + player.getName() + ChatColor.BLACK + "] " + ChatColor.RESET + event.getMessage());
 			}
 			return;
 		}
