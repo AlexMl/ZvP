@@ -21,6 +21,7 @@ public class GameManager {
 	
 	public enum ArenaStatus{
 		RUNNING(MessageManager.getMessage("status:running")),
+		VOTING(MessageManager.getMessage("status:running")),
 		WAITING(MessageManager.getMessage("status:waiting")),
 		STANDBY(MessageManager.getMessage("status:waiting")),
 		STOPED(MessageManager.getMessage("status:stoped")),		

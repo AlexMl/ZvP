@@ -134,7 +134,7 @@ public class InteractSign implements ISign{
 			sign.setLine(0, ZvP.getPrefix());
 			sign.setLine(1, "Arena: " + arena.getID());
 			
-			if(getArena().getStatus()==ArenaStatus.RUNNING){
+			if(getArena().getStatus()==ArenaStatus.RUNNING || getArena().getStatus()==ArenaStatus.VOTING){
 				sign.setLine(2, ChatColor.DARK_GREEN + getArena().getStatus().getName());
 				sign.setLine(3, ChatColor.DARK_RED + "Can't Join!");				
 			}
