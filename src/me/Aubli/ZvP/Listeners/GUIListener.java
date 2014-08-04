@@ -65,26 +65,24 @@ public class GUIListener implements Listener{
 				}
 				if(event.getInventory().getTitle().contains("Items: ")) {
 					event.setCancelled(true);
-					event.getWhoClicked().closeInventory();
+				//	System.out.println(event.getSlot() + " Raw: " + event.getRawSlot() + " " + event.getResult().toString());
 					
-					if(event.getCurrentItem()!=null) {
+					ItemCategory cat = ItemCategory.getEnum(event.getInventory().getTitle().split("s: ")[1]);						
+					ShopItem item = ShopManager.getManager().getItem(cat, event.getInventory().getItem(event.getSlot()));
+					ZvPPlayer player = GameManager.getManager().getPlayer((Player)event.getWhoClicked());
 						
-						ItemCategory cat = ItemCategory.getEnum(event.getInventory().getTitle().split("s: ")[1]);						
-						ShopItem item = ShopManager.getManager().getItem(cat, event.getCurrentItem());
-						ZvPPlayer player = GameManager.getManager().getPlayer((Player)event.getWhoClicked());
-							
-						if(item !=null && player!=null && GameManager.getManager().isInGame(player.getPlayer())){
-						
+					if(item !=null && player!=null && GameManager.getManager().isInGame(player.getPlayer())){
+					
 						//	Bukkit.broadcastMessage(item.getType() + ": " + item.getCategory() + " - " + item.getPrice());
-							
-							switch (event.getClick()) {
+						switch (event.getClick()) {
+						
 							case LEFT: //Buy
 								if(player.getArena().getBalance()>=item.getPrice()) {
-																		
+																			
 									ItemStack boughtItem = new ItemStack(item.getItem().getType(), item.getItem().getAmount());
 									boughtItem.addUnsafeEnchantments(item.getItem().getEnchantments());
 									boughtItem.setDurability(item.getItem().getDurability());
-									
+											
 									player.getArena().subtractBalance(item.getPrice());
 									player.getPlayer().getInventory().addItem(boughtItem);
 									player.getArena().sendMessage("Player " + player.getName() + " bought " + boughtItem.toString()); // TODO message
@@ -92,6 +90,7 @@ public class GUIListener implements Listener{
 									player.sendMessage("not enough money"); //TODO Message
 								}	
 								break;
+									
 							case SHIFT_LEFT: //Buy all
 								if(player.getArena().getBalance()>=item.getPrice()) {
 									
@@ -108,6 +107,7 @@ public class GUIListener implements Listener{
 									player.sendMessage("not enough money"); //TODO Message
 								}	
 								break;
+								
 							case RIGHT: //Sell
 								
 								ItemStack stack = new ItemStack(item.getItem().getType());
@@ -121,6 +121,7 @@ public class GUIListener implements Listener{
 								}
 								
 								break;
+								
 							case SHIFT_RIGHT: //sell all
 								
 								ItemStack stack1 = new ItemStack(item.getItem().getType());
@@ -148,9 +149,10 @@ public class GUIListener implements Listener{
 								break;
 							default:
 								break;
-							}
 						}
 					}
+					event.getView().close();
+					return;
 				}
 			}
 		}
