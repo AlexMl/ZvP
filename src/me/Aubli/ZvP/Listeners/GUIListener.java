@@ -73,7 +73,6 @@ public class GUIListener implements Listener{
 						
 					if(item !=null && player!=null && GameManager.getManager().isInGame(player.getPlayer())){
 					
-						//	Bukkit.broadcastMessage(item.getType() + ": " + item.getCategory() + " - " + item.getPrice());
 						switch (event.getClick()) {
 						
 							case LEFT: //Buy
@@ -87,7 +86,7 @@ public class GUIListener implements Listener{
 									player.getPlayer().getInventory().addItem(boughtItem);
 									player.getArena().sendMessage("Player " + player.getName() + " bought " + boughtItem.toString()); // TODO message
 								}else {
-									player.sendMessage("not enough money"); //TODO Message
+									player.sendMessage(MessageManager.getMessage("game:no_money"));
 								}	
 								break;
 									
@@ -104,7 +103,7 @@ public class GUIListener implements Listener{
 									player.getPlayer().getInventory().addItem(boughtItem);
 									player.getArena().sendMessage("Player " + player.getName() + " bought " + boughtItem.toString() + " " + amount + " times."); // TODO message
 								}else {
-									player.sendMessage("not enough money"); //TODO Message
+									player.sendMessage(MessageManager.getMessage("game:no_money"));
 								}	
 								break;
 								

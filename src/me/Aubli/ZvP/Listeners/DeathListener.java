@@ -3,6 +3,7 @@ package me.Aubli.ZvP.Listeners;
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.ZvPPlayer;
+import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -56,7 +57,7 @@ public class DeathListener implements Listener{
 			player.die();
 			
 			event.setDeathMessage("");
-			player.getArena().sendMessage(player.getName() +  " died!"); //TODO message
+			player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_died"), player.getName()));
 			return;
 		}
 	}

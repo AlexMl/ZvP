@@ -4,6 +4,7 @@ import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPCommands;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
@@ -49,12 +50,10 @@ public class BlockListener implements Listener{
 				if(eventPlayer.hasPermission("zvp.manage.sign")){					
 					boolean success = sm.removeSign(signLoc);					
 					if(success){
-						//TODO Message
-						eventPlayer.sendMessage("successfully removed");
+						eventPlayer.sendMessage(MessageManager.getMessage("manage:sign_removed"));
 						return;
 					}else{
-						//TODO Message
-						eventPlayer.sendMessage("error");
+						eventPlayer.sendMessage(MessageManager.getMessage("error:sign_remove"));
 						return;
 					}					
 				}else{

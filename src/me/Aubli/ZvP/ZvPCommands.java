@@ -57,7 +57,7 @@ public class ZvPCommands implements CommandExecutor {
 					}
 					if(args[0].equalsIgnoreCase("stop-all")) {
 						GameManager.getManager().stopGames();						
-						//TODO Message
+						sender.sendMessage(MessageManager.getMessage("arena:stop_all"));
 						return true;
 					}
 				}
@@ -189,7 +189,7 @@ public class ZvPCommands implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("stop")){
 					if(playerSender.hasPermission("zvp.stop.all")){
 						game.stopGames();
-						//TODO Message
+						playerSender.sendMessage(MessageManager.getMessage("arena:stop_all"));
 						return true;
 					}else{
 						commandDenied(playerSender);
@@ -201,7 +201,7 @@ public class ZvPCommands implements CommandExecutor {
 					if(playerSender.hasPermission("zvp.manage.arena")){
 						
 						positions.put(args[0].toLowerCase(), playerSender.getLocation());
-						playerSender.sendMessage(args[0].toLowerCase() + " saved!"); //TODO Message
+						playerSender.sendMessage(String.format(MessageManager.getMessage("manage:position_saved"), args[0].toLowerCase()));
 						
 						if(positions.containsKey("pos1") && positions.containsKey("pos2")) {
 							game.addArena(positions.get("pos1"), positions.get("pos2"));
@@ -240,7 +240,7 @@ public class ZvPCommands implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("add")){
 					if(args[1].equalsIgnoreCase("arena")){
 						if(playerSender.hasPermission("zvp.manage.arena")){
-							//TODO Message
+							playerSender.sendMessage(MessageManager.getMessage("manage:tool"));
 							playerSender.getInventory().addItem(ZvP.tool);
 							return true;
 						}else{
@@ -268,10 +268,10 @@ public class ZvPCommands implements CommandExecutor {
 						Arena a = game.getArena(Integer.parseInt(args[1]));
 						if(a!=null){
 							a.stop();
-							//TODO Message
+							playerSender.sendMessage(String.format(MessageManager.getMessage("arena:stop"), a.getID()));
 							return true;
 						}else{
-							//TODO message
+							playerSender.sendMessage(MessageManager.getMessage("error:arena_not_available"));
 							return true;
 						}
 					}else{

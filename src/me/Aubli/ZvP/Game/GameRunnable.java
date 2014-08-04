@@ -117,7 +117,7 @@ public class GameRunnable extends BukkitRunnable{
 					}
 					
 					if(!stop) {
-						arena.sendMessage(MessageManager.getMessage("game:vote_request")); // TODO message
+						arena.sendMessage(MessageManager.getMessage("game:vote_request"));
 						arena.setStatus(ArenaStatus.VOTING);
 						this.cancel();
 					}else {			//End of Game				

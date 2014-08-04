@@ -14,6 +14,7 @@ import me.Aubli.ZvP.Sign.InteractSign;
 import me.Aubli.ZvP.Sign.ShopSign;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
+import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,17 +47,17 @@ public class PlayerInteractListener implements Listener{
 					
 					if(event.getAction() == Action.RIGHT_CLICK_BLOCK){
 						clickLoc.put(event.getAction(), event.getClickedBlock().getLocation().clone());
-						eventPlayer.sendMessage("Right click saved!"); //TODO Message
+						eventPlayer.sendMessage(MessageManager.getMessage("manage:right_saved"));
 					}
 					
 					if(event.getAction() == Action.LEFT_CLICK_BLOCK){
 						clickLoc.put(event.getAction(), event.getClickedBlock().getLocation().clone());
-						eventPlayer.sendMessage("Left click saved!"); //TODO Message						
+						eventPlayer.sendMessage(MessageManager.getMessage("manage:left_saved"));					
 					}
 					
 					if(clickLoc.containsKey(Action.RIGHT_CLICK_BLOCK) && clickLoc.containsKey(Action.LEFT_CLICK_BLOCK)){
 						GameManager.getManager().addArena(clickLoc.get(Action.LEFT_CLICK_BLOCK), clickLoc.get(Action.RIGHT_CLICK_BLOCK));
-						eventPlayer.sendMessage("arena created!"); //TODO Message
+						eventPlayer.sendMessage(MessageManager.getMessage("manage:arena_saved"));
 						clickLoc.clear();
 						return;
 					}
@@ -80,21 +81,21 @@ public class PlayerInteractListener implements Listener{
 									boolean success = GameManager.getManager().createPlayer(eventPlayer, sign.getArena(), sign.getLobby());
 									
 									if(success){
-										eventPlayer.sendMessage("You joined Arena " + sign.getArena().getID()); //TODO message
+										eventPlayer.sendMessage(String.format(MessageManager.getMessage("game:joined"), sign.getArena().getID()));
 										return;
 									}else{
 										event.setCancelled(true);
-										eventPlayer.sendMessage("arena full or running"); //TODO message
+										eventPlayer.sendMessage(MessageManager.getMessage("arena:not_ready"));
 										return;
 									}
 								}else{
 									event.setCancelled(true);
-									eventPlayer.sendMessage("arena offline"); //TODO message
+									eventPlayer.sendMessage(MessageManager.getMessage("arena:offline"));
 									return;
 								}
 							}else {
 								event.setCancelled(true);
-								eventPlayer.sendMessage("You have something in your hand"); //TODO message
+								eventPlayer.sendMessage(MessageManager.getMessage("game:sign_interaction"));
 								return;
 							}
 						}else{
@@ -104,7 +105,7 @@ public class PlayerInteractListener implements Listener{
 						}
 					}else{
 						event.setCancelled(true);
-						eventPlayer.sendMessage("already in game"); //TODO message
+						eventPlayer.sendMessage(MessageManager.getMessage("game:already_in_game"));
 						return;
 					}
 				}else if(sm.getType(event.getClickedBlock().getLocation())==SignType.SHOP_SIGN) {
@@ -140,7 +141,7 @@ public class PlayerInteractListener implements Listener{
 						}
 					}else{
 						event.setCancelled(true);
-						eventPlayer.sendMessage("not in game"); //TODO message
+						eventPlayer.sendMessage(MessageManager.getMessage("game:not_in_game"));
 						return;
 					}					
 				}
