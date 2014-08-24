@@ -23,6 +23,10 @@ public class DefaultTranslation extends ListResourceBundle{
 		{"game:player_left", "Player %s has left the game!"},
 		{"game:player_not_found", "You were not found in a game (Might be a plugin error)!"},
 		{"game:player_died", "Player %s died!"},
+		{"game:player_bought", "Player %s bought %s for %s !"},
+		{"game:player_bought_more", "Player %s bought %s %s times and spend %s !"},
+		{"game:player_sold", "Player %s sold %s for %s !"},
+		{"game:player_sold_more", "Player %s sold %s %s times and earned %s !"},
 		{"game:no_money", "You do not own enough money!"},
 		{"game:not_in_game", "You are not in a game!"},
 		{"game:already_in_game", "You are already in a game!"},
@@ -53,6 +57,7 @@ public class DefaultTranslation extends ListResourceBundle{
 		{"error:sign_layout", "The sign layout is wrong!"},
 		{"error:lobby_not_available", "This Lobby is not available!"},
 		{"error:arena_not_available", "This Arena is not available!"},
+		{"error:kit_already_exists", "The Kit %s already exists! Choose another name!"},
 		
 		{"category:food", "Food"},
 		{"category:armor", "Armor"},

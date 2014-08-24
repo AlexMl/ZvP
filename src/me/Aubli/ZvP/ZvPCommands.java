@@ -228,7 +228,7 @@ public class ZvPCommands implements CommandExecutor {
 							KitManager.getManager().openAddKitGUI(playerSender, args[1]);
 							return true;
 						}else {
-							//TODO message kit already exists
+							playerSender.sendMessage(String.format(MessageManager.getMessage("error:kit_already_exists"), args[1]));
 							return true;
 						}
 					}else {

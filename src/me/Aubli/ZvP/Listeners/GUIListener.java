@@ -84,7 +84,7 @@ public class GUIListener implements Listener{
 											
 									player.getArena().subtractBalance(item.getPrice());
 									player.getPlayer().getInventory().addItem(boughtItem);
-									player.getArena().sendMessage("Player " + player.getName() + " bought " + boughtItem.toString()); // TODO message
+									player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_bought"), player.getName(), item.getType(), item.getPrice()));
 								}else {
 									player.sendMessage(MessageManager.getMessage("game:no_money"));
 								}	
@@ -101,7 +101,7 @@ public class GUIListener implements Listener{
 									
 									player.getArena().subtractBalance(item.getPrice()*amount);
 									player.getPlayer().getInventory().addItem(boughtItem);
-									player.getArena().sendMessage("Player " + player.getName() + " bought " + boughtItem.toString() + " " + amount + " times."); // TODO message
+									player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_bought_more"), player.getName(), item.getType(), amount, item.getPrice()*amount));
 								}else {
 									player.sendMessage(MessageManager.getMessage("game:no_money"));
 								}	
@@ -116,7 +116,7 @@ public class GUIListener implements Listener{
 								if(player.getPlayer().getInventory().containsAtLeast(stack, 1)) {
 									player.getPlayer().getInventory().removeItem(stack);
 									player.getArena().addBalance(item.getPrice());
-									player.getArena().sendMessage("Player " + player.getName() + " sold " + stack.toString()); // TODO message
+									player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_sold"), player.getName(), item.getType(), item.getPrice()));
 								}
 								
 								break;
@@ -142,7 +142,7 @@ public class GUIListener implements Listener{
 									}
 									
 									player.getArena().addBalance(item.getPrice() * amount);
-									player.getArena().sendMessage("Sold " + stack1.toString() + " x" + amount + " " + amount*item.getPrice() + "/" + item.getPrice()); // TODO message
+									player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_sold_more"), player.getName(), item.getType(), amount, item.getPrice()*amount));
 								}
 								
 								break;
