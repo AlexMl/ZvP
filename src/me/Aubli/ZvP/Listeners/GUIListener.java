@@ -117,6 +117,8 @@ public class GUIListener implements Listener{
 									player.getPlayer().getInventory().removeItem(stack);
 									player.getArena().addBalance(item.getPrice());
 									player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_sold"), player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
+								}else {
+									player.sendMessage(MessageManager.getMessage("game:no_item_to_sell"));
 								}
 								
 								break;
@@ -143,6 +145,8 @@ public class GUIListener implements Listener{
 									
 									player.getArena().addBalance(item.getPrice() * amount);
 									player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_sold_more"), player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice()*amount)));
+								}else {
+									player.sendMessage(MessageManager.getMessage("game:no_item_to_sell"));
 								}
 								
 								break;
