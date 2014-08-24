@@ -488,6 +488,11 @@ public class Arena {
 			players.remove(player);
 			updatePlayerBoards();
 			SignManager.getManager().updateSigns(this);
+		
+			if(players.size()==0) {
+				this.stop();
+			}
+			
 			return true;
 		}
 		return false;
