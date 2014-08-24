@@ -1,5 +1,7 @@
 package me.Aubli.ZvP.Game;
 
+import java.util.Random;
+
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Translation.MessageManager;
 
@@ -130,12 +132,11 @@ public class GameRunnable extends BukkitRunnable{
 							deaths += p.getDeaths();
 						}
 						
-						//TODO Message
-						arena.sendMessage("Grongrats! You won against the Zombies.");
-						arena.sendMessage("You fought against " + kills + " Zombies in " + (arena.getMaxRounds() * arena.getMaxWaves()) + " rounds and have died " + deaths + " times.");					
-						arena.sendMessage("The remains of your acquired money (" + Math.round(money) + ") will be donated to ...");
-						arena.sendMessage("Thanks for playing!");
+						String[] donP = MessageManager.getMessage("game:won_messages").split(";");
+						int index = new Random().nextInt(donP.length);
+						String endMessage = String.format(MessageManager.getMessage("game:won"), kills, (arena.getMaxRounds() * arena.getMaxWaves()), deaths, Math.round(money), donP[index]);
 						
+						arena.sendMessage(endMessage);
 						arena.stop();
 					}
 				}
