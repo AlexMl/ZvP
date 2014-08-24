@@ -113,7 +113,7 @@ public class GameRunnable extends BukkitRunnable{
 					
 					if(seconds2==0) {
 						arena.updatePlayerBoards();
-						stop = arena.next();
+						stop = arena.next(); //Stop checks if the last round is over
 					}
 					
 					if(!stop) {
