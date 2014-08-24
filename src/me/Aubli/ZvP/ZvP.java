@@ -32,6 +32,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/* ZvP TODO:
+ * 
+ * 	- Some Translations in GameRunnable
+ *  - Status commands
+ *  - plugin.yml commands
+ */
+
 public class ZvP extends JavaPlugin{
 
 	public static final Logger log = Bukkit.getLogger();
