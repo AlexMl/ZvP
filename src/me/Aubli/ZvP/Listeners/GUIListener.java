@@ -101,7 +101,7 @@ public class GUIListener implements Listener{
 									
 									player.getArena().subtractBalance(item.getPrice()*amount);
 									player.getPlayer().getInventory().addItem(boughtItem);
-									player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_bought_more"), player.getName(), item.getType(), amount, item.getPrice()*amount));
+									player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_bought_more"), player.getName(), amount, item.getType(), item.getPrice()*amount));
 								}else {
 									player.sendMessage(MessageManager.getMessage("game:no_money"));
 								}	
@@ -116,7 +116,7 @@ public class GUIListener implements Listener{
 								if(player.getPlayer().getInventory().containsAtLeast(stack, 1)) {
 									player.getPlayer().getInventory().removeItem(stack);
 									player.getArena().addBalance(item.getPrice());
-									player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_sold"), player.getName(), item.getType(), item.getPrice()));
+									player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_sold"), player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
 								}
 								
 								break;
@@ -142,7 +142,7 @@ public class GUIListener implements Listener{
 									}
 									
 									player.getArena().addBalance(item.getPrice() * amount);
-									player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_sold_more"), player.getName(), item.getType(), amount, item.getPrice()*amount));
+									player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_sold_more"), player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()*amount));
 								}
 								
 								break;
