@@ -4,9 +4,12 @@ import java.util.HashMap;
 
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
+import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Kits.IZvPKit;
+import me.Aubli.ZvP.Sign.ISign;
+import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.ChatColor;
@@ -133,11 +136,56 @@ public class ZvPCommands implements CommandExecutor {
 					return true;
 				}				
 				if(args[0].equalsIgnoreCase("status")){
-					//TODO command
-					return false;
+					
+					String pluginName = ZvP.getInstance().getDescription().getName();
+					String pluginVersion = ZvP.getInstance().getDescription().getVersion();
+					
+					playerSender.sendMessage("\n\n");
+					playerSender.sendMessage(ChatColor.GRAY + "|--------------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Status" + ChatColor.GRAY + " ---------------|");
+					
+					for(Arena a : game.getArenas()) {
+						playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Arena: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " +
+								ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + 
+								ChatColor.RED + "Balance: " + ChatColor.BLUE + a.getBalance()  + ChatColor.DARK_GREEN + ", " + 
+								ChatColor.RED + "Zombies: " + ChatColor.BLUE + a.getLivingZombies() + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getRound()*a.getWave()*ZvP.getSpawnRate() + ChatColor.DARK_GREEN + ", " +
+								ChatColor.RED + "Killed: " + ChatColor.BLUE + a.getKilledZombies());
+					}				
+					
+					return true;
 				}	
 				if(args[0].equalsIgnoreCase("list")){
-					//TODO command
+					
+					String pluginName = ZvP.getInstance().getDescription().getName();
+					String pluginVersion = ZvP.getInstance().getDescription().getVersion();
+					
+					playerSender.sendMessage("\n\n");
+					playerSender.sendMessage(ChatColor.GRAY + "|--------------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Signs" + ChatColor.GRAY + " ---------------|");
+					
+					for(ISign sign : SignManager.getManager().getSigns()) {
+						playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "SignType: " + ChatColor.BLUE + sign.getType() + ChatColor.DARK_GREEN + ", " + 
+								ChatColor.RED + "Arena: " + ChatColor.BLUE + sign.getArena().getID() + ChatColor.DARK_GREEN + ", " + 
+								ChatColor.RED + "Lobby: " + ChatColor.BLUE + sign.getLobby().getID() + ChatColor.DARK_GREEN + ", " +
+								ChatColor.RED + "Location: " + ChatColor.BLUE + sign.getLocation().getBlockX() + ChatColor.DARK_GREEN + " | " + ChatColor.BLUE + sign.getLocation().getBlockY() + ChatColor.DARK_GREEN + " | " + ChatColor.BLUE + sign.getLocation().getBlockZ()); 
+					}
+					
+					playerSender.sendMessage("\n\n");
+					playerSender.sendMessage(ChatColor.GRAY + "|--------------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Arenas" + ChatColor.GRAY + " ---------------|");
+				
+					for(Arena a : game.getArenas()) {
+						playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Arena: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " +
+								ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " +
+								ChatColor.RED + "World: " + ChatColor.BLUE + a.getWorld().getName());
+					}				
+					
+					playerSender.sendMessage("\n\n");
+					playerSender.sendMessage(ChatColor.GRAY + "|--------------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Lobbys" + ChatColor.GRAY + " ---------------|");
+					
+					for(Lobby l : game.getLobbys()) {
+						playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Lobby: " + ChatColor.BLUE + l.getID() + ChatColor.DARK_GREEN + ", " +
+								ChatColor.RED + "  World: " + ChatColor.BLUE + l.getWorld().getName());
+					
+					}
+					
 					return true;
 				}	
 				if(args[0].equalsIgnoreCase("save")){
@@ -327,10 +375,9 @@ public class ZvPCommands implements CommandExecutor {
 		if(player.hasPermission("zvp.help")){			
 			String pluginName = ZvP.getInstance().getDescription().getName();
 			String pluginVersion = ZvP.getInstance().getDescription().getVersion();
-			String prefix = ZvP.getPrefix();
 			
 			player.sendMessage("\n\n");
-			player.sendMessage(ChatColor.GRAY + "|--------------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + ChatColor.RESET + " ( " + prefix + ")" + ChatColor.GRAY + " ---------------|");
+			player.sendMessage(ChatColor.GRAY + "|--------------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Help" + ChatColor.GRAY + " ---------------|");
 			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp help");			
 			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp status");
 			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list");
