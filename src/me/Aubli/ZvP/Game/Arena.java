@@ -26,7 +26,7 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 
-public class Arena {
+public class Arena implements Comparable<Arena> {
 
 	private File arenaFile;
 	private FileConfiguration arenaConfig;
@@ -627,5 +627,19 @@ public class Arena {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public int compareTo(Arena o) {
+		
+		if(getID()==o.getID()) {
+			return 0;
+		}else if(getID()>o.getID()) {
+			return 1;
+		}else if(getID()<o.getID()){
+			return -1;
+		}
+		
+		return 0;
 	}
 }

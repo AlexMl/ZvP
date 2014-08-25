@@ -19,7 +19,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class ShopSign implements ISign{
+public class ShopSign implements ISign, Comparable<ISign> {
 	
 	private int ID;
 	
@@ -159,6 +159,11 @@ public class ShopSign implements ISign{
 			sign.setLine(3, ChatColor.DARK_RED + "available!");
 			sign.update(true);
 		}
+	}
+
+	@Override
+	public int compareTo(ISign o) {
+		return getArena().compareTo(o.getArena());
 	}
 	
 }

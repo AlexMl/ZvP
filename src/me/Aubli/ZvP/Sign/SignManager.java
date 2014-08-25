@@ -2,6 +2,7 @@ package me.Aubli.ZvP.Sign;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
@@ -45,7 +46,7 @@ public class SignManager {
 		updateSigns();
 	}
 	
-	private void loadSigns(){		
+	private void loadSigns(){
 		
 		signs = new ArrayList<ISign>();
 		
@@ -110,6 +111,17 @@ public class SignManager {
 		}
 		return null;
 	}	
+	
+	public ISign[] getSigns() {
+		ISign[] signArray = new ISign[signs.size()];
+		
+		for(int i=0;i<signArray.length;i++) {
+			signArray[i] = signs.get(i);
+		}
+		
+		Arrays.sort(signArray);
+		return signArray;
+	}
 	
 	public boolean isZVPSign(Location loc){
 		if(getSign(loc)!=null){

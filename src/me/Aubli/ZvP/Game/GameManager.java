@@ -180,6 +180,7 @@ public class GameManager {
 		for(int i=0;i<arenas.size();i++){
 			array[i] = arenas.get(i);
 		}
+		Arrays.sort(array);		
 		return array;
 	}
 	
@@ -189,6 +190,7 @@ public class GameManager {
 		for(int i=0;i<lobbys.size();i++){
 			array[i] = lobbys.get(i);
 		}
+		Arrays.sort(array);
 		return array;
 	}
 

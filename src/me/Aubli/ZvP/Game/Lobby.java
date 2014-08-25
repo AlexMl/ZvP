@@ -9,7 +9,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class Lobby {
+public class Lobby implements Comparable<Lobby> {
 
 	private File lobbyFile;
 	private FileConfiguration lobbyConfig;
@@ -88,5 +88,19 @@ public class Lobby {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public int compareTo(Lobby o) {
+		
+		if(getID()==o.getID()) {
+			return 0;
+		}else if(getID()>o.getID()) {
+			return 1;
+		}else if(getID()<o.getID()){
+			return -1;
+		}
+		
+		return 0;
 	}
 }

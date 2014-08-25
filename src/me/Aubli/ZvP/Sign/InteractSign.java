@@ -19,7 +19,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class InteractSign implements ISign{	
+public class InteractSign implements ISign, Comparable<ISign> {	
 	
 	private int ID;
 	
@@ -156,4 +156,10 @@ public class InteractSign implements ISign{
 			sign.update(true);
 		}
 	}
+	
+	@Override
+	public int compareTo(ISign o) {
+		return getArena().compareTo(o.getArena());
+	}
+	
 }
