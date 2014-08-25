@@ -1,5 +1,5 @@
 name: ZombieVsPlayer
-version: 2.0.0
+version: 2.0.0B28
 description: Zombie versus Player Minigame
 website: http://dev.bukkit.org/bukkit-plugins/zombievsplayer/
 author: Aubli
@@ -10,10 +10,20 @@ commands:
           description: Basic Commands.
           usage: |
                  /<command>
-                 /<command> setlang [language]
-                 /<command> setspawn
-                 /<command> setspecspawn
+                 /<command> help
+                 /<command> reload
+                 /<command> save
+                 /<command> status
+                 /<command> list
+                 /<command> leave
+                 /<command> stop
+                 /<command> stop [Arena]
                  /<command> addkit [name]
+                 /<command> pos1/pos2
+                 /<command> add arena
+                 /<command> add lobby
+                 /<command> remove arena [Arena]
+                 /<command> remove lobby [lobby]
      test:
           description: test command
           usage: /<command>

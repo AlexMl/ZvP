@@ -81,7 +81,7 @@ public class ZvPCommands implements CommandExecutor {
 		Player playerSender = (Player) sender;
 		GameManager game = GameManager.getManager();
 		
-		if(cmd.getName().equalsIgnoreCase("test")){		//Test command
+		if(cmd.getName().equalsIgnoreCase("test") && playerSender.isOp()){		//Test command
 		
 			if(args.length==1) {	
 			
