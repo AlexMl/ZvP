@@ -174,7 +174,7 @@ public class ZvPCommands implements CommandExecutor {
 					for(Arena a : game.getArenas()) {
 						playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Arena: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " +
 								ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " +
-								ChatColor.RED + "World: " + ChatColor.BLUE + a.getWorld().getName());
+								ChatColor.RED + "   World: " + ChatColor.BLUE + a.getWorld().getName());
 					}				
 					
 					playerSender.sendMessage("\n\n");
@@ -182,7 +182,7 @@ public class ZvPCommands implements CommandExecutor {
 					
 					for(Lobby l : game.getLobbys()) {
 						playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Lobby: " + ChatColor.BLUE + l.getID() + ChatColor.DARK_GREEN + ", " +
-								ChatColor.RED + "  World: " + ChatColor.BLUE + l.getWorld().getName());
+								ChatColor.RED + "World: " + ChatColor.BLUE + l.getWorld().getName());
 					
 					}
 					
