@@ -23,6 +23,7 @@ public class DefaultTranslation extends ListResourceBundle{
 		{"game:joined", ChatColor.GREEN + "You joined Arena " + ChatColor.GOLD + "%s " + ChatColor.GREEN + "!"},
 		{"game:left",  ChatColor.GREEN + "You have left Arena " + ChatColor.GOLD + "%s " + ChatColor.GREEN + "!"},
 		{"game:player_left", ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " has left the game!"},
+		{"game:player_joined" , ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%S" + ChatColor.DARK_GRAY + " joined the game!"},
 		{"game:player_not_found", ChatColor.RED + "You were not found in a game (Might be a plugin error)!"},
 		{"game:player_died", ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " died!"},
 		{"game:player_bought", ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " bought " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " for " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " !"},
@@ -38,7 +39,7 @@ public class DefaultTranslation extends ListResourceBundle{
 		{"game:voted_next_round", ChatColor.GREEN + "You have voted for the next round!"},
 		{"game:already_voted", ChatColor.RED + "You have already voted for the next round!"},
 		{"game:no_voting", ChatColor.RED + "It is not the Time to vote now!"},
-		{"game:won", ChatColor.GOLD + "" + ChatColor.BOLD + "Grongrats!" + ChatColor.RESET + "" + ChatColor.DARK_GRAY + " You won against the Zombies.\nYou fought against " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Zombies in " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " rounds and have died " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " times.\nThe remains of your acquired money " + ChatColor.GOLD + "( %s )" + ChatColor.DARK_GRAY + " will be donated to the " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + "." + ChatColor.BOLD + "" + ChatColor.DARK_GREEN + " Thanks for playing!"},
+		{"game:won", ChatColor.GOLD + "" + ChatColor.BOLD + "Grongrats!" + ChatColor.RESET + "" + ChatColor.DARK_GRAY + " You won against the Zombies.\nYou fought against " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Zombies in " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " rounds and have died " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " times. The remains of your acquired money " + ChatColor.GOLD + "( %s )" + ChatColor.DARK_GRAY + " will be donated to the " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + "." + ChatColor.BOLD + "" + ChatColor.DARK_GREEN + " Thanks for playing!"},
 		{"game:won_messages", "Notch Hospital;Minecraft Factory;Creeper farms;Sheep resorts;Jeb Academy"},
 		
 		{"arena:stop_all", ChatColor.DARK_GRAY + "All arenas halted!"},

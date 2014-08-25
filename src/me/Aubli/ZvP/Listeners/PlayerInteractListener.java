@@ -80,10 +80,7 @@ public class PlayerInteractListener implements Listener{
 								if(sign.getArena().isOnline()){
 									boolean success = GameManager.getManager().createPlayer(eventPlayer, sign.getArena(), sign.getLobby());
 									
-									if(success){
-										eventPlayer.sendMessage(String.format(MessageManager.getMessage("game:joined"), sign.getArena().getID()));
-										return;
-									}else{
+									if(!success){
 										event.setCancelled(true);
 										eventPlayer.sendMessage(MessageManager.getMessage("arena:not_ready"));
 										return;

@@ -85,7 +85,6 @@ public class MessageManager {
 	
 	private void save() {
 		try {
-			System.out.println(getConfig().getCurrentPath());
 			getConfig().save(languageFile);
 		} catch (IOException e) {
 			e.printStackTrace();

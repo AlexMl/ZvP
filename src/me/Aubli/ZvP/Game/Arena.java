@@ -448,23 +448,23 @@ public class Arena implements Comparable<Arena> {
 		}		
 		
 		if(!players.contains(player)){			
-			player.setStartPosition(getNewRandomLocation()); 
-			
 			try{
+				player.setStartPosition(getNewRandomLocation()); 
 				player.getReady();
 			}catch(Exception e){
 				e.printStackTrace();
-				player.setStartPosition(getNewRandomLocation());
 				addPlayer(player);
 				return false;
 			}
 			
+			sendMessage(String.format(MessageManager.getMessage("game:player_joined"), player.getName()));
+			player.sendMessage(String.format(MessageManager.getMessage("game:joined"), getID()));
 			players.add(player);
 			
 			if(players.size()>=minPlayers && !isRunning()) {
 				
 				for(ZvPPlayer p : players) {
-					if(p.hasKit()==false) {
+					if(!p.hasKit()) {
 						for(ZvPPlayer p2 : players) {
 							if(p2.hasKit()) {
 								p2.sendMessage(MessageManager.getMessage("game:waiting"));

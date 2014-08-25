@@ -68,11 +68,8 @@ public class ZvPPlayer {
 		this.kit = null;
 		
 		KitManager.getManager().openSelectKitGUI(this);
-	
-		if(arena.addPlayer(this)==false){
-			System.out.println("Exception");
-			//	throw new Exception("Player is waiting!");
-		}
+		
+		arena.addPlayer(this);
 	}
 		
 	
@@ -155,8 +152,12 @@ public class ZvPPlayer {
 		getPlayer().setLevel(level);
 	}
 	
-	public void setStartPosition(Location position){
-		this.startPosition = position.clone();
+	public void setStartPosition(Location position) throws Exception{
+		if(position!=null) {
+			this.startPosition = position.clone();
+		}else {
+			throw new Exception("Startlocation is null!");
+		}
 	}
 	
 	public void setScoreboard(Scoreboard board) {
@@ -265,39 +266,35 @@ public class ZvPPlayer {
 	
 	
 	@SuppressWarnings("deprecation")
-	public void getReady() throws Exception{
+	public void getReady(){
 		
-		if(getStartLocation()!=null){
-			player.getInventory().clear();
-			player.getInventory().setHelmet(null);
-			player.getInventory().setChestplate(null);
-			player.getInventory().setLeggings(null);
-			player.getInventory().setBoots(null);
-			
-			player.getInventory().setContents(getKit().getContents());
-			
-			
-			player.setTotalExperience(0);
-			player.setExp(0F);
-			player.setLevel(0);
-			player.setGameMode(GameMode.SURVIVAL);
-			player.resetPlayerTime();
-			player.resetPlayerWeather();
-			
-			player.setHealth(20D);
-			player.setFoodLevel(20);
-			player.resetMaxHealth();
-			
-			player.setFlying(false);
-			player.setWalkSpeed((float) 0.2);
-			player.setFlySpeed((float) 0.2);
-			
-			player.updateInventory();
-			
-			player.teleport(getStartLocation(), TeleportCause.PLUGIN);			
-		}else{
-			throw new Exception("Startlocation is null!");
-		}		
+		player.getInventory().clear();
+		player.getInventory().setHelmet(null);
+		player.getInventory().setChestplate(null);
+		player.getInventory().setLeggings(null);
+		player.getInventory().setBoots(null);
+		
+		player.getInventory().setContents(getKit().getContents());
+		
+		
+		player.setTotalExperience(0);
+		player.setExp(0F);
+		player.setLevel(0);
+		player.setGameMode(GameMode.SURVIVAL);
+		player.resetPlayerTime();
+		player.resetPlayerWeather();
+		
+		player.setHealth(20D);
+		player.setFoodLevel(20);
+		player.resetMaxHealth();
+		
+		player.setFlying(false);
+		player.setWalkSpeed((float) 0.2);
+		player.setFlySpeed((float) 0.2);
+		
+		player.updateInventory();
+		
+		player.teleport(getStartLocation(), TeleportCause.PLUGIN);			
 	}
 	
 	@SuppressWarnings("deprecation")
