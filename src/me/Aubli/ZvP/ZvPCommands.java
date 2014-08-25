@@ -386,6 +386,7 @@ public class ZvPCommands implements CommandExecutor {
 			
 			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp leave");
 			
+			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp addkit [Name]");
 			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena");
 			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add lobby");
 			player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos1");
