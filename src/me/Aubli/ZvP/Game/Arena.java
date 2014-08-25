@@ -426,7 +426,7 @@ public class Arena implements Comparable<Arena> {
 	
 	public boolean addPlayer(final ZvPPlayer player){
 	
-		System.out.println(player.getName() + " added?" + containsPlayer(player.getPlayer()) + " Kit: " + player.hasKit());
+	//	System.out.println(player.getName() + " added?" + containsPlayer(player.getPlayer()) + " Kit: " + player.hasKit());
 		
 		if(!player.hasKit()) {
 			

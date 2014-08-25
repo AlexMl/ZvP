@@ -41,7 +41,7 @@ public class GUIListener implements Listener{
 					
 					if(KitManager.getManager().getKit(kitName)!=null && player!=null) {
 						player.setKit(KitManager.getManager().getKit(kitName));
-						System.out.println(player.getName() + " took the " + player.getKit().getName() + " Kit");
+				//		System.out.println(player.getName() + " took the " + player.getKit().getName() + " Kit");
 						return;
 					}
 				}

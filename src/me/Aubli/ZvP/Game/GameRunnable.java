@@ -79,10 +79,10 @@ public class GameRunnable extends BukkitRunnable{
 				firstSpawn = false;
 				spawnZombies = true;
 			}else {
-				System.out.println(spawnGoal + " - " + arena.getRound()*arena.getWave()*magicSpawnNumber);
+			//	System.out.println(spawnGoal + " - " + arena.getRound()*arena.getWave()*magicSpawnNumber);
 				if(spawnGoal<arena.getRound()*arena.getWave()*magicSpawnNumber && spawnZombies) {
 					double spawn = arena.getRound()*arena.getWave()*magicSpawnNumber;
-					System.out.println("Missing: " + (spawn-arena.getLivingZombies()));
+				//	System.out.println("Missing: " + (spawn-arena.getLivingZombies()));
 						
 					if(spawn-arena.getLivingZombies() >= ((int)(spawn*0.17)) && (int)(spawn*0.10)>0) {
 						arena.spawnZombies((int)(spawn*0.10));
