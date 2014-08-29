@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-public class KBowKit implements IZvPKit{
+public class KBowKit implements IZvPKit, Comparable<IZvPKit>{
 
 	private final String name;
 
@@ -65,5 +65,10 @@ public class KBowKit implements IZvPKit{
 	@Override
 	public ItemStack[] getContents() {
 		return items.clone();
+	}
+	
+	@Override
+	public int compareTo(IZvPKit o) {
+		return getName().compareTo(o.getName());
 	}	
 }

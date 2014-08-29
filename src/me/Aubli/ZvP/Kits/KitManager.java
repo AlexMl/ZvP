@@ -2,6 +2,7 @@ package me.Aubli.ZvP.Kits;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -34,7 +35,6 @@ public class KitManager {
 		kitPath = new File(ZvP.getInstance().getDataFolder().getPath() + "/Kits");
 				
 		loadKits();
-		
 	}
 	
 	public static KitManager getManager() {
@@ -72,7 +72,18 @@ public class KitManager {
 		return null;
 	}
 	
-	public int getKits() {
+	public IZvPKit[] getKits() {
+		IZvPKit[] kitArray = new IZvPKit[getKitAmount()-1];
+		
+		for(int i=0;i<getKitAmount()-1;i++) {
+			kitArray[i] = kits.get(i);
+		}
+		
+		Arrays.sort(kitArray);
+		return kitArray;
+	}
+	
+	private int getKitAmount() {
 		return kits.size();
 	}
 	
@@ -90,7 +101,7 @@ public class KitManager {
 	
 	@SuppressWarnings("deprecation")
 	public void openSelectKitGUI(ZvPPlayer player) {
-		Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int)Math.ceil(((double)getKits()/9.0)))*9, MessageManager.getMessage("inventory:kit_select"));
+		Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int)Math.ceil(((double)getKitAmount()/9.0)))*9, MessageManager.getMessage("inventory:kit_select"));
 
 		for(IZvPKit kit : kits) {
 			ItemStack kitItem = kit.getIcon();

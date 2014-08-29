@@ -13,7 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.util.ItemStorageUtil.ItemStorage;
 
-public class KCustomKit implements IZvPKit{
+public class KCustomKit implements IZvPKit, Comparable<IZvPKit>{
 
 	
 	private final File kitFile;
@@ -86,5 +86,10 @@ public class KCustomKit implements IZvPKit{
 	@Override
 	public ItemStack[] getContents() {
 		return items.clone();
+	}
+	
+	@Override
+	public int compareTo(IZvPKit o) {
+		return getName().compareTo(o.getName());
 	}
 }

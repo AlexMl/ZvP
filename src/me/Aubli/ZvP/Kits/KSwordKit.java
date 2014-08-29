@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionType;
 
-public class KSwordKit implements IZvPKit{
+public class KSwordKit implements IZvPKit, Comparable<IZvPKit>{
 
 	private final String name;
 	
@@ -62,5 +62,10 @@ public class KSwordKit implements IZvPKit{
 	@Override
 	public ItemStack[] getContents() {
 		return items.clone();
+	}
+	
+	@Override
+	public int compareTo(IZvPKit o) {
+		return getName().compareTo(o.getName());
 	}
 }
