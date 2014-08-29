@@ -62,7 +62,6 @@ public class KitManager {
 	}
 	
 	
-	
 	public IZvPKit getKit(String kitName) {
 		for(IZvPKit k : kits) {
 			if(k.getName().equals(kitName)) {
@@ -91,6 +90,7 @@ public class KitManager {
 	public void addKit(String kitName, ItemStack icon, ItemStack[] items) {
 		IZvPKit kit = new KCustomKit(kitPath.getAbsolutePath(), kitName, icon, items);
 		kits.add(kit);
+		loadKits();
 	}
 	
 	public void removeKit(String kitName) {
@@ -128,10 +128,8 @@ public class KitManager {
 			}
 			
 			kitMeta.setDisplayName(ChatColor.DARK_GRAY + kit.getName());
-			kitMeta.setLore(lore);
-			
-			kitItem.setItemMeta(kitMeta);
-						
+			kitMeta.setLore(lore);			
+			kitItem.setItemMeta(kitMeta);						
 			kitInventory.addItem(kitItem);
 		}
 		
@@ -139,9 +137,9 @@ public class KitManager {
 	}
 	
 	public void openAddKitGUI(Player player, String kitName) {
-		Inventory kitInv = Bukkit.createInventory(player, 9, ChatColor.DARK_BLUE + "ZvP-Kit: " + ChatColor.RED + kitName);
+		Inventory inv = Bukkit.createInventory(player, 9, ChatColor.DARK_BLUE + "ZvP-Kit: " + ChatColor.RED + kitName);
 		player.closeInventory();
-		player.openInventory(kitInv);
+		player.openInventory(inv);
 	}
 	
 	public void openAddKitIconGUI(Player player) {
