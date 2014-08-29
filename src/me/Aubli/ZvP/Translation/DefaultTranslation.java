@@ -19,6 +19,7 @@ public class DefaultTranslation extends ListResourceBundle{
 		{"commands:missing_Permission", ChatColor.DARK_RED + "You do not have enough permission for that!"},
 		{"commands:only_for_Players", "Only Players can use this command!"},
 		
+		
 		{"game:waiting", ChatColor.DARK_GRAY + "Waiting for players ..."},
 		{"game:joined", ChatColor.GREEN + "You joined Arena " + ChatColor.GOLD + "%s " + ChatColor.GREEN + "!"},
 		{"game:left",  ChatColor.GREEN + "You have left Arena " + ChatColor.GOLD + "%s " + ChatColor.GREEN + "!"},
@@ -42,10 +43,12 @@ public class DefaultTranslation extends ListResourceBundle{
 		{"game:won", ChatColor.GOLD + "" + ChatColor.BOLD + "Grongrats!" + ChatColor.RESET + "" + ChatColor.DARK_GRAY + " You won against the Zombies.\nYou fought against " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Zombies in " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " rounds and have died " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " times. The remains of your acquired money " + ChatColor.GOLD + "( %s )" + ChatColor.DARK_GRAY + " will be donated to the " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + "." + ChatColor.BOLD + "" + ChatColor.DARK_GREEN + " Thanks for playing!"},
 		{"game:won_messages", "Notch Hospital;Minecraft Factory;Creeper farms;Sheep resorts;Jeb Academy"},
 		
+		
 		{"arena:stop_all", ChatColor.DARK_GRAY + "All arenas halted!"},
 		{"arena:stop", ChatColor.DARK_GRAY + "Arena " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " stoped!"},
 		{"arena:offline", ChatColor.RED + "The Arena is Offline!"},
 		{"arena:not_ready", ChatColor.RED + "The Arena is not Ready or full!"},
+		
 		
 		{"manage:right_saved", ChatColor.GREEN + "Right Click saved!"},
 		{"manage:left_saved", ChatColor.GREEN + "Left Click saved!"},
@@ -57,6 +60,9 @@ public class DefaultTranslation extends ListResourceBundle{
 		{"manage:arena_removed",ChatColor.GREEN +  "Arena removed from Config!"},
 		{"manage:sign_saved", ChatColor.GREEN + "Sign successfully placed!"},
 		{"manage:sign_removed", ChatColor.GREEN + "Sign successfully removed!"},
+		{"manage:kit_saved", ChatColor.GREEN + "Kit " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " successfully saved!"},
+		{"manage:kit_removed", ChatColor.GREEN + "Kit " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " successfully removed!"},
+		
 				
 		{"error:sign_remove", ChatColor.RED + "An Error occured while removing this Sign!"},
 		{"error:sign_place", ChatColor.RED + "An Error occured while placing this Sign!"},
@@ -64,6 +70,8 @@ public class DefaultTranslation extends ListResourceBundle{
 		{"error:lobby_not_available", ChatColor.RED + "This Lobby is not available!"},
 		{"error:arena_not_available", ChatColor.RED + "This Arena is not available!"},
 		{"error:kit_already_exists", ChatColor.RED + "The Kit " + ChatColor.GOLD + "%s" + ChatColor.RED + " already exists! Choose another name!"},
+		{"error:kit_does_not_exists", ChatColor.RED + "The Kit " + ChatColor.GOLD + "%s" + ChatColor.RED + " does not exist!"},
+		
 		
 		{"category:food", "Food"},
 		{"category:armor", "Armor"},

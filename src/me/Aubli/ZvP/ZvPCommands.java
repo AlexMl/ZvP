@@ -6,6 +6,7 @@ import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Game.ZvPPlayer;
+import me.Aubli.ZvP.Kits.KCustomKit;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Kits.IZvPKit;
 import me.Aubli.ZvP.Sign.ISign;
@@ -191,6 +192,15 @@ public class ZvPCommands implements CommandExecutor {
 									ChatColor.RED + "World: " + ChatColor.BLUE + l.getWorld().getName());
 						
 						}
+						
+						playerSender.sendMessage("\n\n");
+						playerSender.sendMessage(ChatColor.GRAY + "|--------------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Kits" + ChatColor.GRAY + " ---------------|");
+						
+						for(IZvPKit kit : KitManager.getManager().getKits()) {
+							playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Kit: " + ChatColor.BLUE + kit.getName() + ChatColor.DARK_GREEN + ", " +
+									ChatColor.RED + "Custom: " + ChatColor.BLUE + !(kit instanceof KCustomKit));
+						
+						}
 						return true;
 					}else {
 						commandDenied(playerSender);
@@ -286,6 +296,22 @@ public class ZvPCommands implements CommandExecutor {
 							return true;
 						}else {
 							playerSender.sendMessage(String.format(MessageManager.getMessage("error:kit_already_exists"), args[1]));
+							return true;
+						}
+					}else {
+						commandDenied(playerSender);
+						return true;
+					}
+				}
+				
+				if(args[0].equalsIgnoreCase("removekit")) {
+					if(playerSender.hasPermission("zvp.manage.kit")) {
+						if(KitManager.getManager().getKit(args[1])!=null) {
+							KitManager.getManager().removeKit(args[1]);
+							playerSender.sendMessage(String.format(MessageManager.getMessage("manage:kit_removed"), args[1]));
+							return true;
+						}else {
+							playerSender.sendMessage(String.format(MessageManager.getMessage("error:kit_does_not_exists"), args[1]));
 							return true;
 						}
 					}else {

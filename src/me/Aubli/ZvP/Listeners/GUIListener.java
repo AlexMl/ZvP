@@ -199,12 +199,13 @@ public class GUIListener implements Listener{
 			for(ItemStack item : event.getInventory().getContents()) {
 				if(item!=null && item.getType()!=Material.AIR) {
 					KitManager.getManager().addKit(name, item, content);
-					this.content = null;
-					return;
+					eventPlayer.sendMessage(String.format(MessageManager.getMessage("manage:kit_saved"), name));
+					break;
 				}
 			}
 			this.content = null;
 			this.name = null;
+			return;
 		}else {
 			return;
 		}
