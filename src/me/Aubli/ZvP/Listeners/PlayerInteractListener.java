@@ -41,8 +41,8 @@ public class PlayerInteractListener implements Listener{
 		Player eventPlayer = (Player) event.getPlayer();
 		
 		if(event.getItem()!=null){
-			if(event.getItem().equals(ZvP.tool)){
-				if(eventPlayer.hasPermission("zvp.tool") && eventPlayer.hasPermission("zvp.manage.arena")){
+			if(event.getItem().isSimilar(ZvP.tool)){
+				if(eventPlayer.hasPermission("zvp.manage.arena")){
 					event.setCancelled(true);
 					
 					if(event.getAction() == Action.RIGHT_CLICK_BLOCK){
@@ -70,7 +70,7 @@ public class PlayerInteractListener implements Listener{
 		}
 		
 		
-		if(event.getAction()==Action.RIGHT_CLICK_BLOCK){
+		if(event.getAction()==Action.RIGHT_CLICK_BLOCK){	// Player join per Sign
 			if(sm.isZVPSign(event.getClickedBlock().getLocation())){
 				if(sm.getType(event.getClickedBlock().getLocation())==SignType.INTERACT_SIGN) {
 					if(!GameManager.getManager().isInGame(eventPlayer)){

@@ -12,15 +12,18 @@ zvp setspecspawn	zvp.admin.set.spectatorspawn
 
 
 
-zvp.help
-zvp.status
-zvp.tool
+zvp.help						Display the help message
+zvp.status						Use status and list command
 
-zvp.reload
-zvp.save
+zvp.reload						Config reload
+zvp.save						Config save
 
 zvp.play						Allow the Player to play the game
 
-zvp.manage.arena
-zvp.manage.lobby
-zvp.manage.sign
+zvp.stop 						Stop one arena
+zvp.stop.all					Stop all arenas
+
+zvp.manage.kit					Manage Kit related things
+zvp.manage.arena				Manage Arena related things
+zvp.manage.lobby				Manage Lobby related things
+zvp.manage.sign					manage Sign related things
