@@ -319,7 +319,9 @@ public class ZvPPlayer {
 		player.getInventory().setContents(contents);		
 		
 		for(PotionEffectType effect : PotionEffectType.values()) {
-			player.removePotionEffect(effect);
+			if(effect !=null) {
+				player.removePotionEffect(effect);
+			}
 		}
 		
 		player.updateInventory();
