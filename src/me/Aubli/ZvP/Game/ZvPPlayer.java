@@ -318,10 +318,9 @@ public class ZvPPlayer {
 		player.getInventory().setArmorContents(armorContents);		
 		player.getInventory().setContents(contents);		
 		
-		player.removePotionEffect(PotionEffectType.HEAL);
-		player.removePotionEffect(PotionEffectType.SPEED);
-		player.removePotionEffect(PotionEffectType.REGENERATION);
-		player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+		for(PotionEffectType effect : PotionEffectType.values()) {
+			player.removePotionEffect(effect);
+		}
 		
 		player.updateInventory();
 	}
