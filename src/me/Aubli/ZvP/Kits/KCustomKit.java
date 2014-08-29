@@ -1,7 +1,6 @@
 package me.Aubli.ZvP.Kits;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -38,8 +37,9 @@ public class KCustomKit implements IZvPKit, Comparable<IZvPKit>{
 		ItemStorage.saveItemsToFile(kitFile, "items", content);
 		
 		try {
+			kitConfig.load(kitFile);
 			kitConfig.save(kitFile);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
