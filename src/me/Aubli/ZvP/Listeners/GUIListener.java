@@ -175,12 +175,17 @@ public class GUIListener implements Listener{
 			name = ChatColor.stripColor(eventInv.getTitle().split("ZvP-Kit: ")[1]);
 			content = eventInv.getContents();
 			
-			Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					KitManager.getManager().openAddKitIconGUI(eventPlayer);			
+			for(ItemStack item : content) {
+				if(item!=null && item.getType()!=Material.AIR) {
+					Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
+						@Override
+						public void run() {
+							KitManager.getManager().openAddKitIconGUI(eventPlayer);			
+						}
+					}, 1*10L);
+					break;
 				}
-			}, 1*10L);
+			}			
 		}
 		
 		if(event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage("inventory:kit_select"))) {
