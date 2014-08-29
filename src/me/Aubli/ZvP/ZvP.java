@@ -34,9 +34,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /* ZvP TODO:
  * 
- * 	- Some Translations in GameRunnable
- *  - Status commands
- *  - plugin.yml commands
+ * 	- Some Translations in GameRunnable		+
+ *  - Status commands						+
+ *  - plugin.yml commands					+
+ *  - Add some colors						+
+ *  - add kit management
  */
 
 public class ZvP extends JavaPlugin{
