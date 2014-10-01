@@ -30,6 +30,12 @@ public class GUIListener implements Listener{
 	
 	@EventHandler
 	public void onClick(InventoryClickEvent event) {
+		
+		//Super awesome Clickevent future
+		if(event.getRawSlot()==-999) {
+			((Player)event.getWhoClicked()).closeInventory();
+		}
+	
 		if(event.getWhoClicked().hasPermission("zvp.play")) {
 			if(event.getCurrentItem()!=null && event.getCurrentItem().getType()!=Material.AIR) {
 				if(event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage("inventory:kit_select"))) {				
@@ -65,10 +71,15 @@ public class GUIListener implements Listener{
 				}
 				if(event.getInventory().getTitle().contains("Items: ")) {
 					event.setCancelled(true);
-				//	System.out.println(event.getSlot() + " Raw: " + event.getRawSlot() + " " + event.getResult().toString());
+//					System.out.println(event.getSlot() + " Raw: " + event.getRawSlot() + " " + event.getResult().toString());
+//					System.out.println(event.getCurrentItem() + " :s " + event.getCursor());
+					
+					if(event.getRawSlot()>event.getInventory().getSize()) {						
+						return; 
+					}
 					
 					ItemCategory cat = ItemCategory.getEnum(event.getInventory().getTitle().split("s: ")[1]);						
-					ShopItem item = ShopManager.getManager().getItem(cat, event.getInventory().getItem(event.getSlot()));
+					ShopItem item = ShopManager.getManager().getItem(cat, event.getCurrentItem());
 					ZvPPlayer player = GameManager.getManager().getPlayer((Player)event.getWhoClicked());
 						
 					if(item !=null && player!=null && GameManager.getManager().isInGame(player.getPlayer())){
