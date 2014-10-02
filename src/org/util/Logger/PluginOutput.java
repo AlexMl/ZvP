@@ -55,11 +55,12 @@ public class PluginOutput {
 			return;
 		}		
 		
-		if(debugMode) {
+		if(debugMessage) {
 			logData(level, message, e);
 			
-			if(level.intValue()>=this.loglevel) {
+			if(debugMode && level.intValue()>=this.loglevel) {
 				log.info(message);
+				return;
 			}
 		}
 	}
