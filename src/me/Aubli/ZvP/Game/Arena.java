@@ -422,6 +422,7 @@ public class Arena implements Comparable<Arena> {
 		for(ZvPPlayer p : getPlayers()) {
 			p.sendMessage(message);
 		}
+		ZvP.getPluginLogger().log(Level.FINEST, "[ZvP] M: " + message, true);
 	}
 	
 	

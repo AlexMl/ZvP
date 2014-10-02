@@ -1,5 +1,7 @@
 package me.Aubli.ZvP.Listeners;
 
+import java.util.logging.Level;
+
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
@@ -30,6 +32,8 @@ public class AsyncChatListener implements Listener {
 					if(!player.hasVoted()) {
 						player.setVoted(true);
 						player.sendMessage(MessageManager.getMessage("game:voted_next_round"));
+						
+						ZvP.getPluginLogger().log(Level.FINE, "[ZvP] Player " + player.getName() + " voted in arena " + player.getArena().getID(), true);
 						
 						Arena a = player.getArena();
 						a.updatePlayerBoards();
