@@ -1,5 +1,7 @@
 package me.Aubli.ZvP.Listeners;
 
+import java.util.logging.Level;
+
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
@@ -31,9 +33,11 @@ public class GUIListener implements Listener{
 	@EventHandler
 	public void onClick(InventoryClickEvent event) {
 		
+		Player eventPlayer = (Player)event.getWhoClicked();
+		
 		//Super awesome Clickevent future
 		if(event.getRawSlot()==-999) {
-			((Player)event.getWhoClicked()).closeInventory();
+			eventPlayer.closeInventory();
 		}
 	
 		if(event.getWhoClicked().hasPermission("zvp.play")) {
@@ -43,11 +47,11 @@ public class GUIListener implements Listener{
 					event.getWhoClicked().closeInventory();
 					
 					String kitName = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());				
-					ZvPPlayer player = GameManager.getManager().getPlayer((Player)event.getWhoClicked());
+					ZvPPlayer player = GameManager.getManager().getPlayer(eventPlayer);
 					
 					if(KitManager.getManager().getKit(kitName)!=null && player!=null) {
 						player.setKit(KitManager.getManager().getKit(kitName));
-				//		System.out.println(player.getName() + " took the " + player.getKit().getName() + " Kit");
+						ZvP.getPluginLogger().log(Level.INFO, "[ZvP] " + player.getName() + " took the " + player.getKit().getName() + " Kit", true);
 						return;
 					}
 				}
@@ -71,16 +75,16 @@ public class GUIListener implements Listener{
 				}
 				if(event.getInventory().getTitle().contains("Items: ")) {
 					event.setCancelled(true);
-//					System.out.println(event.getSlot() + " Raw: " + event.getRawSlot() + " " + event.getResult().toString());
-//					System.out.println(event.getCurrentItem() + " :s " + event.getCursor());
+					ZvP.getPluginLogger().log(Level.FINEST, "ShopClick: Slot: " + event.getSlot() + " RawSlot: " + event.getRawSlot() + " Result: " + event.getResult().toString(), true);
 					
-					if(event.getRawSlot()>event.getInventory().getSize()) {						
+					if(event.getRawSlot()>event.getInventory().getSize()) {	
+						ZvP.getPluginLogger().log(Level.WARNING, "Player " + eventPlayer.getName() + " tryed to acces slot " + event.getRawSlot() + " (index:" + event.getInventory().getSize() + ")", true);
 						return; 
 					}
 					
 					ItemCategory cat = ItemCategory.getEnum(event.getInventory().getTitle().split("s: ")[1]);						
 					ShopItem item = ShopManager.getManager().getItem(cat, event.getCurrentItem());
-					ZvPPlayer player = GameManager.getManager().getPlayer((Player)event.getWhoClicked());
+					ZvPPlayer player = GameManager.getManager().getPlayer(eventPlayer);
 						
 					if(item !=null && player!=null && GameManager.getManager().isInGame(player.getPlayer())){
 					

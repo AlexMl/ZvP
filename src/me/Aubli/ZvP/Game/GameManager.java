@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Kits.KitManager;
@@ -266,11 +267,9 @@ public class GameManager {
 			Location tempMax = max.clone();
 			tempMax.setY(min.getY());
 			
-			double dist = min.clone().distance(tempMax);
-			Bukkit.broadcastMessage("Distance: " + dist);
+			double dist = min.clone().distance(tempMax);			
 			
-			int mP = ((int)((Math.ceil(dist+2))/4))+1;
-			Bukkit.broadcastMessage("maxP: " + mP);
+			int mP = ((int)((Math.ceil(dist+2))/4))+1;			
 			
 			if(mP<3){
 				mP = 3;
@@ -282,6 +281,8 @@ public class GameManager {
 			
 			Arena a = new Arena(getNewID(arenaPath), mP, arenaPath, min.clone(), max.clone(), ZvP.getDefaultRounds(), ZvP.getDefaultWaves());
 			arenas.add(a);
+			
+			ZvP.getPluginLogger().log(Level.INFO, "[ZvP] New Arena added!", true);
 			return true;
 		}
 		return false;
@@ -290,14 +291,17 @@ public class GameManager {
 	public void addLobby(Location loc){
 		Lobby l = new Lobby(getNewID(lobbyPath), lobbyPath, loc.clone());
 		lobbys.add(l);
+		ZvP.getPluginLogger().log(Level.INFO, "[ZvP] New Lobby added!", true);
 	}
 	
 	public void removeArena(Arena arena){
+		ZvP.getPluginLogger().log(Level.INFO, "[ZvP] Arena " + arena.getID() + " removed!", true);
 		arenas.remove(arena);
-		arena.delete();
+		arena.delete();		
 	}
 	
 	public void removeLobby(Lobby lobby){
+		ZvP.getPluginLogger().log(Level.INFO, "[ZvP] Lobby " + lobby.getID() + " removed!", true);
 		lobbys.remove(lobby);
 		lobby.delete();
 	}
@@ -323,7 +327,8 @@ public class GameManager {
 	
 	public boolean removePlayer(ZvPPlayer player){
 		boolean success = player.getArena().removePlayer(player);
-		player.reset();
+		player.reset();		
+		ZvP.getPluginLogger().log(Level.INFO, "[ZvP] Player " + player.getName() + " removed from Game!", true);
 		return success;
 	}
 	

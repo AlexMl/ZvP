@@ -1,7 +1,9 @@
 package me.Aubli.ZvP.Game;
 
 import java.util.Random;
+import java.util.logging.Level;
 
+import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Translation.MessageManager;
 
@@ -79,23 +81,19 @@ public class GameRunnable extends BukkitRunnable{
 				firstSpawn = false;
 				spawnZombies = true;
 			}else {
-			//	System.out.println(spawnGoal + " - " + arena.getRound()*arena.getWave()*magicSpawnNumber);
 				if(spawnGoal<arena.getRound()*arena.getWave()*magicSpawnNumber && spawnZombies) {
 					double spawn = arena.getRound()*arena.getWave()*magicSpawnNumber;
-				//	System.out.println("Missing: " + (spawn-arena.getLivingZombies()));
+					ZvP.getPluginLogger().log(Level.FINER, "Arena: " + arena.getID() + " Missing: " + (spawn-arena.getLivingZombies()), true);
 						
 					if(spawn-arena.getLivingZombies() >= ((int)(spawn*0.17)) && (int)(spawn*0.10)>0) {
 						arena.spawnZombies((int)(spawn*0.10));
-						spawnGoal += (int)(spawn*0.10);
-				//		System.out.println("10% " + (int)(spawn*0.10));
+						spawnGoal += (int)(spawn*0.10);				
 					}else if(spawn-arena.getLivingZombies() >= ((int)(spawn*0.12)) && (int)(spawn*0.06)>0) {
 						arena.spawnZombies((int)(spawn*0.06));
-						spawnGoal += (int)(spawn*0.06);
-				//		System.out.println("6% " + (int)(spawn*0.06));						
+						spawnGoal += (int)(spawn*0.06);				
 					}else if(spawn-arena.getLivingZombies() >= ((int)(spawn*0.08)) && (int)(spawn*0.02)>0) {
 						arena.spawnZombies((int)(spawn*0.02));
 						spawnGoal += (int)(spawn*0.02);
-				//		System.out.println("2% " + (int)(spawn*0.02));
 					}else if(spawn-arena.getLivingZombies() > magicSpawnNumber) {
 						arena.spawnZombies((int)magicSpawnNumber/2);
 						spawnGoal += (int)magicSpawnNumber/2;
@@ -145,7 +143,7 @@ public class GameRunnable extends BukkitRunnable{
 			arena.stop();
 		}		
 	
-		if(arena.getLivingZombies()>0) {
+		if(arena.getLivingZombies()>0 && ZvP.getPluginLogger().isDebugMode()) {
 			arena.sendMessage("Arena: " + arena.getID() + " : " + ChatColor.RED + arena.getStatus().toString() + "; " + ChatColor.RESET + arena.getRound() + ":" + arena.getWave() + " Z:" + arena.getLivingZombies() + ":" + arena.getKilledZombies());
 		}
 		arena.getWorld().setTime(15000L);

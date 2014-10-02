@@ -1,6 +1,7 @@
 package me.Aubli.ZvP;
 
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
@@ -82,7 +83,7 @@ public class ZvPCommands implements CommandExecutor {
 		Player playerSender = (Player) sender;
 		GameManager game = GameManager.getManager();
 		
-		if(cmd.getName().equalsIgnoreCase("test") && playerSender.isOp()){		//Test command
+		if(cmd.getName().equalsIgnoreCase("test") && playerSender.isOp() && ZvP.getPluginLogger().isDebugMode()){	//Test command
 		
 			if(args.length==1) {	
 			
@@ -124,6 +125,13 @@ public class ZvPCommands implements CommandExecutor {
 		
 		
 		if(cmd.getName().equalsIgnoreCase("zvp")){
+		
+			String arguments = "";
+			for(String arg : args) {
+				arguments += " " + arg;
+			}			
+			
+			ZvP.getPluginLogger().log(Level.INFO, "[ZvP] Player " + playerSender.getName() + " attempts to execute Command: " + cmd.getName() + arguments, true);
 			
 			if(args.length==0){
 				printCommands(playerSender);

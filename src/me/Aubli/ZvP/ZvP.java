@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Kits.KitManager;
@@ -21,6 +21,7 @@ import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Translation.MessageManager;
 
+import org.util.Logger.PluginOutput;
 import org.util.Metrics.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -43,7 +44,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class ZvP extends JavaPlugin{
 
-	public static final Logger log = Bukkit.getLogger();
+	private static PluginOutput logger;
+
 	private static ZvP instance;
 		
 	public static ItemStack tool;
@@ -51,6 +53,8 @@ public class ZvP extends JavaPlugin{
 	private static String pluginPrefix = ChatColor.DARK_GREEN + "[" + ChatColor.DARK_RED + "Z" + ChatColor.DARK_GRAY + "v" + ChatColor.DARK_RED + "P" + ChatColor.DARK_GREEN + "]"  + ChatColor.RESET + " ";
 	
 	private static Locale locale;
+	
+	private int logLevel;
 	
 	private static int maxPlayers;
 	private static int DEFAULT_ROUNDS;
@@ -62,6 +66,7 @@ public class ZvP extends JavaPlugin{
 	private static double DEATH_FEE;
 	
 	private boolean useMetrics = false;
+	private boolean debugMode = false;
 
 	@Override	
 	public void onDisable() {
@@ -71,21 +76,24 @@ public class ZvP extends JavaPlugin{
 		}		
 		GameManager.getManager().shutdown();
 		
-		log.info("[ZombieVsPlayer] Plugin is disabled!");
+		logger.log(String.format("[%s] Plugin is disabled!", getDescription().getName()));
 	}
 	
 	@Override
 	public void onEnable() {
 		initialize();		
 		
-		log.info("[ZombieVsPlayer] Plugin is enabled!");
+		logger.log(String.format("[%s] Plugin is enabled!", getDescription().getName()));
 	}
 	
 	
 	private void initialize(){
-		instance = this;
+		instance = this;	
+		
 		loadConfig();		
 		setTool();
+		
+		logger = new PluginOutput(this, debugMode, logLevel);
 		
 		new MessageManager(locale);
 		new GameManager();
@@ -102,7 +110,7 @@ public class ZvP extends JavaPlugin{
 			    Metrics metrics = new Metrics(this);
 			    metrics.start();			   
 			} catch (IOException e) {
-			   log.info("[ZombieVsPlayer] Can't start Metrics! Skip!");
+				logger.log(String.format("[%s] Can't start Metrics! Skip!", getDescription().getName()));
 			}
 		}
 	}	
@@ -146,6 +154,10 @@ public class ZvP extends JavaPlugin{
 		
 	public static ZvP getInstance(){
 		return instance;
+	}
+	
+	public static PluginOutput getPluginLogger() {
+		return logger;
 	}
 	
 	public static Locale getLocale() {
@@ -198,10 +210,13 @@ public class ZvP extends JavaPlugin{
 		
 		getConfig().addDefault("plugin.enableMetrics", true);
 		getConfig().addDefault("plugin.Locale", "en");
+		getConfig().addDefault("plugin.debugMode", false);
+		getConfig().addDefault("plugin.loglevel", Level.FINE.intValue());
 		
 		useMetrics = getConfig().getBoolean("plugin.enableMetrics");
+		debugMode = getConfig().getBoolean("plugin.debugMode");
 		locale = new Locale(getConfig().getString("plugin.Locale"));
-		
+		logLevel = getConfig().getInt("plugin.loglevel");
 		
 		getConfig().addDefault("game.maximal_Players", 25);		
 		getConfig().addDefault("game.default_rounds", 3);

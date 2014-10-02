@@ -88,8 +88,8 @@ public class ShopManager {
 		}
 		
 		if(isOutdated()) {
-			try {	
-				ZvP.log.info("[" + ZvP.getInstance().getName() + "] Found outdated item file! Renaming it!");
+			try {
+				ZvP.getPluginLogger().log("[" + ZvP.getInstance().getName() + "] Found outdated item file! Renaming it!");
 				itemFile.renameTo(new File(itemFile.getParentFile().getPath() + "/items-" + itemConfig.getString("version") + ".yml"));
 				itemFile.delete();
 				itemFile.createNewFile();
@@ -265,7 +265,8 @@ public class ShopManager {
 		try {
 			return ItemStorage.getShopItemsFromFile(itemConfig.getList("items"));
 		} catch (Exception e) {
-			ZvP.log.log(Level.WARNING, "Error while loading Item from shop configuration!\nError: " + e.getMessage() + " in File " + itemFile.getPath(), e);
+			ZvP.getPluginLogger().log("Error while loading Item from shop configuration!\nError: " + e.getMessage() + " in File " + itemFile.getPath());
+			ZvP.getPluginLogger().log(Level.WARNING, "Error while loading Item from shop configuration!\nError: " + e.getMessage() + " in File " + itemFile.getPath(), true, e);
 		}
 		return null;
 	}

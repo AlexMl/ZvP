@@ -32,7 +32,7 @@ public class MessageManager {
 		
 		if(!languageFile.exists() || isOutdated()) {
 			try {
-				ZvP.log.info("[" + ZvP.getInstance().getName() + "] Creating new message File for Locale " + getLocale().toString() + "!");
+				ZvP.getPluginLogger().log("[" + ZvP.getInstance().getName() + "] Creating new message File for Locale " + getLocale().toString() + "!");
 				languageFile.getParentFile().mkdirs();
 				languageFile.createNewFile();
 				writeDefaults();

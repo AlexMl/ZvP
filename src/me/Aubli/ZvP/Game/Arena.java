@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
@@ -425,9 +426,9 @@ public class Arena implements Comparable<Arena> {
 	
 	
 	public boolean addPlayer(final ZvPPlayer player){
-	
-	//	System.out.println(player.getName() + " added?" + containsPlayer(player.getPlayer()) + " Kit: " + player.hasKit());
-		
+			
+		ZvP.getPluginLogger().log(Level.FINER, "[ZvP] Player " + player.getName() + " is added?" + containsPlayer(player.getPlayer()) + ", Kit: " + player.hasKit(), true);
+			
 		if(!player.hasKit()) {
 			
 			if(!containsPlayer(player.getPlayer())) {
@@ -461,6 +462,8 @@ public class Arena implements Comparable<Arena> {
 			player.sendMessage(String.format(MessageManager.getMessage("game:joined"), getID()));
 			players.add(player);
 			
+			ZvP.getPluginLogger().log(Level.INFO, "[ZvP] Player " + player.getName() + " has joined Arena " + getID(), true);
+			
 			if(players.size()>=minPlayers && !isRunning()) {
 				
 				for(ZvPPlayer p : players) {
@@ -492,7 +495,7 @@ public class Arena implements Comparable<Arena> {
 			if(players.size()==0) {
 				this.stop();
 			}
-			
+	
 			return true;
 		}
 		return false;
@@ -573,6 +576,7 @@ public class Arena implements Comparable<Arena> {
 		clearArena();
 		
 		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
+		ZvP.getPluginLogger().log(Level.INFO, "[ZvP] Arena " + getID() + " started a new Task!", true);
 	}	
 	
 	public void stop(){
@@ -591,19 +595,22 @@ public class Arena implements Comparable<Arena> {
 		clearArena();	
 		setStatus(ArenaStatus.STANDBY);
 		Bukkit.getScheduler().cancelTask(getTaskId());
+		ZvP.getPluginLogger().log(Level.INFO, "[ZvP] Arena " + getID() + " stoped!", true);
 	}
 	
 	public boolean next() {
+		
 		if(getWave()==getMaxWaves()) {			
-			if(getRound()==getMaxRounds()) {				
+			if(getRound()==getMaxRounds()) {			
 				return true;
 			}
 			setRound(getRound() +1);
 			setWave(1);	
+			ZvP.getPluginLogger().log(Level.FINE, "[ZvP] Arena " + getID() + " from R:" + (getRound()-1) + "W:" + getMaxWaves() + " to R:" + getRound() + "W:1", true);
 			return false;
 		}
 		setWave(getWave() +1);
-		
+		ZvP.getPluginLogger().log(Level.FINE, "[ZvP] Arena " + getID() + " from R:" + getRound() + "W:" + (getWave()-1) + " to R:" + getRound() + "W:" + getWave() , true);
 		return false;
 	}
 	
