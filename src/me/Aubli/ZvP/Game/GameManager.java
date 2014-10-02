@@ -73,15 +73,19 @@ public class GameManager {
 		saveConfig();
 	}
 	
+	public void reloadConfig() {
+		stopGames();
+		loadConfig();
+	}
 	
 	//Config
-	public void loadConfig(){
+	private void loadConfig(){
 		
 		if(!new File(arenaPath).exists() || !new File(lobbyPath).exists()){
 			new File(arenaPath).mkdirs();
 			new File(lobbyPath).mkdirs();
 		}
-		
+				
 		lobbys = new ArrayList<Lobby>();
 		arenas = new ArrayList<Arena>();
 		

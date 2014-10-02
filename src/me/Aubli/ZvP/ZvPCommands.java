@@ -56,7 +56,7 @@ public class ZvPCommands implements CommandExecutor {
 			if(cmd.getName().equals("zvp")) {
 				if(args.length==1) {
 					if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
-						GameManager.getManager().loadConfig();						
+						GameManager.getManager().reloadConfig();						
 						sender.sendMessage(MessageManager.getMessage("config:reloaded"));
 						return true;
 					}
@@ -232,7 +232,7 @@ public class ZvPCommands implements CommandExecutor {
 				}
 				if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
 					if(playerSender.hasPermission("zvp.reload")){
-						GameManager.getManager().loadConfig();						
+						GameManager.getManager().reloadConfig();						
 						playerSender.sendMessage(MessageManager.getMessage("config:reloaded"));
 						return true;
 					}else{
