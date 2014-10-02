@@ -24,7 +24,7 @@ public class DefaultTranslation extends ListResourceBundle{
 		{"game:joined", ChatColor.GREEN + "You joined Arena " + ChatColor.GOLD + "%s " + ChatColor.GREEN + "!"},
 		{"game:left",  ChatColor.GREEN + "You have left Arena " + ChatColor.GOLD + "%s " + ChatColor.GREEN + "!"},
 		{"game:player_left", ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " has left the game!"},
-		{"game:player_joined" , ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%S" + ChatColor.DARK_GRAY + " joined the game!"},
+		{"game:player_joined" , ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " joined the game!"},
 		{"game:player_not_found", ChatColor.RED + "You were not found in a game (Might be a plugin error)!"},
 		{"game:player_died", ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " died!"},
 		{"game:player_bought", ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " bought " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " for " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " !"},
