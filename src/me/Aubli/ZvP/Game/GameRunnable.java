@@ -117,8 +117,19 @@ public class GameRunnable extends BukkitRunnable{
 					}
 					
 					if(!stop) {
-						arena.sendMessage(MessageManager.getMessage("game:vote_request"));
 						arena.setStatus(ArenaStatus.VOTING);
+						
+						new BukkitRunnable() {
+							
+							@Override
+							public void run() {								
+								if(arena.getStatus()==ArenaStatus.VOTING) {
+									arena.sendMessage(MessageManager.getMessage("game:vote_request"));
+								}else {
+									this.cancel();
+								}
+							}
+						}.runTaskTimer(ZvP.getInstance(), 10L, 13*20L);
 						this.cancel();
 					}else {			//End of Game				
 												
