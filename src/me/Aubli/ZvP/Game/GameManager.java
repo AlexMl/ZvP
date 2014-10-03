@@ -283,7 +283,7 @@ public class GameManager {
 				mP = ZvP.getMaxPlayers();
 			}
 			
-			Arena a = new Arena(getNewID(arenaPath), mP, arenaPath, min.clone(), max.clone(), ZvP.getDefaultRounds(), ZvP.getDefaultWaves());
+			Arena a = new Arena(getNewID(arenaPath), mP, arenaPath, min.clone(), max.clone(), ZvP.getDefaultRounds(), ZvP.getDefaultWaves(), ZvP.getDefaultSpawnRate(), ZvP.getDefaultDistance());
 			arenas.add(a);
 			
 			ZvP.getPluginLogger().log(Level.INFO, "[ZvP] New Arena added!", true);

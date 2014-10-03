@@ -60,8 +60,8 @@ public class ZvP extends JavaPlugin{
 	private static int DEFAULT_ROUNDS;
 	private static int DEFAULT_WAVES;
 	private static int START_DELAY;
-	private static int ZOMBIE_SPAWN_RATE;
-	private static double SAVE_RADIUS;	
+	private static int DEFAULT_ZOMBIE_SPAWN_RATE;
+	private static double DEFAULT_SAVE_RADIUS;	
 	private static double ZOMBIE_FUND;
 	private static double DEATH_FEE;
 	
@@ -184,12 +184,12 @@ public class ZvP extends JavaPlugin{
 		return START_DELAY;
 	}
 	
-	public static int getSpawnRate() {
-		return ZOMBIE_SPAWN_RATE;
+	public static int getDefaultSpawnRate() {
+		return DEFAULT_ZOMBIE_SPAWN_RATE;
 	}
 	
  	public static double getDefaultDistance() {		
-		return SAVE_RADIUS;
+		return DEFAULT_SAVE_RADIUS;
 	}
  	
  	public static double getZombieFund() {
@@ -232,11 +232,11 @@ public class ZvP extends JavaPlugin{
 		START_DELAY = getConfig().getInt("times.joinTime");
 		
 		
-		getConfig().addDefault("zombies.spawnRate", 20);
-		getConfig().addDefault("zombies.saveRadius", 3.0);	
+		getConfig().addDefault("zombies.default_spawnRate", 20);
+		getConfig().addDefault("zombies.default_saveRadius", 3.0);	
 		
-		ZOMBIE_SPAWN_RATE = getConfig().getInt("zombies.spawnRate");		
-		SAVE_RADIUS = getConfig().getDouble("zombies.saveRadius");
+		DEFAULT_ZOMBIE_SPAWN_RATE = getConfig().getInt("zombies.default_spawnRate");		
+		DEFAULT_SAVE_RADIUS = getConfig().getDouble("zombies.default_saveRadius");
 		
 		
 		getConfig().addDefault("money.ZombieFund", 0.37);

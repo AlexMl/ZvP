@@ -44,6 +44,9 @@ public class Arena implements Comparable<Arena> {
 	private int round;
 	private int wave;	
 	
+	private int spawnRate;
+	private double saveRadius;
+	
 	private int TaskId;
 	
 	private World arenaWorld;
@@ -57,7 +60,7 @@ public class Arena implements Comparable<Arena> {
 	private ArrayList<ZvPPlayer> players;
 	
 	
-	public Arena(int ID, int maxPlayers, String arenaPath, Location min, Location max, int rounds, int waves){
+	public Arena(int ID, int maxPlayers, String arenaPath, Location min, Location max, int rounds, int waves, int spawnRate, double saveRadius){
 		
 		this.arenaID = ID;
 		
@@ -77,6 +80,9 @@ public class Arena implements Comparable<Arena> {
 		this.wave = 0;
 		
 		this.teamBalance = 0.0;
+		
+		this.saveRadius = saveRadius;
+		this.spawnRate = spawnRate;
 		
 		arenaFile = new File(arenaPath + "/" + ID + ".yml");
 		arenaConfig = YamlConfiguration.loadConfiguration(arenaFile);
@@ -114,6 +120,9 @@ public class Arena implements Comparable<Arena> {
 		this.wave = 0;
 		this.teamBalance = 0.0;
 		
+		this.spawnRate = arenaConfig.getInt("arena.spawnRate");
+		this.saveRadius = arenaConfig.getDouble("arena.saveRadius");
+		
 		this.arenaWorld = Bukkit.getWorld(arenaConfig.getString("arena.Location.world"));		
 		this.minLoc = new Location(arenaWorld, 
 				arenaConfig.getInt("arena.Location.min.X"), 
@@ -137,6 +146,8 @@ public class Arena implements Comparable<Arena> {
 		arenaConfig.set("arena.maxPlayers", maxPlayers);
 		arenaConfig.set("arena.rounds", maxRounds);
 		arenaConfig.set("arena.waves", maxWaves);
+		arenaConfig.set("arena.spawnRate", spawnRate);
+		arenaConfig.set("arena.saveRadius", saveRadius);
 		
 		arenaConfig.set("arena.Location.world", arenaWorld.getName());
 		arenaConfig.set("arena.Location.min.X", minLoc.getBlockX());
@@ -209,12 +220,20 @@ public class Arena implements Comparable<Arena> {
 		return wave;
 	}
 	
+	public int getSpawnRate() {
+		return spawnRate;
+	}
+	
 	public int getTaskId(){
 		return TaskId;
 	}
 	
 	public double getBalance() {
 		return teamBalance;
+	}
+	
+	public double getSaveRadius() {
+		return saveRadius;
 	}
 	
 	public World getWorld(){
@@ -251,7 +270,7 @@ public class Arena implements Comparable<Arena> {
 	
 	public Location getNewSaveLocation() {
 		
-		final double distance = ZvP.getDefaultDistance();
+		final double distance = getSaveRadius();
 		
 		final Location spawnLoc = getNewRandomLocation();
 		
@@ -577,7 +596,7 @@ public class Arena implements Comparable<Arena> {
 		getWorld().setMonsterSpawnLimit(0);
 		clearArena();
 		
-		TaskId = new GameRunnable(this, ZvP.getStartDelay(), ZvP.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
+		TaskId = new GameRunnable(this, ZvP.getStartDelay(), getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
 		ZvP.getPluginLogger().log(Level.INFO, "[ZvP] Arena " + getID() + " started a new Task!", true);
 	}	
 	

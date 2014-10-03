@@ -158,7 +158,7 @@ public class ZvPCommands implements CommandExecutor {
 									ChatColor.GRAY + "| " + ChatColor.RED + "A: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " +
 									ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + 
 									ChatColor.RED + "Money: " + ChatColor.BLUE + a.getBalance()  + ChatColor.DARK_GREEN + ", " + 
-									ChatColor.RED + "Zombies: " + ChatColor.BLUE + a.getLivingZombies() + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getRound()*a.getWave()*ZvP.getSpawnRate() + ChatColor.DARK_GREEN + ", " +
+									ChatColor.RED + "Zombies: " + ChatColor.BLUE + a.getLivingZombies() + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getRound()*a.getWave()*a.getSpawnRate() + ChatColor.DARK_GREEN + ", " +
 									ChatColor.RED + "Killed: " + ChatColor.BLUE + a.getKilledZombies());
 						}	
 
