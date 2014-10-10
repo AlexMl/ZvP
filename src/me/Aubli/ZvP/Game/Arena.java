@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
@@ -123,7 +124,7 @@ public class Arena implements Comparable<Arena> {
 		this.spawnRate = arenaConfig.getInt("arena.spawnRate");
 		this.saveRadius = arenaConfig.getDouble("arena.saveRadius");
 		
-		this.arenaWorld = Bukkit.getWorld(arenaConfig.getString("arena.Location.world"));		
+		this.arenaWorld = Bukkit.getWorld(UUID.fromString(arenaConfig.getString("arena.Location.world")));		
 		this.minLoc = new Location(arenaWorld, 
 				arenaConfig.getInt("arena.Location.min.X"), 
 				arenaConfig.getInt("arena.Location.min.Y"),
@@ -149,7 +150,7 @@ public class Arena implements Comparable<Arena> {
 		arenaConfig.set("arena.spawnRate", spawnRate);
 		arenaConfig.set("arena.saveRadius", saveRadius);
 		
-		arenaConfig.set("arena.Location.world", arenaWorld.getName());
+		arenaConfig.set("arena.Location.world", arenaWorld.getUID().toString());
 		arenaConfig.set("arena.Location.min.X", minLoc.getBlockX());
 		arenaConfig.set("arena.Location.min.Y", minLoc.getBlockY());
 		arenaConfig.set("arena.Location.min.Z", minLoc.getBlockZ());

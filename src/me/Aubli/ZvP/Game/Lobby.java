@@ -2,6 +2,7 @@ package me.Aubli.ZvP.Game;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -41,7 +42,7 @@ public class Lobby implements Comparable<Lobby> {
 		
 		this.lobbyID = lobbyConfig.getInt("lobby.ID");
 		this.centerLoc = new Location(
-				Bukkit.getWorld(lobbyConfig.getString("lobby.Location.world")),
+				Bukkit.getWorld(UUID.fromString(lobbyConfig.getString("lobby.Location.world"))),
 				lobbyConfig.getInt("lobby.Location.X"),
 				lobbyConfig.getInt("lobby.Location.Y"),
 				lobbyConfig.getInt("lobby.Location.Z"));		
@@ -51,7 +52,7 @@ public class Lobby implements Comparable<Lobby> {
 	void save() throws IOException{		
 		lobbyConfig.set("lobby.ID", lobbyID);
 			
-		lobbyConfig.set("lobby.Location.world", centerLoc.getWorld().getName());
+		lobbyConfig.set("lobby.Location.world", centerLoc.getWorld().getUID().toString());
 		lobbyConfig.set("lobby.Location.X", centerLoc.getBlockX());
 		lobbyConfig.set("lobby.Location.Y", centerLoc.getBlockY());
 		lobbyConfig.set("lobby.Location.Z", centerLoc.getBlockZ());
