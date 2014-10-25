@@ -1,5 +1,11 @@
 Changelog:
 
+2.0:
+*Complete rewrite
+*Optimized Kit system, Shopsystem, scoreboard, spawnsystem
+*Added Lobby and Arena support
+*Added Information sign
+
 1.2.1:
 *updated plugin structure
 *updated bukkit version

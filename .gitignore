@@ -1,6 +1,7 @@
 *.class
 .classpath
 .project
+build.xml
 
 # Package Files #
 *.jar
@@ -10,3 +11,4 @@
 # Folders #
 /bin
 /.settings
+/.externalToolBuilders
