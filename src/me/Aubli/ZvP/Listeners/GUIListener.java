@@ -35,16 +35,27 @@ public class GUIListener implements Listener{
 		
 		Player eventPlayer = (Player)event.getWhoClicked();
 		
-		//Super awesome Clickevent future
-		if(event.getRawSlot()==-999) {
-			eventPlayer.closeInventory();
-		}
+	//	Super awesome Clickevent future
+	//	if(event.getRawSlot()==-999) {
+	//		eventPlayer.closeInventory();
+	//	}
+	//	Cool but very dangerous for importent user input	
 	
-		if(event.getWhoClicked().hasPermission("zvp.play")) {
+	//	System.out.println(event.getRawSlot() + " " + event.getSlot() + "; " + event.getInventory().getSize());
+		if(eventPlayer.hasPermission("zvp.play")) {
 			if(event.getCurrentItem()!=null && event.getCurrentItem().getType()!=Material.AIR) {
+				
+				if((event.getRawSlot() != event.getSlot()) || event.getSlot()>=event.getInventory().getSize()) {
+					eventPlayer.sendMessage(MessageManager.getMessage("game:wrong_inventory"));
+					event.setCancelled(true);
+					return;
+				}				
+				
+	//			System.out.println(event.getRawSlot() + " " + event.getSlot() + ": " + event.getCurrentItem().getItemMeta().getDisplayName());
+				
 				if(event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage("inventory:kit_select"))) {				
 					event.setCancelled(true);
-					event.getWhoClicked().closeInventory();
+					eventPlayer.closeInventory();
 					
 					String kitName = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());				
 					ZvPPlayer player = GameManager.getManager().getPlayer(eventPlayer);
@@ -57,7 +68,7 @@ public class GUIListener implements Listener{
 				}
 				if(event.getInventory().getTitle().contains(MessageManager.getMessage("inventory:select_category"))) {					
 					event.setCancelled(true);
-					event.getWhoClicked().closeInventory();
+					eventPlayer.closeInventory();
 					
 					int signID = Integer.parseInt(event.getInventory().getTitle().split("Category ")[1].replace("(", "").replace(")", ""));
 					ItemCategory cat = ItemCategory.getEnum(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()));

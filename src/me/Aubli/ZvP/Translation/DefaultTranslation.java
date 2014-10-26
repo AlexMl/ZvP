@@ -33,6 +33,7 @@ public class DefaultTranslation extends ListResourceBundle{
 		{"game:player_sold_more", ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " sold " + ChatColor.GOLD + "%s %s " + ChatColor.DARK_GRAY + "for " + ChatColor.GOLD + "%s " + ChatColor.DARK_GRAY + "!"},
 		{"game:no_money", ChatColor.RED + "You do not own enough money!"},
 		{"game:no_item_to_sell", ChatColor.RED + "You do not have this item!"},
+		{"game:wrong_inventory", ChatColor.RED + "You clicked the wrong Inventory! Try the top one!"},
 		{"game:not_in_game", ChatColor.RED + "You are not in a game!"},
 		{"game:already_in_game", ChatColor.RED + "You are already in a game!"},
 		{"game:sign_interaction", ChatColor.DARK_PURPLE + "You need a free Hand to interact with this sign!"},
@@ -86,7 +87,6 @@ public class DefaultTranslation extends ListResourceBundle{
 		{"inventory:kit_select", "Select your Kit!"},
 		{"inventory:place_icon", "Place Kit icon here!"},
 		{"inventory:select_category", "Select Category"},		
-		
 	};
 	
 }
