@@ -45,7 +45,15 @@ public class GUIListener implements Listener{
 		if(eventPlayer.hasPermission("zvp.play")) {
 			if(event.getCurrentItem()!=null && event.getCurrentItem().getType()!=Material.AIR) {
 				
-				if((event.getRawSlot() != event.getSlot()) || event.getSlot()>=event.getInventory().getSize()) {
+				boolean onlyTopinventory = false;
+				
+				if(event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage("inventory:kit_select")) ||
+				   event.getInventory().getTitle().contains(MessageManager.getMessage("inventory:select_category")) ||
+				   event.getInventory().getTitle().contains("Items: "))	{
+					onlyTopinventory = true;
+				}				
+				
+				if(((event.getRawSlot() != event.getSlot()) || event.getSlot()>=event.getInventory().getSize()) && onlyTopinventory) {
 					eventPlayer.sendMessage(MessageManager.getMessage("game:wrong_inventory"));
 					event.setCancelled(true);
 					return;
