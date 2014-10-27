@@ -241,7 +241,7 @@ public class ShopManager {
 		item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 10);
 		item.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 3);
 		item.addUnsafeEnchantment(Enchantment.DURABILITY, 5);
-		defaultItems[47] = new ShopItem(item, cat, 25.0);
+		defaultItems[47] = new ShopItem(item, cat, 35.0);
 		
 		//Potions
 		cat = ItemCategory.POTION;
