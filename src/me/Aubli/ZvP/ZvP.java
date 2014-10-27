@@ -204,8 +204,8 @@ public class ZvP extends JavaPlugin{
 	public void loadConfig(){
 		
 		getConfig().options().header("\n" +
-				"This is the main config file for PlayerVsZombies.\n" +
-				"For more items write a coment or a ticket on the bukkit-dev website:\n" +
+				"This is the main config file for ZombieVsPlayer.\n" +
+				"For more informations about this file visit the website:\n" +
 				"http://dev.bukkit.org/bukkit-plugins/zombievsplayer/\n");
 		
 		getConfig().addDefault("plugin.enableMetrics", true);

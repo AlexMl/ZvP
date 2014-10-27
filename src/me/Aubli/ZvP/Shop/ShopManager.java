@@ -111,6 +111,16 @@ public class ShopManager {
 	private void writeDefaults() {
 		
 		try {
+			itemConfig.options().header(
+					"This is the config file used in ZvP to store all items for the ingame Shop.\n\n" +
+					"'id:' The id describes the item material. A list of all items can be found here: http://jd.bukkit.org/dev/apidocs/org/bukkit/Material.html\n" +
+					"'amount:' The amount of the item (Should be 1!)\n" +
+					"'data:' Used by potions\n" + 
+					"'category:' The shop category can be FOOD, MISC, ARMOR, WEAPON, POTION\n" +
+					"'price:' The price of the item\n" + 
+					"'ench: {}' A list of enchantings (ench: {ENCHANTMENT:LEVEL}). A list of enchantments can be found here:\n http://jd.bukkit.org/dev/apidocs/org/bukkit/enchantments/Enchantment.html\n");
+			itemConfig.options().copyHeader(true);
+			
 			itemConfig.set("version", ZvP.getInstance().getDescription().getVersion());
 			itemConfig.save(itemFile);
 		}catch(IOException e) {
