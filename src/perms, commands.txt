@@ -1,17 +1,3 @@
-User Commands:
-zvpstart		zvp.start
-zvpstop 		zvp.stop
-zvpjoin			zvp.join
-zvpsell			zvp.sell
-zvp addkit 		zvp.addkit
-
-Admin Commands:
-zvp setlang			zvp.admin.set.language
-zvp setspawn		zvp.admin.set.spawn
-zvp setspecspawn	zvp.admin.set.spectatorspawn
-
-
-
 zvp.help						Display the help message
 zvp.status						Use status and list command
 
