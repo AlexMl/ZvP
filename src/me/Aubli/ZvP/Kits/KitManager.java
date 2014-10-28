@@ -88,6 +88,16 @@ public class KitManager {
 	
 	
 	public void addKit(String kitName, ItemStack icon, ItemStack[] items) {
+		
+		// splash portion of healing I causes illegal argument exception -> replace it with splash potion of healing II
+		for(ItemStack stack : items) {
+			if(stack.getType()==Material.POTION) {
+				if(stack.getDurability()==16453) { 
+					stack.setDurability((short)16421);
+				}
+			}
+		}		
+		
 		IZvPKit kit = new KCustomKit(kitPath.getAbsolutePath(), kitName, icon, items);
 		kits.add(kit);
 		loadKits();
@@ -99,7 +109,6 @@ public class KitManager {
 	}
 	
 	
-	@SuppressWarnings("deprecation")
 	public void openSelectKitGUI(ZvPPlayer player) {
 		Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int)Math.ceil(((double)getKitAmount()/9.0)))*9, MessageManager.getMessage("inventory:kit_select"));
 
@@ -115,8 +124,8 @@ public class KitManager {
 				lore.add(ChatColor.DARK_GREEN + "" + stack.getAmount() + "x " + stack.getType().toString());
 				
 				if(stack.getType()==Material.POTION) {
-					Potion p = Potion.fromDamage(stack.getDurability());					
-					lore.add(ChatColor.DARK_BLUE + "  -" + p.getType() + " L" + p.getLevel());
+					Potion p = Potion.fromItemStack(stack);					
+					lore.add(ChatColor.DARK_BLUE + "  -" + p.getType() + " L" + p.getLevel());					
 				}			
 				
 				Map<Enchantment, Integer> enchs = stack.getEnchantments();						
