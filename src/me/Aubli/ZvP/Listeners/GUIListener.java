@@ -227,7 +227,9 @@ public class GUIListener implements Listener{
 			
 			if(player!=null) {
 				if(!player.hasKit()) {
-					player.setKit(KitManager.getManager().getKit("No Kit"));
+					player.setCanceled(true);
+					GameManager.getManager().removePlayer(player);
+					//player.setKit(KitManager.getManager().getKit("No Kit"));
 					return;
 				}
 			}

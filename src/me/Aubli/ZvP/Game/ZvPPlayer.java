@@ -32,6 +32,7 @@ public class ZvPPlayer {
 	private Location startPosition;
 	
 	private boolean voted;
+	private boolean canceled;
 	
 	private int zombieKills;
 	private int deaths;
@@ -54,6 +55,7 @@ public class ZvPPlayer {
 		this.lobby = lobby;
 		
 		this.voted = false;
+		this.canceled = false;
 		
 		this.zombieKills = 0;
 		this.deaths = 0;
@@ -168,8 +170,12 @@ public class ZvPPlayer {
 		getPlayer().setScoreboard(getBoard());
 	}
 	
-	public void setVoted(boolean voted) {
-		this.voted = voted;
+	public void setVoted(boolean vote) {
+		this.voted = vote;
+	}
+	
+	public void setCanceled(boolean cancel) {
+		this.canceled = cancel;
 	}
 	
 	
@@ -179,6 +185,10 @@ public class ZvPPlayer {
 	
 	public boolean hasVoted() {
 		return voted;
+	}
+	
+	public boolean hasCanceled() {
+		return canceled;
 	}
 	
 	

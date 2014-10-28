@@ -449,9 +449,9 @@ public class Arena implements Comparable<Arena> {
 	
 	public boolean addPlayer(final ZvPPlayer player){
 			
-		ZvP.getPluginLogger().log(Level.FINER, "[ZvP] Player " + player.getName() + " is added?" + containsPlayer(player.getPlayer()) + ", Kit: " + player.hasKit(), true);
+		ZvP.getPluginLogger().log(Level.FINER, "[ZvP] Player " + player.getName() + " inGame: " + GameManager.getManager().isInGame(player.getPlayer()) + ", hasCanceled: " + player.hasCanceled() + " , Kit: " + player.hasKit(), true);
 			
-		if(!player.hasKit()) {
+		if(!player.hasKit() && !player.hasCanceled()) {
 			
 			if(!containsPlayer(player.getPlayer())) {
 				players.add(player);
@@ -470,7 +470,7 @@ public class Arena implements Comparable<Arena> {
 			players.remove(player);		
 		}		
 		
-		if(!players.contains(player)){			
+		if(!players.contains(player) && !player.hasCanceled()){
 			try{
 				player.setStartPosition(getNewRandomLocation()); 
 				player.getReady();
