@@ -223,16 +223,25 @@ public class GUIListener implements Listener{
 		}
 		
 		if(event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage("inventory:kit_select"))) {
-			ZvPPlayer player = GameManager.getManager().getPlayer(eventPlayer);
+			final Player player = eventPlayer;
 			
-			if(player!=null) {
-				if(!player.hasKit()) {
-					player.setCanceled(true);
-					GameManager.getManager().removePlayer(player);
-					//player.setKit(KitManager.getManager().getKit("No Kit"));
-					return;
+			Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
+				
+				@Override
+				public void run() {
+					if(player!=null) {
+						ZvPPlayer zvpp = GameManager.getManager().getPlayer(eventPlayer);
+						
+						if(zvpp!=null) {						
+							if(!zvpp.hasKit()) {
+								zvpp.setCanceled(true);
+								GameManager.getManager().removePlayer(zvpp);								
+								return;
+							}
+						}
+					}
 				}
-			}
+			}, 1L);
 		}
 		
 		if(event.getInventory().getTitle().equals(MessageManager.getMessage("inventory:place_icon"))){
