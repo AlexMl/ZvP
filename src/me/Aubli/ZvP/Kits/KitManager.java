@@ -91,9 +91,11 @@ public class KitManager {
 		
 		// splash portion of healing I causes illegal argument exception -> replace it with splash potion of healing II
 		for(ItemStack stack : items) {
-			if(stack.getType()==Material.POTION) {
-				if(stack.getDurability()==16453) { 
-					stack.setDurability((short)16421);
+			if(stack!=null && stack.getType()!=Material.AIR) {
+				if(stack.getType()==Material.POTION) {
+					if(stack.getDurability()==16453) { 
+						stack.setDurability((short)16421);
+					}
 				}
 			}
 		}		
