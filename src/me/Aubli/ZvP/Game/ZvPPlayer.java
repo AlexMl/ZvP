@@ -236,7 +236,7 @@ public class ZvPPlayer {
 			obj.setDisplayName(ChatColor.GREEN + "Arena: " + ChatColor.GOLD + getArena().getID());
 			obj.setDisplaySlot(DisplaySlot.SIDEBAR);		
 			
-			obj.getScore(Bukkit.getOfflinePlayer("")).setScore(15);
+			obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RESET + " ")).setScore(15);
 			obj.getScore(Bukkit.getOfflinePlayer(ChatColor.BLUE + "Players: " + ChatColor.RED + getArena().getPlayers().length)).setScore(14);
 			obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GRAY + "R: " + ChatColor.AQUA + getArena().getRound() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getMaxRounds())).setScore(13);
 			obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GRAY + "W: " + ChatColor.AQUA + getArena().getWave() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getMaxWaves())).setScore(12);
