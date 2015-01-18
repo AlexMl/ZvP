@@ -91,6 +91,10 @@ public class PlayerInteractListener implements Listener {
 					eventPlayer.sendMessage(MessageManager.getMessage("arena:offline"));
 					return;
 				    }
+				} else {
+				    event.setCancelled(true);
+				    eventPlayer.sendMessage(MessageManager.getMessage("error:arena_not_available"));
+				    return;
 				}
 			    } else {
 				event.setCancelled(true);
