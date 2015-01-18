@@ -8,20 +8,21 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-public class PlayerRespawnListener implements Listener{
+
+public class PlayerRespawnListener implements Listener {
+    
+    private GameManager game = GameManager.getManager();
+    
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
 	
-	private GameManager game = GameManager.getManager();
+	Player eventPlayer = event.getPlayer();
 	
-	@EventHandler
-	public void onPlayerRespawn(PlayerRespawnEvent event){
-		
-		Player eventPlayer = event.getPlayer();
-	
-		if(game.isInGame(eventPlayer)) {
-			ZvPPlayer player = game.getPlayer(eventPlayer);
-			
-			event.setRespawnLocation(player.getArena().getNewRandomLocation());
-			return;
-		}
+	if (this.game.isInGame(eventPlayer)) {
+	    ZvPPlayer player = this.game.getPlayer(eventPlayer);
+	    
+	    event.setRespawnLocation(player.getArena().getNewRandomLocation());
+	    return;
 	}
+    }
 }

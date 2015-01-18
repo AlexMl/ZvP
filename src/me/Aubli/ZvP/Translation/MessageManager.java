@@ -14,104 +14,99 @@ import me.Aubli.ZvP.ZvP;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+
 public class MessageManager {
-
-	private static Locale loc;
+    
+    private static Locale loc;
+    
+    private File languageFile;
+    private FileConfiguration conf;
+    
+    private static Map<String, String> messages;
+    
+    public MessageManager(Locale locale) {
 	
-	private File languageFile;
-	private FileConfiguration conf;
+	this.languageFile = new File(ZvP.getInstance().getDataFolder().getPath() + "/Messages/" + locale.toString() + ".yml");
+	this.conf = YamlConfiguration.loadConfiguration(this.languageFile);
 	
-	private static Map<String, String> messages;	
+	loc = locale;
 	
-	public MessageManager(Locale locale){
-
-		this.languageFile = new File(ZvP.getInstance().getDataFolder().getPath() + "/Messages/" + locale.toString() + ".yml");	
-		this.conf = YamlConfiguration.loadConfiguration(languageFile);
-		
-		loc = locale;
-		
-		if(!languageFile.exists() || isOutdated()) {
-			try {
-				ZvP.getPluginLogger().log("[" + ZvP.getInstance().getName() + "] Creating new message File for Locale " + getLocale().toString() + "!");
-				languageFile.getParentFile().mkdirs();
-				languageFile.createNewFile();
-				writeDefaults();
-			}catch(IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		messages = getTranslation();		
+	if (!this.languageFile.exists() || isOutdated()) {
+	    try {
+		ZvP.getPluginLogger().log("[" + ZvP.getInstance().getName() + "] Creating new message File for Locale " + getLocale().toString() + "!");
+		this.languageFile.getParentFile().mkdirs();
+		this.languageFile.createNewFile();
+		writeDefaults();
+	    } catch (IOException e) {
+		e.printStackTrace();
+	    }
 	}
 	
-	private boolean isOutdated() {
-		return !ZvP.getInstance().getDescription().getVersion().equals(getConfig().getString("Version"));
-	}	
+	messages = getTranslation();
+    }
+    
+    private boolean isOutdated() {
+	return !ZvP.getInstance().getDescription().getVersion().equals(getConfig().getString("Version"));
+    }
+    
+    private void writeDefaults() {
+	getConfig().options().header("This file contains all Text messages used in ZvP.\n" + "A guide for translation can be found here: http://dev.bukkit.org/bukkit-plugins/zombievsplayer/pages/language-setup/\n");
+	getConfig().options().copyHeader(true);
 	
-	private void writeDefaults(){
-		getConfig().options().header(
-				"This file contains all Text messages used in ZvP.\n" +
-				"A guide for translation can be found here: http://dev.bukkit.org/bukkit-plugins/zombievsplayer/pages/language-setup/\n");
-		getConfig().options().copyHeader(true);
-		
-		getConfig().set("Version", ZvP.getInstance().getDescription().getVersion());
-		save();
-		
-		ResourceBundle bundle = ResourceBundle.getBundle("me.Aubli.ZvP.Translation.DefaultTranslation");
-		
-		SortedMap<String, String> sortedBundle = new TreeMap<String, String>();
-		
-		for(String key : bundle.keySet()) {
-			sortedBundle.put(key, bundle.getString(key));
-		}
-		
-		for(String key : sortedBundle.keySet()) {
-			getConfig().addDefault("messages." + key, sortedBundle.get(key));
-		}
-		getConfig().options().copyDefaults(true);
-		save();
-	}	
+	getConfig().set("Version", ZvP.getInstance().getDescription().getVersion());
+	save();
 	
-	private Map<String, String> getTranslation(){
-		
-		Map<String, String> translation = new HashMap<String, String>();
-		ResourceBundle defaultBundle = ResourceBundle.getBundle("me.Aubli.ZvP.Translation.DefaultTranslation");
-		
-		for(String key : defaultBundle.keySet()) {
-			translation.put(key, getConfig().getString("messages." + key));
-		}
-		
-		return translation;
+	ResourceBundle bundle = ResourceBundle.getBundle("me.Aubli.ZvP.Translation.DefaultTranslation");
+	
+	SortedMap<String, String> sortedBundle = new TreeMap<String, String>();
+	
+	for (String key : bundle.keySet()) {
+	    sortedBundle.put(key, bundle.getString(key));
 	}
 	
-	private FileConfiguration getConfig() {		
-		return this.conf;
+	for (String key : sortedBundle.keySet()) {
+	    getConfig().addDefault("messages." + key, sortedBundle.get(key));
+	}
+	getConfig().options().copyDefaults(true);
+	save();
+    }
+    
+    private Map<String, String> getTranslation() {
+	
+	Map<String, String> translation = new HashMap<String, String>();
+	ResourceBundle defaultBundle = ResourceBundle.getBundle("me.Aubli.ZvP.Translation.DefaultTranslation");
+	
+	for (String key : defaultBundle.keySet()) {
+	    translation.put(key, getConfig().getString("messages." + key));
 	}
 	
-	
-	private void save() {
-		try {
-			getConfig().save(languageFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	return translation;
+    }
+    
+    private FileConfiguration getConfig() {
+	return this.conf;
+    }
+    
+    private void save() {
+	try {
+	    getConfig().save(this.languageFile);
+	} catch (IOException e) {
+	    e.printStackTrace();
 	}
-	
-	
-	public static String getMessage(String messageKey) {
-		for(String Key : messages.keySet()) {
-			
-			if(Key.equals(messageKey)) {
-				return messages.get(Key);
-			}			
-		}
-		return "";
+    }
+    
+    public static String getMessage(String messageKey) {
+	for (String Key : messages.keySet()) {
+	    
+	    if (Key.equals(messageKey)) {
+		return messages.get(Key);
+	    }
 	}
-	
-	
-	public static Locale getLocale() {
-		return loc;
-	}
-	
-	
+	return "";
+    }
+    
+    public static Locale getLocale() {
+	return loc;
+    }
+    
 }
