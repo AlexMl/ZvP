@@ -7,15 +7,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class PlayerQuitListener implements Listener{
+
+public class PlayerQuitListener implements Listener {
+    
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+	Player eventPlayer = event.getPlayer();
 	
-	@EventHandler
-	public void onPlayerQuit(PlayerQuitEvent event){
-		Player eventPlayer = event.getPlayer();
-		
-		if(GameManager.getManager().isInGame(eventPlayer)) {
-			GameManager.getManager().removePlayer(GameManager.getManager().getPlayer(eventPlayer));			
-			return;
-		}
+	if (GameManager.getManager().isInGame(eventPlayer)) {
+	    GameManager.getManager().removePlayer(GameManager.getManager().getPlayer(eventPlayer));
+	    return;
 	}
+    }
 }

@@ -13,52 +13,53 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class DeathListener implements Listener{
+
+public class DeathListener implements Listener {
+    
+    private Player eventPlayer;
+    private GameManager game = GameManager.getManager();
+    
+    @EventHandler
+    public void onEntityDeath(EntityDeathEvent event) {
 	
-	private Player eventPlayer;
-	private GameManager game = GameManager.getManager();
-	
-	@EventHandler
-	public void onEntityDeath(EntityDeathEvent event){	
+	if (event.getEntity().getKiller() != null) {
+	    
+	    this.eventPlayer = event.getEntity().getKiller();
+	    
+	    if (this.game.isInGame(this.eventPlayer)) {
+		event.setDroppedExp(0);
+		final ZvPPlayer player = this.game.getPlayer(this.eventPlayer);
 		
-		if(event.getEntity().getKiller()!=null) {
+		if (event.getEntity() instanceof Zombie) {
+		    event.getEntity().remove();
+		    
+		    Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
 			
-			eventPlayer = event.getEntity().getKiller();
-			
-			if(game.isInGame(eventPlayer)) {
-				event.setDroppedExp(0);
-				final ZvPPlayer player = game.getPlayer(eventPlayer);
-				
-				if(event.getEntity() instanceof Zombie) {					
-					event.getEntity().remove();
-						
-					Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
-						
-						@Override
-						public void run() {
-							player.addKill();
-						}
-					}, 5L);
-						
-					return;
-				}
+			@Override
+			public void run() {
+			    player.addKill();
 			}
+		    }, 5L);
+		    
+		    return;
 		}
+	    }
 	}
+    }
+    
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
 	
-	@EventHandler
-	public void onPlayerDeath(PlayerDeathEvent event){
-		
-		eventPlayer = event.getEntity();
-		
-		if(game.isInGame(eventPlayer)) {
-			ZvPPlayer player = game.getPlayer(eventPlayer);
-			
-			player.die();
-			
-			event.setDeathMessage("");
-			player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_died"), player.getName()));
-			return;
-		}
+	this.eventPlayer = event.getEntity();
+	
+	if (this.game.isInGame(this.eventPlayer)) {
+	    ZvPPlayer player = this.game.getPlayer(this.eventPlayer);
+	    
+	    player.die();
+	    
+	    event.setDeathMessage("");
+	    player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_died"), player.getName()));
+	    return;
 	}
+    }
 }
