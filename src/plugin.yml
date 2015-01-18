@@ -3,6 +3,8 @@ version: 2.0.4
 description: Zombie versus Player Minigame
 website: http://dev.bukkit.org/bukkit-plugins/zombievsplayer/
 author: Aubli
+load: POSTWORLD
+softdepend: [Multiverse-Core]
 main: me.Aubli.ZvP.ZvP
 
 commands:     
