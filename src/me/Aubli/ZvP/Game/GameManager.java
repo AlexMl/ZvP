@@ -60,7 +60,7 @@ public class GameManager {
 	
 	this.boardman = Bukkit.getScoreboardManager();
 	
-	loadConfig();
+	loadConfig(true);
     }
     
     public static GameManager getManager() {
@@ -74,11 +74,21 @@ public class GameManager {
     
     public void reloadConfig() {
 	stopGames();
-	loadConfig();
+	loadConfig(false);
     }
     
     // Config
-    private void loadConfig() {
+    private void loadConfig(boolean delay) {
+	
+	if (delay) {
+	    Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
+		
+		@Override
+		public void run() {
+		    reloadConfig();
+		}
+	    }, 3 * 20L);
+	}
 	
 	if (!new File(this.arenaPath).exists() || !new File(this.lobbyPath).exists()) {
 	    new File(this.arenaPath).mkdirs();
@@ -88,22 +98,22 @@ public class GameManager {
 	this.lobbys = new ArrayList<Lobby>();
 	this.arenas = new ArrayList<Arena>();
 	
-	loadArenas();
-	loadLobbys();
-	
 	ZvP.getInstance().reloadConfig();
 	ZvP.getInstance().loadConfig();
-	new MessageManager(ZvP.getLocale());
-	new ShopManager();
+	
+	loadArenas();
+	loadLobbys();
 	
 	if (SignManager.getManager() != null) {
 	    SignManager.getManager().reloadConfig();
 	}
 	
+	new MessageManager(ZvP.getLocale());
+	new ShopManager();
+	
 	if (KitManager.getManager() != null) {
 	    KitManager.getManager().loadKits();
 	}
-	
     }
     
     public void saveConfig() {
@@ -117,8 +127,8 @@ public class GameManager {
     
     // Load and save
     private void loadArenas() {
-	for (int i = 0; i < new File(this.arenaPath).listFiles().length; i++) {
-	    Arena arena = new Arena(new File(this.arenaPath).listFiles()[i]);
+	for (File arenaFile : new File(this.arenaPath).listFiles()) {
+	    Arena arena = new Arena(arenaFile);
 	    
 	    if (arena.getWorld() != null) {
 		this.arenas.add(arena);
@@ -127,8 +137,8 @@ public class GameManager {
     }
     
     private void loadLobbys() {
-	for (int i = 0; i < new File(this.lobbyPath).listFiles().length; i++) {
-	    Lobby lobby = new Lobby(new File(this.lobbyPath).listFiles()[i]);
+	for (File lobbyFile : new File(this.lobbyPath).listFiles()) {
+	    Lobby lobby = new Lobby(lobbyFile);
 	    
 	    if (lobby.getWorld() != null) {
 		this.lobbys.add(lobby);
