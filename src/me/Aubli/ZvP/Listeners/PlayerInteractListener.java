@@ -77,18 +77,20 @@ public class PlayerInteractListener implements Listener {
 			if (eventPlayer.hasPermission("zvp.play")) {
 			    if (eventPlayer.getInventory().getItemInHand().getType() == Material.AIR) {
 				InteractSign sign = (InteractSign) this.sm.getSign(event.getClickedBlock().getLocation());
-				if (sign.getArena().isOnline()) {
-				    boolean success = GameManager.getManager().createPlayer(eventPlayer, sign.getArena(), sign.getLobby());
-				    
-				    if (!success) {
+				if (sign.getArena() != null) {
+				    if (sign.getArena().isOnline()) {
+					boolean success = GameManager.getManager().createPlayer(eventPlayer, sign.getArena(), sign.getLobby());
+					
+					if (!success) {
+					    event.setCancelled(true);
+					    eventPlayer.sendMessage(MessageManager.getMessage("arena:not_ready"));
+					    return;
+					}
+				    } else {
 					event.setCancelled(true);
-					eventPlayer.sendMessage(MessageManager.getMessage("arena:not_ready"));
+					eventPlayer.sendMessage(MessageManager.getMessage("arena:offline"));
 					return;
 				    }
-				} else {
-				    event.setCancelled(true);
-				    eventPlayer.sendMessage(MessageManager.getMessage("arena:offline"));
-				    return;
 				}
 			    } else {
 				event.setCancelled(true);
