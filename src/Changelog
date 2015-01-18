@@ -1,5 +1,8 @@
 Changelog:
 
+2.0.5:
+*Fixed bug in multi world support where the world is loaded after the plugin.
+
 2.0.4:
 *Updated PluginLogger
 
