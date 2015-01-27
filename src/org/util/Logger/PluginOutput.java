@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 
 public class PluginOutput {
@@ -20,7 +20,7 @@ public class PluginOutput {
     private boolean debugMode;
     private int loglevel;
     
-    public PluginOutput(Plugin plugin, boolean enableDebug, int minLevel) {
+    public PluginOutput(JavaPlugin plugin, boolean enableDebug, int minLevel) {
 	
 	this.log = plugin.getLogger();
 	
@@ -42,17 +42,27 @@ public class PluginOutput {
 	return this.debugMode;
     }
     
-    public void log(String message) {
-	log(Level.INFO, message, false);
+    public void log(String message, boolean logMessage) {
+	log(Level.INFO, message, logMessage, false);
     }
     
     public void log(Level level, String message, boolean debugMessage) {
-	log(level, message, debugMessage, null);
+	log(level, message, true, debugMessage, null);
     }
     
-    public void log(Level level, String message, boolean debugMessage, Exception e) {
+    public void log(Level level, String message, boolean logMessage, boolean debugMessage) {
+	log(level, message, logMessage, debugMessage, null);
+    }
+    
+    public void log(Level level, String message, boolean logMessage, boolean debugMessage, Exception e) {
 	
-	logData(level, message, e);
+	if (logMessage) {
+	    logData(level, message, e);
+	}
+	
+	if (e != null) {
+	    this.log.log(Level.WARNING, message, e);
+	}
 	
 	if (!debugMessage) {
 	    if (level.intValue() >= Level.INFO.intValue()) {
