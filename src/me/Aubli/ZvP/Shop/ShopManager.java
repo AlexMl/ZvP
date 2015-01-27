@@ -81,20 +81,20 @@ public class ShopManager {
 		writeDefaults();
 		this.itemConfig = YamlConfiguration.loadConfiguration(this.itemFile);
 	    } catch (IOException e) {
-		e.printStackTrace();
+		ZvP.getPluginLogger().log(Level.WARNING, "Error while saving item config: " + e.getMessage(), true, false, e);
 	    }
 	}
 	
 	if (isOutdated()) {
 	    try {
-		ZvP.getPluginLogger().log("[" + ZvP.getInstance().getName() + "] Found outdated item file! Renaming it!");
+		ZvP.getPluginLogger().log("Found outdated item file! Renaming it!", true);
 		this.itemFile.renameTo(new File(this.itemFile.getParentFile().getPath() + "/items-" + this.itemConfig.getString("version") + ".yml"));
 		this.itemFile.delete();
 		this.itemFile.createNewFile();
 		writeDefaults();
 		this.itemConfig = YamlConfiguration.loadConfiguration(this.itemFile);
 	    } catch (IOException e) {
-		e.printStackTrace();
+		ZvP.getPluginLogger().log(Level.WARNING, "Error while saving item config: " + e.getMessage(), true, false, e);
 	    }
 	}
 	
@@ -114,7 +114,7 @@ public class ShopManager {
 	    this.itemConfig.set("version", ZvP.getInstance().getDescription().getVersion());
 	    this.itemConfig.save(this.itemFile);
 	} catch (IOException e) {
-	    e.printStackTrace();
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving item config: " + e.getMessage(), true, false, e);
 	}
 	
 	ShopItem[] defaultItems = new ShopItem[53];
@@ -261,8 +261,7 @@ public class ShopManager {
 	try {
 	    return ItemStorage.getShopItemsFromFile(this.itemConfig.getList("items"));
 	} catch (Exception e) {
-	    ZvP.getPluginLogger().log("Error while loading Item from shop configuration!\nError: " + e.getMessage() + " in File " + this.itemFile.getPath());
-	    ZvP.getPluginLogger().log(Level.WARNING, "Error while loading Item from shop configuration!\nError: " + e.getMessage() + " in File " + this.itemFile.getPath(), true, e);
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while loading Item from shop configuration!\nError: " + e.getMessage() + " in File " + this.itemFile.getPath(), true, false, e);
 	}
 	return null;
     }

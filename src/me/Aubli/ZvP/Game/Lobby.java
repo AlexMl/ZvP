@@ -3,6 +3,9 @@ package me.Aubli.ZvP.Game;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.logging.Level;
+
+import me.Aubli.ZvP.ZvP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -33,7 +36,7 @@ public class Lobby implements Comparable<Lobby> {
 	    this.lobbyFile.createNewFile();
 	    save();
 	} catch (IOException e) {
-	    e.printStackTrace();
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Lobby config: " + e.getMessage(), true, false, e);
 	}
     }
     

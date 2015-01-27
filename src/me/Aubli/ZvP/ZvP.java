@@ -34,15 +34,6 @@ import org.util.Logger.PluginOutput;
 import org.util.Metrics.Metrics;
 
 
-/* ZvP TODO:
- *
- * 	- Some Translations in GameRunnable		+
- *  - Status commands						+
- *  - plugin.yml commands					+
- *  - Add some colors						+
- *  - add kit management
- */
-
 public class ZvP extends JavaPlugin {
     
     private static PluginOutput logger;
@@ -77,14 +68,14 @@ public class ZvP extends JavaPlugin {
 	}
 	GameManager.getManager().shutdown();
 	
-	logger.log(String.format("[%s] Plugin is disabled!", getDescription().getName()));
+	logger.log("Plugin is disabled!", false);
     }
     
     @Override
     public void onEnable() {
 	initialize();
 	
-	logger.log(String.format("[%s] Plugin is enabled!", getDescription().getName()));
+	logger.log("Plugin is enabled!", false);
     }
     
     private void initialize() {
@@ -110,7 +101,7 @@ public class ZvP extends JavaPlugin {
 		Metrics metrics = new Metrics(this);
 		metrics.start();
 	    } catch (IOException e) {
-		logger.log(String.format("[%s] Can't start Metrics! Skip!", getDescription().getName()));
+		logger.log(Level.WARNING, "Can't start Metrics! Skip!", true, false, e);
 	    }
 	}
     }

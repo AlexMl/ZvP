@@ -3,6 +3,7 @@ package me.Aubli.ZvP.Sign;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.Arena;
@@ -63,14 +64,14 @@ public class SignManager {
 			this.signs.add(info);
 		    }
 		    break;
-		    
+		
 		case INTERACT_SIGN:
 		    InteractSign inter = new InteractSign(f);
 		    if (inter.getWorld() != null) {
 			this.signs.add(inter);
 		    }
 		    break;
-		    
+		
 		case SHOP_SIGN:
 		    ShopSign shop = new ShopSign(f);
 		    if (shop.getWorld() != null) {
@@ -137,7 +138,7 @@ public class SignManager {
 	    
 	    try {
 		switch (type) {
-		    
+		
 		    case INFO_SIGN:
 			ISign info = new InfoSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby);
 			this.signs.add(info);
@@ -158,7 +159,7 @@ public class SignManager {
 		}
 		
 	    } catch (Exception e) {
-		e.printStackTrace();
+		ZvP.getPluginLogger().log(Level.WARNING, "Error while creating new " + type.toString() + ": " + e.getMessage(), true, false, e);
 		return false;
 	    }
 	}

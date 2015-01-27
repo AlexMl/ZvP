@@ -96,7 +96,7 @@ public class Arena implements Comparable<Arena> {
 	    this.arenaFile.createNewFile();
 	    save();
 	} catch (IOException e) {
-	    e.printStackTrace();
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena " + getID() + ": " + e.getMessage(), true, false, e);
 	}
     }
     
@@ -460,7 +460,7 @@ public class Arena implements Comparable<Arena> {
 		player.setStartPosition(getNewRandomLocation());
 		player.getReady();
 	    } catch (Exception e) {
-		e.printStackTrace();
+		ZvP.getPluginLogger().log(Level.INFO, e.getMessage(), true, false, e);
 		addPlayer(player);
 		return false;
 	    }

@@ -121,7 +121,7 @@ public class GameManager {
 	    saveArenas();
 	    saveLobbys();
 	} catch (IOException e) {
-	    e.printStackTrace();
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena: " + e.getMessage(), true, false, e);
 	}
     }
     
@@ -323,7 +323,7 @@ public class GameManager {
 		SignManager.getManager().updateSigns(arena);
 		return true;
 	    } catch (Exception e) {
-		e.printStackTrace();
+		ZvP.getPluginLogger().log(Level.WARNING, "Error while creating Player: " + e.getMessage(), true, false, e);
 		return false;
 	    }
 	} else {

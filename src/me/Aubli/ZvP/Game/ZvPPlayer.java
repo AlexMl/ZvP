@@ -157,7 +157,7 @@ public class ZvPPlayer {
 	if (position != null) {
 	    this.startPosition = position.clone();
 	} else {
-	    throw new Exception("Startlocation is null!");
+	    throw new Exception("start location is null!");
 	}
     }
     

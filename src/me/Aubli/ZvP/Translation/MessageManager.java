@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 
@@ -33,12 +34,12 @@ public class MessageManager {
 	
 	if (!this.languageFile.exists() || isOutdated()) {
 	    try {
-		ZvP.getPluginLogger().log("[" + ZvP.getInstance().getName() + "] Creating new message File for Locale " + getLocale().toString() + "!");
+		ZvP.getPluginLogger().log("Creating new message File for Locale " + getLocale().toString() + "!", true);
 		this.languageFile.getParentFile().mkdirs();
 		this.languageFile.createNewFile();
 		writeDefaults();
 	    } catch (IOException e) {
-		e.printStackTrace();
+		ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Message file: " + e.getMessage(), true, false, e);
 	    }
 	}
 	
@@ -91,7 +92,7 @@ public class MessageManager {
 	try {
 	    getConfig().save(this.languageFile);
 	} catch (IOException e) {
-	    e.printStackTrace();
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Message file: " + e.getMessage(), true, false, e);
 	}
     }
     

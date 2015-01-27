@@ -42,7 +42,7 @@ public class KCustomKit implements IZvPKit, Comparable<IZvPKit> {
 	    kitConfig.load(this.kitFile);
 	    kitConfig.save(this.kitFile);
 	} catch (Exception e) {
-	    e.printStackTrace();
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Kit file: " + e.getMessage(), true, false, e);
 	}
     }
     
@@ -60,8 +60,7 @@ public class KCustomKit implements IZvPKit, Comparable<IZvPKit> {
 	try {
 	    return ItemStorage.getItemsFromFile(itemList);
 	} catch (Exception e) {
-	    ZvP.getPluginLogger().log("[ZvP] Error while loading Custom Kit: " + getName() + "  Error: " + e.getMessage() + " in File " + this.kitFile.getPath());
-	    ZvP.getPluginLogger().log(Level.WARNING, "Error while loading Custom Kit: " + getName() + "  Error: " + e.getMessage() + " in File " + this.kitFile.getPath(), true, e);
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while loading Custom Kit: " + getName() + "  Error: " + e.getMessage() + " in File " + this.kitFile.getPath(), true, false, e);
 	}
 	return null;
     }
