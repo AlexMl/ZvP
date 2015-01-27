@@ -85,7 +85,7 @@ public class ZvPCommands implements CommandExecutor {
 	Player playerSender = (Player) sender;
 	
 	if (cmd.getName().equalsIgnoreCase("test") && playerSender.isOp() && ZvP.getPluginLogger().isDebugMode()) {	// Test command
-	    
+	
 	    if (args.length == 1) {
 		if (args[0].equalsIgnoreCase("u")) {
 		    SignManager.getManager().updateSigns();
@@ -129,7 +129,7 @@ public class ZvPCommands implements CommandExecutor {
 		arguments += " " + arg;
 	    }
 	    
-	    ZvP.getPluginLogger().log(Level.INFO, "[ZvP] Player " + playerSender.getName() + " attempts to execute Command: " + cmd.getName() + arguments, true);
+	    ZvP.getPluginLogger().log(Level.INFO, "Player " + playerSender.getName() + " attempts to execute Command: " + cmd.getName() + arguments, true);
 	    
 	    if (args.length == 0) {
 		printCommands(playerSender);

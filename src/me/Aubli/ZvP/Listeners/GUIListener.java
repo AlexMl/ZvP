@@ -69,7 +69,7 @@ public class GUIListener implements Listener {
 		    
 		    if (KitManager.getManager().getKit(kitName) != null && player != null) {
 			player.setKit(KitManager.getManager().getKit(kitName));
-			ZvP.getPluginLogger().log(Level.INFO, "[ZvP] " + player.getName() + " took the " + player.getKit().getName() + " Kit", true);
+			ZvP.getPluginLogger().log(Level.INFO, player.getName() + " took the " + player.getKit().getName() + " Kit", true);
 			return;
 		    }
 		}
@@ -107,7 +107,7 @@ public class GUIListener implements Listener {
 		    if (item != null && player != null && GameManager.getManager().isInGame(player.getPlayer())) {
 			
 			switch (event.getClick()) {
-			
+			    
 			    case LEFT: // Buy
 				if (player.getArena().getBalance() >= item.getPrice()) {
 				    
@@ -122,7 +122,7 @@ public class GUIListener implements Listener {
 				    player.sendMessage(MessageManager.getMessage("game:no_money"));
 				}
 				break;
-			    
+				
 			    case SHIFT_LEFT: // Buy all
 				if (player.getArena().getBalance() >= item.getPrice()) {
 				    
@@ -139,7 +139,7 @@ public class GUIListener implements Listener {
 				    player.sendMessage(MessageManager.getMessage("game:no_money"));
 				}
 				break;
-			    
+				
 			    case RIGHT: // Sell
 				
 				ItemStack stack = new ItemStack(item.getItem().getType());
@@ -155,7 +155,7 @@ public class GUIListener implements Listener {
 				}
 				
 				break;
-			    
+				
 			    case SHIFT_RIGHT: // sell all
 				
 				ItemStack stack1 = new ItemStack(item.getItem().getType());

@@ -429,12 +429,12 @@ public class Arena implements Comparable<Arena> {
 	for (ZvPPlayer p : getPlayers()) {
 	    p.sendMessage(message);
 	}
-	ZvP.getPluginLogger().log(Level.FINEST, "[ZvP-Message] " + ChatColor.stripColor(message), true);
+	ZvP.getPluginLogger().log(Level.FINEST, "[Message] " + ChatColor.stripColor(message), true);
     }
     
     public boolean addPlayer(final ZvPPlayer player) {
 	
-	ZvP.getPluginLogger().log(Level.FINER, "[ZvP] Player " + player.getName() + " inGame: " + GameManager.getManager().isInGame(player.getPlayer()) + ", hasCanceled: " + player.hasCanceled() + " , Kit: " + player.hasKit(), true);
+	ZvP.getPluginLogger().log(Level.FINER, "Player " + player.getName() + " inGame: " + GameManager.getManager().isInGame(player.getPlayer()) + ", hasCanceled: " + player.hasCanceled() + " , Kit: " + player.hasKit(), true);
 	
 	if (!player.hasKit() && !player.hasCanceled()) {
 	    
@@ -469,7 +469,7 @@ public class Arena implements Comparable<Arena> {
 	    player.sendMessage(String.format(MessageManager.getMessage("game:joined"), getID()));
 	    this.players.add(player);
 	    
-	    ZvP.getPluginLogger().log(Level.INFO, "[ZvP] Player " + player.getName() + " has joined Arena " + getID(), true);
+	    ZvP.getPluginLogger().log(Level.INFO, "Player " + player.getName() + " has joined Arena " + getID(), true);
 	    
 	    if (this.players.size() >= this.minPlayers && !isRunning()) {
 		
@@ -582,7 +582,7 @@ public class Arena implements Comparable<Arena> {
 	clearArena();
 	
 	this.TaskId = new GameRunnable(this, ZvP.getStartDelay(), getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
-	ZvP.getPluginLogger().log(Level.INFO, "[ZvP] Arena " + getID() + " started a new Task!", true);
+	ZvP.getPluginLogger().log(Level.INFO, "Arena " + getID() + " started a new Task!", true);
     }
     
     public void stop() {
@@ -601,7 +601,7 @@ public class Arena implements Comparable<Arena> {
 	clearArena();
 	setStatus(ArenaStatus.STANDBY);
 	Bukkit.getScheduler().cancelTask(getTaskId());
-	ZvP.getPluginLogger().log(Level.INFO, "[ZvP] Arena " + getID() + " stoped!", true);
+	ZvP.getPluginLogger().log(Level.INFO, "Arena " + getID() + " stoped!", true);
     }
     
     public boolean next() {
@@ -612,11 +612,11 @@ public class Arena implements Comparable<Arena> {
 	    }
 	    setRound(getRound() + 1);
 	    setWave(1);
-	    ZvP.getPluginLogger().log(Level.FINE, "[ZvP] Arena " + getID() + " from R:" + (getRound() - 1) + "W:" + getMaxWaves() + " to R:" + getRound() + "W:1", true);
+	    ZvP.getPluginLogger().log(Level.FINE, "Arena " + getID() + " from R:" + (getRound() - 1) + "W:" + getMaxWaves() + " to R:" + getRound() + "W:1", true);
 	    return false;
 	}
 	setWave(getWave() + 1);
-	ZvP.getPluginLogger().log(Level.FINE, "[ZvP] Arena " + getID() + " from R:" + getRound() + "W:" + (getWave() - 1) + " to R:" + getRound() + "W:" + getWave(), true);
+	ZvP.getPluginLogger().log(Level.FINE, "Arena " + getID() + " from R:" + getRound() + "W:" + (getWave() - 1) + " to R:" + getRound() + "W:" + getWave(), true);
 	return false;
     }
     

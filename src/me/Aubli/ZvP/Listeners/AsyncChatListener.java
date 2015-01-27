@@ -34,7 +34,7 @@ public class AsyncChatListener implements Listener {
 			player.setVoted(true);
 			player.sendMessage(MessageManager.getMessage("game:voted_next_round"));
 			
-			ZvP.getPluginLogger().log(Level.FINE, "[ZvP] Player " + player.getName() + " voted in arena " + player.getArena().getID(), true);
+			ZvP.getPluginLogger().log(Level.FINE, "Player " + player.getName() + " voted in arena " + player.getArena().getID(), true);
 			
 			Arena a = player.getArena();
 			a.updatePlayerBoards();

@@ -289,7 +289,7 @@ public class GameManager {
 	    Arena a = new Arena(getNewID(this.arenaPath), mP, this.arenaPath, min.clone(), max.clone(), ZvP.getDefaultRounds(), ZvP.getDefaultWaves(), ZvP.getDefaultSpawnRate(), ZvP.getDefaultDistance());
 	    this.arenas.add(a);
 	    
-	    ZvP.getPluginLogger().log(Level.INFO, "[ZvP] New Arena added!", true);
+	    ZvP.getPluginLogger().log(Level.INFO, "New Arena added!", true);
 	    return true;
 	}
 	return false;
@@ -298,17 +298,17 @@ public class GameManager {
     public void addLobby(Location loc) {
 	Lobby l = new Lobby(getNewID(this.lobbyPath), this.lobbyPath, loc.clone());
 	this.lobbys.add(l);
-	ZvP.getPluginLogger().log(Level.INFO, "[ZvP] New Lobby added!", true);
+	ZvP.getPluginLogger().log(Level.INFO, "New Lobby added!", true);
     }
     
     public void removeArena(Arena arena) {
-	ZvP.getPluginLogger().log(Level.INFO, "[ZvP] Arena " + arena.getID() + " removed!", true);
+	ZvP.getPluginLogger().log(Level.INFO, "Arena " + arena.getID() + " removed!", true);
 	this.arenas.remove(arena);
 	arena.delete();
     }
     
     public void removeLobby(Lobby lobby) {
-	ZvP.getPluginLogger().log(Level.INFO, "[ZvP] Lobby " + lobby.getID() + " removed!", true);
+	ZvP.getPluginLogger().log(Level.INFO, "Lobby " + lobby.getID() + " removed!", true);
 	this.lobbys.remove(lobby);
 	lobby.delete();
     }
@@ -334,7 +334,7 @@ public class GameManager {
     public boolean removePlayer(ZvPPlayer player) {
 	boolean success = player.getArena().removePlayer(player);
 	player.reset();
-	ZvP.getPluginLogger().log(Level.INFO, "[ZvP] Player " + player.getName() + " removed from Game!", true);
+	ZvP.getPluginLogger().log(Level.INFO, "Player " + player.getName() + " removed from Game!", true);
 	return success;
     }
     

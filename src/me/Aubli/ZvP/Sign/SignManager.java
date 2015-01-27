@@ -60,23 +60,24 @@ public class SignManager {
 	    switch (t) {
 		case INFO_SIGN:
 		    InfoSign info = new InfoSign(f);
-		    if (info.getWorld() != null) {
+		    if (info.getWorld() != null && info.getArena() != null && info.getLobby() != null) {
 			this.signs.add(info);
 		    }
 		    break;
-		
+		    
 		case INTERACT_SIGN:
 		    InteractSign inter = new InteractSign(f);
-		    if (inter.getWorld() != null) {
+		    if (inter.getWorld() != null && inter.getArena() != null && inter.getLobby() != null) {
 			this.signs.add(inter);
 		    }
 		    break;
-		
+		    
 		case SHOP_SIGN:
 		    ShopSign shop = new ShopSign(f);
-		    if (shop.getWorld() != null) {
+		    if (shop.getWorld() != null && shop.getArena() != null && shop.getLobby() != null) {
 			this.signs.add(shop);
 		    }
+		    break;
 	    }
 	}
     }
@@ -138,7 +139,7 @@ public class SignManager {
 	    
 	    try {
 		switch (type) {
-		
+		    
 		    case INFO_SIGN:
 			ISign info = new InfoSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby);
 			this.signs.add(info);
