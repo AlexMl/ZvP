@@ -601,7 +601,7 @@ public class Arena implements Comparable<Arena> {
 	clearArena();
 	setStatus(ArenaStatus.STANDBY);
 	Bukkit.getScheduler().cancelTask(getTaskId());
-	ZvP.getPluginLogger().log(Level.INFO, "Arena " + getID() + " stoped!", true);
+	ZvP.getPluginLogger().log(Level.INFO, "Arena " + getID() + " stoped!", false, true);
     }
     
     public boolean next() {
