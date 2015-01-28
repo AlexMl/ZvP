@@ -27,6 +27,6 @@ commands:
                  /<command> add lobby
                  /<command> remove arena [Arena]
                  /<command> remove lobby [lobby]
-     test:
+     zvptest:
           description: test command
           usage: /<command>

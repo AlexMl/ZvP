@@ -94,7 +94,7 @@ public class ZvP extends JavaPlugin {
 	
 	registerListeners();
 	getCommand("zvp").setExecutor(new ZvPCommands());
-	getCommand("test").setExecutor(new ZvPCommands());
+	getCommand("zvptest").setExecutor(new ZvPCommands());
 	
 	if (this.useMetrics == true) {
 	    try {
