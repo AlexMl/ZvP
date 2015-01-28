@@ -86,7 +86,7 @@ public class ZvPCommands implements CommandExecutor {
 	Player playerSender = (Player) sender;
 	
 	if (cmd.getName().equalsIgnoreCase("zvptest") && playerSender.isOp() && ZvP.getPluginLogger().isDebugMode()) {	// Test command
-	    
+	
 	    if (args.length == 1) {
 		if (args[0].equalsIgnoreCase("u")) {
 		    SignManager.getManager().updateSigns();
@@ -145,9 +145,14 @@ public class ZvPCommands implements CommandExecutor {
 		}
 		if (args[0].equalsIgnoreCase("update")) {
 		    if (playerSender.hasPermission("zvp.update")) {
-			ZvP.getInstance().updatePlugin();
-			playerSender.sendMessage(ZvP.getPrefix() + "The new version is now downloading!");
-			return true;
+			if (ZvP.updateAvailable) {
+			    ZvP.getInstance().updatePlugin();
+			    playerSender.sendMessage(ZvP.getPrefix() + "The new version is now downloading!");
+			    return true;
+			} else {
+			    playerSender.sendMessage(ZvP.getPrefix() + "No update available!");
+			    return true;
+			}
 		    } else {
 			commandDenied(playerSender);
 			return true;
