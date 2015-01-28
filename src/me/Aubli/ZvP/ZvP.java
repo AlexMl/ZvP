@@ -62,8 +62,8 @@ public class ZvP extends JavaPlugin {
     private static double ZOMBIE_FUND;
     private static double DEATH_FEE;
     
-    public static boolean updateAvailable;
-    public static String newVersion;
+    public static boolean updateAvailable = false;
+    public static String newVersion = "";
     
     private boolean useMetrics = false;
     private boolean debugMode = false;
