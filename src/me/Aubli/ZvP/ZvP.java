@@ -13,8 +13,8 @@ import me.Aubli.ZvP.Listeners.BlockListener;
 import me.Aubli.ZvP.Listeners.DeathListener;
 import me.Aubli.ZvP.Listeners.EntityDamageListener;
 import me.Aubli.ZvP.Listeners.GUIListener;
+import me.Aubli.ZvP.Listeners.PlayerConnectionListener;
 import me.Aubli.ZvP.Listeners.PlayerInteractListener;
-import me.Aubli.ZvP.Listeners.PlayerQuitListener;
 import me.Aubli.ZvP.Listeners.PlayerRespawnListener;
 import me.Aubli.ZvP.Listeners.SignChangelistener;
 import me.Aubli.ZvP.Shop.ShopManager;
@@ -32,6 +32,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.util.Logger.PluginOutput;
 import org.util.Metrics.Metrics;
+import org.util.Updater.Updater;
+import org.util.Updater.Updater.UpdateResult;
+import org.util.Updater.Updater.UpdateType;
 
 
 public class ZvP extends JavaPlugin {
@@ -48,6 +51,8 @@ public class ZvP extends JavaPlugin {
     
     private int logLevel;
     
+    private int pluginID = 59021;
+    
     private static int maxPlayers;
     private static int DEFAULT_ROUNDS;
     private static int DEFAULT_WAVES;
@@ -57,8 +62,15 @@ public class ZvP extends JavaPlugin {
     private static double ZOMBIE_FUND;
     private static double DEATH_FEE;
     
+    public static boolean updateAvailable;
+    public static String newVersion;
+    
     private boolean useMetrics = false;
     private boolean debugMode = false;
+    
+    private boolean enableUpdater = false;
+    private boolean logUpdate = false;
+    private boolean autoUpdate = true;
     
     @Override
     public void onDisable() {
@@ -96,6 +108,21 @@ public class ZvP extends JavaPlugin {
 	getCommand("zvp").setExecutor(new ZvPCommands());
 	getCommand("zvptest").setExecutor(new ZvPCommands());
 	
+	if (this.enableUpdater) {
+	    UpdateType updType = UpdateType.DEFAULT;
+	    
+	    if (this.autoUpdate == false) {
+		updType = UpdateType.NO_DOWNLOAD;
+	    }
+	    
+	    Updater upd = new Updater(this, this.pluginID, this.getFile(), updType, this.logUpdate);
+	    
+	    if (this.autoUpdate == false) {
+		updateAvailable = upd.getResult() == UpdateResult.UPDATE_AVAILABLE;
+		newVersion = upd.getLatestName();
+	    }
+	}
+	
 	if (this.useMetrics == true) {
 	    try {
 		Metrics metrics = new Metrics(this);
@@ -112,12 +139,18 @@ public class ZvP extends JavaPlugin {
 	pm.registerEvents(new BlockListener(), this);
 	pm.registerEvents(new DeathListener(), this);
 	pm.registerEvents(new PlayerInteractListener(), this);
-	pm.registerEvents(new PlayerQuitListener(), this);
+	pm.registerEvents(new PlayerConnectionListener(), this);
 	pm.registerEvents(new PlayerRespawnListener(), this);
 	pm.registerEvents(new SignChangelistener(), this);
 	pm.registerEvents(new GUIListener(), this);
 	pm.registerEvents(new EntityDamageListener(), this);
 	pm.registerEvents(new AsyncChatListener(), this);
+    }
+    
+    public void updatePlugin() {
+	if (this.enableUpdater) {
+	    new Updater(this, this.pluginID, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, this.logUpdate);
+	}
     }
     
     private void setTool() {
@@ -204,6 +237,14 @@ public class ZvP extends JavaPlugin {
 	locale = new Locale(getConfig().getString("plugin.Locale"));
 	this.logLevel = getConfig().getInt("plugin.loglevel");
 	
+	getConfig().addDefault("plugin.update.enable", true);
+	getConfig().addDefault("plugin.update.autoUpdate", true);
+	getConfig().addDefault("plugin.update.showUpdateInConsole", true);
+	
+	this.enableUpdater = getConfig().getBoolean("plugin.update.enable", true);
+	this.autoUpdate = getConfig().getBoolean("plugin.update.autoUpdate", true);
+	this.logUpdate = getConfig().getBoolean("plugin.update.showUpdateInConsole", false);
+	
 	getConfig().addDefault("game.maximal_Players", 25);
 	getConfig().addDefault("game.default_rounds", 3);
 	getConfig().addDefault("game.default_waves", 5);
@@ -234,5 +275,4 @@ public class ZvP extends JavaPlugin {
 	getConfig().options().copyDefaults(true);
 	saveConfig();
     }
-    
 }
