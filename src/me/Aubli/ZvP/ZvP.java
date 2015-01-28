@@ -148,7 +148,7 @@ public class ZvP extends JavaPlugin {
     }
     
     public void updatePlugin() {
-	if (this.enableUpdater) {
+	if (this.enableUpdater && updateAvailable) {
 	    new Updater(this, this.pluginID, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, this.logUpdate);
 	}
     }
