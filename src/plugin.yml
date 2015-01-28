@@ -9,7 +9,7 @@ main: me.Aubli.ZvP.ZvP
 
 commands:     
      zvp:
-          description: Basic Commands.
+          description: Basic Commands
           usage: |
                  /<command>
                  /<command> help
@@ -28,5 +28,5 @@ commands:
                  /<command> remove arena [Arena]
                  /<command> remove lobby [lobby]
      zvptest:
-          description: test command
+          description: ZvP Test command
           usage: /<command>
