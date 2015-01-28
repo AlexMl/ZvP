@@ -1,5 +1,6 @@
 zvp.help						Display the help message
 zvp.status						Use status and list command
+zvp.update						Update the plugin
 
 zvp.reload						Config reload
 zvp.save						Config save
