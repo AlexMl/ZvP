@@ -1,5 +1,8 @@
 Changelog:
 
+2.1.0:
+*Added automatic plugin updater
+
 2.0.6:
 *Fixed Logger issues.
 *Logger handles exceptions.
