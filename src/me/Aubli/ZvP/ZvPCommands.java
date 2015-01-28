@@ -30,6 +30,7 @@ public class ZvPCommands implements CommandExecutor {
      *
      * - zvp
      * - zvp help
+     * - zvp update
      * - zvp status
      * - zvp list
      * - zvp save
@@ -141,6 +142,16 @@ public class ZvPCommands implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("help")) {
 		    printCommands(playerSender);
 		    return true;
+		}
+		if (args[0].equalsIgnoreCase("update")) {
+		    if (playerSender.hasPermission("zvp.update")) {
+			ZvP.getInstance().updatePlugin();
+			playerSender.sendMessage(ZvP.getPrefix() + "The new version is now downloading!");
+			return true;
+		    } else {
+			commandDenied(playerSender);
+			return true;
+		    }
 		}
 		if (args[0].equalsIgnoreCase("status")) {
 		    
@@ -437,6 +448,7 @@ public class ZvPCommands implements CommandExecutor {
 	    player.sendMessage("\n\n");
 	    player.sendMessage(ChatColor.GRAY + "|------------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Help" + ChatColor.GRAY + " -------------|");
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp help");
+	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp update");
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp status");
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list");
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp save");

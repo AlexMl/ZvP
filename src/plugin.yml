@@ -13,6 +13,7 @@ commands:
           usage: |
                  /<command>
                  /<command> help
+                 /<command> update
                  /<command> reload
                  /<command> save
                  /<command> status
