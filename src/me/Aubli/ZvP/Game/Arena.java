@@ -247,8 +247,17 @@ public class Arena implements Comparable<Arena> {
 	int z;
 	
 	x = this.rand.nextInt((getMax().getBlockX() - getMin().getBlockX() - 1)) + getMin().getBlockX() + 1;
-	y = getWorld().getHighestBlockYAt(this.minLoc) + 1;
 	z = this.rand.nextInt((getMax().getBlockZ() - getMin().getBlockZ() - 1)) + getMin().getBlockZ() + 1;
+	
+	if (getMax().getBlockY() == getMin().getBlockY()) {
+	    y = getMax().getBlockY() + 1;
+	} else {
+	    if (getWorld().getHighestBlockYAt(getMax()) > getMax().getBlockY() + 1 || getWorld().getHighestBlockYAt(getMin()) > getMin().getBlockY() + 1) {
+		y = getMax().getBlockY() + 1;
+	    } else {
+		y = getWorld().getHighestBlockYAt(getMax());
+	    }
+	}
 	
 	Location startLoc = new Location(getWorld(), x, y, z);
 	
