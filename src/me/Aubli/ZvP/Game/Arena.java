@@ -18,6 +18,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -261,7 +262,7 @@ public class Arena implements Comparable<Arena> {
 	
 	Location startLoc = new Location(getWorld(), x, y, z);
 	
-	if (containsLocation(startLoc)) {
+	if (containsLocation(startLoc) && startLoc.getBlock().getType() == Material.AIR && startLoc.clone().add(0, 1, 0).getBlock().getType() == Material.AIR) {
 	    return startLoc.clone();
 	} else {
 	    return getNewRandomLocation();
