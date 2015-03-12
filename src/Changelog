@@ -1,4 +1,7 @@
 Changelog:
+2.2.0:
+*Added option to disable Kits
+*Fix teleportation into blocks
 
 2.1.1:
 *Fixed wrong spawnlocations in buildings
