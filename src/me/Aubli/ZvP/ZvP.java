@@ -67,6 +67,7 @@ public class ZvP extends JavaPlugin {
     
     private boolean useMetrics = false;
     private boolean debugMode = false;
+    private boolean enableKits = true;
     
     private boolean enableUpdater = false;
     private boolean logUpdate = false;
@@ -102,7 +103,7 @@ public class ZvP extends JavaPlugin {
 	new GameManager();
 	new SignManager();
 	new ShopManager();
-	new KitManager();
+	new KitManager(this.enableKits);
 	
 	registerListeners();
 	getCommand("zvp").setExecutor(new ZvPCommands());
@@ -245,10 +246,12 @@ public class ZvP extends JavaPlugin {
 	this.autoUpdate = getConfig().getBoolean("plugin.update.autoUpdate", true);
 	this.logUpdate = getConfig().getBoolean("plugin.update.showUpdateInConsole", false);
 	
+	getConfig().addDefault("game.enableKits", true);
 	getConfig().addDefault("game.maximal_Players", 25);
 	getConfig().addDefault("game.default_rounds", 3);
 	getConfig().addDefault("game.default_waves", 5);
 	
+	this.enableKits = getConfig().getBoolean("game.enableKits");
 	maxPlayers = getConfig().getInt("game.maximal_Players");
 	DEFAULT_ROUNDS = getConfig().getInt("game.default_rounds");
 	DEFAULT_WAVES = getConfig().getInt("game.default_waves");

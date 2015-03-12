@@ -70,7 +70,11 @@ public class ZvPPlayer {
 	this.startPosition = null;
 	this.kit = null;
 	
-	KitManager.getManager().openSelectKitGUI(this);
+	if (KitManager.getManager().isEnabled()) {
+	    KitManager.getManager().openSelectKitGUI(this);
+	} else {
+	    this.kit = KitManager.getManager().getKit("No Kit");
+	}
 	
 	arena.addPlayer(this);
     }
@@ -272,13 +276,16 @@ public class ZvPPlayer {
     @SuppressWarnings("deprecation")
     public void getReady() {
 	
-	this.player.getInventory().clear();
-	this.player.getInventory().setHelmet(null);
-	this.player.getInventory().setChestplate(null);
-	this.player.getInventory().setLeggings(null);
-	this.player.getInventory().setBoots(null);
-	
-	this.player.getInventory().setContents(getKit().getContents());
+	if (KitManager.getManager().isEnabled()) {
+	    this.player.getInventory().clear();
+	    this.player.getInventory().setHelmet(null);
+	    this.player.getInventory().setChestplate(null);
+	    this.player.getInventory().setLeggings(null);
+	    this.player.getInventory().setBoots(null);
+	    
+	    this.player.getInventory().setContents(getKit().getContents());
+	    this.player.updateInventory();
+	}
 	
 	this.player.setTotalExperience(0);
 	this.player.setExp(0F);
@@ -294,8 +301,6 @@ public class ZvPPlayer {
 	this.player.setFlying(false);
 	this.player.setWalkSpeed((float) 0.2);
 	this.player.setFlySpeed((float) 0.2);
-	
-	this.player.updateInventory();
 	
 	this.player.teleport(getStartLocation(), TeleportCause.PLUGIN);
     }

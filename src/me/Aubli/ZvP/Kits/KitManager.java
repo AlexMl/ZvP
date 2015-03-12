@@ -24,14 +24,17 @@ public class KitManager {
     
     private static KitManager instance;
     
+    private boolean enabled;
+    
     private File kitPath;
     
     private ArrayList<IZvPKit> kits;
     
-    public KitManager() {
+    public KitManager(boolean enableKits) {
 	
 	instance = this;
 	
+	this.enabled = enableKits;
 	this.kits = new ArrayList<IZvPKit>();
 	this.kitPath = new File(ZvP.getInstance().getDataFolder().getPath() + "/Kits");
 	
@@ -83,6 +86,10 @@ public class KitManager {
     
     private int getKitAmount() {
 	return this.kits.size();
+    }
+    
+    public boolean isEnabled() {
+	return this.enabled;
     }
     
     public void addKit(String kitName, ItemStack icon, ItemStack[] items) {
