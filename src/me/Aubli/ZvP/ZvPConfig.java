@@ -26,6 +26,7 @@ public class ZvPConfig {
     private static int defaultWaves;
     
     private static int startDelay;
+    private static int breakTime;
     
     private static int defaultZombieSpawnRate;
     private static double defaultSaveRadius;
@@ -58,6 +59,7 @@ public class ZvPConfig {
 	getConfig().addDefault("game.default_waves", 5);
 	
 	getConfig().addDefault("times.joinTime", 15);
+	getConfig().addDefault("times.timeBetweenWaves", 90);
 	
 	getConfig().addDefault("zombies.default_spawnRate", 20);
 	getConfig().addDefault("zombies.default_saveRadius", 3.0);
@@ -84,6 +86,7 @@ public class ZvPConfig {
 	defaultWaves = getConfig().getInt("game.default_waves");
 	
 	startDelay = getConfig().getInt("times.joinTime");
+	breakTime = getConfig().getInt("times.timeBetweenWaves");
 	
 	defaultZombieSpawnRate = getConfig().getInt("zombies.default_spawnRate");
 	defaultSaveRadius = getConfig().getDouble("zombies.default_saveRadius");
@@ -152,6 +155,10 @@ public class ZvPConfig {
     
     public static int getStartDelay() {
 	return startDelay;
+    }
+    
+    public static int getBreakTime() {
+	return breakTime;
     }
     
     public static int getDefaultZombieSpawnRate() {
