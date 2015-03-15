@@ -3,7 +3,7 @@ package me.Aubli.ZvP.Game;
 import java.text.DecimalFormat;
 import java.util.UUID;
 
-import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Kits.IZvPKit;
 import me.Aubli.ZvP.Kits.KitManager;
 
@@ -204,12 +204,12 @@ public class ZvPPlayer {
     
     public void addKill() {
 	setKills(getKills() + 1);
-	getArena().addBalance(ZvP.getZombieFund());
+	getArena().addBalance(ZvPConfig.getZombieFund());
     }
     
     public void die() {
 	setDeaths(getDeaths() + 1);
-	getArena().subtractBalance(ZvP.getDeathFee());
+	getArena().subtractBalance(ZvPConfig.getDeathFee());
     }
     
     public void removeScoreboard() {

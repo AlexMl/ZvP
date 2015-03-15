@@ -3,7 +3,6 @@ package me.Aubli.ZvP;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.GameManager;
@@ -47,31 +46,10 @@ public class ZvP extends JavaPlugin {
     
     private static String pluginPrefix = ChatColor.DARK_GREEN + "[" + ChatColor.DARK_RED + "Z" + ChatColor.DARK_GRAY + "v" + ChatColor.DARK_RED + "P" + ChatColor.DARK_GREEN + "]" + ChatColor.RESET + " ";
     
-    private static Locale locale;
-    
-    private int logLevel;
-    
     private int pluginID = 59021;
-    
-    private static int maxPlayers;
-    private static int DEFAULT_ROUNDS;
-    private static int DEFAULT_WAVES;
-    private static int START_DELAY;
-    private static int DEFAULT_ZOMBIE_SPAWN_RATE;
-    private static double DEFAULT_SAVE_RADIUS;
-    private static double ZOMBIE_FUND;
-    private static double DEATH_FEE;
     
     public static boolean updateAvailable = false;
     public static String newVersion = "";
-    
-    private boolean useMetrics = false;
-    private boolean debugMode = false;
-    private boolean enableKits = true;
-    
-    private boolean enableUpdater = false;
-    private boolean logUpdate = false;
-    private boolean autoUpdate = true;
     
     @Override
     public void onDisable() {
@@ -94,37 +72,37 @@ public class ZvP extends JavaPlugin {
     private void initialize() {
 	instance = this;
 	
-	loadConfig();
+	new ZvPConfig(getConfig());
 	setTool();
 	
-	logger = new PluginOutput(this, this.debugMode, this.logLevel);
+	logger = new PluginOutput(this, ZvPConfig.getDebugMode(), ZvPConfig.getLogLevel());
 	
-	new MessageManager(locale);
+	new MessageManager(ZvPConfig.getLocale());
 	new GameManager();
 	new SignManager();
 	new ShopManager();
-	new KitManager(this.enableKits);
+	new KitManager(ZvPConfig.getEnableKits());
 	
 	registerListeners();
 	getCommand("zvp").setExecutor(new ZvPCommands());
 	getCommand("zvptest").setExecutor(new ZvPCommands());
 	
-	if (this.enableUpdater) {
+	if (ZvPConfig.getEnableUpdater()) {
 	    UpdateType updType = UpdateType.DEFAULT;
 	    
-	    if (this.autoUpdate == false) {
+	    if (ZvPConfig.getAutoUpdate() == false) {
 		updType = UpdateType.NO_DOWNLOAD;
 	    }
 	    
-	    Updater upd = new Updater(this, this.pluginID, this.getFile(), updType, this.logUpdate);
+	    Updater upd = new Updater(this, this.pluginID, this.getFile(), updType, ZvPConfig.getlogUpdate());
 	    
-	    if (this.autoUpdate == false) {
-		updateAvailable = upd.getResult() == UpdateResult.UPDATE_AVAILABLE;
+	    if (ZvPConfig.getAutoUpdate() == false) {
+		updateAvailable = (upd.getResult() == UpdateResult.UPDATE_AVAILABLE);
 		newVersion = upd.getLatestName();
 	    }
 	}
 	
-	if (this.useMetrics == true) {
+	if (ZvPConfig.getUseMetrics() == true) {
 	    try {
 		Metrics metrics = new Metrics(this);
 		metrics.start();
@@ -148,9 +126,21 @@ public class ZvP extends JavaPlugin {
 	pm.registerEvents(new AsyncChatListener(), this);
     }
     
+    public static ZvP getInstance() {
+	return instance;
+    }
+    
+    public static PluginOutput getPluginLogger() {
+	return logger;
+    }
+    
+    public static String getPrefix() {
+	return pluginPrefix;
+    }
+    
     public void updatePlugin() {
-	if (this.enableUpdater && updateAvailable) {
-	    new Updater(this, this.pluginID, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, this.logUpdate);
+	if (ZvPConfig.getEnableUpdater() && updateAvailable) {
+	    new Updater(this, this.pluginID, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, ZvPConfig.getlogUpdate());
 	}
     }
     
@@ -174,108 +164,5 @@ public class ZvP extends JavaPlugin {
 	    return true;
 	}
 	return false;
-    }
-    
-    public static ZvP getInstance() {
-	return instance;
-    }
-    
-    public static PluginOutput getPluginLogger() {
-	return logger;
-    }
-    
-    public static Locale getLocale() {
-	return locale;
-    }
-    
-    public static String getPrefix() {
-	return pluginPrefix;
-    }
-    
-    public static int getMaxPlayers() {
-	return maxPlayers;
-    }
-    
-    public static int getDefaultRounds() {
-	return DEFAULT_ROUNDS;
-    }
-    
-    public static int getDefaultWaves() {
-	return DEFAULT_WAVES;
-    }
-    
-    public static int getStartDelay() {
-	return START_DELAY;
-    }
-    
-    public static int getDefaultSpawnRate() {
-	return DEFAULT_ZOMBIE_SPAWN_RATE;
-    }
-    
-    public static double getDefaultDistance() {
-	return DEFAULT_SAVE_RADIUS;
-    }
-    
-    public static double getZombieFund() {
-	return ZOMBIE_FUND;
-    }
-    
-    public static double getDeathFee() {
-	return DEATH_FEE;
-    }
-    
-    public void loadConfig() {
-	
-	getConfig().options().header("\n" + "This is the main config file for ZombieVsPlayer.\n" + "For more informations about this file visit the website:\n" + "http://dev.bukkit.org/bukkit-plugins/zombievsplayer/\n");
-	
-	getConfig().addDefault("plugin.enableMetrics", true);
-	getConfig().addDefault("plugin.Locale", "en");
-	getConfig().addDefault("plugin.debugMode", false);
-	getConfig().addDefault("plugin.loglevel", Level.FINE.intValue());
-	
-	this.useMetrics = getConfig().getBoolean("plugin.enableMetrics");
-	this.debugMode = getConfig().getBoolean("plugin.debugMode");
-	locale = new Locale(getConfig().getString("plugin.Locale"));
-	this.logLevel = getConfig().getInt("plugin.loglevel");
-	
-	getConfig().addDefault("plugin.update.enable", true);
-	getConfig().addDefault("plugin.update.autoUpdate", true);
-	getConfig().addDefault("plugin.update.showUpdateInConsole", true);
-	
-	this.enableUpdater = getConfig().getBoolean("plugin.update.enable", true);
-	this.autoUpdate = getConfig().getBoolean("plugin.update.autoUpdate", true);
-	this.logUpdate = getConfig().getBoolean("plugin.update.showUpdateInConsole", false);
-	
-	getConfig().addDefault("game.enableKits", true);
-	getConfig().addDefault("game.maximal_Players", 25);
-	getConfig().addDefault("game.default_rounds", 3);
-	getConfig().addDefault("game.default_waves", 5);
-	
-	this.enableKits = getConfig().getBoolean("game.enableKits");
-	maxPlayers = getConfig().getInt("game.maximal_Players");
-	DEFAULT_ROUNDS = getConfig().getInt("game.default_rounds");
-	DEFAULT_WAVES = getConfig().getInt("game.default_waves");
-	
-	getConfig().addDefault("times.joinTime", 15);
-	
-	START_DELAY = getConfig().getInt("times.joinTime");
-	
-	getConfig().addDefault("zombies.default_spawnRate", 20);
-	getConfig().addDefault("zombies.default_saveRadius", 3.0);
-	
-	DEFAULT_ZOMBIE_SPAWN_RATE = getConfig().getInt("zombies.default_spawnRate");
-	DEFAULT_SAVE_RADIUS = getConfig().getDouble("zombies.default_saveRadius");
-	
-	getConfig().addDefault("money.ZombieFund", 0.37);
-	getConfig().addDefault("money.DeathFee", 3);
-	
-	ZOMBIE_FUND = getConfig().getDouble("money.ZombieFund");
-	DEATH_FEE = getConfig().getDouble("money.DeathFee");
-	
-	// this.getConfig().addDefault("config.misc.portOnJoinGame", true);
-	// this.getConfig().addDefault("config.misc.changeToSpectatorAfterDeath", false);
-	
-	getConfig().options().copyDefaults(true);
-	saveConfig();
     }
 }

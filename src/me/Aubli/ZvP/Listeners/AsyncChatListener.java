@@ -3,6 +3,7 @@ package me.Aubli.ZvP.Listeners;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
@@ -42,7 +43,7 @@ public class AsyncChatListener implements Listener {
 			    for (ZvPPlayer p : a.getPlayers()) {
 				p.setVoted(false);
 			    }
-			    a.setTaskID(new GameRunnable(a, ZvP.getStartDelay(), a.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+			    a.setTaskID(new GameRunnable(a, ZvPConfig.getStartDelay(), a.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
 			    a.setStatus(ArenaStatus.RUNNING);
 			}
 		    } else {

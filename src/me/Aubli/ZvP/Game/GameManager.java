@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Sign.SignManager;
@@ -98,8 +99,7 @@ public class GameManager {
 	this.lobbys = new ArrayList<Lobby>();
 	this.arenas = new ArrayList<Arena>();
 	
-	ZvP.getInstance().reloadConfig();
-	ZvP.getInstance().loadConfig();
+	ZvPConfig.reloadConfig();
 	
 	loadArenas();
 	loadLobbys();
@@ -108,7 +108,7 @@ public class GameManager {
 	    SignManager.getManager().reloadConfig();
 	}
 	
-	new MessageManager(ZvP.getLocale());
+	new MessageManager(ZvPConfig.getLocale());
 	new ShopManager();
 	
 	if (KitManager.getManager() != null) {
@@ -282,11 +282,11 @@ public class GameManager {
 		mP = 3;
 	    }
 	    
-	    if (mP > ZvP.getMaxPlayers()) {
-		mP = ZvP.getMaxPlayers();
+	    if (mP > ZvPConfig.getMaxPlayers()) {
+		mP = ZvPConfig.getMaxPlayers();
 	    }
 	    
-	    Arena a = new Arena(getNewID(this.arenaPath), mP, this.arenaPath, min.clone(), max.clone(), ZvP.getDefaultRounds(), ZvP.getDefaultWaves(), ZvP.getDefaultSpawnRate(), ZvP.getDefaultDistance());
+	    Arena a = new Arena(getNewID(this.arenaPath), mP, this.arenaPath, min.clone(), max.clone(), ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ZvPConfig.getDefaultSaveRadius());
 	    this.arenas.add(a);
 	    
 	    ZvP.getPluginLogger().log(Level.INFO, "New Arena added!", true);

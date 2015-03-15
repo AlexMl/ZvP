@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Translation.MessageManager;
@@ -591,7 +592,7 @@ public class Arena implements Comparable<Arena> {
 	getWorld().setMonsterSpawnLimit(0);
 	clearArena();
 	
-	this.TaskId = new GameRunnable(this, ZvP.getStartDelay(), getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
+	this.TaskId = new GameRunnable(this, ZvPConfig.getStartDelay(), getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
 	ZvP.getPluginLogger().log(Level.INFO, "Arena " + getID() + " started a new Task!", true);
     }
     
