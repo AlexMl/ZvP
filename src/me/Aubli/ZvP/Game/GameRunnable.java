@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Translation.MessageManager;
 
@@ -118,22 +119,46 @@ public class GameRunnable extends BukkitRunnable {
 		    }
 		    
 		    if (!stop) {
-			this.arena.setStatus(ArenaStatus.VOTING);
-			
-			new BukkitRunnable() {
+			if (ZvPConfig.getUseVoteSystem()) {
+			    this.arena.setStatus(ArenaStatus.VOTING);
 			    
-			    @Override
-			    public void run() {
-				if (GameRunnable.this.arena.getStatus() == ArenaStatus.VOTING) {
-				    GameRunnable.this.arena.sendMessage(MessageManager.getMessage("game:vote_request"));
-				} else {
-				    this.cancel();
+			    new BukkitRunnable() {
+				
+				@Override
+				public void run() {
+				    GameRunnable.this.arena.setTaskID(getTaskId());
+				    if (GameRunnable.this.arena.getStatus() == ArenaStatus.VOTING) {
+					GameRunnable.this.arena.sendMessage(MessageManager.getMessage("game:vote_request"));
+				    } else {
+					this.cancel();
+				    }
 				}
-			    }
-			}.runTaskTimer(ZvP.getInstance(), 10L, 13 * 20L);
-			this.cancel();
+			    }.runTaskTimer(ZvP.getInstance(), 10L, 13 * 20L);
+			    this.cancel();
+			} else {
+			    this.arena.setStatus(ArenaStatus.BREAKWAITING);
+			    
+			    new BukkitRunnable() {
+				
+				int runs = 0;
+				
+				@Override
+				public void run() {
+				    if (this.runs < ZvPConfig.getBreakTime()) {
+					GameRunnable.this.arena.setPlayerLevel(ZvPConfig.getBreakTime() - this.runs);
+					GameRunnable.this.arena.setTaskID(getTaskId());
+					this.runs++;
+				    } else {
+					GameRunnable.this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, ZvPConfig.getStartDelay(), GameRunnable.this.arena.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+					GameRunnable.this.arena.setStatus(ArenaStatus.RUNNING);
+					this.cancel();
+				    }
+				}
+			    }.runTaskTimer(ZvP.getInstance(), 0L, 1 * 20L);
+			    this.cancel();
+			}
 		    } else {			// End of Game
-		    
+			
 			int kills = this.arena.getKilledZombies();
 			int deaths = 0;
 			double money = this.arena.getBalance();

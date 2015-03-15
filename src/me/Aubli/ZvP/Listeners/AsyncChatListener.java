@@ -30,24 +30,28 @@ public class AsyncChatListener implements Listener {
 	    ZvPPlayer player = GameManager.getManager().getPlayer(chatPlayer);
 	    
 	    if (event.getMessage().equalsIgnoreCase("zvp vote")) {
-		if (player.getArena().getStatus() == ArenaStatus.VOTING) {
-		    if (!player.hasVoted()) {
-			player.setVoted(true);
-			player.sendMessage(MessageManager.getMessage("game:voted_next_round"));
-			
-			ZvP.getPluginLogger().log(Level.FINE, "Player " + player.getName() + " voted in arena " + player.getArena().getID(), true);
-			
-			Arena a = player.getArena();
-			a.updatePlayerBoards();
-			if (a.hasVoted()) {
-			    for (ZvPPlayer p : a.getPlayers()) {
-				p.setVoted(false);
+		if (ZvPConfig.getUseVoteSystem()) {
+		    if (player.getArena().getStatus() == ArenaStatus.VOTING) {
+			if (!player.hasVoted()) {
+			    player.setVoted(true);
+			    player.sendMessage(MessageManager.getMessage("game:voted_next_round"));
+			    
+			    ZvP.getPluginLogger().log(Level.FINE, "Player " + player.getName() + " voted in arena " + player.getArena().getID(), true);
+			    
+			    Arena a = player.getArena();
+			    a.updatePlayerBoards();
+			    if (a.hasVoted()) {
+				for (ZvPPlayer p : a.getPlayers()) {
+				    p.setVoted(false);
+				}
+				a.setTaskID(new GameRunnable(a, ZvPConfig.getStartDelay(), a.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+				a.setStatus(ArenaStatus.RUNNING);
 			    }
-			    a.setTaskID(new GameRunnable(a, ZvPConfig.getStartDelay(), a.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
-			    a.setStatus(ArenaStatus.RUNNING);
+			} else {
+			    player.sendMessage(MessageManager.getMessage("game:already_voted"));
 			}
 		    } else {
-			player.sendMessage(MessageManager.getMessage("game:already_voted"));
+			player.sendMessage(MessageManager.getMessage("game:voting_disabled"));
 		    }
 		} else {
 		    player.sendMessage(MessageManager.getMessage("game:no_voting"));
