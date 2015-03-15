@@ -20,6 +20,7 @@ public class ZvPConfig {
     private static boolean logUpdate = false;
     
     private static boolean enableKits = true;
+    private static boolean useVoteSystem = true;
     private static int maxPlayers;
     private static int defaultRounds;
     private static int defaultWaves;
@@ -51,6 +52,7 @@ public class ZvPConfig {
 	getConfig().addDefault("plugin.update.showUpdateInConsole", true);
 	
 	getConfig().addDefault("game.enableKits", true);
+	getConfig().addDefault("game.useVoteSystem", true);
 	getConfig().addDefault("game.maximal_Players", 25);
 	getConfig().addDefault("game.default_rounds", 3);
 	getConfig().addDefault("game.default_waves", 5);
@@ -76,6 +78,7 @@ public class ZvPConfig {
 	logUpdate = getConfig().getBoolean("plugin.update.showUpdateInConsole", false);
 	
 	enableKits = getConfig().getBoolean("game.enableKits");
+	useVoteSystem = getConfig().getBoolean("game.useVoteSystem");
 	maxPlayers = getConfig().getInt("game.maximal_Players");
 	defaultRounds = getConfig().getInt("game.default_rounds");
 	defaultWaves = getConfig().getInt("game.default_waves");
@@ -119,6 +122,10 @@ public class ZvPConfig {
     
     public static boolean getEnableKits() {
 	return enableKits;
+    }
+    
+    public static boolean getUseVoteSystem() {
+	return useVoteSystem;
     }
     
     public static Locale getLocale() {
