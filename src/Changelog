@@ -1,4 +1,8 @@
 Changelog:
+
+2.3.0:
+*Added option to use either the votesystem or wait time setting between waves
+
 2.2.0:
 *Added option to disable Kits
 *Fix teleportation into blocks
