@@ -96,6 +96,8 @@ public class ZvPConfig {
     }
     
     public static void reloadConfig() {
+	ZvP.getInstance().reloadConfig();
+	config = ZvP.getInstance().getConfig();
 	init();
 	load();
     }
