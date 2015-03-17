@@ -63,10 +63,11 @@ public class AsyncChatListener implements Listener {
 			    player.sendMessage(MessageManager.getMessage("game:already_voted"));
 			}
 		    } else {
-			player.sendMessage(MessageManager.getMessage("game:voting_disabled"));
+			player.sendMessage(MessageManager.getMessage("game:no_voting"));
+			
 		    }
 		} else {
-		    player.sendMessage(MessageManager.getMessage("game:no_voting"));
+		    player.sendMessage(MessageManager.getMessage("game:voting_disabled"));
 		}
 	    } else {
 		player.getArena().sendMessage(ChatColor.BLACK + "[" + ChatColor.GOLD + player.getName() + ChatColor.BLACK + "] " + ChatColor.RESET + event.getMessage());
