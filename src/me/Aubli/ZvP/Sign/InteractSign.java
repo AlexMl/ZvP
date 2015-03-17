@@ -139,7 +139,7 @@ public class InteractSign implements ISign, Comparable<ISign> {
 	    this.sign.setLine(0, ZvP.getPrefix());
 	    this.sign.setLine(1, "Arena: " + this.arena.getID());
 	    
-	    if (getArena().getStatus() == ArenaStatus.RUNNING || getArena().getStatus() == ArenaStatus.VOTING) {
+	    if (getArena().getStatus() == ArenaStatus.RUNNING || getArena().getStatus() == ArenaStatus.VOTING || getArena().getStatus() == ArenaStatus.BREAKWAITING) {
 		this.sign.setLine(2, ChatColor.DARK_GREEN + getArena().getStatus().getName());
 		this.sign.setLine(3, ChatColor.DARK_RED + "Can't Join!");
 	    }
