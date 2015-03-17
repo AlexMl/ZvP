@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 
 public class AsyncChatListener implements Listener {
@@ -27,7 +28,7 @@ public class AsyncChatListener implements Listener {
 	
 	if (GameManager.getManager().getPlayer(chatPlayer) != null && GameManager.getManager().isInGame(chatPlayer)) {
 	    event.setCancelled(true);
-	    ZvPPlayer player = GameManager.getManager().getPlayer(chatPlayer);
+	    final ZvPPlayer player = GameManager.getManager().getPlayer(chatPlayer);
 	    
 	    if (event.getMessage().equalsIgnoreCase("zvp vote")) {
 		if (ZvPConfig.getUseVoteSystem()) {
@@ -38,15 +39,26 @@ public class AsyncChatListener implements Listener {
 			    
 			    ZvP.getPluginLogger().log(Level.FINE, "Player " + player.getName() + " voted in arena " + player.getArena().getID(), true);
 			    
-			    Arena a = player.getArena();
-			    a.updatePlayerBoards();
-			    if (a.hasVoted()) {
-				for (ZvPPlayer p : a.getPlayers()) {
-				    p.setVoted(false);
+			    // Make sure that in asynchronous cases the non-thread
+			    // safe methods are called synchronously
+			    new BukkitRunnable() {
+				
+				@Override
+				public void run() {
+				    Arena a = player.getArena();
+				    a.updatePlayerBoards();
+				    
+				    if (a.hasVoted()) {
+					for (ZvPPlayer p : a.getPlayers()) {
+					    p.setVoted(false);
+					}
+					a.setTaskID(new GameRunnable(a, ZvPConfig.getStartDelay(), a.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+					a.setStatus(ArenaStatus.RUNNING);
+					this.cancel();
+				    }
 				}
-				a.setTaskID(new GameRunnable(a, ZvPConfig.getStartDelay(), a.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
-				a.setStatus(ArenaStatus.RUNNING);
-			    }
+			    }.runTask(ZvP.getInstance());
+			    
 			} else {
 			    player.sendMessage(MessageManager.getMessage("game:already_voted"));
 			}
