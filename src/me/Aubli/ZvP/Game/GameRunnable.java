@@ -121,19 +121,19 @@ public class GameRunnable extends BukkitRunnable {
 		    if (!stop) {
 			if (ZvPConfig.getUseVoteSystem()) {
 			    this.arena.setStatus(ArenaStatus.VOTING);
-			    
-			    new BukkitRunnable() {
+			    this.arena.setTaskID(new BukkitRunnable() {
 				
 				@Override
 				public void run() {
-				    GameRunnable.this.arena.setTaskID(getTaskId());
+				    
 				    if (GameRunnable.this.arena.getStatus() == ArenaStatus.VOTING) {
 					GameRunnable.this.arena.sendMessage(MessageManager.getMessage("game:vote_request"));
 				    } else {
 					this.cancel();
 				    }
 				}
-			    }.runTaskTimer(ZvP.getInstance(), 10L, 13 * 20L);
+			    }.runTaskTimer(ZvP.getInstance(), 10L, 13 * 20L).getTaskId());
+			    
 			    this.cancel();
 			} else {
 			    this.arena.setStatus(ArenaStatus.BREAKWAITING);
@@ -146,7 +146,7 @@ public class GameRunnable extends BukkitRunnable {
 				public void run() {
 				    if (this.runs < ZvPConfig.getBreakTime()) {
 					GameRunnable.this.arena.setPlayerLevel(ZvPConfig.getBreakTime() - this.runs);
-					GameRunnable.this.arena.setTaskID(getTaskId());
+					GameRunnable.this.arena.setTaskID(this.getTaskId());
 					this.runs++;
 				    } else {
 					GameRunnable.this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, ZvPConfig.getStartDelay(), GameRunnable.this.arena.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
