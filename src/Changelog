@@ -1,5 +1,9 @@
 Changelog:
 
+2.3.1:
+*Fixed errors with tasks
+*Fixed wrong messages
+
 2.3.0:
 *Added option to use either the votesystem or wait time setting between waves
 
