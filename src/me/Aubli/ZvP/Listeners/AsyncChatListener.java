@@ -52,7 +52,7 @@ public class AsyncChatListener implements Listener {
 					for (ZvPPlayer p : a.getPlayers()) {
 					    p.setVoted(false);
 					}
-					a.setTaskID(new GameRunnable(a, ZvPConfig.getStartDelay(), a.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+					a.setTaskID(new GameRunnable(a, 0, a.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
 					a.setStatus(ArenaStatus.RUNNING);
 					this.cancel();
 				    }

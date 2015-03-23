@@ -137,28 +137,11 @@ public class GameRunnable extends BukkitRunnable {
 			    this.cancel();
 			} else {
 			    this.arena.setStatus(ArenaStatus.BREAKWAITING);
-			    
-			    new BukkitRunnable() {
-				
-				int runs = 0;
-				
-				@Override
-				public void run() {
-				    if (this.runs < ZvPConfig.getBreakTime()) {
-					GameRunnable.this.arena.setPlayerLevel(ZvPConfig.getBreakTime() - this.runs);
-					GameRunnable.this.arena.setTaskID(this.getTaskId());
-					this.runs++;
-				    } else {
-					GameRunnable.this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, ZvPConfig.getStartDelay(), GameRunnable.this.arena.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
-					GameRunnable.this.arena.setStatus(ArenaStatus.RUNNING);
-					this.cancel();
-				    }
-				}
-			    }.runTaskTimer(ZvP.getInstance(), 0L, 1 * 20L);
+			    this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, ZvPConfig.getBreakTime(), GameRunnable.this.arena.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
 			    this.cancel();
 			}
 		    } else {			// End of Game
-			
+		    
 			int kills = this.arena.getKilledZombies();
 			int deaths = 0;
 			double money = this.arena.getBalance();
