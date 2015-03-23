@@ -40,11 +40,18 @@ public class KSwordKit implements IZvPKit, Comparable<IZvPKit> {
 	this.items[5] = new ItemStack(Material.COOKED_CHICKEN, 10);
 	
 	this.items[6] = new Potion(PotionType.INSTANT_HEAL, 2).splash().toItemStack(2);
+	
+	new KCustomKit(KitManager.getManager().getKitPath().getAbsolutePath(), this.name, this.icon, this.items);
     }
     
     @Override
     public void delete() {
 	// Does nothing in this case
+    }
+    
+    @Override
+    public boolean isEnabled() {
+	return false;
     }
     
     @Override

@@ -26,6 +26,11 @@ public class KNullKit implements IZvPKit {
     }
     
     @Override
+    public boolean isEnabled() {
+	return false;
+    }
+    
+    @Override
     public String getName() {
 	return this.name;
     }

@@ -23,26 +23,33 @@ public class KCustomKit implements IZvPKit, Comparable<IZvPKit> {
     
     private final ItemStack[] items;
     
+    private final boolean enabled;
+    
     public KCustomKit(String path, String name, ItemStack icon, ItemStack[] content) {
 	this.name = name;
 	this.icon = icon;
 	this.items = content;
+	this.enabled = true;
 	
 	this.kitFile = new File(path + "/" + name + ".yml");
 	FileConfiguration kitConfig = YamlConfiguration.loadConfiguration(this.kitFile);
-	
-	kitConfig.options().header("This is the config file used in ZvP to store a customm kit.\n\n" + "'name:' The name of the kit\n" + "'icon:' An item used as an icon\n\n" + "'id:' The id describes the item material. A list of all items can be found here: http://jd.bukkit.org/dev/apidocs/org/bukkit/Material.html\n" + "'amount:' The amount of the item (Should be 1!)\n" + "'data:' Used by potions\n" + "'ench: {}' A list of enchantings (ench: {ENCHANTMENT:LEVEL}). A list of enchantments can be found here:\n http://jd.bukkit.org/dev/apidocs/org/bukkit/enchantments/Enchantment.html\n");
-	kitConfig.options().copyHeader(true);
-	
-	kitConfig.set("name", name);
-	kitConfig.set("icon", icon.getType().toString());
-	ItemStorage.saveItemsToFile(this.kitFile, "items", content);
-	
-	try {
-	    kitConfig.load(this.kitFile);
-	    kitConfig.save(this.kitFile);
-	} catch (Exception e) {
-	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Kit file: " + e.getMessage(), true, false, e);
+	System.out.println(name + " " + this.kitFile.exists());
+	if (!this.kitFile.exists()) {
+	    
+	    kitConfig.options().header("This is the config file used in ZvP to store a customm kit.\n\n" + "'name:' The name of the kit\n" + "'icon:' An item used as an icon\n\n" + "'id:' The id describes the item material. A list of all items can be found here: http://jd.bukkit.org/dev/apidocs/org/bukkit/Material.html\n" + "'amount:' The amount of the item (Should be 1!)\n" + "'data:' Used by potions\n" + "'ench: {}' A list of enchantings (ench: {ENCHANTMENT:LEVEL}). A list of enchantments can be found here:\n http://jd.bukkit.org/dev/apidocs/org/bukkit/enchantments/Enchantment.html\n");
+	    kitConfig.options().copyHeader(true);
+	    
+	    kitConfig.set("name", name);
+	    kitConfig.set("icon", icon.getType().toString());
+	    kitConfig.set("enabled", true);
+	    ItemStorage.saveItemsToFile(this.kitFile, "items", content);
+	    
+	    try {
+		kitConfig.load(this.kitFile);
+		kitConfig.save(this.kitFile);
+	    } catch (Exception e) {
+		ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Kit file: " + e.getMessage(), true, false, e);
+	    }
 	}
     }
     
@@ -54,6 +61,7 @@ public class KCustomKit implements IZvPKit, Comparable<IZvPKit> {
 	this.name = kitConfig.getString("name");
 	this.icon = parseIcon(kitConfig.getString("icon"));
 	this.items = parseItemStack(kitConfig.getList("items"));
+	this.enabled = kitConfig.getBoolean("enabled", true);
     }
     
     private ItemStack[] parseItemStack(List<?> itemList) {
@@ -72,6 +80,11 @@ public class KCustomKit implements IZvPKit, Comparable<IZvPKit> {
     @Override
     public void delete() {
 	this.kitFile.delete();
+    }
+    
+    @Override
+    public boolean isEnabled() {
+	return this.enabled;
     }
     
     @Override

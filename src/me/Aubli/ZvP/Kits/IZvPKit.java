@@ -7,6 +7,8 @@ public interface IZvPKit {
     
     void delete();
     
+    public boolean isEnabled();
+    
     public String getName();
     
     public ItemStack getIcon();

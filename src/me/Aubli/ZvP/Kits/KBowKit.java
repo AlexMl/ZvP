@@ -43,11 +43,18 @@ public class KBowKit implements IZvPKit, Comparable<IZvPKit> {
 	this.items[7] = new ItemStack(Material.GOLDEN_APPLE, 5);
 	
 	this.items[8] = new ItemStack(Material.COOKED_BEEF, 5);
+	
+	new KCustomKit(KitManager.getManager().getKitPath().getAbsolutePath(), this.name, this.icon, this.items);
     }
     
     @Override
     public void delete() {
 	// Does nothing in this case
+    }
+    
+    @Override
+    public boolean isEnabled() {
+	return false;
     }
     
     @Override

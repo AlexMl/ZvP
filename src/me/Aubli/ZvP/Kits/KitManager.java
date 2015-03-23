@@ -50,18 +50,20 @@ public class KitManager {
 	this.kits = new ArrayList<IZvPKit>();
 	this.kitPath.mkdirs();
 	
-	IZvPKit bowKit = new KBowKit();
-	IZvPKit swordKit = new KSwordKit();
-	IZvPKit nullKit = new KNullKit();
-	
-	this.kits.add(bowKit);
-	this.kits.add(swordKit);
+	new KBowKit();
+	new KSwordKit();
 	
 	for (File f : this.kitPath.listFiles()) {
 	    IZvPKit kit = new KCustomKit(f);
-	    this.kits.add(kit);
+	    if (kit.isEnabled()) {
+		this.kits.add(kit);
+	    }
 	}
-	this.kits.add(nullKit);
+	this.kits.add(new KNullKit());
+    }
+    
+    public File getKitPath() {
+	return this.kitPath;
     }
     
     public IZvPKit getKit(String kitName) {
