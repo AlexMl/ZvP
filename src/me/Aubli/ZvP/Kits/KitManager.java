@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.ZvPPlayer;
@@ -52,14 +53,17 @@ public class KitManager {
 	
 	new KBowKit();
 	new KSwordKit();
+	new KNullKit();
 	
 	for (File f : this.kitPath.listFiles()) {
 	    IZvPKit kit = new KCustomKit(f);
 	    if (kit.isEnabled()) {
 		this.kits.add(kit);
+		ZvP.getPluginLogger().log(Level.FINER, "Loaded " + kit.getName() + " from " + f.getPath(), true);
+	    } else {
+		ZvP.getPluginLogger().log(Level.FINEST, "Kit " + kit.getName() + " is disabled through config " + f.getPath(), true);
 	    }
 	}
-	this.kits.add(new KNullKit());
     }
     
     public File getKitPath() {
