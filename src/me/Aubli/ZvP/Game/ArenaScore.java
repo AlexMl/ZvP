@@ -1,6 +1,10 @@
 package me.Aubli.ZvP.Game;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.logging.Level;
+
+import me.Aubli.ZvP.ZvP;
 
 
 public class ArenaScore {
@@ -31,8 +35,21 @@ public class ArenaScore {
 	}
     }
     
-    public double getScore() {
-	return this.score;
+    public double getScore(ZvPPlayer player) {
+	if (player == null && isSeperated()) {
+	    double score = 0.0;
+	    for (Entry<ZvPPlayer, Double> entry : this.playerScore.entrySet()) {
+		score += entry.getValue();
+	    }
+	    return score;
+	} else if (!isSeperated()) {
+	    return this.score;
+	} else if (isSeperated() && player != null) {
+	    return this.playerScore.get(player);
+	} else {
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while returning score for Arena:" + this.arena.getID() + "; seperated:" + isSeperated() + " player==null:" + (player == null), true, true);
+	    return 0.0;
+	}
     }
     
     public Arena getArena() {
