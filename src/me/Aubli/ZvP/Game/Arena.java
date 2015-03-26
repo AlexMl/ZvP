@@ -57,9 +57,9 @@ public class Arena implements Comparable<Arena> {
     private Location minLoc;
     private Location maxLoc;
     
-    private Random rand;
+    private ArenaScore score;
     
-    private double teamBalance;
+    private Random rand;
     
     private ArrayList<ZvPPlayer> players;
     
@@ -81,8 +81,6 @@ public class Arena implements Comparable<Arena> {
 	
 	this.round = 0;
 	this.wave = 0;
-	
-	this.teamBalance = 0.0;
 	
 	this.saveRadius = saveRadius;
 	this.spawnRate = spawnRate;
@@ -121,7 +119,6 @@ public class Arena implements Comparable<Arena> {
 	
 	this.round = 0;
 	this.wave = 0;
-	this.teamBalance = 0.0;
 	
 	this.spawnRate = this.arenaConfig.getInt("arena.spawnRate");
 	this.saveRadius = this.arenaConfig.getDouble("arena.saveRadius");
@@ -222,12 +219,12 @@ public class Arena implements Comparable<Arena> {
 	return this.TaskId;
     }
     
-    public double getBalance() {
-	return this.teamBalance;
-    }
-    
     public double getSaveRadius() {
 	return this.saveRadius;
+    }
+    
+    public ArenaScore getScore() {
+	return this.score;
     }
     
     public World getWorld() {
@@ -396,20 +393,6 @@ public class Arena implements Comparable<Arena> {
     
     public boolean containsLocation(Location location) {
 	return ((location.getX() <= getMax().getX() && location.getX() >= getMin().getX()) && (location.getZ() <= getMax().getZ() && location.getZ() >= getMin().getZ()));
-    }
-    
-    public void addBalance(double sum) {
-	this.teamBalance += sum;
-	updatePlayerBoards();
-    }
-    
-    public void subtractBalance(double sum) {
-	if (sum > getBalance()) {
-	    this.teamBalance = 0.0;
-	} else {
-	    this.teamBalance -= sum;
-	}
-	updatePlayerBoards();
     }
     
     public void setPlayerBoards() {
@@ -585,8 +568,9 @@ public class Arena implements Comparable<Arena> {
 	
 	this.round = 0;
 	this.wave = 0;
-	this.teamBalance = 0.0;
 	
+	this.score = new ArenaScore(this, // TODO config option)
+	false);
 	getWorld().setDifficulty(Difficulty.NORMAL);
 	getWorld().setTime(15000L);
 	getWorld().setMonsterSpawnLimit(0);
@@ -604,7 +588,6 @@ public class Arena implements Comparable<Arena> {
 	
 	this.round = 0;
 	this.wave = 0;
-	this.teamBalance = 0.0;
 	
 	getWorld().setMonsterSpawnLimit(-1);
 	getWorld().setTime(5000L);

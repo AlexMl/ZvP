@@ -107,39 +107,39 @@ public class GUIListener implements Listener {
 		    if (item != null && player != null && GameManager.getManager().isInGame(player.getPlayer())) {
 			
 			switch (event.getClick()) {
-			    
+			
 			    case LEFT: // Buy
-				if (player.getArena().getBalance() >= item.getPrice()) {
+				if (player.getArena().getScore().getScore(player) >= item.getPrice()) {
 				    
 				    ItemStack boughtItem = new ItemStack(item.getItem().getType(), item.getItem().getAmount());
 				    boughtItem.addUnsafeEnchantments(item.getItem().getEnchantments());
 				    boughtItem.setDurability(item.getItem().getDurability());
 				    
-				    player.getArena().subtractBalance(item.getPrice());
+				    player.getArena().getScore().subtractScore(player, item.getPrice());
 				    player.getPlayer().getInventory().addItem(boughtItem);
 				    player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_bought"), player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
 				} else {
 				    player.sendMessage(MessageManager.getMessage("game:no_money"));
 				}
 				break;
-				
+			    
 			    case SHIFT_LEFT: // Buy all
-				if (player.getArena().getBalance() >= item.getPrice()) {
+				if (player.getArena().getScore().getScore(player) >= item.getPrice()) {
 				    
-				    int amount = (int) (player.getArena().getBalance() / item.getPrice()) < 64 ? (int) (player.getArena().getBalance() / item.getPrice()) : 64;
+				    int amount = (int) (player.getArena().getScore().getScore(player) / item.getPrice()) < 64 ? (int) (player.getArena().getScore().getScore(player) / item.getPrice()) : 64;
 				    
 				    ItemStack boughtItem = new ItemStack(item.getItem().getType(), amount);
 				    boughtItem.addUnsafeEnchantments(item.getItem().getEnchantments());
 				    boughtItem.setDurability(item.getItem().getDurability());
 				    
-				    player.getArena().subtractBalance(item.getPrice() * amount);
+				    player.getArena().getScore().subtractScore(player, item.getPrice() * amount);
 				    player.getPlayer().getInventory().addItem(boughtItem);
 				    player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_bought_more"), player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
 				} else {
 				    player.sendMessage(MessageManager.getMessage("game:no_money"));
 				}
 				break;
-				
+			    
 			    case RIGHT: // Sell
 				
 				ItemStack stack = new ItemStack(item.getItem().getType());
@@ -148,14 +148,14 @@ public class GUIListener implements Listener {
 				
 				if (player.getPlayer().getInventory().containsAtLeast(stack, 1)) {
 				    player.getPlayer().getInventory().removeItem(stack);
-				    player.getArena().addBalance(item.getPrice());
+				    player.getArena().getScore().addScore(player, item.getPrice());
 				    player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_sold"), player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
 				} else {
 				    player.sendMessage(MessageManager.getMessage("game:no_item_to_sell"));
 				}
 				
 				break;
-				
+			    
 			    case SHIFT_RIGHT: // sell all
 				
 				ItemStack stack1 = new ItemStack(item.getItem().getType());
@@ -176,7 +176,7 @@ public class GUIListener implements Listener {
 					}
 				    }
 				    
-				    player.getArena().addBalance(item.getPrice() * amount);
+				    player.getArena().getScore().addScore(player, item.getPrice() * amount);
 				    player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_sold_more"), player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
 				} else {
 				    player.sendMessage(MessageManager.getMessage("game:no_item_to_sell"));
