@@ -33,7 +33,7 @@ public class KCustomKit implements IZvPKit, Comparable<IZvPKit> {
 	
 	this.kitFile = new File(path + "/" + name + ".yml");
 	FileConfiguration kitConfig = YamlConfiguration.loadConfiguration(this.kitFile);
-	System.out.println(name + " " + this.kitFile.exists());
+	
 	if (!this.kitFile.exists()) {
 	    
 	    kitConfig.options().header("This is the config file used in ZvP to store a customm kit.\n\n" + "'name:' The name of the kit\n" + "'icon:' An item used as an icon\n\n" + "'id:' The id describes the item material. A list of all items can be found here: http://jd.bukkit.org/dev/apidocs/org/bukkit/Material.html\n" + "'amount:' The amount of the item (Should be 1!)\n" + "'data:' Used by potions\n" + "'ench: {}' A list of enchantings (ench: {ENCHANTMENT:LEVEL}). A list of enchantments can be found here:\n http://jd.bukkit.org/dev/apidocs/org/bukkit/enchantments/Enchantment.html\n");
