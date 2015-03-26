@@ -1,4 +1,7 @@
 Changelog:
+2.3.3:
+*Standard kits can now be disabled in their kit-setting file.
+
 2.3.2:
 *Fixed Bug with jointime if the votesystem is disabled
 
