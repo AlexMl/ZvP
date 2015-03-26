@@ -46,8 +46,10 @@ public class ArenaScore {
     public void addScore(ZvPPlayer player, double score) {
 	if (isSeperated()) {
 	    this.playerScore.put(player, this.playerScore.get(player) + score);
+	    player.updateScoreboard();
 	} else {
 	    this.score += score;
+	    this.arena.updatePlayerBoards();
 	}
     }
     
@@ -59,12 +61,14 @@ public class ArenaScore {
 	    } else {
 		this.playerScore.put(player, this.playerScore.get(player) - score);
 	    }
+	    player.updateScoreboard();
 	} else {
 	    if (score >= this.score) {
 		this.score = 0;
 	    } else {
 		this.score -= score;
 	    }
+	    this.arena.updatePlayerBoards();
 	}
     }
 }
