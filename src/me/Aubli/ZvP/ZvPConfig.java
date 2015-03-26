@@ -21,6 +21,7 @@ public class ZvPConfig {
     
     private static boolean enableKits = true;
     private static boolean useVoteSystem = true;
+    private static boolean seperatePlayerScores = false;
     private static int maxPlayers;
     private static int defaultRounds;
     private static int defaultWaves;
@@ -54,6 +55,7 @@ public class ZvPConfig {
 	
 	getConfig().addDefault("game.enableKits", true);
 	getConfig().addDefault("game.useVoteSystem", true);
+	getConfig().addDefault("game.seperatePlayerScores", false);
 	getConfig().addDefault("game.maximal_Players", 25);
 	getConfig().addDefault("game.default_rounds", 3);
 	getConfig().addDefault("game.default_waves", 5);
@@ -70,17 +72,18 @@ public class ZvPConfig {
     }
     
     private static void load() {
-	useMetrics = getConfig().getBoolean("plugin.enableMetrics");
-	debugMode = getConfig().getBoolean("plugin.debugMode");
-	locale = new Locale(getConfig().getString("plugin.Locale"));
-	logLevel = getConfig().getInt("plugin.loglevel");
+	useMetrics = getConfig().getBoolean("plugin.enableMetrics", true);
+	debugMode = getConfig().getBoolean("plugin.debugMode", false);
+	locale = new Locale(getConfig().getString("plugin.Locale", "en"));
+	logLevel = getConfig().getInt("plugin.loglevel", 500);
 	
 	enableUpdater = getConfig().getBoolean("plugin.update.enable", true);
 	autoUpdate = getConfig().getBoolean("plugin.update.autoUpdate", true);
 	logUpdate = getConfig().getBoolean("plugin.update.showUpdateInConsole", false);
 	
-	enableKits = getConfig().getBoolean("game.enableKits");
-	useVoteSystem = getConfig().getBoolean("game.useVoteSystem");
+	enableKits = getConfig().getBoolean("game.enableKits", true);
+	useVoteSystem = getConfig().getBoolean("game.useVoteSystem", true);
+	seperatePlayerScores = getConfig().getBoolean("game.seperatePlayerScores", false);
 	maxPlayers = getConfig().getInt("game.maximal_Players");
 	defaultRounds = getConfig().getInt("game.default_rounds");
 	defaultWaves = getConfig().getInt("game.default_waves");
@@ -127,6 +130,10 @@ public class ZvPConfig {
     
     public static boolean getEnableKits() {
 	return enableKits;
+    }
+    
+    public static boolean getSeperatePlayerScores() {
+	return seperatePlayerScores;
     }
     
     public static boolean getUseVoteSystem() {
