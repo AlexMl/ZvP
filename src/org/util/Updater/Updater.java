@@ -15,6 +15,8 @@ import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import me.Aubli.ZvP.ZvP;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -601,7 +603,11 @@ public class Updater {
      * @return true if Updater should consider the remote version an update, false if not.
      */
     public boolean shouldUpdate(String localVersion, String remoteVersion) {
-	return !localVersion.equalsIgnoreCase(remoteVersion);
+	double local = Double.parseDouble(localVersion.replace(".", "").replace("-", "."));
+	double remote = Double.parseDouble(remoteVersion.replace(".", "").replace("-", "."));
+	ZvP.getPluginLogger().log(Level.FINEST, "LV=" + local + " : RV=" + remote + " Update? " + (remote > local), true, true);
+	
+	return remote > local;
     }
     
     /**
