@@ -21,7 +21,7 @@ public class ZvPConfig {
     
     private static boolean enableKits = true;
     private static boolean useVoteSystem = true;
-    private static boolean seperatePlayerScores = false;
+    private static boolean separatePlayerScores = false;
     private static int maxPlayers;
     private static int defaultRounds;
     private static int defaultWaves;
@@ -55,7 +55,7 @@ public class ZvPConfig {
 	
 	getConfig().addDefault("game.enableKits", true);
 	getConfig().addDefault("game.useVoteSystem", true);
-	getConfig().addDefault("game.seperatePlayerScores", false);
+	getConfig().addDefault("game.separatePlayerScores", false);
 	getConfig().addDefault("game.maximal_Players", 25);
 	getConfig().addDefault("game.default_rounds", 3);
 	getConfig().addDefault("game.default_waves", 5);
@@ -83,7 +83,7 @@ public class ZvPConfig {
 	
 	enableKits = getConfig().getBoolean("game.enableKits", true);
 	useVoteSystem = getConfig().getBoolean("game.useVoteSystem", true);
-	seperatePlayerScores = getConfig().getBoolean("game.seperatePlayerScores", false);
+	separatePlayerScores = getConfig().getBoolean("game.separatePlayerScores", false);
 	maxPlayers = getConfig().getInt("game.maximal_Players");
 	defaultRounds = getConfig().getInt("game.default_rounds");
 	defaultWaves = getConfig().getInt("game.default_waves");
@@ -132,8 +132,8 @@ public class ZvPConfig {
 	return enableKits;
     }
     
-    public static boolean getSeperatePlayerScores() {
-	return seperatePlayerScores;
+    public static boolean getSeparatePlayerScores() {
+	return separatePlayerScores;
     }
     
     public static boolean getUseVoteSystem() {

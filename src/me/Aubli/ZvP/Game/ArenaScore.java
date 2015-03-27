@@ -15,13 +15,13 @@ public class ArenaScore {
     
     private HashMap<ZvPPlayer, Double> playerScore;
     
-    private final boolean seperated;
+    private final boolean separated;
     
-    public ArenaScore(Arena arena, boolean seperated) {
+    public ArenaScore(Arena arena, boolean separated) {
 	this.arena = arena;
-	this.seperated = seperated;
+	this.separated = separated;
 	
-	if (seperated) {
+	if (separated) {
 	    this.playerScore = new HashMap<ZvPPlayer, Double>();
 	    initMap();
 	} else {
@@ -36,18 +36,18 @@ public class ArenaScore {
     }
     
     public double getScore(ZvPPlayer player) {
-	if (player == null && isSeperated()) {
+	if (player == null && isSeparated()) {
 	    double score = 0.0;
 	    for (Entry<ZvPPlayer, Double> entry : this.playerScore.entrySet()) {
 		score += entry.getValue();
 	    }
 	    return score;
-	} else if (!isSeperated()) {
+	} else if (!isSeparated()) {
 	    return this.score;
-	} else if (isSeperated() && player != null) {
+	} else if (isSeparated() && player != null) {
 	    return this.playerScore.get(player);
 	} else {
-	    ZvP.getPluginLogger().log(Level.WARNING, "Error while returning score for Arena:" + this.arena.getID() + "; seperated:" + isSeperated() + " player==null:" + (player == null), true, true);
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while returning score for Arena:" + this.arena.getID() + "; separated:" + isSeparated() + " player==null:" + (player == null), true, true);
 	    return 0.0;
 	}
     }
@@ -56,12 +56,12 @@ public class ArenaScore {
 	return this.arena;
     }
     
-    public boolean isSeperated() {
-	return this.seperated;
+    public boolean isSeparated() {
+	return this.separated;
     }
     
     public void addScore(ZvPPlayer player, double score) {
-	if (isSeperated()) {
+	if (isSeparated()) {
 	    this.playerScore.put(player, this.playerScore.get(player) + score);
 	    player.updateScoreboard();
 	} else {
@@ -71,7 +71,7 @@ public class ArenaScore {
     }
     
     public void subtractScore(ZvPPlayer player, double score) {
-	if (isSeperated()) {
+	if (isSeparated()) {
 	    double prevScore = this.playerScore.get(player);
 	    if (prevScore <= score) {
 		this.playerScore.put(player, 0.0);
