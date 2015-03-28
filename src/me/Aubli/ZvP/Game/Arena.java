@@ -131,7 +131,7 @@ public class Arena implements Comparable<Arena> {
 	this.rand = new Random();
     }
     
-    void save() throws IOException {
+    private void save() throws IOException {
 	this.arenaConfig.set("arena.ID", this.arenaID);
 	this.arenaConfig.set("arena.Online", !(getStatus() == ArenaStatus.STOPED));
 	

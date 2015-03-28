@@ -1,7 +1,6 @@
 package me.Aubli.ZvP.Game;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -71,7 +70,6 @@ public class GameManager {
     
     public void shutdown() {
 	stopGames();
-	saveConfig();
     }
     
     public void reloadConfig() {
@@ -117,15 +115,6 @@ public class GameManager {
 	}
     }
     
-    public void saveConfig() {
-	try {
-	    saveArenas();
-	    saveLobbys();
-	} catch (IOException e) {
-	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena: " + e.getMessage(), true, false, e);
-	}
-    }
-    
     // Load and save
     private void loadArenas() {
 	for (File arenaFile : new File(this.arenaPath).listFiles()) {
@@ -144,18 +133,6 @@ public class GameManager {
 	    if (lobby.getWorld() != null) {
 		this.lobbys.add(lobby);
 	    }
-	}
-    }
-    
-    private void saveArenas() throws IOException {
-	for (int i = 0; i < getArenas().length; i++) {
-	    getArenas()[i].save();
-	}
-    }
-    
-    private void saveLobbys() throws IOException {
-	for (int i = 0; i < getLobbys().length; i++) {
-	    getLobbys()[i].save();
 	}
     }
     

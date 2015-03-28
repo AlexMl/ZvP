@@ -190,16 +190,6 @@ public class ZvPCommands implements CommandExecutor {
 			return true;
 		    }
 		}
-		if (args[0].equalsIgnoreCase("save")) {
-		    if (playerSender.hasPermission("zvp.save")) {
-			GameManager.getManager().saveConfig();
-			playerSender.sendMessage(MessageManager.getMessage("config:saved"));
-			return true;
-		    } else {
-			commandDenied(playerSender);
-			return true;
-		    }
-		}
 		if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
 		    if (playerSender.hasPermission("zvp.reload")) {
 			GameManager.getManager().reloadConfig();

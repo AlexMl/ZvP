@@ -48,7 +48,7 @@ public class Lobby implements Comparable<Lobby> {
 	this.centerLoc = new Location(Bukkit.getWorld(UUID.fromString(this.lobbyConfig.getString("lobby.Location.world"))), this.lobbyConfig.getInt("lobby.Location.X"), this.lobbyConfig.getInt("lobby.Location.Y"), this.lobbyConfig.getInt("lobby.Location.Z"));
     }
     
-    void save() throws IOException {
+    private void save() throws IOException {
 	this.lobbyConfig.set("lobby.ID", this.lobbyID);
 	
 	this.lobbyConfig.set("lobby.Location.world", this.centerLoc.getWorld().getUID().toString());
