@@ -9,6 +9,12 @@ import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
@@ -19,9 +25,13 @@ public class GameRunnable extends BukkitRunnable {
 	this.startDelay = startDelay;
 	this.magicSpawnNumber = magicSpawnRate;
 	this.spawnRate = 0.45;
+	
+	this.rand = new Random(System.currentTimeMillis());
     }
     
     private Arena arena;
+    
+    private Random rand;
     
     private final int startDelay;
     
@@ -146,6 +156,65 @@ public class GameRunnable extends BukkitRunnable {
 			}
 		    } else {			// End of Game
 		    
+			new BukkitRunnable() {
+			    
+			    ZvPPlayer winner = GameRunnable.this.arena.getBestPlayer();
+			    
+			    int runs = 0;
+			    
+			    @Override
+			    public void run() {
+				
+				if (this.runs <= 5) {
+				    for (int i = 0; i < 10; i++) {
+					Firework fw = (Firework) GameRunnable.this.arena.getWorld().spawnEntity(this.winner.getLocation().clone().add((GameRunnable.this.rand.nextInt(60) - 2.8 * i), GameRunnable.this.rand.nextInt(15), (GameRunnable.this.rand.nextInt(60) - 2.8 * i)), EntityType.FIREWORK);
+					FireworkMeta fwMeta = fw.getFireworkMeta();
+					
+					// Get the type
+					Type effectType;
+					switch (GameRunnable.this.rand.nextInt(4) + 1) {
+					    case 1:
+						effectType = Type.BALL;
+						break;
+					    
+					    case 2:
+						effectType = Type.BALL_LARGE;
+						break;
+					    
+					    case 3:
+						effectType = Type.BURST;
+						break;
+					    
+					    case 4:
+						effectType = Type.STAR;
+						break;
+					    
+					    default:
+						effectType = Type.BALL;
+						break;
+					}
+					
+					// Get our random colours
+					Color c1 = GameRunnable.getColor(GameRunnable.this.rand.nextInt(17) + 1);
+					Color c2 = GameRunnable.getColor(GameRunnable.this.rand.nextInt(17) + 1);
+					
+					// Create our effect with this
+					FireworkEffect effect = FireworkEffect.builder().flicker(GameRunnable.this.rand.nextBoolean()).withColor(c1).withFade(c2).with(effectType).trail(GameRunnable.this.rand.nextBoolean()).build();
+					
+					// Then apply the effect to the meta
+					fwMeta.addEffect(effect);
+					
+					// Generate some random power and set it
+					fwMeta.setPower(GameRunnable.this.rand.nextInt(2) + 1);
+					fw.setFireworkMeta(fwMeta);
+				    }
+				    this.runs++;
+				} else {
+				    this.cancel();
+				}
+			    }
+			}.runTaskTimer(ZvP.getInstance(), 2 * 20L, 2 * 20L);
+			
 			int kills = this.arena.getKilledZombies();
 			int deaths = 0;
 			double money = this.arena.getScore().getScore(null);
@@ -155,7 +224,7 @@ public class GameRunnable extends BukkitRunnable {
 			}
 			
 			String[] donP = MessageManager.getMessage("game:won_messages").split(";");
-			int index = new Random().nextInt(donP.length);
+			int index = this.rand.nextInt(donP.length);
 			String endMessage = String.format(MessageManager.getMessage("game:won"), kills, (this.arena.getMaxRounds() * this.arena.getMaxWaves()), deaths, Math.round(money), donP[index]);
 			
 			this.arena.sendMessage(endMessage);
@@ -177,4 +246,46 @@ public class GameRunnable extends BukkitRunnable {
 	this.seconds++;
     }
     
+    private static Color getColor(int value) {
+	
+	switch (value) {
+	    case 1:
+		return Color.AQUA;
+	    case 2:
+		return Color.BLACK;
+	    case 3:
+		return Color.BLUE;
+	    case 4:
+		return Color.FUCHSIA;
+	    case 5:
+		return Color.GRAY;
+	    case 6:
+		return Color.GREEN;
+	    case 7:
+		return Color.LIME;
+	    case 8:
+		return Color.MAROON;
+	    case 9:
+		return Color.NAVY;
+	    case 10:
+		return Color.OLIVE;
+	    case 11:
+		return Color.ORANGE;
+	    case 12:
+		return Color.PURPLE;
+	    case 13:
+		return Color.RED;
+	    case 14:
+		return Color.SILVER;
+	    case 15:
+		return Color.TEAL;
+	    case 16:
+		return Color.WHITE;
+	    case 17:
+		return Color.YELLOW;
+		
+	    default:
+		return Color.BLUE;
+	}
+    }
 }
