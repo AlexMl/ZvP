@@ -3,7 +3,9 @@ package me.Aubli.ZvP.Game;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -30,6 +32,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
+import org.util.SortMap.SortMap;
 
 
 public class Arena implements Comparable<Arena> {
@@ -346,6 +349,18 @@ public class Arena implements Comparable<Arena> {
 	    kills += p.getKills();
 	}
 	return kills;
+    }
+    
+    public ZvPPlayer getBestPlayer() {
+	Map<UUID, Double> scoreMap = new HashMap<UUID, Double>();
+	
+	for (ZvPPlayer player : getPlayers()) {
+	    double score = (player.getKills() + getScore().getScore(player)) - player.getDeaths();
+	    scoreMap.put(player.getUuid(), score);
+	}
+	
+	scoreMap = SortMap.sortByValue(scoreMap);
+	return GameManager.getManager().getPlayer(UUID.fromString(scoreMap.entrySet().toArray()[scoreMap.size() - 1].toString().split("=")[0]));
     }
     
     public boolean isOnline() {
