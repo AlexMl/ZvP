@@ -204,12 +204,12 @@ public class ZvPPlayer {
     
     public void addKill() {
 	setKills(getKills() + 1);
-	getArena().addBalance(ZvPConfig.getZombieFund());
+	getArena().getScore().addScore(this, ZvPConfig.getZombieFund());
     }
     
     public void die() {
 	setDeaths(getDeaths() + 1);
-	getArena().subtractBalance(ZvPConfig.getDeathFee());
+	getArena().getScore().subtractScore(this, ZvPConfig.getDeathFee());
     }
     
     public void removeScoreboard() {
@@ -241,7 +241,7 @@ public class ZvPPlayer {
 	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GRAY + "W: " + ChatColor.AQUA + getArena().getWave() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getMaxWaves())).setScore(12);
 	    
 	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE + "-------------")).setScore(11);
-	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Money: " + new DecimalFormat("#0.00").format(this.arena.getBalance()))).setScore(10);
+	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Money: " + new DecimalFormat("#0.00").format(getArena().getScore().getScore(this)))).setScore(10);
 	    
 	    obj.getScore(Bukkit.getOfflinePlayer("-------------")).setScore(9);
 	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "Left:  " + ChatColor.GREEN + getArena().getLivingZombies())).setScore(8);

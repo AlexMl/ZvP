@@ -144,7 +144,7 @@ public class GameRunnable extends BukkitRunnable {
 		    
 			int kills = this.arena.getKilledZombies();
 			int deaths = 0;
-			double money = this.arena.getBalance();
+			double money = this.arena.getScore().getScore(null);
 			
 			for (ZvPPlayer p : this.arena.getPlayers()) {
 			    deaths += p.getDeaths();
