@@ -1,4 +1,7 @@
 Changelog:
+2.3.5:
+*Added Fireworks to the game
+
 2.3.4-1:
 *Fixed wrong arenastate issue
 *Arena and Lobby config file will not be replaced by the plugin on reload
