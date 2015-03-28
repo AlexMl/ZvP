@@ -77,6 +77,10 @@ public class GameRunnable extends BukkitRunnable {
 		this.spawnZombies = false;
 	    }
 	    
+	    if (this.arena.getStatus() != ArenaStatus.RUNNING) {
+		this.arena.setStatus(ArenaStatus.RUNNING);
+	    }
+	    
 	    if (this.firstSpawn) {
 		this.arena.spawnZombies(this.arena.getRound() * this.arena.getWave() * this.magicSpawnNumber - (int) (this.arena.getRound() * this.arena.getWave() * this.magicSpawnNumber * this.spawnRate));
 		this.spawnGoal = this.arena.getRound() * this.arena.getWave() * this.magicSpawnNumber - (int) (this.arena.getRound() * this.arena.getWave() * this.magicSpawnNumber * this.spawnRate);
@@ -141,7 +145,7 @@ public class GameRunnable extends BukkitRunnable {
 			    this.cancel();
 			}
 		    } else {			// End of Game
-		    
+			
 			int kills = this.arena.getKilledZombies();
 			int deaths = 0;
 			double money = this.arena.getScore().getScore(null);
