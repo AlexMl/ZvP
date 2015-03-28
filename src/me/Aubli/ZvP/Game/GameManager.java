@@ -3,6 +3,7 @@ package me.Aubli.ZvP.Game;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
@@ -210,6 +211,11 @@ public class GameManager {
 	    }
 	}
 	return null;
+    }
+    
+    // get ZvPPlayer from UUID
+    public ZvPPlayer getPlayer(UUID uuid) {
+	return getPlayer(Bukkit.getPlayer(uuid));
     }
     
     // Scoreboard manager
