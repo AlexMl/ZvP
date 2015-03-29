@@ -27,8 +27,7 @@ public class GameManager {
 	BREAKWAITING(MessageManager.getMessage("status:running")),
 	WAITING(MessageManager.getMessage("status:waiting")),
 	STANDBY(MessageManager.getMessage("status:waiting")),
-	STOPED(MessageManager.getMessage("status:stoped")),
-	SUSPEND(MessageManager.getMessage("status:stoped")), ;
+	STOPED(MessageManager.getMessage("status:stoped"));
 	
 	private String name;
 	

@@ -147,7 +147,7 @@ public class InteractSign implements ISign, Comparable<ISign> {
 		this.sign.setLine(2, ChatColor.YELLOW + getArena().getStatus().getName());
 		this.sign.setLine(3, ChatColor.GREEN + "[JOIN]");
 	    }
-	    if (getArena().getStatus() == ArenaStatus.STOPED || getArena().getStatus() == ArenaStatus.SUSPEND) {
+	    if (getArena().getStatus() == ArenaStatus.STOPED) {
 		this.sign.setLine(2, ChatColor.DARK_RED + getArena().getStatus().getName());
 		this.sign.setLine(3, ChatColor.DARK_RED + "Can't Join!");
 	    }

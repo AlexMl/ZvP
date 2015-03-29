@@ -349,7 +349,7 @@ public class Arena implements Comparable<Arena> {
     }
     
     public boolean isOnline() {
-	return !(getStatus() == ArenaStatus.STOPED || getStatus() == ArenaStatus.SUSPEND);
+	return !(getStatus() == ArenaStatus.STOPED);
     }
     
     public boolean isRunning() {
