@@ -145,7 +145,7 @@ public class GameRunnable extends BukkitRunnable {
 			    this.cancel();
 			}
 		    } else {			// End of Game
-			
+		    
 			int kills = this.arena.getKilledZombies();
 			int deaths = 0;
 			double money = this.arena.getScore().getScore(null);
@@ -160,16 +160,19 @@ public class GameRunnable extends BukkitRunnable {
 			
 			this.arena.sendMessage(endMessage);
 			this.arena.stop();
+			return;
 		    }
 		}
 	    }
 	} else {
 	    this.arena.stop();
+	    return;
 	}
 	
 	if (this.arena.getLivingZombies() > 0 && ZvP.getPluginLogger().isDebugMode()) {
 	    this.arena.sendMessage("Arena: " + this.arena.getID() + " : " + ChatColor.RED + this.arena.getStatus().toString() + "; " + ChatColor.RESET + this.arena.getRound() + ":" + this.arena.getWave() + " Z:" + this.arena.getLivingZombies() + ":" + this.arena.getKilledZombies());
 	}
+	
 	this.arena.getWorld().setTime(15000L);
 	this.seconds++;
     }

@@ -493,7 +493,7 @@ public class Arena implements Comparable<Arena> {
 	    updatePlayerBoards();
 	    SignManager.getManager().updateSigns(this);
 	    
-	    if (this.players.size() == 0) {
+	    if (this.players.size() == 0 && getStatus() != ArenaStatus.STANDBY) {
 		this.stop();
 	    }
 	    
@@ -580,6 +580,10 @@ public class Arena implements Comparable<Arena> {
     }
     
     public void stop() {
+	
+	setStatus(ArenaStatus.STANDBY);
+	Bukkit.getScheduler().cancelTask(getTaskId());
+	
 	for (ZvPPlayer zp : getPlayers()) {
 	    zp.reset();
 	    removePlayer(zp);
@@ -592,8 +596,6 @@ public class Arena implements Comparable<Arena> {
 	getWorld().setTime(5000L);
 	
 	clearArena();
-	setStatus(ArenaStatus.STANDBY);
-	Bukkit.getScheduler().cancelTask(getTaskId());
 	ZvP.getPluginLogger().log(Level.INFO, "Arena " + getID() + " stoped!", false, true);
     }
     
