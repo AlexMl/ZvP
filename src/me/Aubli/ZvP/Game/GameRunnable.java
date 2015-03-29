@@ -156,7 +156,7 @@ public class GameRunnable extends BukkitRunnable {
 			}
 		    } else {			// End of Game
 		    
-			new BukkitRunnable() {
+			this.arena.setTaskID(new BukkitRunnable() {
 			    
 			    ZvPPlayer winner = GameRunnable.this.arena.getBestPlayer();
 			    
@@ -164,6 +164,7 @@ public class GameRunnable extends BukkitRunnable {
 			    
 			    @Override
 			    public void run() {
+				GameRunnable.this.arena.setPlayerLevel(6 - this.runs);
 				
 				if (this.runs <= 5) {
 				    for (int i = 0; i < 10; i++) {
@@ -210,10 +211,11 @@ public class GameRunnable extends BukkitRunnable {
 				    }
 				    this.runs++;
 				} else {
+				    GameRunnable.this.arena.stop();
 				    this.cancel();
 				}
 			    }
-			}.runTaskTimer(ZvP.getInstance(), 2 * 20L, 2 * 20L);
+			}.runTaskTimer(ZvP.getInstance(), 1 * 20L, 2 * 20L).getTaskId());
 			
 			int kills = this.arena.getKilledZombies();
 			int deaths = 0;
@@ -228,7 +230,7 @@ public class GameRunnable extends BukkitRunnable {
 			String endMessage = String.format(MessageManager.getMessage("game:won"), kills, (this.arena.getMaxRounds() * this.arena.getMaxWaves()), deaths, Math.round(money), donP[index]);
 			
 			this.arena.sendMessage(endMessage);
-			this.arena.stop();
+			this.cancel();
 			return;
 		    }
 		}
