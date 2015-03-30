@@ -20,6 +20,7 @@ public class ZvPConfig {
     private static boolean logUpdate = false;
     
     private static boolean enableKits = true;
+    private static boolean enableFirework = true;
     private static boolean useVoteSystem = true;
     private static boolean separatePlayerScores = false;
     private static int maxPlayers;
@@ -54,6 +55,7 @@ public class ZvPConfig {
 	getConfig().addDefault("plugin.update.showUpdateInConsole", true);
 	
 	getConfig().addDefault("game.enableKits", true);
+	getConfig().addDefault("game.enableFirework", true);
 	getConfig().addDefault("game.useVoteSystem", true);
 	getConfig().addDefault("game.separatePlayerScores", false);
 	getConfig().addDefault("game.maximal_Players", 25);
@@ -82,6 +84,7 @@ public class ZvPConfig {
 	logUpdate = getConfig().getBoolean("plugin.update.showUpdateInConsole", false);
 	
 	enableKits = getConfig().getBoolean("game.enableKits", true);
+	enableFirework = getConfig().getBoolean("game.enableFirework", true);
 	useVoteSystem = getConfig().getBoolean("game.useVoteSystem", true);
 	separatePlayerScores = getConfig().getBoolean("game.separatePlayerScores", false);
 	maxPlayers = getConfig().getInt("game.maximal_Players");
@@ -130,6 +133,10 @@ public class ZvPConfig {
     
     public static boolean getEnableKits() {
 	return enableKits;
+    }
+    
+    public static boolean getEnableFirework() {
+	return enableFirework;
     }
     
     public static boolean getSeparatePlayerScores() {

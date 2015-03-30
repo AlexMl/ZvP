@@ -164,62 +164,66 @@ public class GameRunnable extends BukkitRunnable {
 			    
 			    @Override
 			    public void run() {
-				GameRunnable.this.arena.setPlayerLevel(6 - this.runs);
-				
-				if (this.runs <= 5) {
-				    for (int i = 0; i < 10; i++) {
-					Firework fw = (Firework) GameRunnable.this.arena.getWorld().spawnEntity(this.winner.getLocation().clone().add((GameRunnable.this.rand.nextInt(60) - 2.8 * i), GameRunnable.this.rand.nextInt(15), (GameRunnable.this.rand.nextInt(60) - 2.8 * i)), EntityType.FIREWORK);
-					FireworkMeta fwMeta = fw.getFireworkMeta();
-					
-					// Get the type
-					Type effectType;
-					switch (GameRunnable.this.rand.nextInt(4) + 1) {
-					    case 1:
-						effectType = Type.BALL;
-						break;
+				if (ZvPConfig.getEnableFirework()) {
+				    GameRunnable.this.arena.setPlayerLevel(6 - this.runs);
+				    
+				    if (this.runs <= 5) {
+					for (int i = 0; i < 10; i++) {
+					    Firework fw = (Firework) GameRunnable.this.arena.getWorld().spawnEntity(this.winner.getLocation().clone().add((GameRunnable.this.rand.nextInt(60) - 2.8 * i), GameRunnable.this.rand.nextInt(15), (GameRunnable.this.rand.nextInt(60) - 2.8 * i)), EntityType.FIREWORK);
+					    FireworkMeta fwMeta = fw.getFireworkMeta();
 					    
-					    case 2:
-						effectType = Type.BALL_LARGE;
-						break;
+					    // Get the type
+					    Type effectType;
+					    switch (GameRunnable.this.rand.nextInt(4) + 1) {
+						case 1:
+						    effectType = Type.BALL;
+						    break;
+						
+						case 2:
+						    effectType = Type.BALL_LARGE;
+						    break;
+						
+						case 3:
+						    effectType = Type.BURST;
+						    break;
+						
+						case 4:
+						    effectType = Type.STAR;
+						    break;
+						
+						default:
+						    effectType = Type.BALL;
+						    break;
+					    }
 					    
-					    case 3:
-						effectType = Type.BURST;
-						break;
+					    // Get our random colours
+					    Color c1 = GameRunnable.getColor(GameRunnable.this.rand.nextInt(17) + 1);
+					    Color c2 = GameRunnable.getColor(GameRunnable.this.rand.nextInt(17) + 1);
 					    
-					    case 4:
-						effectType = Type.STAR;
-						break;
+					    // Create our effect with this
+					    FireworkEffect effect = FireworkEffect.builder().flicker(GameRunnable.this.rand.nextBoolean()).withColor(c1).withFade(c2).with(effectType).trail(GameRunnable.this.rand.nextBoolean()).build();
 					    
-					    default:
-						effectType = Type.BALL;
-						break;
+					    // Then apply the effect to the meta
+					    fwMeta.addEffect(effect);
+					    
+					    // Generate some random power and set it
+					    fwMeta.setPower(GameRunnable.this.rand.nextInt(2) + 1);
+					    fw.setFireworkMeta(fwMeta);
 					}
-					
-					// Get our random colours
-					Color c1 = GameRunnable.getColor(GameRunnable.this.rand.nextInt(17) + 1);
-					Color c2 = GameRunnable.getColor(GameRunnable.this.rand.nextInt(17) + 1);
-					
-					// Create our effect with this
-					FireworkEffect effect = FireworkEffect.builder().flicker(GameRunnable.this.rand.nextBoolean()).withColor(c1).withFade(c2).with(effectType).trail(GameRunnable.this.rand.nextBoolean()).build();
-					
-					// Then apply the effect to the meta
-					fwMeta.addEffect(effect);
-					
-					// Generate some random power and set it
-					fwMeta.setPower(GameRunnable.this.rand.nextInt(2) + 1);
-					fw.setFireworkMeta(fwMeta);
+					this.runs++;
+				    } else {
+					GameRunnable.this.arena.stop();
+					this.cancel();
 				    }
-				    this.runs++;
 				} else {
 				    GameRunnable.this.arena.stop();
-				    this.cancel();
 				}
 			    }
 			}.runTaskTimer(ZvP.getInstance(), 1 * 20L, 2 * 20L).getTaskId());
 			
 			int kills = this.arena.getKilledZombies();
-			int deaths = 0;
 			double money = this.arena.getScore().getScore(null);
+			int deaths = 0;
 			
 			for (ZvPPlayer p : this.arena.getPlayers()) {
 			    deaths += p.getDeaths();
