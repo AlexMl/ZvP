@@ -1,4 +1,9 @@
 Changelog:
+2.3.7:
+*Fixed performance issues on Spigot
+*Fixed missing kit error
+*Status display changed
+
 2.3.6:
 *Fixed scoreboard updating to late issue
 *Added option to disable firework
