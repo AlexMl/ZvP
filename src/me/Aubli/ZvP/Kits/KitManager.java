@@ -3,6 +3,7 @@ package me.Aubli.ZvP.Kits;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -80,10 +81,17 @@ public class KitManager {
     }
     
     public IZvPKit[] getKits() {
-	IZvPKit[] kitArray = new IZvPKit[getKitAmount() - 1];
+	List<IZvPKit> kitList = new ArrayList<IZvPKit>();
 	
-	for (int i = 0; i < getKitAmount() - 1; i++) {
-	    kitArray[i] = this.kits.get(i);
+	for (IZvPKit kit : this.kits) {
+	    if (!kit.getName().equals("No Kit")) {
+		kitList.add(kit);
+	    }
+	}
+	
+	IZvPKit[] kitArray = new IZvPKit[kitList.size()];
+	for (IZvPKit kit : kitList) {
+	    kitArray[kitList.indexOf(kit)] = kit;
 	}
 	
 	Arrays.sort(kitArray);
