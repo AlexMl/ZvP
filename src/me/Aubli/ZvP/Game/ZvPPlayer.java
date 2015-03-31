@@ -235,21 +235,21 @@ public class ZvPPlayer {
 	    obj.setDisplayName(ChatColor.GREEN + "Arena: " + ChatColor.GOLD + getArena().getID());
 	    obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 	    
-	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RESET + " ")).setScore(15);
-	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.BLUE + "Players: " + ChatColor.RED + getArena().getPlayers().length)).setScore(14);
-	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GRAY + "R: " + ChatColor.AQUA + getArena().getRound() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getMaxRounds())).setScore(13);
-	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GRAY + "W: " + ChatColor.AQUA + getArena().getWave() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getMaxWaves())).setScore(12);
+	    obj.getScore(ChatColor.RESET + " ").setScore(15);
+	    obj.getScore(ChatColor.BLUE + "Players: " + ChatColor.RED + getArena().getPlayers().length).setScore(14);
+	    obj.getScore(ChatColor.GRAY + "R: " + ChatColor.AQUA + getArena().getRound() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getMaxRounds()).setScore(13);
+	    obj.getScore(ChatColor.GRAY + "W: " + ChatColor.AQUA + getArena().getWave() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getMaxWaves()).setScore(12);
 	    
-	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.WHITE + "-------------")).setScore(11);
-	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Money: " + new DecimalFormat("#0.00").format(getArena().getScore().getScore(this)))).setScore(10);
+	    obj.getScore(ChatColor.WHITE + "-------------").setScore(11);
+	    obj.getScore(ChatColor.GREEN + "Money: " + new DecimalFormat("#0.00").format(getArena().getScore().getScore(this))).setScore(10);
 	    
-	    obj.getScore(Bukkit.getOfflinePlayer("-------------")).setScore(9);
-	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "Left:  " + ChatColor.GREEN + getArena().getLivingZombies())).setScore(8);
-	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "Killed: " + ChatColor.GREEN + getArena().getKilledZombies())).setScore(7);
+	    obj.getScore("-------------").setScore(9);
+	    obj.getScore(ChatColor.RED + "Left:  " + ChatColor.GREEN + getArena().getLivingZombies()).setScore(8);
+	    obj.getScore(ChatColor.RED + "Killed: " + ChatColor.GREEN + getArena().getKilledZombies()).setScore(7);
 	    
-	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RESET + "-------------")).setScore(6);
-	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GOLD + "Kills: " + getKills())).setScore(5);
-	    obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_PURPLE + "Deaths: " + getDeaths())).setScore(4);
+	    obj.getScore(ChatColor.RESET + "-------------").setScore(6);
+	    obj.getScore(ChatColor.GOLD + "Kills: " + getKills()).setScore(5);
+	    obj.getScore(ChatColor.DARK_PURPLE + "Deaths: " + getDeaths()).setScore(4);
 	    
 	    Objective voteObj = getBoard().getObjective("zvp-vote");
 	    if (voteObj == null) {
