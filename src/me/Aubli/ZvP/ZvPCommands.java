@@ -392,40 +392,50 @@ public class ZvPCommands implements CommandExecutor {
 	String pluginVersion = ZvP.getInstance().getDescription().getVersion();
 	
 	if (option.equalsIgnoreCase("signs")) {
-	    
-	    player.sendMessage("\n\n");
-	    player.sendMessage(ChatColor.GRAY + "|------------ " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Signs" + ChatColor.GRAY + " -------------|");
-	    for (ISign sign : SignManager.getManager().getSigns()) {
-		player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Type: " + ChatColor.BLUE + sign.getType() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Arena: " + ChatColor.BLUE + sign.getArena().getID() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Lobby: " + ChatColor.BLUE + sign.getLobby().getID() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Loc: " + ChatColor.BLUE + sign.getLocation().getBlockX() + ChatColor.DARK_GREEN + " | " + ChatColor.BLUE + sign.getLocation().getBlockY() + ChatColor.DARK_GREEN + " | " + ChatColor.BLUE + sign.getLocation().getBlockZ());
+	    if (SignManager.getManager().getSigns().length > 0) {
+		
+		player.sendMessage("\n\n");
+		player.sendMessage(ChatColor.GRAY + "|------------ " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Signs" + ChatColor.GRAY + " -------------|");
+		
+		for (ISign sign : SignManager.getManager().getSigns()) {
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Type: " + ChatColor.BLUE + sign.getType() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Arena: " + ChatColor.BLUE + sign.getArena().getID() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Lobby: " + ChatColor.BLUE + sign.getLobby().getID() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Loc: " + ChatColor.BLUE + sign.getLocation().getBlockX() + ChatColor.DARK_GREEN + " | " + ChatColor.BLUE + sign.getLocation().getBlockY() + ChatColor.DARK_GREEN + " | " + ChatColor.BLUE + sign.getLocation().getBlockZ());
+		}
 	    }
 	} else if (option.equalsIgnoreCase("arenas")) {
-	    
-	    player.sendMessage("\n\n");
-	    player.sendMessage(ChatColor.GRAY + "|----------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Arenas" + ChatColor.GRAY + " ------------|");
-	    
-	    for (Arena a : this.game.getArenas()) {
-		player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Arena: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "   World: " + ChatColor.BLUE + a.getWorld().getName());
+	    if (this.game.getArenas().length > 0) {
+		
+		player.sendMessage("\n\n");
+		player.sendMessage(ChatColor.GRAY + "|----------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Arenas" + ChatColor.GRAY + " ------------|");
+		
+		for (Arena a : this.game.getArenas()) {
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Arena: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "   World: " + ChatColor.BLUE + a.getWorld().getName());
+		}
 	    }
 	} else if (option.equalsIgnoreCase("lobbys")) {
-	    
-	    player.sendMessage("\n\n");
-	    player.sendMessage(ChatColor.GRAY + "|----------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Lobbys" + ChatColor.GRAY + " ------------|");
-	    
-	    for (Lobby l : this.game.getLobbys()) {
-		player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Lobby: " + ChatColor.BLUE + l.getID() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "World: " + ChatColor.BLUE + l.getWorld().getName());
+	    if (this.game.getLobbys().length > 0) {
 		
+		player.sendMessage("\n\n");
+		player.sendMessage(ChatColor.GRAY + "|----------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Lobbys" + ChatColor.GRAY + " ------------|");
+		
+		for (Lobby l : this.game.getLobbys()) {
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Lobby: " + ChatColor.BLUE + l.getID() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "World: " + ChatColor.BLUE + l.getWorld().getName());
+		    
+		}
 	    }
 	} else if (option.equalsIgnoreCase("kits")) {
-	    
-	    player.sendMessage("\n\n");
-	    player.sendMessage(ChatColor.GRAY + "|------------ " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Kits" + ChatColor.GRAY + " -------------|");
-	    
-	    for (IZvPKit kit : KitManager.getManager().getKits()) {
-		player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Kit: " + ChatColor.BLUE + kit.getName() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Custom: " + ChatColor.BLUE + (kit instanceof KCustomKit));
+	    if (KitManager.getManager().getKits().length > 0) {
 		
+		player.sendMessage("\n\n");
+		player.sendMessage(ChatColor.GRAY + "|------------ " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Kits" + ChatColor.GRAY + " -------------|");
+		
+		for (IZvPKit kit : KitManager.getManager().getKits()) {
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Kit: " + ChatColor.BLUE + kit.getName() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Custom: " + ChatColor.BLUE + (kit instanceof KCustomKit));
+		    
+		}
 	    }
 	} else {
 	    player.sendMessage("\n\n");
+	    player.sendMessage(ChatColor.GRAY + "|----------- " + ChatColor.YELLOW + "List command Syntax" + ChatColor.GRAY + " ------------|");
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list signs");
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list arenas");
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list lobbys");
