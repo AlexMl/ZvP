@@ -1,4 +1,8 @@
 Changelog:
+2.3.7-1:
+*Fixed message mistakes
+*Update excludes specific builds
+
 2.3.7:
 *Fixed performance issues on Spigot
 *Fixed missing kit error
