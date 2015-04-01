@@ -58,8 +58,10 @@ public class Updater {
     private static final String USER_AGENT = "Updater (by Gravity)";
     // Used for locating version numbers in file names
     private static final String DELIMETER = "^v|[\\s_-]v";
-    // If the version number contains one of these, don't update.
-    private static final String[] NO_UPDATE_TAG = {"-DEV", "-PRE", "-SNAPSHOT"};
+    // If the local version number contains one of these, don't update.
+    private static final String[] NO_UPDATE_TAG_LOCAL = {"_DEV"};
+    // If the remote version number contains one of these, don't update.
+    private static final String[] NO_UPDATE_TAG_REMOTE = {"_DEV", "_LP"};
     // Used for downloading files
     private static final int BYTE_SIZE = 1024;
     // Config key for api key
@@ -561,8 +563,10 @@ public class Updater {
 	    if (title.split(DELIMETER).length == 2) {
 		// Get the newest file's version number
 		final String remoteVersion = title.split(DELIMETER)[1].split(" ")[0];
-		if (this.hasTag(localVersion) || !this.shouldUpdate(localVersion, remoteVersion)) {
-		    // We already have the latest version, or this build is tagged for no-update
+		// System.out.println("LT:" + this.hasTag(localVersion, true) + " RT:" + this.hasTag(remoteVersion, false) + " SU:" + this.shouldUpdate(localVersion, remoteVersion) + " ---> Update?" +
+		// !(this.hasTag(localVersion, true) || this.hasTag(remoteVersion, false) || !this.shouldUpdate(localVersion, remoteVersion)));
+		if (this.hasTag(localVersion, true) || this.hasTag(remoteVersion, false) || !this.shouldUpdate(localVersion, remoteVersion)) {
+		    // We already have the latest version, or the build is tagged for no-update
 		    this.result = Updater.UpdateResult.NO_UPDATE;
 		    return false;
 		}
@@ -603,11 +607,20 @@ public class Updater {
      * @return true if Updater should consider the remote version an update, false if not.
      */
     public boolean shouldUpdate(String localVersion, String remoteVersion) {
-	double local = Double.parseDouble(localVersion.replace(".", "").replace("-", "."));
-	double remote = Double.parseDouble(remoteVersion.replace(".", "").replace("-", "."));
-	ZvP.getPluginLogger().log(Level.FINEST, "LV=" + local + " : RV=" + remote + " Update? " + (remote > local), true, true);
+	double local = parseVersion(localVersion);
+	double remote = parseVersion(remoteVersion);
+	ZvP.getPluginLogger().log(Level.FINE, "LV=" + local + " : RV=" + remote + " Update? " + (remote > local), true, true);
 	
 	return remote > local;
+    }
+    
+    private double parseVersion(String version) {
+	// Possibilities: 2.3.7-5_LP
+	if (version.contains("_")) {
+	    return parseVersion(version.split("_")[0]);
+	} else {
+	    return Double.parseDouble(version.replace(".", "").replace("-", "."));
+	}
     }
     
     /**
@@ -617,10 +630,18 @@ public class Updater {
      *        a version number to check for tags in.
      * @return true if updating should be disabled.
      */
-    private boolean hasTag(String version) {
-	for (final String string : Updater.NO_UPDATE_TAG) {
-	    if (version.contains(string)) {
-		return true;
+    private boolean hasTag(String version, boolean local) {
+	if (local) {
+	    for (final String string : Updater.NO_UPDATE_TAG_LOCAL) {
+		if (version.contains(string)) {
+		    return true;
+		}
+	    }
+	} else {
+	    for (final String string : Updater.NO_UPDATE_TAG_REMOTE) {
+		if (version.contains(string)) {
+		    return true;
+		}
 	    }
 	}
 	return false;
