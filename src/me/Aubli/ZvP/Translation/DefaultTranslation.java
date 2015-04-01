@@ -41,7 +41,7 @@ public class DefaultTranslation extends ListResourceBundle {
 	    {"game:voted_next_round", ChatColor.GREEN + "You have voted for the next round!"}, {"game:already_voted", ChatColor.RED + "You have already voted for the next round!"},
 	    {"game:no_voting", ChatColor.RED + "It is not the Time to vote now!"},
 	    {"game:voting_disabled", ChatColor.RED + "The vote system is disabled!"},
-	    {"game:won", ChatColor.GOLD + "" + ChatColor.BOLD + "Grongrats!" + ChatColor.RESET + "" + ChatColor.DARK_GRAY + " You won against the Zombies.\nYou fought against " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Zombies in " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " rounds and have died " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " times. The remains of your acquired money " + ChatColor.GOLD + "( %s )" + ChatColor.DARK_GRAY + " will be donated to the " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + "." + ChatColor.BOLD + "" + ChatColor.DARK_GREEN + " Thanks for playing!"},
+	    {"game:won", ChatColor.GOLD + "" + ChatColor.BOLD + "Grongrats!" + ChatColor.RESET + "" + ChatColor.DARK_GRAY + " You won against the Zombies.\nYou fought against " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Zombies in " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " waves and have died " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " times. The remains of your acquired money " + ChatColor.GOLD + "( %s )" + ChatColor.DARK_GRAY + " will be donated to the " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + "." + ChatColor.BOLD + "" + ChatColor.DARK_GREEN + " Thanks for playing!"},
 	    {"game:won_messages", "Notch Hospital;Minecraft Factory;Creeper farms;Sheep resorts;Jeb Academy"},
 	    
 	    {"arena:stop_all", ChatColor.DARK_GRAY + "All arenas halted!"},
