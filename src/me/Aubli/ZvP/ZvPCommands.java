@@ -121,6 +121,23 @@ public class ZvPCommands implements CommandExecutor {
 		a.setRound(round);
 		a.setWave(wave);
 	    }
+	    
+	    if (args.length == 5) {
+		if (args[0].equalsIgnoreCase("rt")) {
+		    int id = Integer.parseInt(args[1]);
+		    int r = Integer.parseInt(args[2]);
+		    int w = Integer.parseInt(args[3]);
+		    int p = Integer.parseInt(args[4]);
+		    Arena a = this.game.getArena(id);
+		    
+		    for (int ir = 1; ir <= r; ir++) {
+			for (int iw = 1; iw <= w; iw++) {
+			    playerSender.sendMessage("P:" + p + " RW:" + iw + ":" + ir + " ->" + a.getSpawningZombies(iw, ir, p));
+			}
+		    }
+		    
+		}
+	    }
 	}
 	
 	if (cmd.getName().equalsIgnoreCase("zvp")) {
