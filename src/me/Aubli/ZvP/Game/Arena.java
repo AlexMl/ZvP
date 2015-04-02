@@ -12,6 +12,7 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
+import me.Aubli.ZvP.Game.GameManager.ArenaDifficultyLevel;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Translation.MessageManager;
@@ -43,6 +44,7 @@ public class Arena implements Comparable<Arena> {
     private int arenaID;
     
     private ArenaStatus status;
+    private ArenaDifficultyLevel difficulty;
     
     private int maxPlayers;
     private int minPlayers;
@@ -61,12 +63,13 @@ public class Arena implements Comparable<Arena> {
     private Location maxLoc;
     
     private ArenaScore score;
+    private ArenaDifficulty difficultyTool;
     
     private Random rand;
     
     private ArrayList<ZvPPlayer> players;
     
-    public Arena(int ID, int maxPlayers, String arenaPath, Location min, Location max, int rounds, int waves, int spawnRate, double saveRadius) {
+    public Arena(int ID, int maxPlayers, String arenaPath, Location min, Location max, int rounds, int waves, int spawnRate, double saveRadius, ArenaDifficultyLevel difficulty) {
 	
 	this.arenaID = ID;
 	
@@ -81,6 +84,7 @@ public class Arena implements Comparable<Arena> {
 	this.maxLoc = max.clone();
 	
 	this.status = ArenaStatus.STANDBY;
+	this.difficulty = difficulty;
 	
 	this.round = 0;
 	this.wave = 0;
@@ -92,6 +96,8 @@ public class Arena implements Comparable<Arena> {
 	this.arenaConfig = YamlConfiguration.loadConfiguration(this.arenaFile);
 	
 	this.players = new ArrayList<ZvPPlayer>();
+	
+	this.difficultyTool = new ArenaDifficulty(this, getDifficulty());
 	
 	this.rand = new Random();
 	
@@ -108,35 +114,45 @@ public class Arena implements Comparable<Arena> {
 	this.arenaConfig = YamlConfiguration.loadConfiguration(arenaFile);
 	
 	this.arenaID = this.arenaConfig.getInt("arena.ID");
-	this.maxPlayers = this.arenaConfig.getInt("arena.maxPlayers");
-	this.minPlayers = this.arenaConfig.getInt("arena.minPlayers");
+	this.maxPlayers = this.arenaConfig.getInt("arena.maxPlayers", ZvPConfig.getMaxPlayers());
+	this.minPlayers = this.arenaConfig.getInt("arena.minPlayers", 3);
 	
-	this.maxRounds = this.arenaConfig.getInt("arena.rounds");
-	this.maxWaves = this.arenaConfig.getInt("arena.waves");
+	this.maxRounds = this.arenaConfig.getInt("arena.rounds", ZvPConfig.getDefaultRounds());
+	this.maxWaves = this.arenaConfig.getInt("arena.waves", ZvPConfig.getDefaultWaves());
 	
-	if (this.arenaConfig.getBoolean("arena.Online")) {
+	if (this.arenaConfig.getBoolean("arena.Online", true)) {
 	    this.status = ArenaStatus.STANDBY;
 	} else {
 	    this.status = ArenaStatus.STOPED;
 	}
 	
+	this.difficulty = ArenaDifficultyLevel.valueOf(this.arenaConfig.getString("arena.Difficulty", "NORMAL"));
+	
 	this.round = 0;
 	this.wave = 0;
 	
-	this.spawnRate = this.arenaConfig.getInt("arena.spawnRate");
-	this.saveRadius = this.arenaConfig.getDouble("arena.saveRadius");
+	this.spawnRate = this.arenaConfig.getInt("arena.spawnRate", ZvPConfig.getDefaultZombieSpawnRate());
+	this.saveRadius = this.arenaConfig.getDouble("arena.saveRadius", ZvPConfig.getDefaultSaveRadius());
 	
 	this.arenaWorld = Bukkit.getWorld(UUID.fromString(this.arenaConfig.getString("arena.Location.world")));
 	this.minLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.min.X"), this.arenaConfig.getInt("arena.Location.min.Y"), this.arenaConfig.getInt("arena.Location.min.Z"));
 	this.maxLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.max.X"), this.arenaConfig.getInt("arena.Location.max.Y"), this.arenaConfig.getInt("arena.Location.max.Z"));
 	
+	this.difficultyTool = new ArenaDifficulty(this, getDifficulty());
 	this.players = new ArrayList<ZvPPlayer>();
 	this.rand = new Random();
+	
+	try {
+	    save();
+	} catch (IOException e) {
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena " + getID() + ": " + e.getMessage(), true, false, e);
+	}
     }
     
     private void save() throws IOException {
 	this.arenaConfig.set("arena.ID", this.arenaID);
 	this.arenaConfig.set("arena.Online", !(getStatus() == ArenaStatus.STOPED));
+	this.arenaConfig.set("arena.Difficulty", getDifficulty().name());
 	
 	this.arenaConfig.set("arena.minPlayers", this.minPlayers);
 	this.arenaConfig.set("arena.maxPlayers", this.maxPlayers);
@@ -190,6 +206,10 @@ public class Arena implements Comparable<Arena> {
 	return this.status;
     }
     
+    public ArenaDifficultyLevel getDifficulty() {
+	return this.difficulty;
+    }
+    
     public int getMaxPlayers() {
 	return this.maxPlayers;
     }
@@ -228,6 +248,10 @@ public class Arena implements Comparable<Arena> {
     
     public ArenaScore getScore() {
 	return this.score;
+    }
+    
+    public ArenaDifficulty getDifficultyTool() {
+	return this.difficultyTool;
     }
     
     public World getWorld() {
@@ -526,62 +550,10 @@ public class Arena implements Comparable<Arena> {
 	return false;
     }
     
-    private void customizeEntity(Entity zombie) {
-	Zombie z = (Zombie) zombie;
-	
-	z.setRemoveWhenFarAway(false);
-	z.setTarget(getRandomPlayer().getPlayer());
-	
-	switch (this.rand.nextInt(7)) {
-	    case 0:
-		z.setBaby(false);
-		z.setCanPickupItems(true);
-		z.setMaxHealth(40D);
-		z.setVelocity(z.getVelocity().multiply(1.5D));
-		// z.setCustomName("0");
-		break;
-	    case 1:
-		z.setBaby(true);
-		z.setCanPickupItems(false);
-		z.setVillager(false);
-		z.setHealth(20D);
-		z.setVelocity(z.getVelocity().multiply(0.75D));
-		// z.setCustomName("1");
-		break;
-	    case 2:
-		z.setBaby(false);
-		z.setCanPickupItems(true);
-		z.setVillager(true);
-		z.setHealth(10D);
-		// z.setCustomName("2");
-		break;
-	    case 3:
-		z.setBaby(false);
-		z.setCanPickupItems(true);
-		z.setVillager(true);
-		z.setHealth(15D);
-		// z.setCustomName("3");
-		break;
-	    case 4:
-		z.setBaby(false);
-		z.setCanPickupItems(true);
-		z.setVillager(false);
-		z.setMaxHealth(30D);
-		// z.setCustomName("4");
-		break;
-	    default:
-		z.setBaby(false);
-		z.setCanPickupItems(false);
-		z.setVillager(false);
-		z.setHealth(20D);
-		// z.setCustomName("default");
-		break;
-	}
-    }
-    
     public void spawnZombies(int amount) {
 	for (int i = 0; i < amount; i++) {
-	    customizeEntity(getWorld().spawnEntity(getNewSaveLocation(), EntityType.ZOMBIE));
+	    Entity zombie = getWorld().spawnEntity(getNewSaveLocation(), EntityType.ZOMBIE);
+	    getDifficultyTool().customizeEntity(zombie);
 	}
 	updatePlayerBoards();
     }
