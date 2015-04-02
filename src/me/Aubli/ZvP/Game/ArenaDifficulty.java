@@ -6,6 +6,8 @@ import me.Aubli.ZvP.Game.GameManager.ArenaDifficultyLevel;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Zombie;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 
 public class ArenaDifficulty {
@@ -33,55 +35,105 @@ public class ArenaDifficulty {
     
     public void customizeEntity(Entity zombie) {
 	Zombie z = (Zombie) zombie;
-	// TODO apply difficulty level
 	z.setRemoveWhenFarAway(false);
 	z.setTarget(getArena().getRandomPlayer().getPlayer());
 	
-	switch (this.rand.nextInt(7)) {
-	    case 0:
-		z.setBaby(false);
-		z.setCanPickupItems(true);
-		z.setMaxHealth(40D);
-		z.setVelocity(z.getVelocity().multiply(1.5D));
-		// z.setCustomName("0");
-		break;
+	boolean setBaby = false;
+	boolean setVillager = false;
+	boolean setCanPickupItems = false;
+	double maxHealth = 20D;
+	double velocity = 1D;
+	PotionEffect potionEffect = null;
+	String name = "";
+	
+	switch (getDifficulty().getLevel()) {
 	    case 1:
-		z.setBaby(true);
-		z.setCanPickupItems(false);
-		z.setVillager(false);
-		z.setHealth(20D);
-		z.setVelocity(z.getVelocity().multiply(0.75D));
-		// z.setCustomName("1");
+		setBaby = false;
+		setVillager = (this.rand.nextBoolean() && this.rand.nextBoolean());
+		setCanPickupItems = false;
+		maxHealth = 18D;
+		velocity = 0.8D;
+		name = "EASY";
 		break;
+	    
 	    case 2:
-		z.setBaby(false);
-		z.setCanPickupItems(true);
-		z.setVillager(true);
-		z.setHealth(10D);
-		// z.setCustomName("2");
+		switch (this.rand.nextInt(7)) {
+		    case 0:
+			setBaby = true;
+			setCanPickupItems = true;
+			maxHealth = 40D;
+			velocity = 1.2D;
+			break;
+		    case 1:
+			setBaby = true;
+			setCanPickupItems = false;
+			velocity = 0.75D;
+			break;
+		    case 2:
+			setBaby = false;
+			setCanPickupItems = true;
+			setVillager = false;
+			maxHealth = 15D;
+			break;
+		    case 3:
+			setBaby = false;
+			setCanPickupItems = false;
+			setVillager = true;
+			maxHealth = 30D;
+			break;
+		    default:
+			break;
+		}
+		name = "NORMAL";
 		break;
+	    
 	    case 3:
-		z.setBaby(false);
-		z.setCanPickupItems(true);
-		z.setVillager(true);
-		z.setHealth(15D);
-		// z.setCustomName("3");
-		break;
-	    case 4:
-		z.setBaby(false);
-		z.setCanPickupItems(true);
-		z.setVillager(false);
-		z.setMaxHealth(30D);
-		// z.setCustomName("4");
-		break;
-	    default:
-		z.setBaby(false);
-		z.setCanPickupItems(false);
-		z.setVillager(false);
-		z.setHealth(20D);
-		// z.setCustomName("default");
+		switch (this.rand.nextInt(7)) {
+		    case 0:
+			setBaby = true;
+			setCanPickupItems = true;
+			maxHealth = 40D;
+			velocity = 1.2D;
+			potionEffect = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 20, 2);
+			break;
+		    case 1:
+			setBaby = true;
+			setCanPickupItems = true;
+			maxHealth = 30D;
+			velocity = 1D;
+			potionEffect = new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 100 * 20, 2);
+			break;
+		    case 2:
+			setBaby = false;
+			setCanPickupItems = true;
+			setVillager = false;
+			maxHealth = 20D;
+			velocity = 1.2D;
+			potionEffect = new PotionEffect(PotionEffectType.HEAL, 20 * 20, 2);
+			break;
+		    case 3:
+			setBaby = false;
+			setCanPickupItems = true;
+			setVillager = true;
+			maxHealth = 35D;
+			velocity = 1.1D;
+			potionEffect = new PotionEffect(PotionEffectType.SPEED, 20 * 20, 2);
+			break;
+		    default:
+			maxHealth = 30D;
+			setCanPickupItems = true;
+			break;
+		}
+		name = "HARD";
 		break;
 	}
+	
+	z.setCustomName(name);
+	z.setMaxHealth(maxHealth);
+	z.setVelocity(z.getVelocity().multiply(velocity));
+	z.setBaby(setBaby);
+	z.setVillager(setVillager);
+	z.setCanPickupItems(setCanPickupItems);
+	z.addPotionEffect(potionEffect, true);
     }
-    
 }
