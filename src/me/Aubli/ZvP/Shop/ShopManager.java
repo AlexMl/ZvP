@@ -18,6 +18,8 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionType;
 import org.util.ItemStorageUtil.ItemStorage;
 
+import com.google.common.io.Files;
+
 
 public class ShopManager {
     
@@ -87,10 +89,8 @@ public class ShopManager {
 	
 	if (isOutdated()) {
 	    try {
-		ZvP.getPluginLogger().log("Found outdated item file! Renaming it!", true);
-		this.itemFile.renameTo(new File(this.itemFile.getParentFile().getPath() + "/items-" + this.itemConfig.getString("version") + ".yml"));
-		this.itemFile.delete();
-		this.itemFile.createNewFile();
+		ZvP.getPluginLogger().log("Found outdated item file! Updating it!", true);
+		Files.copy(this.itemFile, new File(this.itemFile.getParentFile().getPath() + "/items-" + this.itemConfig.getString("version") + ".yml"));
 		writeDefaults();
 		this.itemConfig = YamlConfiguration.loadConfiguration(this.itemFile);
 	    } catch (IOException e) {

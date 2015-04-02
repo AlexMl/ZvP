@@ -30,7 +30,6 @@ public class ItemStorage {
     public static void saveItemsToFile(File saveFile, String configSection, ItemStack[] content) {
 	// - { id: IRON_SWORD, amount: 1, data: 0, ench: {DAMAGE_ALL:1} }
 	
-	FileConfiguration fileConfig = YamlConfiguration.loadConfiguration(saveFile);
 	List<String> itemList = new ArrayList<String>();
 	
 	for (ItemStack item : content) {
@@ -42,10 +41,8 @@ public class ItemStorage {
 	    }
 	}
 	
-	fileConfig.set(configSection, itemList);
-	
 	try {
-	    fileConfig.save(saveFile);
+	    save(saveFile, configSection, itemList);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
@@ -64,7 +61,6 @@ public class ItemStorage {
     public static void saveItemsToFile(File saveFile, String configSection, ShopItem[] content) {
 	// - { id: IRON_SWORD, amount: 1, data: 0, ench: {DAMAGE_ALL:1}, Price: 5.0}
 	
-	FileConfiguration fileConfig = YamlConfiguration.loadConfiguration(saveFile);
 	List<String> itemList = new ArrayList<String>();
 	
 	for (ShopItem item : content) {
@@ -76,10 +72,8 @@ public class ItemStorage {
 	    }
 	}
 	
-	fileConfig.set(configSection, itemList);
-	
 	try {
-	    fileConfig.save(saveFile);
+	    save(saveFile, configSection, itemList);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
@@ -150,6 +144,15 @@ public class ItemStorage {
 	    }
 	}
 	return toShopArray(items);
+    }
+    
+    private static void save(File saveFile, String configSection, List<String> content) throws IOException {
+	FileConfiguration conf = YamlConfiguration.loadConfiguration(saveFile);
+	
+	conf.addDefault(configSection, content);
+	
+	conf.options().copyDefaults(true);
+	conf.save(saveFile);
     }
     
     private static String generateItemString(String enchString, ItemStack item) {
