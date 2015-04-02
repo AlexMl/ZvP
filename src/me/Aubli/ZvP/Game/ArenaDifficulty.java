@@ -48,7 +48,6 @@ public class ArenaDifficulty {
 	ItemStack[] armorContent = null;
 	Float dropchance = 0.5F;
 	PotionEffect potionEffect = null;
-	String name = "";
 	
 	switch (getDifficulty().getLevel()) {
 	    case 1:
@@ -59,7 +58,6 @@ public class ArenaDifficulty {
 		velocity = 0.8D;
 		armorContent = null;
 		dropchance = 0F;
-		name = "EASY";
 		break;
 	    
 	    case 2:
@@ -69,83 +67,76 @@ public class ArenaDifficulty {
 			setCanPickupItems = true;
 			maxHealth = 40D;
 			velocity = 1.2D;
-			dropchance = 0.6F;
+			dropchance = 0.3F;
 			break;
 		    case 1:
 			setBaby = true;
 			setCanPickupItems = false;
 			velocity = 0.75D;
-			dropchance = 0.6F;
+			dropchance = 0.3F;
 			break;
 		    case 2:
 			setBaby = false;
 			setCanPickupItems = true;
 			setVillager = false;
 			maxHealth = 15D;
-			dropchance = 0.4F;
+			dropchance = 0.2F;
 			break;
 		    case 3:
 			setBaby = false;
 			setCanPickupItems = false;
 			setVillager = true;
 			maxHealth = 30D;
-			dropchance = 0.3F;
+			dropchance = 0.2F;
 			break;
 		    default:
 			break;
 		}
 		armorContent = getRandomArmor();
-		name = "NORMAL";
 		break;
 	    
 	    case 3:
 		switch (this.rand.nextInt(7)) {
 		    case 0:
 			setBaby = true;
-			setCanPickupItems = true;
 			maxHealth = 40D;
 			velocity = 1.2D;
 			potionEffect = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 20, 2);
-			dropchance = 0.4F;
+			dropchance = 0.1F;
 			break;
 		    case 1:
 			setBaby = true;
-			setCanPickupItems = true;
 			maxHealth = 30D;
 			velocity = 1D;
 			potionEffect = new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 100 * 20, 2);
-			dropchance = 0.4F;
+			dropchance = 0.1F;
 			break;
 		    case 2:
 			setBaby = false;
-			setCanPickupItems = true;
 			setVillager = false;
 			maxHealth = 20D;
 			velocity = 1.2D;
 			potionEffect = new PotionEffect(PotionEffectType.HEAL, 20 * 20, 2);
-			dropchance = 0.2F;
+			dropchance = 0F;
 			break;
 		    case 3:
 			setBaby = false;
-			setCanPickupItems = true;
 			setVillager = true;
 			maxHealth = 35D;
 			velocity = 1.1D;
 			potionEffect = new PotionEffect(PotionEffectType.SPEED, 20 * 20, 2);
-			dropchance = 0.2F;
+			dropchance = 0F;
 			break;
 		    default:
 			maxHealth = 30D;
-			setCanPickupItems = true;
-			dropchance = 0.25F;
+			dropchance = 0F;
 			break;
 		}
 		armorContent = getRandomArmor();
-		name = "HARD";
+		setCanPickupItems = true;
 		break;
 	}
 	
-	z.setCustomName(name);
 	z.setMaxHealth(maxHealth);
 	z.setHealth(maxHealth);
 	z.getEquipment().setArmorContents(armorContent);
@@ -167,7 +158,7 @@ public class ArenaDifficulty {
     private ItemStack[] getRandomArmor() {
 	ItemStack[] content = new ItemStack[4];
 	
-	int i = this.rand.nextInt(7) + getDifficulty().getLevel();
+	int i = this.rand.nextInt(10) + getDifficulty().getLevel();
 	switch (i) {
 	    case 1:
 		content[0] = new ItemStack(Material.LEATHER_HELMET);
@@ -192,20 +183,20 @@ public class ArenaDifficulty {
 		content[2] = new ItemStack(Material.GOLD_LEGGINGS);
 		break;
 	    
-	    case 8:
+	    case 10:
 		content[0] = new ItemStack(Material.CHAINMAIL_HELMET);
 		content[1] = new ItemStack(Material.DIAMOND_CHESTPLATE);
 		content[3] = new ItemStack(Material.DIAMOND_BOOTS);
 		break;
 	    
-	    case 9:
+	    case 11:
 		content[0] = new ItemStack(Material.CHAINMAIL_HELMET);
 		content[1] = new ItemStack(Material.IRON_CHESTPLATE);
 		content[2] = new ItemStack(Material.IRON_LEGGINGS);
 		content[3] = new ItemStack(Material.CHAINMAIL_BOOTS);
 		break;
 	    
-	    case 10:
+	    case 12:
 		content[0] = new ItemStack(Material.DIAMOND_HELMET);
 		content[1] = new ItemStack(Material.DIAMOND_CHESTPLATE);
 		content[2] = new ItemStack(Material.DIAMOND_LEGGINGS);
