@@ -42,9 +42,9 @@ public class GameManager {
     }
     
     public enum ArenaDifficultyLevel {
-	EASY(0),
-	NORMAL(1),
-	HARD(2);
+	EASY(1),
+	NORMAL(2),
+	HARD(3);
 	
 	private int level;
 	
