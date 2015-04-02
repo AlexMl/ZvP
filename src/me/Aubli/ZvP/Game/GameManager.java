@@ -41,6 +41,22 @@ public class GameManager {
 	}
     }
     
+    public enum ArenaDifficultyLevel {
+	EASY(0),
+	NORMAL(1),
+	HARD(2);
+	
+	private int level;
+	
+	private ArenaDifficultyLevel(int level) {
+	    this.level = level;
+	}
+	
+	public int getLevel() {
+	    return this.level;
+	}
+    }
+    
     private static GameManager manager;
     private ZvP plugin;
     
@@ -269,7 +285,7 @@ public class GameManager {
 		mP = ZvPConfig.getMaxPlayers();
 	    }
 	    
-	    Arena a = new Arena(getNewID(this.arenaPath), mP, this.arenaPath, min.clone(), max.clone(), ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ZvPConfig.getDefaultSaveRadius());
+	    Arena a = new Arena(getNewID(this.arenaPath), mP, this.arenaPath, min.clone(), max.clone(), ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ZvPConfig.getDefaultSaveRadius(), ArenaDifficultyLevel.NORMAL);
 	    this.arenas.add(a);
 	    
 	    ZvP.getPluginLogger().log(Level.INFO, "New Arena added!", true);
