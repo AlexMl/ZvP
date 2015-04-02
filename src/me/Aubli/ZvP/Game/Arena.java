@@ -143,7 +143,9 @@ public class Arena implements Comparable<Arena> {
 	this.rand = new Random();
 	
 	try {
-	    save();
+	    if (this.arenaWorld != null) {
+		save();
+	    }
 	} catch (IOException e) {
 	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena " + getID() + ": " + e.getMessage(), true, false, e);
 	}
