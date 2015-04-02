@@ -1,4 +1,7 @@
 Changelog:
+2.3.7-2:
+*Fixed issue with essentials back command
+
 2.3.7-1:
 *Fixed message mistakes
 *Update excludes specific builds
