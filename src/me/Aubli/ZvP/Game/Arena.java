@@ -351,6 +351,15 @@ public class Arena implements Comparable<Arena> {
 	return kills;
     }
     
+    public int getSpawningZombies() {
+	return getSpawningZombies(getWave(), getRound(), getPlayers().length);
+    }
+    
+    public int getSpawningZombies(int w, int r, int p) {
+	int spawn = (int) Math.sqrt(r * w * getSpawnRate() * getMin().distance(getMax()) * p);
+	return spawn;
+    }
+    
     public ZvPPlayer getBestPlayer() {
 	Map<UUID, Double> scoreMap = new HashMap<UUID, Double>();
 	
@@ -590,7 +599,7 @@ public class Arena implements Comparable<Arena> {
 	getWorld().setMonsterSpawnLimit(0);
 	clearArena();
 	
-	this.TaskId = new GameRunnable(this, ZvPConfig.getStartDelay(), getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
+	this.TaskId = new GameRunnable(this, ZvPConfig.getStartDelay()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
 	ZvP.getPluginLogger().log(Level.INFO, "Arena " + getID() + " started a new Task!", true);
     }
     
