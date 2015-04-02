@@ -20,10 +20,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class GameRunnable extends BukkitRunnable {
     
-    public GameRunnable(Arena arena, int startDelay, int magicSpawnRate) {
+    public GameRunnable(Arena arena, int startDelay) {
 	this.arena = arena;
 	this.startDelay = startDelay;
-	this.magicSpawnNumber = magicSpawnRate;
 	this.spawnRate = 0.45;
 	
 	this.rand = new Random(System.currentTimeMillis());
@@ -38,10 +37,7 @@ public class GameRunnable extends BukkitRunnable {
     private final double spawnRate;
     
     private int seconds = 0;
-    private int seconds2 = 0;
     private int spawnGoal;
-    
-    private int magicSpawnNumber;
     
     private boolean firstSpawn;
     private boolean spawnZombies;
@@ -92,27 +88,30 @@ public class GameRunnable extends BukkitRunnable {
 	    }
 	    
 	    if (this.firstSpawn) {
-		this.arena.spawnZombies(this.arena.getRound() * this.arena.getWave() * this.magicSpawnNumber - (int) (this.arena.getRound() * this.arena.getWave() * this.magicSpawnNumber * this.spawnRate));
-		this.spawnGoal = this.arena.getRound() * this.arena.getWave() * this.magicSpawnNumber - (int) (this.arena.getRound() * this.arena.getWave() * this.magicSpawnNumber * this.spawnRate);
+		final int nextZombies = this.arena.getSpawningZombies();
+		this.spawnGoal = nextZombies - (int) (nextZombies * this.spawnRate);
+		this.arena.spawnZombies(this.spawnGoal);
 		this.firstSpawn = false;
 		this.spawnZombies = true;
 	    } else {
-		if (this.spawnGoal < this.arena.getRound() * this.arena.getWave() * this.magicSpawnNumber && this.spawnZombies) {
-		    double spawn = this.arena.getRound() * this.arena.getWave() * this.magicSpawnNumber;
-		    ZvP.getPluginLogger().log(Level.FINER, "Arena: " + this.arena.getID() + " Missing: " + (spawn - this.arena.getLivingZombies()), true);
+		final int nextZombies = this.arena.getSpawningZombies();
+		
+		if ((this.spawnGoal < nextZombies) && this.spawnZombies) {
+		    double missing = this.spawnGoal - this.arena.getLivingZombies();
+		    ZvP.getPluginLogger().log(Level.FINER, "Arena: " + this.arena.getID() + " Missing: " + missing, true);
 		    
-		    if (spawn - this.arena.getLivingZombies() >= ((int) (spawn * 0.17)) && (int) (spawn * 0.10) > 0) {
-			this.arena.spawnZombies((int) (spawn * 0.10));
-			this.spawnGoal += (int) (spawn * 0.10);
-		    } else if (spawn - this.arena.getLivingZombies() >= ((int) (spawn * 0.12)) && (int) (spawn * 0.06) > 0) {
-			this.arena.spawnZombies((int) (spawn * 0.06));
-			this.spawnGoal += (int) (spawn * 0.06);
-		    } else if (spawn - this.arena.getLivingZombies() >= ((int) (spawn * 0.08)) && (int) (spawn * 0.02) > 0) {
-			this.arena.spawnZombies((int) (spawn * 0.02));
-			this.spawnGoal += (int) (spawn * 0.02);
-		    } else if (spawn - this.arena.getLivingZombies() > this.magicSpawnNumber) {
-			this.arena.spawnZombies(this.magicSpawnNumber / 2);
-			this.spawnGoal += this.magicSpawnNumber / 2;
+		    if (missing >= ((int) (nextZombies * 0.17)) && ((int) (nextZombies * 0.10)) > 0) {
+			this.arena.spawnZombies((int) (nextZombies * 0.10));
+			this.spawnGoal += (int) (nextZombies * 0.10);
+		    } else if (missing >= ((int) (nextZombies * 0.12)) && ((int) (nextZombies * 0.06)) > 0) {
+			this.arena.spawnZombies((int) (nextZombies * 0.06));
+			this.spawnGoal += (int) (nextZombies * 0.06);
+		    } else if (missing >= ((int) (nextZombies * 0.08)) && ((int) (nextZombies * 0.02)) > 0) {
+			this.arena.spawnZombies((int) (nextZombies * 0.02));
+			this.spawnGoal += (int) (nextZombies * 0.02);
+		    } else if (missing > this.arena.getSpawnRate() && ((int) (this.arena.getSpawnRate() * 0.5)) > 0) {
+			this.arena.spawnZombies(this.arena.getSpawnRate() / 2);
+			this.spawnGoal += this.arena.getSpawnRate() / 2;
 		    } else {
 			this.arena.spawnZombies(1);
 			this.spawnGoal++;
@@ -125,12 +124,9 @@ public class GameRunnable extends BukkitRunnable {
 	    
 	    if (this.firstSpawn == false && this.spawnZombies == false) {
 		if (this.arena.getLivingZombies() == 0) {
-		    boolean stop = false;
 		    
-		    if (this.seconds2 == 0) {
-			this.arena.updatePlayerBoards();
-			stop = this.arena.next(); // Stop checks if the last round is over
-		    }
+		    this.arena.updatePlayerBoards();
+		    boolean stop = this.arena.next(); // Stop checks if the last round is over
 		    
 		    if (!stop) {
 			if (ZvPConfig.getUseVoteSystem()) {
@@ -151,7 +147,7 @@ public class GameRunnable extends BukkitRunnable {
 			    this.cancel();
 			} else {
 			    this.arena.setStatus(ArenaStatus.BREAKWAITING);
-			    this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, ZvPConfig.getBreakTime(), GameRunnable.this.arena.getSpawnRate()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+			    this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, ZvPConfig.getBreakTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
 			    this.cancel();
 			}
 		    } else {			// End of Game
