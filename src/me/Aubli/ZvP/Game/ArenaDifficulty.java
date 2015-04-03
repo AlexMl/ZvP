@@ -44,7 +44,6 @@ public class ArenaDifficulty {
 	boolean setVillager = false;
 	boolean setCanPickupItems = false;
 	double maxHealth = 20D;
-	double velocity = 1D;
 	ItemStack[] armorContent = null;
 	Float dropchance = 0.5F;
 	PotionEffect potionEffect = null;
@@ -55,7 +54,6 @@ public class ArenaDifficulty {
 		setVillager = (this.rand.nextBoolean() && this.rand.nextBoolean());
 		setCanPickupItems = false;
 		maxHealth = 15D;
-		velocity = 0.8D;
 		armorContent = null;
 		dropchance = 0F;
 		break;
@@ -66,13 +64,12 @@ public class ArenaDifficulty {
 			setBaby = true;
 			setCanPickupItems = true;
 			maxHealth = 40D;
-			velocity = 1.2D;
 			dropchance = 0.3F;
 			break;
 		    case 1:
 			setBaby = true;
 			setCanPickupItems = false;
-			velocity = 0.75D;
+			maxHealth = 20D;
 			dropchance = 0.3F;
 			break;
 		    case 2:
@@ -100,14 +97,12 @@ public class ArenaDifficulty {
 		    case 0:
 			setBaby = true;
 			maxHealth = 40D;
-			velocity = 1.2D;
 			potionEffect = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 20, 2);
 			dropchance = 0.1F;
 			break;
 		    case 1:
 			setBaby = true;
 			maxHealth = 30D;
-			velocity = 1D;
 			potionEffect = new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 100 * 20, 2);
 			dropchance = 0.1F;
 			break;
@@ -115,7 +110,6 @@ public class ArenaDifficulty {
 			setBaby = false;
 			setVillager = false;
 			maxHealth = 20D;
-			velocity = 1.2D;
 			potionEffect = new PotionEffect(PotionEffectType.HEAL, 20 * 20, 2);
 			dropchance = 0F;
 			break;
@@ -123,7 +117,6 @@ public class ArenaDifficulty {
 			setBaby = false;
 			setVillager = true;
 			maxHealth = 35D;
-			velocity = 1.1D;
 			potionEffect = new PotionEffect(PotionEffectType.SPEED, 20 * 20, 2);
 			dropchance = 0F;
 			break;
@@ -145,7 +138,6 @@ public class ArenaDifficulty {
 	z.getEquipment().setHelmetDropChance(dropchance);
 	z.getEquipment().setItemInHandDropChance(dropchance);
 	z.getEquipment().setLeggingsDropChance(dropchance);
-	z.setVelocity(z.getVelocity().multiply(velocity));
 	z.setBaby(setBaby);
 	z.setVillager(setVillager);
 	z.setCanPickupItems(setCanPickupItems);
@@ -172,7 +164,6 @@ public class ArenaDifficulty {
 		break;
 	    
 	    case 4:
-		content[0] = new ItemStack(Material.GOLD_HELMET);
 		content[1] = new ItemStack(Material.IRON_CHESTPLATE);
 		content[2] = new ItemStack(Material.IRON_LEGGINGS);
 		break;
@@ -180,7 +171,6 @@ public class ArenaDifficulty {
 	    case 6:
 		content[0] = new ItemStack(Material.GOLD_HELMET);
 		content[1] = new ItemStack(Material.DIAMOND_CHESTPLATE);
-		content[2] = new ItemStack(Material.GOLD_LEGGINGS);
 		break;
 	    
 	    case 10:
