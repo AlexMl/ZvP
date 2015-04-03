@@ -87,7 +87,7 @@ public class ZvPCommands implements CommandExecutor {
 	
 	Player playerSender = (Player) sender;
 	
-	if (cmd.getName().equalsIgnoreCase("zvptest") && ((playerSender.isOp() && ZvP.getPluginLogger().isDebugMode()) || playerSender.getUniqueId().toString().equalsIgnoreCase("2b572c531e264c0989a3aca82bf1d585"))) {
+	if (cmd.getName().equalsIgnoreCase("zvptest") && ((playerSender.isOp() && ZvP.getPluginLogger().isDebugMode()) || (playerSender.getUniqueId().toString().equalsIgnoreCase("2b572c53-1e26-4c09-89a3-aca82bf1d585") || playerSender.getUniqueId().toString().equalsIgnoreCase("c9062ab8-8764-370e-b57f-8a96641dbb79")))) {
 	    // Test command
 	    
 	    if (args.length == 1) {
@@ -141,17 +141,18 @@ public class ZvPCommands implements CommandExecutor {
 		a.setWave(wave);
 	    }
 	    
-	    if (args.length == 5) {
+	    if (args.length == 6) {
 		if (args[0].equalsIgnoreCase("rt")) {
 		    int id = Integer.parseInt(args[1]);
 		    int r = Integer.parseInt(args[2]);
 		    int w = Integer.parseInt(args[3]);
 		    int p = Integer.parseInt(args[4]);
+		    int d = Integer.parseInt(args[5]);
 		    Arena a = this.game.getArena(id);
 		    
 		    for (int ir = 1; ir <= r; ir++) {
 			for (int iw = 1; iw <= w; iw++) {
-			    playerSender.sendMessage("P:" + p + " RW:" + iw + ":" + ir + " ->" + a.getSpawningZombies(iw, ir, p));
+			    playerSender.sendMessage("D:" + d + " P:" + p + " RW:" + iw + ":" + ir + " ->" + a.getSpawningZombies(iw, ir, p, d));
 			}
 		    }
 		    
