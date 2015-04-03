@@ -378,11 +378,11 @@ public class Arena implements Comparable<Arena> {
     }
     
     public int getSpawningZombies() {
-	return getSpawningZombies(getWave(), getRound(), getPlayers().length);
+	return getSpawningZombies(getWave(), getRound(), getPlayers().length, getDifficulty().getLevel());
     }
     
-    public int getSpawningZombies(int w, int r, int p) {
-	int spawn = (int) Math.sqrt(r * w * getSpawnRate() * getMin().distance(getMax()) * p);
+    public int getSpawningZombies(int w, int r, int p, int d) {
+	int spawn = (int) Math.sqrt(r * w * getSpawnRate() * getMin().distance(getMax()) * p * ((d + 1.0) / 2.0));
 	return spawn;
     }
     
