@@ -183,7 +183,7 @@ public class ZvPPlayer {
 	this.canceled = cancel;
     }
     
-    public void setProtected(boolean protection) {
+    public void setSpawnProtected(boolean protection) {
 	this.spawnProtected = protection;
     }
     
