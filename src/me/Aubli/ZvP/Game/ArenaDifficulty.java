@@ -79,7 +79,7 @@ public class ArenaDifficulty {
 			setCanPickupItems = true;
 			setVillager = false;
 			maxHealth = 15D;
-			dropchance = 0.15F;
+			dropchance = 0.20F;
 			armorContent = getRandomArmor();
 			break;
 		    case 3:
@@ -87,7 +87,7 @@ public class ArenaDifficulty {
 			setCanPickupItems = false;
 			setVillager = true;
 			maxHealth = 30D;
-			dropchance = 0.15F;
+			dropchance = 0.18F;
 			armorContent = getRandomArmor();
 			break;
 		    default:
