@@ -55,12 +55,25 @@ public class DeathListener implements Listener {
 	this.eventPlayer = event.getEntity();
 	
 	if (this.game.isInGame(this.eventPlayer)) {
-	    ZvPPlayer player = this.game.getPlayer(this.eventPlayer);
+	    final ZvPPlayer player = this.game.getPlayer(this.eventPlayer);
 	    
 	    player.die();
 	    
 	    event.setDeathMessage("");
 	    player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_died"), player.getName()));
+	    
+	    if (player.getArena().getSpawnProtection()) {
+		player.setSpawnProtected(true);
+		Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
+		    
+		    @Override
+		    public void run() {
+			player.setSpawnProtected(false);
+			player.sendMessage("Spawn protection over");
+		    }
+		}, player.getArena().getProtectionDuration() * 20L);
+	    }
+	    
 	    return;
 	}
     }
