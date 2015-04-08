@@ -34,6 +34,7 @@ public class ZvPPlayer {
     
     private boolean voted;
     private boolean canceled;
+    private boolean spawnProtected;
     
     private int zombieKills;
     private int deaths;
@@ -57,6 +58,7 @@ public class ZvPPlayer {
 	
 	this.voted = false;
 	this.canceled = false;
+	this.spawnProtected = false;
 	
 	this.zombieKills = 0;
 	this.deaths = 0;
@@ -181,6 +183,10 @@ public class ZvPPlayer {
 	this.canceled = cancel;
     }
     
+    public void setSpawnProtected(boolean protection) {
+	this.spawnProtected = protection;
+    }
+    
     public boolean hasKit() {
 	return getKit() != null;
     }
@@ -191,6 +197,10 @@ public class ZvPPlayer {
     
     public boolean hasCanceled() {
 	return this.canceled;
+    }
+    
+    public boolean hasProtection() {
+	return this.spawnProtected;
     }
     
     public void sendMessage(String message) {

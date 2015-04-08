@@ -42,25 +42,10 @@ public class Arena implements Comparable<Arena> {
     private FileConfiguration arenaConfig;
     
     private int arenaID;
+    private int TaskId;
     
     private ArenaStatus status;
     private ArenaDifficultyLevel difficulty;
-    
-    private int maxPlayers;
-    private int minPlayers;
-    private int maxRounds;
-    private int maxWaves;
-    private int round;
-    private int wave;
-    
-    private int spawnRate;
-    private double saveRadius;
-    
-    private int TaskId;
-    
-    private World arenaWorld;
-    private Location minLoc;
-    private Location maxLoc;
     
     private ArenaScore score;
     private ArenaDifficulty difficultyTool;
@@ -69,7 +54,24 @@ public class Arena implements Comparable<Arena> {
     
     private ArrayList<ZvPPlayer> players;
     
-    public Arena(int ID, int maxPlayers, String arenaPath, Location min, Location max, int rounds, int waves, int spawnRate, double saveRadius, ArenaDifficultyLevel difficulty) {
+    private boolean enableSpawnProtection;
+    
+    private final int maxPlayers;
+    private final int minPlayers;
+    private final int maxRounds;
+    private final int maxWaves;
+    private int round;
+    private int wave;
+    
+    private final int spawnRate;
+    private final int protectionDuration;
+    private final double saveRadius;
+    
+    private World arenaWorld;
+    private Location minLoc;
+    private Location maxLoc;
+    
+    public Arena(int ID, int maxPlayers, String arenaPath, Location min, Location max, int rounds, int waves, int spawnRate, double saveRadius, ArenaDifficultyLevel difficulty, boolean spawnProtection) {
 	
 	this.arenaID = ID;
 	
@@ -91,6 +93,9 @@ public class Arena implements Comparable<Arena> {
 	
 	this.saveRadius = saveRadius;
 	this.spawnRate = spawnRate;
+	
+	this.enableSpawnProtection = spawnProtection;
+	this.protectionDuration = 5;
 	
 	this.arenaFile = new File(arenaPath + "/" + ID + ".yml");
 	this.arenaConfig = YamlConfiguration.loadConfiguration(this.arenaFile);
@@ -126,13 +131,15 @@ public class Arena implements Comparable<Arena> {
 	    this.status = ArenaStatus.STOPED;
 	}
 	
+	this.enableSpawnProtection = this.arenaConfig.getBoolean("arena.safety.SpawnProtection.enabled", true);
+	this.protectionDuration = this.arenaConfig.getInt("arena.safety.SpawnProtection.duration");
 	this.difficulty = ArenaDifficultyLevel.valueOf(this.arenaConfig.getString("arena.Difficulty", "NORMAL"));
 	
 	this.round = 0;
 	this.wave = 0;
 	
 	this.spawnRate = this.arenaConfig.getInt("arena.spawnRate", ZvPConfig.getDefaultZombieSpawnRate());
-	this.saveRadius = this.arenaConfig.getDouble("arena.saveRadius", ZvPConfig.getDefaultSaveRadius());
+	this.saveRadius = this.arenaConfig.getDouble("arena.safety.saveRadius", ZvPConfig.getDefaultSaveRadius());
 	
 	this.arenaWorld = Bukkit.getWorld(UUID.fromString(this.arenaConfig.getString("arena.Location.world")));
 	this.minLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.min.X"), this.arenaConfig.getInt("arena.Location.min.Y"), this.arenaConfig.getInt("arena.Location.min.Z"));
@@ -141,17 +148,9 @@ public class Arena implements Comparable<Arena> {
 	this.difficultyTool = new ArenaDifficulty(this, getDifficulty());
 	this.players = new ArrayList<ZvPPlayer>();
 	this.rand = new Random();
-	
-	try {
-	    if (this.arenaWorld != null) {
-		save();
-	    }
-	} catch (IOException e) {
-	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena " + getID() + ": " + e.getMessage(), true, false, e);
-	}
     }
     
-    private void save() throws IOException {
+    public void save() throws IOException {
 	this.arenaConfig.set("arena.ID", this.arenaID);
 	this.arenaConfig.set("arena.Online", !(getStatus() == ArenaStatus.STOPED));
 	this.arenaConfig.set("arena.Difficulty", getDifficulty().name());
@@ -161,7 +160,10 @@ public class Arena implements Comparable<Arena> {
 	this.arenaConfig.set("arena.rounds", this.maxRounds);
 	this.arenaConfig.set("arena.waves", this.maxWaves);
 	this.arenaConfig.set("arena.spawnRate", this.spawnRate);
-	this.arenaConfig.set("arena.saveRadius", this.saveRadius);
+	
+	this.arenaConfig.set("arena.safety.SpawnProtection.enabled", getSpawnProtection());
+	this.arenaConfig.set("arena.safety.SpawnProtection.duration", getProtectionDuration());
+	this.arenaConfig.set("arena.safety.saveRadius", this.saveRadius);
 	
 	this.arenaConfig.set("arena.Location.world", this.arenaWorld.getUID().toString());
 	this.arenaConfig.set("arena.Location.min.X", this.minLoc.getBlockX());
@@ -248,12 +250,20 @@ public class Arena implements Comparable<Arena> {
 	return this.saveRadius;
     }
     
+    public int getProtectionDuration() {
+	return this.protectionDuration;
+    }
+    
     public ArenaScore getScore() {
 	return this.score;
     }
     
     public ArenaDifficulty getDifficultyTool() {
 	return this.difficultyTool;
+    }
+    
+    public boolean getSpawnProtection() {
+	return this.enableSpawnProtection;
     }
     
     public World getWorld() {
@@ -529,7 +539,7 @@ public class Arena implements Comparable<Arena> {
 		}
 		
 		if (!isWaiting()) {
-		    GameManager.getManager().startGame(this, player.getLobby(), getMaxRounds(), getMaxWaves());
+		    GameManager.getManager().startGame(this, player.getLobby());
 		}
 	    }
 	    return true;
@@ -560,10 +570,7 @@ public class Arena implements Comparable<Arena> {
 	updatePlayerBoards();
     }
     
-    public void start(int rounds, int waves) {
-	this.maxRounds = rounds;
-	this.maxWaves = waves;
-	
+    public void start() {
 	this.round = 0;
 	this.wave = 0;
 	

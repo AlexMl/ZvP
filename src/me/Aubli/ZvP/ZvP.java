@@ -29,6 +29,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.util.Converter.FileConverter;
 import org.util.Logger.PluginOutput;
 import org.util.Metrics.Metrics;
 import org.util.Updater.Updater;
@@ -39,6 +40,8 @@ import org.util.Updater.Updater.UpdateType;
 public class ZvP extends JavaPlugin {
     
     private static PluginOutput logger;
+    
+    private static FileConverter converter;
     
     private static ZvP instance;
     
@@ -73,9 +76,9 @@ public class ZvP extends JavaPlugin {
 	instance = this;
 	
 	new ZvPConfig(getConfig());
-	setTool();
-	
 	logger = new PluginOutput(this, ZvPConfig.getDebugMode(), ZvPConfig.getLogLevel());
+	
+	converter = new FileConverter(this);
 	
 	new MessageManager(ZvPConfig.getLocale());
 	new GameManager();
@@ -86,6 +89,8 @@ public class ZvP extends JavaPlugin {
 	registerListeners();
 	getCommand("zvp").setExecutor(new ZvPCommands());
 	getCommand("zvptest").setExecutor(new ZvPCommands());
+	
+	setTool();
 	
 	if (ZvPConfig.getEnableUpdater()) {
 	    UpdateType updType = UpdateType.DEFAULT;
@@ -132,6 +137,10 @@ public class ZvP extends JavaPlugin {
     
     public static PluginOutput getPluginLogger() {
 	return logger;
+    }
+    
+    public static FileConverter getConverter() {
+	return converter;
     }
     
     public static String getPrefix() {

@@ -1,6 +1,8 @@
 package me.Aubli.ZvP.Game;
 
 import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
@@ -18,6 +20,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
+import org.util.Converter.FileConverter.FileType;
 
 
 public class GameManager {
@@ -63,6 +66,8 @@ public class GameManager {
     private String arenaPath;
     private String lobbyPath;
     
+    private FilenameFilter fileFilter;
+    
     private ArrayList<Lobby> lobbys;
     private ArrayList<Arena> arenas;
     
@@ -76,6 +81,17 @@ public class GameManager {
 	this.lobbyPath = this.plugin.getDataFolder().getPath() + "/Lobbys";
 	
 	this.boardman = Bukkit.getScoreboardManager();
+	
+	this.fileFilter = new FilenameFilter() {
+	    
+	    @Override
+	    public boolean accept(File dir, String name) {
+		if (name.contains(".old")) {
+		    return false;
+		}
+		return true;
+	    }
+	};
 	
 	loadConfig(true);
     }
@@ -133,11 +149,18 @@ public class GameManager {
     
     // Load and save
     private void loadArenas() {
-	for (File arenaFile : new File(this.arenaPath).listFiles()) {
-	    Arena arena = new Arena(arenaFile);
+	for (File arenaFile : new File(this.arenaPath).listFiles(this.fileFilter)) {
+	    // Version 2.4.0 needs converted arena files
+	    ZvP.getConverter().convert(FileType.ARENAFILE, arenaFile, 240.0);
 	    
-	    if (arena.getWorld() != null) {
-		this.arenas.add(arena);
+	    Arena arena = new Arena(arenaFile);
+	    try {
+		if (arena.getWorld() != null) {
+		    this.arenas.add(arena);
+		    arena.save();
+		}
+	    } catch (IOException e) {
+		ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena " + arena.getID() + ": " + e.getMessage(), true, false, e);
 	    }
 	}
     }
@@ -285,7 +308,7 @@ public class GameManager {
 		mP = ZvPConfig.getMaxPlayers();
 	    }
 	    
-	    Arena a = new Arena(getNewID(this.arenaPath), mP, this.arenaPath, min.clone(), max.clone(), ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ZvPConfig.getDefaultSaveRadius(), ArenaDifficultyLevel.NORMAL);
+	    Arena a = new Arena(getNewID(this.arenaPath), mP, this.arenaPath, min.clone(), max.clone(), ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ZvPConfig.getDefaultSaveRadius(), ArenaDifficultyLevel.NORMAL, true);
 	    this.arenas.add(a);
 	    
 	    ZvP.getPluginLogger().log(Level.INFO, "New Arena added!", true);
@@ -338,8 +361,8 @@ public class GameManager {
     }
     
     // Game control
-    public void startGame(Arena a, Lobby l, int rounds, int waves) {
-	a.start(rounds, waves);
+    public void startGame(Arena a, Lobby l) {
+	a.start();
 	SignManager.getManager().updateSigns(l);
 	SignManager.getManager().updateSigns(a);
     }

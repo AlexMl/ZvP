@@ -47,14 +47,14 @@ public class MessageManager {
     }
     
     private boolean isOutdated() {
-	return !ZvP.getInstance().getDescription().getVersion().equals(getConfig().getString("Version"));
+	return !ZvP.getInstance().getDescription().getVersion().equals(getConfig().getString("version"));
     }
     
     private void writeDefaults() {
 	getConfig().options().header("This file contains all Text messages used in ZvP.\n" + "A guide for translation can be found here: http://dev.bukkit.org/bukkit-plugins/zombievsplayer/pages/language-setup/\n");
 	getConfig().options().copyHeader(true);
 	
-	getConfig().set("Version", ZvP.getInstance().getDescription().getVersion());
+	getConfig().set("version", ZvP.getInstance().getDescription().getVersion());
 	save();
 	
 	ResourceBundle bundle = ResourceBundle.getBundle("me.Aubli.ZvP.Translation.DefaultTranslation");
