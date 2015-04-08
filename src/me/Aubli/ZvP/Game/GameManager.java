@@ -1,6 +1,7 @@
 package me.Aubli.ZvP.Game;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
@@ -136,8 +137,13 @@ public class GameManager {
 	for (File arenaFile : new File(this.arenaPath).listFiles()) {
 	    Arena arena = new Arena(arenaFile);
 	    
-	    if (arena.getWorld() != null) {
-		this.arenas.add(arena);
+	    try {
+		if (arena.getWorld() != null) {
+		    this.arenas.add(arena);
+		    arena.save();
+		}
+	    } catch (IOException e) {
+		ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena " + arena.getID() + ": " + e.getMessage(), true, false, e);
 	    }
 	}
     }
