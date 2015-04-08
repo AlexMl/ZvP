@@ -15,6 +15,17 @@ public class EntityDamageListener implements Listener {
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
 	
+	if (event.getDamager() instanceof Player) {
+	    ZvPPlayer damager = GameManager.getManager().getPlayer((Player) event.getDamager());
+	    
+	    if (damager != null && GameManager.getManager().isInGame(damager.getPlayer())) {
+		if (damager.hasProtection()) {
+		    event.setCancelled(true);
+		    return;
+		}
+	    }
+	}
+	
 	if (event.getEntity() instanceof Player) {
 	    
 	    ZvPPlayer victim = GameManager.getManager().getPlayer((Player) event.getEntity());
