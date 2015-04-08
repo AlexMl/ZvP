@@ -343,7 +343,7 @@ public class ZvPCommands implements CommandExecutor {
 		    if (args[1].equalsIgnoreCase("arena")) {
 			if (playerSender.hasPermission("zvp.manage.arena")) {
 			    playerSender.sendMessage(MessageManager.getMessage("manage:tool"));
-			    playerSender.getInventory().addItem(ZvP.tool);
+			    playerSender.getInventory().addItem(ZvP.getTool(ZvP.ADDARENA));
 			    return true;
 			} else {
 			    commandDenied(playerSender);
@@ -355,6 +355,16 @@ public class ZvPCommands implements CommandExecutor {
 			if (playerSender.hasPermission("zvp.manage.lobby")) {
 			    GameManager.getManager().addLobby(playerSender.getLocation().clone());
 			    playerSender.sendMessage(MessageManager.getMessage("manage:lobby_saved"));
+			    return true;
+			} else {
+			    commandDenied(playerSender);
+			    return true;
+			}
+		    }
+		    
+		    if (args[1].equalsIgnoreCase("position")) {
+			if (playerSender.hasPermission("zvp.manage.arena")) {
+			    playerSender.getInventory().addItem(ZvP.getTool(ZvP.ADDPOSITION));
 			    return true;
 			} else {
 			    commandDenied(playerSender);
@@ -502,6 +512,7 @@ public class ZvPCommands implements CommandExecutor {
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp removekit [Name]");
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena");
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add lobby");
+	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add position");
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos1");
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos2");
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove arena [Arena-ID]");
