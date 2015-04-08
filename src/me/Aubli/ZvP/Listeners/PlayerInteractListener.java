@@ -76,14 +76,14 @@ public class PlayerInteractListener implements Listener {
 			if (arena.containsLocation(eventPlayer.getLocation())) {
 			    boolean success = arena.addSpawnLocation(event.getClickedBlock().getLocation().clone().add(0, 1, 0));
 			    if (success) {
-				eventPlayer.sendMessage("Position added");
+				eventPlayer.sendMessage(MessageManager.getFormatedMessage("manage:position_saved", "Position in arena " + arena.getID()));
 			    } else {
-				eventPlayer.sendMessage("Position not in Arena!");
+				eventPlayer.sendMessage(MessageManager.getMessage("manage:position_not_saved"));
 			    }
 			    return;
 			}
 		    }
-		    eventPlayer.sendMessage("not in arena");
+		    eventPlayer.sendMessage(MessageManager.getMessage("manage:position_not_in_arena"));
 		    return;
 		} else {
 		    ZvP.removeTool(eventPlayer);
