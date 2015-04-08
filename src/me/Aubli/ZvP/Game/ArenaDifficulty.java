@@ -45,7 +45,7 @@ public class ArenaDifficulty {
 	boolean setCanPickupItems = false;
 	double maxHealth = 20D;
 	ItemStack[] armorContent = null;
-	Float dropchance = 0.5F;
+	Float dropchance = 0.25F;
 	PotionEffect potionEffect = null;
 	
 	switch (getDifficulty().getLevel()) {
@@ -64,44 +64,49 @@ public class ArenaDifficulty {
 			setBaby = true;
 			setCanPickupItems = true;
 			maxHealth = 40D;
-			dropchance = 0.3F;
+			dropchance = 0.35F;
+			armorContent = null;
 			break;
 		    case 1:
 			setBaby = true;
 			setCanPickupItems = false;
 			maxHealth = 20D;
-			dropchance = 0.3F;
+			dropchance = 0.35F;
+			armorContent = null;
 			break;
 		    case 2:
 			setBaby = false;
 			setCanPickupItems = true;
 			setVillager = false;
 			maxHealth = 15D;
-			dropchance = 0.2F;
+			dropchance = 0.15F;
+			armorContent = getRandomArmor();
 			break;
 		    case 3:
 			setBaby = false;
 			setCanPickupItems = false;
 			setVillager = true;
 			maxHealth = 30D;
-			dropchance = 0.2F;
+			dropchance = 0.15F;
+			armorContent = getRandomArmor();
 			break;
 		    default:
 			break;
 		}
-		armorContent = getRandomArmor();
 		break;
 	    
 	    case 3:
 		switch (this.rand.nextInt(7)) {
 		    case 0:
 			setBaby = true;
+			setVillager = true;
 			maxHealth = 40D;
 			potionEffect = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 20, 2);
 			dropchance = 0.1F;
 			break;
 		    case 1:
 			setBaby = true;
+			setVillager = false;
 			maxHealth = 30D;
 			potionEffect = new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 100 * 20, 2);
 			dropchance = 0.1F;
@@ -136,8 +141,8 @@ public class ArenaDifficulty {
 	z.getEquipment().setBootsDropChance(dropchance);
 	z.getEquipment().setChestplateDropChance(dropchance);
 	z.getEquipment().setHelmetDropChance(dropchance);
-	z.getEquipment().setItemInHandDropChance(dropchance);
 	z.getEquipment().setLeggingsDropChance(dropchance);
+	z.getEquipment().setItemInHandDropChance(dropchance * 2);
 	z.setBaby(setBaby);
 	z.setVillager(setVillager);
 	z.setCanPickupItems(setCanPickupItems);
