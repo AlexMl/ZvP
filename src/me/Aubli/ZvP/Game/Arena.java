@@ -70,6 +70,7 @@ public class Arena implements Comparable<Arena> {
     private World arenaWorld;
     private Location minLoc;
     private Location maxLoc;
+    private List<Location> staticSpawnLocations;
     
     public Arena(int ID, int maxPlayers, String arenaPath, Location min, Location max, int rounds, int waves, int spawnRate, double saveRadius, ArenaDifficultyLevel difficulty, boolean spawnProtection) {
 	
@@ -101,7 +102,7 @@ public class Arena implements Comparable<Arena> {
 	this.arenaConfig = YamlConfiguration.loadConfiguration(this.arenaFile);
 	
 	this.players = new ArrayList<ZvPPlayer>();
-	
+	this.staticSpawnLocations = new ArrayList<Location>();
 	this.difficultyTool = new ArenaDifficulty(this, getDifficulty());
 	
 	this.rand = new Random();
@@ -145,6 +146,15 @@ public class Arena implements Comparable<Arena> {
 	this.minLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.min.X"), this.arenaConfig.getInt("arena.Location.min.Y"), this.arenaConfig.getInt("arena.Location.min.Z"));
 	this.maxLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.max.X"), this.arenaConfig.getInt("arena.Location.max.Y"), this.arenaConfig.getInt("arena.Location.max.Z"));
 	
+	this.staticSpawnLocations = new ArrayList<Location>();
+	for (String locationString : this.arenaConfig.getStringList("arena.Location.staticPositions")) {
+	    
+	    String[] cords = locationString.split(",");
+	    
+	    Location loc = new Location(getWorld(), Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
+	    this.staticSpawnLocations.add(loc);
+	}
+	
 	this.difficultyTool = new ArenaDifficulty(this, getDifficulty());
 	this.players = new ArrayList<ZvPPlayer>();
 	this.rand = new Random();
@@ -173,6 +183,14 @@ public class Arena implements Comparable<Arena> {
 	this.arenaConfig.set("arena.Location.max.X", this.maxLoc.getBlockX());
 	this.arenaConfig.set("arena.Location.max.Y", this.maxLoc.getBlockY());
 	this.arenaConfig.set("arena.Location.max.Z", this.maxLoc.getBlockZ());
+	
+	List<String> locationList = new ArrayList<String>();
+	
+	for (Location loc : this.staticSpawnLocations) {
+	    locationList.add(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+	}
+	
+	this.arenaConfig.set("arena.Location.staticPositions", locationList);
 	
 	this.arenaConfig.save(this.arenaFile);
     }
@@ -278,45 +296,64 @@ public class Arena implements Comparable<Arena> {
 	return this.maxLoc;
     }
     
-    public Location getNewRandomLocation() {
+    public Location getNewRandomLocation(boolean player) {
 	
-	int x;
-	int y;
-	int z;
-	
-	x = this.rand.nextInt((getMax().getBlockX() - getMin().getBlockX() - 1)) + getMin().getBlockX() + 1;
-	z = this.rand.nextInt((getMax().getBlockZ() - getMin().getBlockZ() - 1)) + getMin().getBlockZ() + 1;
-	
-	if (getMax().getBlockY() == getMin().getBlockY()) {
-	    y = getMax().getBlockY() + 1;
+	if (player && !this.staticSpawnLocations.isEmpty()) {
+	    Location location = this.staticSpawnLocations.get(this.rand.nextInt(this.staticSpawnLocations.size()));
+	    if (containsLocation(location)) {
+		return location.clone();
+	    }
+	    return getNewRandomLocation(player);
 	} else {
-	    if (getWorld().getHighestBlockYAt(getMax()) > getMax().getBlockY() + 1 || getWorld().getHighestBlockYAt(getMin()) > getMin().getBlockY() + 1) {
+	    
+	    int x;
+	    int y;
+	    int z;
+	    
+	    x = this.rand.nextInt((getMax().getBlockX() - getMin().getBlockX() - 1)) + getMin().getBlockX() + 1;
+	    z = this.rand.nextInt((getMax().getBlockZ() - getMin().getBlockZ() - 1)) + getMin().getBlockZ() + 1;
+	    
+	    if (getMax().getBlockY() == getMin().getBlockY()) {
 		y = getMax().getBlockY() + 1;
 	    } else {
-		y = getWorld().getHighestBlockYAt(getMax());
+		if (getWorld().getHighestBlockYAt(getMax()) > getMax().getBlockY() + 1 || getWorld().getHighestBlockYAt(getMin()) > getMin().getBlockY() + 1) {
+		    y = getMax().getBlockY() + 1;
+		} else {
+		    y = getWorld().getHighestBlockYAt(getMax());
+		}
+	    }
+	    
+	    Location startLoc = new Location(getWorld(), x, y, z);
+	    
+	    if (containsLocation(startLoc) && startLoc.getBlock().getType() == Material.AIR && startLoc.clone().add(0, 1, 0).getBlock().getType() == Material.AIR) {
+		return startLoc.clone();
+	    } else {
+		return getNewRandomLocation(player);
 	    }
 	}
-	
-	Location startLoc = new Location(getWorld(), x, y, z);
-	
-	if (containsLocation(startLoc) && startLoc.getBlock().getType() == Material.AIR && startLoc.clone().add(0, 1, 0).getBlock().getType() == Material.AIR) {
-	    return startLoc.clone();
-	} else {
-	    return getNewRandomLocation();
-	}
-	
     }
     
     public Location getNewSaveLocation() {
 	
 	final double distance = getSaveRadius();
 	
-	final Location spawnLoc = getNewRandomLocation();
+	final Location spawnLoc = getNewRandomLocation(false);
 	
 	for (ZvPPlayer p : getPlayers()) {
 	    
-	    if (p.getLocation().distance(spawnLoc) <= distance) {
-		return getNewSaveLocation();
+	    if (this.staticSpawnLocations.isEmpty()) {
+		if (p.getLocation().distanceSquared(spawnLoc) <= (distance * distance)) {
+		    return getNewSaveLocation();
+		}
+	    } else {
+		if (p.getLocation().distanceSquared(spawnLoc) <= (distance * distance)) {
+		    return getNewSaveLocation();
+		}
+		for (Location loc : this.staticSpawnLocations) {
+		    if (spawnLoc.distanceSquared(loc) <= (distance * distance)) {
+			return getNewSaveLocation();
+		    }
+		}
 	    }
 	}
 	
@@ -486,6 +523,15 @@ public class Arena implements Comparable<Arena> {
 	ZvP.getPluginLogger().log(Level.FINEST, "[Message] " + ChatColor.stripColor(message), true);
     }
     
+    public boolean addSpawnLocation(Location loc) {
+	if (containsLocation(loc)) {
+	    if (!this.staticSpawnLocations.contains(loc)) {
+		return this.staticSpawnLocations.add(loc);
+	    }
+	}
+	return false;
+    }
+    
     public boolean addPlayer(final ZvPPlayer player) {
 	
 	ZvP.getPluginLogger().log(Level.FINER, "Player " + player.getName() + " inGame: " + GameManager.getManager().isInGame(player.getPlayer()) + ", hasCanceled: " + player.hasCanceled() + " , Kit: " + player.hasKit(), true);
@@ -511,7 +557,7 @@ public class Arena implements Comparable<Arena> {
 	
 	if (!this.players.contains(player) && !player.hasCanceled()) {
 	    try {
-		player.setStartPosition(getNewRandomLocation());
+		player.setStartPosition(getNewRandomLocation(true));
 		player.getReady();
 	    } catch (Exception e) {
 		ZvP.getPluginLogger().log(Level.INFO, e.getMessage(), true, false, e);

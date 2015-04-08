@@ -25,7 +25,7 @@ public class PlayerRespawnListener implements Listener {
 	if (this.game.isInGame(eventPlayer)) {
 	    final ZvPPlayer player = this.game.getPlayer(eventPlayer);
 	    
-	    event.setRespawnLocation(player.getArena().getNewRandomLocation());
+	    event.setRespawnLocation(player.getArena().getNewRandomLocation(true));
 	    
 	    if (player.getArena().getSpawnProtection()) {
 		player.setSpawnProtected(true);
