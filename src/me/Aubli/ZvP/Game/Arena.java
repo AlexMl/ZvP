@@ -106,13 +106,7 @@ public class Arena implements Comparable<Arena> {
 	this.difficultyTool = new ArenaDifficulty(this, getDifficulty());
 	
 	this.rand = new Random();
-	
-	try {
-	    this.arenaFile.createNewFile();
-	    save();
-	} catch (IOException e) {
-	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena " + getID() + ": " + e.getMessage(), true, false, e);
-	}
+	save();
     }
     
     public Arena(File arenaFile) {
@@ -160,39 +154,45 @@ public class Arena implements Comparable<Arena> {
 	this.rand = new Random();
     }
     
-    public void save() throws IOException {
-	this.arenaConfig.set("arena.ID", this.arenaID);
-	this.arenaConfig.set("arena.Online", !(getStatus() == ArenaStatus.STOPED));
-	this.arenaConfig.set("arena.Difficulty", getDifficulty().name());
-	
-	this.arenaConfig.set("arena.minPlayers", this.minPlayers);
-	this.arenaConfig.set("arena.maxPlayers", this.maxPlayers);
-	this.arenaConfig.set("arena.rounds", this.maxRounds);
-	this.arenaConfig.set("arena.waves", this.maxWaves);
-	this.arenaConfig.set("arena.spawnRate", this.spawnRate);
-	
-	this.arenaConfig.set("arena.safety.SpawnProtection.enabled", getSpawnProtection());
-	this.arenaConfig.set("arena.safety.SpawnProtection.duration", getProtectionDuration());
-	this.arenaConfig.set("arena.safety.saveRadius", this.saveRadius);
-	
-	this.arenaConfig.set("arena.Location.world", this.arenaWorld.getUID().toString());
-	this.arenaConfig.set("arena.Location.min.X", this.minLoc.getBlockX());
-	this.arenaConfig.set("arena.Location.min.Y", this.minLoc.getBlockY());
-	this.arenaConfig.set("arena.Location.min.Z", this.minLoc.getBlockZ());
-	
-	this.arenaConfig.set("arena.Location.max.X", this.maxLoc.getBlockX());
-	this.arenaConfig.set("arena.Location.max.Y", this.maxLoc.getBlockY());
-	this.arenaConfig.set("arena.Location.max.Z", this.maxLoc.getBlockZ());
-	
-	List<String> locationList = new ArrayList<String>();
-	
-	for (Location loc : this.staticSpawnLocations) {
-	    locationList.add(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+    public void save() {
+	try {
+	    this.arenaFile.createNewFile();
+	    
+	    this.arenaConfig.set("arena.ID", this.arenaID);
+	    this.arenaConfig.set("arena.Online", !(getStatus() == ArenaStatus.STOPED));
+	    this.arenaConfig.set("arena.Difficulty", getDifficulty().name());
+	    
+	    this.arenaConfig.set("arena.minPlayers", this.minPlayers);
+	    this.arenaConfig.set("arena.maxPlayers", this.maxPlayers);
+	    this.arenaConfig.set("arena.rounds", this.maxRounds);
+	    this.arenaConfig.set("arena.waves", this.maxWaves);
+	    this.arenaConfig.set("arena.spawnRate", this.spawnRate);
+	    
+	    this.arenaConfig.set("arena.safety.SpawnProtection.enabled", getSpawnProtection());
+	    this.arenaConfig.set("arena.safety.SpawnProtection.duration", getProtectionDuration());
+	    this.arenaConfig.set("arena.safety.saveRadius", this.saveRadius);
+	    
+	    this.arenaConfig.set("arena.Location.world", this.arenaWorld.getUID().toString());
+	    this.arenaConfig.set("arena.Location.min.X", this.minLoc.getBlockX());
+	    this.arenaConfig.set("arena.Location.min.Y", this.minLoc.getBlockY());
+	    this.arenaConfig.set("arena.Location.min.Z", this.minLoc.getBlockZ());
+	    
+	    this.arenaConfig.set("arena.Location.max.X", this.maxLoc.getBlockX());
+	    this.arenaConfig.set("arena.Location.max.Y", this.maxLoc.getBlockY());
+	    this.arenaConfig.set("arena.Location.max.Z", this.maxLoc.getBlockZ());
+	    
+	    List<String> locationList = new ArrayList<String>();
+	    
+	    for (Location loc : this.staticSpawnLocations) {
+		locationList.add(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+	    }
+	    
+	    this.arenaConfig.set("arena.Location.staticPositions", locationList);
+	    
+	    this.arenaConfig.save(this.arenaFile);
+	} catch (IOException e) {
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena " + getID() + ": " + e.getMessage(), true, false, e);
 	}
-	
-	this.arenaConfig.set("arena.Location.staticPositions", locationList);
-	
-	this.arenaConfig.save(this.arenaFile);
     }
     
     void delete() {
@@ -526,7 +526,9 @@ public class Arena implements Comparable<Arena> {
     public boolean addSpawnLocation(Location loc) {
 	if (containsLocation(loc)) {
 	    if (!this.staticSpawnLocations.contains(loc)) {
-		return this.staticSpawnLocations.add(loc);
+		this.staticSpawnLocations.add(loc);
+		save();
+		return true;
 	    }
 	}
 	return false;
