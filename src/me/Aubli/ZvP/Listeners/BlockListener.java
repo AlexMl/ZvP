@@ -32,12 +32,12 @@ public class BlockListener implements Listener {
 	}
 	
 	if (this.eventPlayer.getItemInHand() != null) {
-	    if (this.eventPlayer.getItemInHand().isSimilar(ZvP.tool)) {
+	    if (this.eventPlayer.getItemInHand().isSimilar(ZvP.getTool(ZvP.ADDARENA)) || this.eventPlayer.getItemInHand().isSimilar(ZvP.getTool(ZvP.ADDPOSITION))) {
 		if (this.eventPlayer.hasPermission("zvp.manage.arena")) {
 		    event.setCancelled(true);
 		    return;
 		} else {
-		    ZvP.getInstance().removeTool(this.eventPlayer);
+		    ZvP.removeTool(this.eventPlayer);
 		    event.setCancelled(true);
 		    ZvPCommands.commandDenied(this.eventPlayer);
 		    return;
