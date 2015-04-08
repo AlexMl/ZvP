@@ -65,7 +65,7 @@ public class ZvPConfig {
 	getConfig().addDefault("times.joinTime", 15);
 	getConfig().addDefault("times.timeBetweenWaves", 90);
 	
-	getConfig().addDefault("zombies.default_spawnRate", 20);
+	getConfig().addDefault("zombies.default_spawnRate", 15);
 	getConfig().addDefault("zombies.default_saveRadius", 3.0);
 	
 	getConfig().addDefault("money.ZombieFund", 0.37);
