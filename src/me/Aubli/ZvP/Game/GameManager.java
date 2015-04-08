@@ -291,7 +291,7 @@ public class GameManager {
 		mP = ZvPConfig.getMaxPlayers();
 	    }
 	    
-	    Arena a = new Arena(getNewID(this.arenaPath), mP, this.arenaPath, min.clone(), max.clone(), ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ZvPConfig.getDefaultSaveRadius(), ArenaDifficultyLevel.NORMAL);
+	    Arena a = new Arena(getNewID(this.arenaPath), mP, this.arenaPath, min.clone(), max.clone(), ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ZvPConfig.getDefaultSaveRadius(), ArenaDifficultyLevel.NORMAL, true);
 	    this.arenas.add(a);
 	    
 	    ZvP.getPluginLogger().log(Level.INFO, "New Arena added!", true);
@@ -344,8 +344,8 @@ public class GameManager {
     }
     
     // Game control
-    public void startGame(Arena a, Lobby l, int rounds, int waves) {
-	a.start(rounds, waves);
+    public void startGame(Arena a, Lobby l) {
+	a.start();
 	SignManager.getManager().updateSigns(l);
 	SignManager.getManager().updateSigns(a);
     }
