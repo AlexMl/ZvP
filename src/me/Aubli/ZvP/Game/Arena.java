@@ -519,8 +519,8 @@ public class Arena implements Comparable<Arena> {
 		return false;
 	    }
 	    
-	    sendMessage(String.format(MessageManager.getMessage("game:player_joined"), player.getName()));
-	    player.sendMessage(String.format(MessageManager.getMessage("game:joined"), getID()));
+	    sendMessage(MessageManager.getFormatedMessage("game:player_joined", player.getName()));
+	    player.sendMessage(MessageManager.getFormatedMessage("game:joined", getID()));
 	    this.players.add(player);
 	    
 	    ZvP.getPluginLogger().log(Level.INFO, "Player " + player.getName() + " has joined Arena " + getID(), true);

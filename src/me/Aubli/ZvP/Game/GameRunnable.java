@@ -227,7 +227,7 @@ public class GameRunnable extends BukkitRunnable {
 			
 			String[] donP = MessageManager.getMessage("game:won_messages").split(";");
 			int index = this.rand.nextInt(donP.length);
-			String endMessage = String.format(MessageManager.getMessage("game:won"), kills, (this.arena.getMaxRounds() * this.arena.getMaxWaves()), deaths, Math.round(money), donP[index]);
+			String endMessage = MessageManager.getFormatedMessage("game:won", kills, (this.arena.getMaxRounds() * this.arena.getMaxWaves()), deaths, Math.round(money), donP[index]);
 			
 			this.arena.sendMessage(endMessage);
 			this.cancel();

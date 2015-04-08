@@ -60,7 +60,7 @@ public class DeathListener implements Listener {
 	    player.die();
 	    
 	    event.setDeathMessage("");
-	    player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_died"), player.getName()));
+	    player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_died", player.getName()));
 	    return;
 	}
     }

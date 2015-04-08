@@ -246,8 +246,8 @@ public class ZvPCommands implements CommandExecutor {
 			    boolean success = this.game.removePlayer(p);
 			    
 			    if (success) {
-				playerSender.sendMessage(String.format(MessageManager.getMessage("game:left"), p.getArena().getID()));
-				a.sendMessage(String.format(MessageManager.getMessage("game:player_left"), playerSender.getName()));
+				playerSender.sendMessage(MessageManager.getFormatedMessage("game:left", p.getArena().getID()));
+				a.sendMessage(MessageManager.getFormatedMessage("game:player_left", playerSender.getName()));
 				return true;
 			    } else {
 				playerSender.sendMessage(MessageManager.getMessage("game:player_not_found"));
@@ -278,7 +278,7 @@ public class ZvPCommands implements CommandExecutor {
 		    if (playerSender.hasPermission("zvp.manage.arena")) {
 			
 			this.positions.put(args[0].toLowerCase(), playerSender.getLocation());
-			playerSender.sendMessage(String.format(MessageManager.getMessage("manage:position_saved"), args[0].toLowerCase()));
+			playerSender.sendMessage(MessageManager.getFormatedMessage("manage:position_saved", args[0].toLowerCase()));
 			
 			if (this.positions.containsKey("pos1") && this.positions.containsKey("pos2")) {
 			    this.game.addArena(this.positions.get("pos1"), this.positions.get("pos2"));
@@ -314,7 +314,7 @@ public class ZvPCommands implements CommandExecutor {
 			    KitManager.getManager().openAddKitGUI(playerSender, args[1]);
 			    return true;
 			} else {
-			    playerSender.sendMessage(String.format(MessageManager.getMessage("error:kit_already_exists"), args[1]));
+			    playerSender.sendMessage(MessageManager.getFormatedMessage("error:kit_already_exists", args[1]));
 			    return true;
 			}
 		    } else {
@@ -327,10 +327,10 @@ public class ZvPCommands implements CommandExecutor {
 		    if (playerSender.hasPermission("zvp.manage.kit")) {
 			if (KitManager.getManager().getKit(args[1]) != null) {
 			    KitManager.getManager().removeKit(args[1]);
-			    playerSender.sendMessage(String.format(MessageManager.getMessage("manage:kit_removed"), args[1]));
+			    playerSender.sendMessage(MessageManager.getFormatedMessage("manage:kit_removed", args[1]));
 			    return true;
 			} else {
-			    playerSender.sendMessage(String.format(MessageManager.getMessage("error:kit_does_not_exists"), args[1]));
+			    playerSender.sendMessage(MessageManager.getFormatedMessage("error:kit_does_not_exists", args[1]));
 			    return true;
 			}
 		    } else {
@@ -370,7 +370,7 @@ public class ZvPCommands implements CommandExecutor {
 			Arena a = this.game.getArena(Integer.parseInt(args[1]));
 			if (a != null) {
 			    a.stop();
-			    playerSender.sendMessage(String.format(MessageManager.getMessage("arena:stop"), a.getID()));
+			    playerSender.sendMessage(MessageManager.getFormatedMessage("arena:stop", a.getID()));
 			    return true;
 			} else {
 			    playerSender.sendMessage(MessageManager.getMessage("error:arena_not_available"));

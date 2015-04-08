@@ -106,6 +106,15 @@ public class MessageManager {
 	return "";
     }
     
+    public static String getFormatedMessage(String messageKey, Object... args) {
+	String message = getMessage(messageKey);
+	
+	if (!message.isEmpty()) {
+	    return String.format(message, args);
+	}
+	return "";
+    }
+    
     public static Locale getLocale() {
 	return loc;
     }

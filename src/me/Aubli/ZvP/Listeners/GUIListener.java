@@ -117,7 +117,7 @@ public class GUIListener implements Listener {
 				    
 				    player.getArena().getScore().subtractScore(player, item.getPrice());
 				    player.getPlayer().getInventory().addItem(boughtItem);
-				    player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_bought"), player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
+				    player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_bought", player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
 				} else {
 				    player.sendMessage(MessageManager.getMessage("game:no_money"));
 				}
@@ -134,7 +134,7 @@ public class GUIListener implements Listener {
 				    
 				    player.getArena().getScore().subtractScore(player, item.getPrice() * amount);
 				    player.getPlayer().getInventory().addItem(boughtItem);
-				    player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_bought_more"), player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
+				    player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_bought_more", player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
 				} else {
 				    player.sendMessage(MessageManager.getMessage("game:no_money"));
 				}
@@ -149,7 +149,7 @@ public class GUIListener implements Listener {
 				if (player.getPlayer().getInventory().containsAtLeast(stack, 1)) {
 				    player.getPlayer().getInventory().removeItem(stack);
 				    player.getArena().getScore().addScore(player, item.getPrice());
-				    player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_sold"), player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
+				    player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_sold", player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
 				} else {
 				    player.sendMessage(MessageManager.getMessage("game:no_item_to_sell"));
 				}
@@ -177,7 +177,7 @@ public class GUIListener implements Listener {
 				    }
 				    
 				    player.getArena().getScore().addScore(player, item.getPrice() * amount);
-				    player.getArena().sendMessage(String.format(MessageManager.getMessage("game:player_sold_more"), player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
+				    player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_sold_more", player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
 				} else {
 				    player.sendMessage(MessageManager.getMessage("game:no_item_to_sell"));
 				}
@@ -248,7 +248,7 @@ public class GUIListener implements Listener {
 	    for (ItemStack item : event.getInventory().getContents()) {
 		if (item != null && item.getType() != Material.AIR) {
 		    KitManager.getManager().addKit(this.name, item, this.content);
-		    eventPlayer.sendMessage(String.format(MessageManager.getMessage("manage:kit_saved"), this.name));
+		    eventPlayer.sendMessage(MessageManager.getFormatedMessage("manage:kit_saved", this.name));
 		    break;
 		}
 	    }
