@@ -1,6 +1,7 @@
 package me.Aubli.ZvP.Game;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +20,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
+import org.util.Converter.FileConverter.FileType;
 
 
 public class GameManager {
@@ -64,6 +66,8 @@ public class GameManager {
     private String arenaPath;
     private String lobbyPath;
     
+    private FilenameFilter fileFilter;
+    
     private ArrayList<Lobby> lobbys;
     private ArrayList<Arena> arenas;
     
@@ -77,6 +81,17 @@ public class GameManager {
 	this.lobbyPath = this.plugin.getDataFolder().getPath() + "/Lobbys";
 	
 	this.boardman = Bukkit.getScoreboardManager();
+	
+	this.fileFilter = new FilenameFilter() {
+	    
+	    @Override
+	    public boolean accept(File dir, String name) {
+		if (name.contains(".old")) {
+		    return false;
+		}
+		return true;
+	    }
+	};
 	
 	loadConfig(true);
     }
@@ -134,9 +149,11 @@ public class GameManager {
     
     // Load and save
     private void loadArenas() {
-	for (File arenaFile : new File(this.arenaPath).listFiles()) {
-	    Arena arena = new Arena(arenaFile);
+	for (File arenaFile : new File(this.arenaPath).listFiles(this.fileFilter)) {
+	    // Version 2.4.0 needs converted arena files
+	    ZvP.getConverter().convert(FileType.ARENAFILE, arenaFile, 240.0);
 	    
+	    Arena arena = new Arena(arenaFile);
 	    try {
 		if (arena.getWorld() != null) {
 		    this.arenas.add(arena);
