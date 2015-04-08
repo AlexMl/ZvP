@@ -2,7 +2,9 @@ package org.util.Converter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
+import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.GameManager.ArenaDifficultyLevel;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -36,6 +38,7 @@ public class FileConverter {
 	    
 	    if (type == FileType.ARENAFILE) {
 		if (localVersion == null || parseVersion(localVersion) < uptadeRequired) { // Version that needs upgrade
+		    ZvP.getPluginLogger().log(Level.INFO, "Found outdated arena file(" + file.getName() + ")! Converting to " + uptadeRequired + " ...", true, false);
 		    int arenaID = conf.getInt("arena.ID");
 		    String status = conf.getString("arena.Online");
 		    
@@ -87,13 +90,14 @@ public class FileConverter {
 		    conf.set("version", this.currentVersion);
 		    
 		    conf.save(file);
+		    ZvP.getPluginLogger().log(Level.INFO, "Updated " + file.getName() + " to " + uptadeRequired + " successfully!", true, false);
+		    return true;
 		}
 	    }
 	} catch (IOException e) {
-	    e.printStackTrace();
+	    ZvP.getPluginLogger().log(Level.WARNING, "Failed saving converted file for " + file.getAbsolutePath() + "!", true, false, e);
 	    return false;
 	}
-	
 	return false;
     }
     
