@@ -2,7 +2,6 @@ package me.Aubli.ZvP.Game;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
@@ -132,6 +131,10 @@ public class GameManager {
 	
 	ZvPConfig.reloadConfig();
 	
+	for (Player player : Bukkit.getOnlinePlayers()) {
+	    ZvP.removeTool(player);
+	}
+	
 	loadArenas();
 	loadLobbys();
 	
@@ -154,14 +157,11 @@ public class GameManager {
 	    ZvP.getConverter().convert(FileType.ARENAFILE, arenaFile, 240.0);
 	    
 	    Arena arena = new Arena(arenaFile);
-	    try {
-		if (arena.getWorld() != null) {
-		    this.arenas.add(arena);
-		    arena.save();
-		}
-	    } catch (IOException e) {
-		ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena " + arena.getID() + ": " + e.getMessage(), true, false, e);
+	    if (arena.getWorld() != null) {
+		this.arenas.add(arena);
+		arena.save();
 	    }
+	    
 	}
     }
     
