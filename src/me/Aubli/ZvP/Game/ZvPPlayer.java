@@ -254,7 +254,7 @@ public class ZvPPlayer {
 	    obj.getScore(ChatColor.GREEN + "Money: " + new DecimalFormat("#0.00").format(getArena().getScore().getScore(this))).setScore(10);
 	    
 	    obj.getScore("-------------").setScore(9);
-	    obj.getScore(ChatColor.RED + "Left:  " + ChatColor.GREEN + getArena().getLivingZombies()).setScore(8);
+	    obj.getScore(ChatColor.RED + "Left:  " + ChatColor.GREEN + getArena().getLivingZombieAmount()).setScore(8);
 	    obj.getScore(ChatColor.RED + "Killed: " + ChatColor.GREEN + getArena().getKilledZombies()).setScore(7);
 	    
 	    obj.getScore(ChatColor.RESET + "-------------").setScore(6);

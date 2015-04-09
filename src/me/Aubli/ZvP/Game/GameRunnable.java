@@ -97,7 +97,7 @@ public class GameRunnable extends BukkitRunnable {
 		final int nextZombies = this.arena.getSpawningZombies();
 		
 		if ((this.spawnGoal < nextZombies) && this.spawnZombies) {
-		    double missing = this.spawnGoal - this.arena.getLivingZombies();
+		    double missing = this.spawnGoal - this.arena.getLivingZombieAmount();
 		    ZvP.getPluginLogger().log(Level.FINER, "Arena: " + this.arena.getID() + " Missing: " + missing, true);
 		    
 		    if (missing >= ((int) (nextZombies * 0.17)) && ((int) (nextZombies * 0.10)) > 0) {
@@ -123,7 +123,7 @@ public class GameRunnable extends BukkitRunnable {
 	    }
 	    
 	    if (this.firstSpawn == false && this.spawnZombies == false) {
-		if (this.arena.getLivingZombies() == 0) {
+		if (this.arena.getLivingZombieAmount() == 0) {
 		    
 		    this.arena.updatePlayerBoards();
 		    boolean stop = this.arena.next(); // Stop checks if the last round is over
@@ -240,8 +240,8 @@ public class GameRunnable extends BukkitRunnable {
 	    return;
 	}
 	
-	if (this.arena.getLivingZombies() > 0 && ZvP.getPluginLogger().isDebugMode()) {
-	    this.arena.sendMessage("Arena: " + this.arena.getID() + " : " + ChatColor.RED + this.arena.getStatus().toString() + "; " + ChatColor.RESET + this.arena.getRound() + ":" + this.arena.getWave() + " Z:" + this.arena.getLivingZombies() + ":" + this.arena.getKilledZombies());
+	if (this.arena.getLivingZombieAmount() > 0 && ZvP.getPluginLogger().isDebugMode()) {
+	    this.arena.sendMessage("Arena: " + this.arena.getID() + " : " + ChatColor.RED + this.arena.getStatus().toString() + "; " + ChatColor.RESET + this.arena.getRound() + ":" + this.arena.getWave() + " Z:" + this.arena.getLivingZombieAmount() + ":" + this.arena.getKilledZombies());
 	}
 	
 	this.arena.getWorld().setTime(15000L);
