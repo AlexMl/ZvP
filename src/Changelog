@@ -1,4 +1,12 @@
 Changelog:
+2.4.0:
+*Amount of zombies depent now on amount of players, arena size, spawnrate, waves, rounds
+*Added Difficulty to arena settings
+*Added spawnprotection
+*Added config file converter
+*Added custom spawn locations
+*Internal message changes
+
 2.3.7-3:
 *Fixed documentation links
 *Itemconfiguration will be updated. Not replaced
