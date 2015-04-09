@@ -406,14 +406,24 @@ public class Arena implements Comparable<Arena> {
 	return entities;
     }
     
-    public int getLivingZombies() {
-	int zombies = 0;
+    public Zombie[] getLivingZombies() {
+	List<Zombie> zombieList = new ArrayList<Zombie>();
 	for (Entity e : getEntities()) {
 	    if (e instanceof Zombie) {
-		zombies++;
+		zombieList.add((Zombie) e);
 	    }
 	}
+	
+	Zombie[] zombies = new Zombie[zombieList.size()];
+	for (Zombie z : zombieList) {
+	    zombies[zombieList.indexOf(z)] = z;
+	}
+	
 	return zombies;
+    }
+    
+    public int getLivingZombieAmount() {
+	return getLivingZombies().length;
     }
     
     public int getKilledZombies() {
