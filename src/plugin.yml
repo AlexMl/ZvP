@@ -26,6 +26,7 @@ commands:
                  /<command> pos1/pos2
                  /<command> add arena
                  /<command> add lobby
+                 /<command> add position
                  /<command> remove arena [Arena]
                  /<command> remove lobby [lobby]
      zvptest:
