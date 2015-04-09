@@ -45,7 +45,8 @@ public class ZvP extends JavaPlugin {
     
     private static ZvP instance;
     
-    public static ItemStack tool;
+    public static String ADDARENA = "Use this tool to add an arena!";
+    public static String ADDPOSITION = "Use this tool to add a spawn position";
     
     private static String pluginPrefix = ChatColor.DARK_GREEN + "[" + ChatColor.DARK_RED + "Z" + ChatColor.DARK_GRAY + "v" + ChatColor.DARK_RED + "P" + ChatColor.DARK_GREEN + "]" + ChatColor.RESET + " ";
     
@@ -89,8 +90,6 @@ public class ZvP extends JavaPlugin {
 	registerListeners();
 	getCommand("zvp").setExecutor(new ZvPCommands());
 	getCommand("zvptest").setExecutor(new ZvPCommands());
-	
-	setTool();
 	
 	if (ZvPConfig.getEnableUpdater()) {
 	    UpdateType updType = UpdateType.DEFAULT;
@@ -153,23 +152,27 @@ public class ZvP extends JavaPlugin {
 	}
     }
     
-    private void setTool() {
-	tool = new ItemStack(Material.STICK);
+    public static ItemStack getTool(String loreString) {
+	ItemStack tool = new ItemStack(Material.STICK);
 	
 	List<String> lore = new ArrayList<String>();
 	
 	ItemMeta toolMeta = tool.getItemMeta();
 	toolMeta.setDisplayName(pluginPrefix + ChatColor.BOLD + "Tool");
 	toolMeta.addEnchant(Enchantment.DURABILITY, 5, true);
-	lore.add("Use this tool to add an Arena!");
+	lore.add(ChatColor.GOLD + loreString);
 	toolMeta.setLore(lore);
 	
 	tool.setItemMeta(toolMeta);
+	return tool;
     }
     
-    public boolean removeTool(Player player) {
-	if (player.getInventory().contains(tool)) {
-	    player.getInventory().removeItem(tool);
+    public static boolean removeTool(Player player) {
+	if (player.getInventory().contains(getTool(ADDARENA))) {
+	    player.getInventory().removeItem(getTool(ADDARENA));
+	    return true;
+	} else if (player.getInventory().contains(getTool(ADDPOSITION))) {
+	    player.getInventory().removeItem(getTool(ADDPOSITION));
 	    return true;
 	}
 	return false;
