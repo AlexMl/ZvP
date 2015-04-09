@@ -1,16 +1,24 @@
 package me.Aubli.ZvP.Listeners;
 
+import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.scheduler.BukkitTask;
 
 
 public class EntityDamageListener implements Listener {
+    
+    private BukkitTask task;
     
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
@@ -22,6 +30,33 @@ public class EntityDamageListener implements Listener {
 		if (damager.hasProtection()) {
 		    event.setCancelled(true);
 		    return;
+		}
+		
+		if (event.getEntity() instanceof Zombie) {
+		    if (damager.getArena().getLivingZombieAmount() < (damager.getArena().getSpawningZombies() * 0.15)) {
+			if (this.task != null) {
+			    this.task.cancel();
+			    System.out.println("task killed!");
+			}
+			
+			final Arena arena = damager.getArena();
+			
+			this.task = Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
+			    
+			    @Override
+			    public void run() {
+				
+				if (arena.getLivingZombieAmount() < (arena.getSpawningZombies() * 0.15)) {
+				    
+				    for (Zombie zombie : arena.getLivingZombies()) {
+					zombie.teleport(arena.getNewSaveLocation(), TeleportCause.PLUGIN);
+				    }
+				    System.out.println("zombie respawn!!!!!!");
+				    EntityDamageListener.this.task = Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), this, 50 * 20L);
+				}
+			    }
+			}, 50 * 20L); // Time to wait until zombie respawn
+		    }
 		}
 	    }
 	}
