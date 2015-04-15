@@ -6,6 +6,8 @@ Changelog:
 *Added config file converter
 *Added custom spawn locations
 *Internal message changes
+*Sign message changed
+*Several Bug fixes
 
 2.3.7-3:
 *Fixed documentation links
