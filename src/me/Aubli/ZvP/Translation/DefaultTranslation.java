@@ -49,7 +49,7 @@ public class DefaultTranslation extends ListResourceBundle {
 	    {"arena:stop_all", ChatColor.DARK_GRAY + "All arenas halted!"},
 	    {"arena:stop", ChatColor.DARK_GRAY + "Arena " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " stoped!"},
 	    {"arena:offline", ChatColor.RED + "The Arena is Offline!"},
-	    {"arena:not_ready", ChatColor.RED + "The Arena is not Ready or full!"},
+	    {"arena:not_ready", ChatColor.RED + "The Arena is not ready or full!"},
 	    
 	    {"manage:right_saved", ChatColor.GREEN + "Right Click saved!"},
 	    {"manage:left_saved", ChatColor.GREEN + "Left Click saved!"},
