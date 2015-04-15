@@ -22,7 +22,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -313,23 +312,82 @@ public class Arena implements Comparable<Arena> {
 	    x = this.rand.nextInt((getMax().getBlockX() - getMin().getBlockX() - 1)) + getMin().getBlockX() + 1;
 	    z = this.rand.nextInt((getMax().getBlockZ() - getMin().getBlockZ() - 1)) + getMin().getBlockZ() + 1;
 	    
-	    if (getMax().getBlockY() == getMin().getBlockY()) {
-		y = getMax().getBlockY() + 1;
+	    if (getWorld().getHighestBlockYAt(getMax()) == getMax().getBlockY() && getWorld().getHighestBlockYAt(getMin()) == getMin().getBlockY()) { // Asume that as arena without ceiling
+		y = getWorld().getHighestBlockYAt(x, z) + 1;
 	    } else {
-		if (getWorld().getHighestBlockYAt(getMax()) > getMax().getBlockY() + 1 || getWorld().getHighestBlockYAt(getMin()) > getMin().getBlockY() + 1) {
+		if (getMax().getBlockY() == getMin().getBlockY()) {
 		    y = getMax().getBlockY() + 1;
 		} else {
-		    y = getWorld().getHighestBlockYAt(getMax());
+		    if (getWorld().getHighestBlockYAt(getMax()) > getMax().getBlockY() + 1 || getWorld().getHighestBlockYAt(getMin()) > getMin().getBlockY() + 1) {
+			y = getMax().getBlockY() + 1;
+		    } else {
+			y = getWorld().getHighestBlockYAt(x, z) + 1;
+		    }
 		}
 	    }
-	    
 	    Location startLoc = new Location(getWorld(), x, y, z);
 	    
-	    if (containsLocation(startLoc) && startLoc.getBlock().getType() == Material.AIR && startLoc.clone().add(0, 1, 0).getBlock().getType() == Material.AIR) {
+	    if (isValidLocation(startLoc)) {
 		return startLoc.clone();
 	    } else {
 		return getNewRandomLocation(player);
 	    }
+	}
+    }
+    
+    private boolean isValidLocation(Location location) {
+	
+	if (containsLocation(location)) {
+	    if (isValidBlock(location) && isValidBlock(location.clone().add(0, 1, 0))) { // Make sure the location is not a Block
+		if (!isValidBlock(location.clone().subtract(0, 1, 0))) {
+		    return true;
+		}
+	    }
+	}
+	
+	return false;
+    }
+    
+    private boolean isValidBlock(Location location) {
+	
+	if (location.getBlock().isEmpty() || location.getBlock().isLiquid()) {
+	    return true;
+	}
+	
+	switch (location.getBlock().getType()) {
+	    case ACTIVATOR_RAIL:
+	    case ARMOR_STAND:
+	    case BREWING_STAND:
+	    case DEAD_BUSH:
+	    case DETECTOR_RAIL:
+	    case DOUBLE_PLANT:
+	    case ENDER_PORTAL:
+	    case FLOWER_POT:
+	    case GRASS:
+	    case LONG_GRASS:
+	    case PORTAL:
+	    case POWERED_RAIL:
+	    case PUMPKIN_STEM:
+	    case RAILS:
+	    case RED_MUSHROOM:
+	    case RED_ROSE:
+	    case REDSTONE_COMPARATOR:
+	    case REDSTONE_COMPARATOR_OFF:
+	    case REDSTONE_COMPARATOR_ON:
+	    case REDSTONE_TORCH_OFF:
+	    case REDSTONE_TORCH_ON:
+	    case REDSTONE_WIRE:
+	    case SAPLING:
+	    case SIGN_POST:
+	    case SUGAR_CANE_BLOCK:
+	    case TORCH:
+	    case TRIPWIRE:
+	    case WEB:
+	    case YELLOW_FLOWER:
+		return true;
+		
+	    default:
+		return false;
 	}
     }
     
