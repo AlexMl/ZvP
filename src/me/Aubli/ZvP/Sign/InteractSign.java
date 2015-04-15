@@ -141,7 +141,7 @@ public class InteractSign implements ISign, Comparable<ISign> {
 	    
 	    if (getArena().getStatus() == ArenaStatus.RUNNING || getArena().getStatus() == ArenaStatus.VOTING || getArena().getStatus() == ArenaStatus.BREAKWAITING) {
 		this.sign.setLine(2, ChatColor.DARK_GREEN + getArena().getStatus().getName());
-		this.sign.setLine(3, ChatColor.DARK_RED + "Can't Join!");
+		this.sign.setLine(3, ChatColor.DARK_RED + "In Progress!");
 	    }
 	    if (getArena().getStatus() == ArenaStatus.WAITING || getArena().getStatus() == ArenaStatus.STANDBY) {
 		this.sign.setLine(2, ChatColor.YELLOW + getArena().getStatus().getName());
@@ -149,7 +149,7 @@ public class InteractSign implements ISign, Comparable<ISign> {
 	    }
 	    if (getArena().getStatus() == ArenaStatus.STOPED) {
 		this.sign.setLine(2, ChatColor.DARK_RED + getArena().getStatus().getName());
-		this.sign.setLine(3, ChatColor.DARK_RED + "Can't Join!");
+		this.sign.setLine(3, ChatColor.DARK_RED + "Arena is offline!");
 	    }
 	    
 	    this.sign.update(true);
