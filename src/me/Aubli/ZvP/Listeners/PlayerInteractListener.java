@@ -98,7 +98,6 @@ public class PlayerInteractListener implements Listener {
 		if (this.sm.getType(event.getClickedBlock().getLocation()) == SignType.INTERACT_SIGN) {
 		    if (!GameManager.getManager().isInGame(eventPlayer)) {
 			if (eventPlayer.hasPermission("zvp.play")) {
-			    // if (eventPlayer.getInventory().getItemInHand().getType() == Material.AIR) {
 			    InteractSign sign = (InteractSign) this.sm.getSign(event.getClickedBlock().getLocation());
 			    if (sign.getArena() != null) {
 				if (sign.getArena().isOnline()) {
@@ -119,11 +118,6 @@ public class PlayerInteractListener implements Listener {
 				eventPlayer.sendMessage(MessageManager.getMessage("error:arena_not_available"));
 				return;
 			    }
-			    /*  } else {
-			    event.setCancelled(true);
-			    eventPlayer.sendMessage(MessageManager.getMessage("game:sign_interaction"));
-			    return;
-			      }*/
 			} else {
 			    event.setCancelled(true);
 			    ZvPCommands.commandDenied(eventPlayer);
