@@ -1,5 +1,7 @@
 package me.Aubli.ZvP.Listeners;
 
+import java.util.logging.Level;
+
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
@@ -36,7 +38,7 @@ public class EntityDamageListener implements Listener {
 		    if (damager.getArena().getLivingZombieAmount() < (damager.getArena().getSpawningZombies() * 0.15)) {
 			if (this.task != null) {
 			    this.task.cancel();
-			    System.out.println("task killed!");
+			    ZvP.getPluginLogger().log(Level.FINE, "Zombie Respawn Task killed caused by interaction!", true, true);
 			}
 			
 			final Arena arena = damager.getArena();
@@ -51,7 +53,7 @@ public class EntityDamageListener implements Listener {
 				    for (Zombie zombie : arena.getLivingZombies()) {
 					zombie.teleport(arena.getNewSaveLocation(), TeleportCause.PLUGIN);
 				    }
-				    System.out.println("zombie respawn!!!!!!");
+				    ZvP.getPluginLogger().log(Level.FINE, "Zombie teleport caused by no interaction!", true, true);
 				    EntityDamageListener.this.task = Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), this, 50 * 20L);
 				}
 			    }
