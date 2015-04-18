@@ -678,12 +678,19 @@ public class Arena implements Comparable<Arena> {
 	return false;
     }
     
-    public void spawnZombies(int amount) {
+    public int spawnZombies(int amount) {
+	int successfullySpawned = 0;
+	
 	for (int i = 0; i < amount; i++) {
 	    Entity zombie = getWorld().spawnEntity(getNewSaveLocation(), EntityType.ZOMBIE);
-	    getDifficultyTool().customizeEntity(zombie);
+	    if (zombie != null) {
+		getDifficultyTool().customizeEntity(zombie);
+		successfullySpawned++;
+	    }
 	}
+	
 	updatePlayerBoards();
+	return successfullySpawned;
     }
     
     public void start() {
