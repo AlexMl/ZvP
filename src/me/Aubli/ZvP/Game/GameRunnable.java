@@ -46,7 +46,7 @@ public class GameRunnable extends BukkitRunnable {
     public void run() {
 	
 	if (ZvP.getPluginLogger().isDebugMode()) {
-	    this.arena.sendMessage("A:" + this.arena.getID() + " ;" + ChatColor.RED + this.arena.getStatus().toString() + "; " + ChatColor.RESET + this.arena.getRound() + ":" + this.arena.getWave() + " Z:" + this.arena.getLivingZombieAmount() + ":" + this.arena.getSpawningZombies() + " FS:" + this.firstSpawn + " SZ:" + this.spawnZombies);
+	    this.arena.sendMessage("A:" + this.arena.getID() + " ;" + ChatColor.RED + this.arena.getStatus().toString() + ChatColor.RESET + "; " + this.arena.getRound() + ":" + this.arena.getWave() + " Z:" + this.arena.getLivingZombieAmount() + ":" + this.arena.getSpawningZombies() + " FS:" + this.firstSpawn + " SZ:" + this.spawnZombies + " T:" + this.seconds);
 	}
 	
 	if (this.seconds <= this.startDelay) {	// Waiting for players
