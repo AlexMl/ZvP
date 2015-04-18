@@ -97,24 +97,19 @@ public class GameRunnable extends BukkitRunnable {
 		final int nextZombies = this.arena.getSpawningZombies();
 		
 		if ((this.spawnGoal < nextZombies) && this.spawnZombies) {
-		    double missing = this.spawnGoal - this.arena.getLivingZombieAmount();
-		    ZvP.getPluginLogger().log(Level.FINER, "Arena: " + this.arena.getID() + " Missing: " + missing, true);
+		    double missing = nextZombies - this.spawnGoal;
+		    ZvP.getPluginLogger().log(Level.FINER, "Arena: " + this.arena.getID() + " Missing: " + (int) missing, true);
 		    
 		    if (missing >= ((int) (nextZombies * 0.17)) && ((int) (nextZombies * 0.10)) > 0) {
-			this.arena.spawnZombies((int) (nextZombies * 0.10));
-			this.spawnGoal += (int) (nextZombies * 0.10);
+			this.spawnGoal += this.arena.spawnZombies((int) (nextZombies * 0.10));;
 		    } else if (missing >= ((int) (nextZombies * 0.12)) && ((int) (nextZombies * 0.06)) > 0) {
-			this.arena.spawnZombies((int) (nextZombies * 0.06));
-			this.spawnGoal += (int) (nextZombies * 0.06);
+			this.spawnGoal += this.arena.spawnZombies((int) (nextZombies * 0.06));
 		    } else if (missing >= ((int) (nextZombies * 0.08)) && ((int) (nextZombies * 0.02)) > 0) {
-			this.arena.spawnZombies((int) (nextZombies * 0.02));
-			this.spawnGoal += (int) (nextZombies * 0.02);
+			this.spawnGoal += this.arena.spawnZombies((int) (nextZombies * 0.02));
 		    } else if (missing > this.arena.getSpawnRate() && ((int) (this.arena.getSpawnRate() * 0.5)) > 0) {
-			this.arena.spawnZombies(this.arena.getSpawnRate() / 2);
-			this.spawnGoal += this.arena.getSpawnRate() / 2;
+			this.spawnGoal += this.arena.spawnZombies(this.arena.getSpawnRate() / 2);
 		    } else {
-			this.arena.spawnZombies(1);
-			this.spawnGoal++;
+			this.spawnGoal += this.arena.spawnZombies(1);
 		    }
 		} else {
 		    this.spawnZombies = false;
