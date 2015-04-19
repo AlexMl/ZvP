@@ -2,9 +2,11 @@ package org.util.Converter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.GameManager.ArenaDifficultyLevel;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -47,7 +49,7 @@ public class FileConverter {
 		    int rounds = conf.getInt("arena.rounds");
 		    int waves = conf.getInt("arena.waves");
 		    int spawnRate = conf.getInt("arena.spawnRate");
-		    int saveRadius = conf.getInt("arena.saveRadius");
+		    double saveRadius = conf.getDouble("arena.saveRadius", ZvPConfig.getDefaultSaveRadius());
 		    
 		    String world = conf.getString("arena.Location.world");
 		    int minX = conf.getInt("arena.Location.min.X");
@@ -57,6 +59,8 @@ public class FileConverter {
 		    int maxX = conf.getInt("arena.Location.max.X");
 		    int maxY = conf.getInt("arena.Location.max.Y");
 		    int maxZ = conf.getInt("arena.Location.max.Z");
+		    
+		    List<String> staticPositions = conf.getStringList("arena.Location.staticPositions");
 		    
 		    file.renameTo(new File(file.getParentFile(), file.getName() + ".old"));
 		    file.delete();
@@ -86,6 +90,8 @@ public class FileConverter {
 		    conf.set("arena.Location.max.X", maxX);
 		    conf.set("arena.Location.max.Y", maxY);
 		    conf.set("arena.Location.max.Z", maxZ);
+		    
+		    conf.set("arena.Location.staticPositions", staticPositions);
 		    
 		    conf.set("version", this.currentVersion);
 		    
