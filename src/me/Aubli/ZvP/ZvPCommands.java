@@ -437,7 +437,7 @@ public class ZvPCommands implements CommandExecutor {
 	String pluginName = ZvP.getInstance().getDescription().getName();
 	String pluginVersion = ZvP.getInstance().getDescription().getVersion();
 	
-	if (option.equalsIgnoreCase("signs")) {
+	if (option.equalsIgnoreCase("signs") || option.equalsIgnoreCase("sign")) {
 	    if (SignManager.getManager().getSigns().length > 0) {
 		
 		player.sendMessage("\n\n");
@@ -447,7 +447,7 @@ public class ZvPCommands implements CommandExecutor {
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Type: " + ChatColor.BLUE + sign.getType() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Arena: " + ChatColor.BLUE + sign.getArena().getID() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Lobby: " + ChatColor.BLUE + sign.getLobby().getID() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Loc: " + ChatColor.BLUE + sign.getLocation().getBlockX() + ChatColor.DARK_GREEN + " | " + ChatColor.BLUE + sign.getLocation().getBlockY() + ChatColor.DARK_GREEN + " | " + ChatColor.BLUE + sign.getLocation().getBlockZ());
 		}
 	    }
-	} else if (option.equalsIgnoreCase("arenas")) {
+	} else if (option.equalsIgnoreCase("arenas") || option.equalsIgnoreCase("arena")) {
 	    if (this.game.getArenas().length > 0) {
 		
 		player.sendMessage("\n\n");
@@ -457,7 +457,7 @@ public class ZvPCommands implements CommandExecutor {
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Arena: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "   World: " + ChatColor.BLUE + a.getWorld().getName());
 		}
 	    }
-	} else if (option.equalsIgnoreCase("lobbys")) {
+	} else if (option.equalsIgnoreCase("lobbys") || option.equalsIgnoreCase("lobby")) {
 	    if (this.game.getLobbys().length > 0) {
 		
 		player.sendMessage("\n\n");
@@ -468,7 +468,7 @@ public class ZvPCommands implements CommandExecutor {
 		    
 		}
 	    }
-	} else if (option.equalsIgnoreCase("kits")) {
+	} else if (option.equalsIgnoreCase("kits") || option.equalsIgnoreCase("kit")) {
 	    if (KitManager.getManager().getKits().length > 0) {
 		
 		player.sendMessage("\n\n");
