@@ -8,7 +8,6 @@ import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Kits.IZvPKit;
-import me.Aubli.ZvP.Kits.KCustomKit;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Sign.ISign;
 import me.Aubli.ZvP.Sign.SignManager;
@@ -454,7 +453,7 @@ public class ZvPCommands implements CommandExecutor {
 		player.sendMessage(ChatColor.GRAY + "|----------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Arenas" + ChatColor.GRAY + " ------------|");
 		
 		for (Arena a : this.game.getArenas()) {
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Arena: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "   World: " + ChatColor.BLUE + a.getWorld().getName());
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "ID: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Mode: " + ChatColor.BLUE + a.getDifficulty().name() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "World: " + ChatColor.BLUE + a.getWorld().getName());
 		}
 	    }
 	} else if (option.equalsIgnoreCase("lobbys") || option.equalsIgnoreCase("lobby")) {
@@ -465,7 +464,6 @@ public class ZvPCommands implements CommandExecutor {
 		
 		for (Lobby l : this.game.getLobbys()) {
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Lobby: " + ChatColor.BLUE + l.getID() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "World: " + ChatColor.BLUE + l.getWorld().getName());
-		    
 		}
 	    }
 	} else if (option.equalsIgnoreCase("kits") || option.equalsIgnoreCase("kit")) {
@@ -475,8 +473,7 @@ public class ZvPCommands implements CommandExecutor {
 		player.sendMessage(ChatColor.GRAY + "|------------ " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Kits" + ChatColor.GRAY + " -------------|");
 		
 		for (IZvPKit kit : KitManager.getManager().getKits()) {
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Kit: " + ChatColor.BLUE + kit.getName() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Custom: " + ChatColor.BLUE + (kit instanceof KCustomKit));
-		    
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Kit: " + ChatColor.BLUE + kit.getName() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Enabled: " + ChatColor.BLUE + kit.isEnabled());
 		}
 	    }
 	} else {
