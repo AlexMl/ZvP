@@ -188,6 +188,9 @@ public class Arena implements Comparable<Arena> {
 	    
 	    this.arenaConfig.set("arena.Location.staticPositions", locationList);
 	    
+	    this.arenaConfig.addDefault("version", ZvP.getInstance().getDescription().getVersion());
+	    this.arenaConfig.options().copyDefaults(true);
+	    
 	    this.arenaConfig.save(this.arenaFile);
 	} catch (IOException e) {
 	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena " + getID() + ": " + e.getMessage(), true, false, e);
