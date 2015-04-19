@@ -179,14 +179,15 @@ public class GameManager {
     public int getNewID(String path) {
 	
 	File folder = new File(path);
-	if (folder.listFiles().length == 0) {
+	File[] files = folder.listFiles(this.fileFilter);
+	if (files.length == 0) {
 	    return 1;
 	} else {
 	    
-	    int[] fileIds = new int[folder.listFiles().length];
+	    int[] fileIds = new int[files.length];
 	    
 	    for (int i = 0; i < fileIds.length; i++) {
-		fileIds[i] = Integer.parseInt(folder.listFiles()[i].getName().split(".ym")[0]);
+		fileIds[i] = Integer.parseInt(files[i].getName().split(".ym")[0]);
 	    }
 	    
 	    Arrays.sort(fileIds);
