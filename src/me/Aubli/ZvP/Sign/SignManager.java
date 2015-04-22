@@ -11,6 +11,7 @@ import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -131,8 +132,13 @@ public class SignManager {
     }
     
     public boolean isZVPSign(Location loc) {
-	if (getSign(loc) != null) {
-	    return true;
+	if (loc.getBlock().getState() instanceof Sign) {
+	    Sign sign = (Sign) loc.getBlock().getState();
+	    
+	    boolean hasPrefix = ChatColor.stripColor(sign.getLine(0)).equalsIgnoreCase("[zvp]");
+	    if ((getSign(loc) != null && hasPrefix) || hasPrefix) {
+		return true;
+	    }
 	}
 	return false;
     }
