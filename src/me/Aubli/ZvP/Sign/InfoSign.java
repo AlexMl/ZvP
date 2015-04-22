@@ -73,7 +73,7 @@ public class InfoSign implements ISign, Comparable<ISign> {
 	update();
     }
     
-    public InfoSign(File signFile) {
+    public InfoSign(File signFile) throws Exception {
 	this.signFile = signFile;
 	this.signConfig = YamlConfiguration.loadConfiguration(signFile);
 	
@@ -83,11 +83,17 @@ public class InfoSign implements ISign, Comparable<ISign> {
 	this.signLoc = new Location(Bukkit.getWorld(UUID.fromString(this.signConfig.getString("sign.Location.world"))), this.signConfig.getDouble("sign.Location.X"), this.signConfig.getDouble("sign.Location.Y"), this.signConfig.getDouble("sign.Location.Z"));
 	
 	if (this.signLoc.getWorld() != null) {
-	    this.sign = (Sign) this.signLoc.getBlock().getState();
-	    
-	    this.arena = GameManager.getManager().getArena(this.signConfig.getInt("sign.Arena"));
-	    this.lobby = GameManager.getManager().getLobby(this.signConfig.getInt("sign.Lobby"));
-	    update();
+	    if (this.signLoc.getBlock().getState() instanceof Sign) {
+		this.sign = (Sign) this.signLoc.getBlock().getState();
+		
+		this.sign = (Sign) this.signLoc.getBlock().getState();
+		
+		this.arena = GameManager.getManager().getArena(this.signConfig.getInt("sign.Arena"));
+		this.lobby = GameManager.getManager().getLobby(this.signConfig.getInt("sign.Lobby"));
+		update();
+	    } else {
+		throw new Exception("Location " + this.signLoc.getBlockX() + ":" + this.signLoc.getBlockY() + ":" + this.signLoc.getBlockZ() + " in World " + this.signLoc.getWorld().getName() + " is not a Sign! (File:" + signFile.getAbsolutePath());
+	    }
 	}
     }
     

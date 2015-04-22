@@ -57,27 +57,32 @@ public class SignManager {
 	    conf = YamlConfiguration.loadConfiguration(f);
 	    SignType t = SignType.valueOf(conf.getString("sign.Type"));
 	    
-	    switch (t) {
-		case INFO_SIGN:
-		    InfoSign info = new InfoSign(f);
-		    if (info.getWorld() != null) {// && info.getArena() != null && info.getLobby() != null) {
-			this.signs.add(info);
-		    }
-		    break;
+	    try {
 		
-		case INTERACT_SIGN:
-		    InteractSign inter = new InteractSign(f);
-		    if (inter.getWorld() != null) {// && inter.getArena() != null && inter.getLobby() != null) {
-			this.signs.add(inter);
-		    }
-		    break;
-		
-		case SHOP_SIGN:
-		    ShopSign shop = new ShopSign(f);
-		    if (shop.getWorld() != null) {// && shop.getArena() != null && shop.getLobby() != null) {
-			this.signs.add(shop);
-		    }
-		    break;
+		switch (t) {
+		    case INFO_SIGN:
+			InfoSign info = new InfoSign(f);
+			if (info.getWorld() != null) {// && info.getArena() != null && info.getLobby() != null) {
+			    this.signs.add(info);
+			}
+			break;
+		    
+		    case INTERACT_SIGN:
+			InteractSign inter = new InteractSign(f);
+			if (inter.getWorld() != null) {// && inter.getArena() != null && inter.getLobby() != null) {
+			    this.signs.add(inter);
+			}
+			break;
+		    
+		    case SHOP_SIGN:
+			ShopSign shop = new ShopSign(f);
+			if (shop.getWorld() != null) {// && shop.getArena() != null && shop.getLobby() != null) {
+			    this.signs.add(shop);
+			}
+			break;
+		}
+	    } catch (Exception e) {
+		ZvP.getPluginLogger().log(Level.WARNING, e.getMessage(), true, false, e);
 	    }
 	}
     }
