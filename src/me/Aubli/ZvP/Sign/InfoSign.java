@@ -140,13 +140,13 @@ public class InfoSign implements ISign, Comparable<ISign> {
     @Override
     public void update() {
 	if (this.arena != null) {
-	    this.sign.setLine(0, ZvP.getPrefix());
+	    this.sign.setLine(0, ZvP.getPrefix().trim());
 	    this.sign.setLine(1, "Arena: " + this.arena.getID());
 	    this.sign.setLine(2, ChatColor.AQUA + "" + this.arena.getPlayers().length + ChatColor.RESET + " / " + ChatColor.DARK_RED + this.arena.getMaxPlayers());
 	    this.sign.setLine(3, ChatColor.BLUE + "" + this.arena.getRound() + ":" + this.arena.getWave() + ChatColor.RESET + " / " + ChatColor.DARK_RED + this.arena.getMaxRounds() + ":" + this.arena.getMaxWaves());
 	    this.sign.update(true);
 	} else {
-	    this.sign.setLine(0, ZvP.getPrefix());
+	    this.sign.setLine(0, ZvP.getPrefix().trim());
 	    this.sign.setLine(1, "");
 	    this.sign.setLine(2, ChatColor.DARK_RED + "Arena is not");
 	    this.sign.setLine(3, ChatColor.DARK_RED + "available!");

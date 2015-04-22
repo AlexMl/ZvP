@@ -141,7 +141,7 @@ public class InteractSign implements ISign, Comparable<ISign> {
     @Override
     public void update() {
 	if (this.arena != null) {
-	    this.sign.setLine(0, ZvP.getPrefix());
+	    this.sign.setLine(0, ZvP.getPrefix().trim());
 	    this.sign.setLine(1, "Arena: " + this.arena.getID());
 	    
 	    if (getArena().getStatus() == ArenaStatus.RUNNING || getArena().getStatus() == ArenaStatus.VOTING || getArena().getStatus() == ArenaStatus.BREAKWAITING) {
@@ -159,7 +159,7 @@ public class InteractSign implements ISign, Comparable<ISign> {
 	    
 	    this.sign.update(true);
 	} else {
-	    this.sign.setLine(0, ZvP.getPrefix());
+	    this.sign.setLine(0, ZvP.getPrefix().trim());
 	    this.sign.setLine(1, "");
 	    this.sign.setLine(2, ChatColor.DARK_RED + "Arena is not");
 	    this.sign.setLine(3, ChatColor.DARK_RED + "available!");

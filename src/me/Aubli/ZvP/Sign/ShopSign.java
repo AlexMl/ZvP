@@ -152,19 +152,19 @@ public class ShopSign implements ISign, Comparable<ISign> {
     @Override
     public void update() {
 	if (this.arena != null && this.cat != null) {
-	    this.sign.setLine(0, ZvP.getPrefix());
+	    this.sign.setLine(0, ZvP.getPrefix().trim());
 	    this.sign.setLine(1, ChatColor.DARK_BLUE + "Item Shop");
 	    this.sign.setLine(2, ChatColor.BLACK + "Category:");
 	    this.sign.setLine(3, ChatColor.DARK_RED + getCategory().toString());
 	    this.sign.update(true);
 	} else if (this.arena != null && this.cat == null) {
-	    this.sign.setLine(0, ZvP.getPrefix());
+	    this.sign.setLine(0, ZvP.getPrefix().trim());
 	    this.sign.setLine(1, "");
 	    this.sign.setLine(2, ChatColor.DARK_RED + "No category");
 	    this.sign.setLine(3, ChatColor.DARK_RED + "set!");
 	    this.sign.update(true);
 	} else {
-	    this.sign.setLine(0, ZvP.getPrefix());
+	    this.sign.setLine(0, ZvP.getPrefix().trim());
 	    this.sign.setLine(1, "");
 	    this.sign.setLine(2, ChatColor.DARK_RED + "Arena is not");
 	    this.sign.setLine(3, ChatColor.DARK_RED + "available!");

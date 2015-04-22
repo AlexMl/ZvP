@@ -57,7 +57,7 @@ public class SignChangelistener implements Listener {
 				    boolean success = SignManager.getManager().createSign(type, event.getBlock().getLocation().clone(), a, l, null);
 				    
 				    if (success) {
-					event.setLine(0, ZvP.getPrefix());
+					event.setLine(0, ZvP.getPrefix().trim());
 					event.setLine(1, "Arena: " + arenaID);
 					
 					if (type == SignType.INFO_SIGN) {
