@@ -29,7 +29,7 @@ public class SignChangelistener implements Listener {
 	
 	Player eventPlayer = event.getPlayer();
 	
-	if (event.getLine(0).equalsIgnoreCase("[zvp]")) {
+	if (event.getLine(0).replace(" ", "").equalsIgnoreCase("[zvp]")) {
 	    if (eventPlayer.hasPermission("zvp.manage.sign")) {
 		if (!event.getLine(1).isEmpty() && !event.getLine(2).isEmpty()) {
 		    if (event.getLine(3).equalsIgnoreCase("interact") || event.getLine(3).equalsIgnoreCase("info") || event.getLine(3).equalsIgnoreCase("shop")) {
