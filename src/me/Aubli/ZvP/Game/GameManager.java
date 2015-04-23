@@ -384,7 +384,7 @@ public class GameManager {
 	for (Arena a : getArenas()) {
 	    a.stop();
 	}
-	Bukkit.getScheduler().cancelAllTasks();
+	Bukkit.getScheduler().cancelTasks(ZvP.getInstance());;
     }
     
     public boolean isInGame(Player player) {
