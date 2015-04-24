@@ -5,6 +5,7 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
+import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Kits.IZvPKit;
@@ -403,6 +404,35 @@ public class ZvPCommands implements CommandExecutor {
 	    }
 	    
 	    if (args.length == 3) {
+		if (args[0].equalsIgnoreCase("set")) {
+		    if (playerSender.hasPermission("zvp.manage.arena")) {
+			Arena arena = this.game.getArena(parseInt(args[1]));
+			if (arena != null) {
+			    if (args[2].equalsIgnoreCase("offline") || args[2].equalsIgnoreCase("off")) {
+				arena.setStatus(ArenaStatus.STOPED);
+				arena.save();
+				playerSender.sendMessage(MessageManager.getFormatedMessage("manage:arena_status_changed", "Offline"));
+				return true;
+			    } else if (args[2].equalsIgnoreCase("online") || args[2].equalsIgnoreCase("on")) {
+				if (!arena.isOnline()) {
+				    arena.setStatus(ArenaStatus.STANDBY);
+				    arena.save();
+				    playerSender.sendMessage(MessageManager.getFormatedMessage("manage:arena_status_changed", "Online"));
+				    return true;
+				}
+			    } else {
+				printCommands(playerSender, 2);
+				return true;
+			    }
+			} else {
+			    playerSender.sendMessage(MessageManager.getMessage("error:arena_not_available"));
+			    return true;
+			}
+		    } else {
+			commandDenied(playerSender);
+			return true;
+		    }
+		}
 		if (args[0].equalsIgnoreCase("remove")) {
 		    if (args[1].equalsIgnoreCase("arena")) {
 			if (playerSender.hasPermission("zvp.manage.arena")) {
@@ -543,6 +573,7 @@ public class ZvPCommands implements CommandExecutor {
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add position");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos1");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos2");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp set [Arena-ID] [online|offline]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove arena [Arena-ID]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove lobby [Lobby-ID]");
 		    break;

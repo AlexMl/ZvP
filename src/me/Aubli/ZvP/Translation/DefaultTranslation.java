@@ -61,6 +61,7 @@ public class DefaultTranslation extends ListResourceBundle {
 	    {"manage:arena_saved", ChatColor.GREEN + "Arena saved!"},
 	    {"manage:lobby_removed", ChatColor.GREEN + "Lobby removed from Config!"},
 	    {"manage:arena_removed", ChatColor.GREEN + "Arena removed from Config!"},
+	    {"manage:arena_status_changed", ChatColor.GREEN + "Arena is now " + ChatColor.GOLD + "%s" + ChatColor.GREEN + "!"},
 	    {"manage:sign_saved", ChatColor.GREEN + "Sign successfully placed!"},
 	    {"manage:sign_removed", ChatColor.GREEN + "Sign successfully removed!"},
 	    {"manage:kit_saved", ChatColor.GREEN + "Kit " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " successfully saved!"},
