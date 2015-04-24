@@ -309,27 +309,40 @@ public class Arena implements Comparable<Arena> {
 	} else {
 	    
 	    int x;
-	    int y;
+	    int y = 0;
 	    int z;
 	    
 	    x = this.rand.nextInt((getMax().getBlockX() - getMin().getBlockX() - 1)) + getMin().getBlockX() + 1;
 	    z = this.rand.nextInt((getMax().getBlockZ() - getMin().getBlockZ() - 1)) + getMin().getBlockZ() + 1;
 	    
-	    if (getWorld().getHighestBlockYAt(getMax()) == getMax().getBlockY() && getWorld().getHighestBlockYAt(getMin()) == getMin().getBlockY()) { // Asume that as arena without ceiling
+	    if (getWorld().getHighestBlockYAt(x, z) + 1 >= getMin().getBlockY() && getWorld().getHighestBlockYAt(x, z) + 1 <= getMax().getBlockY()) {
+		// If highest y is between min and max, go for it
 		y = getWorld().getHighestBlockYAt(x, z) + 1;
+	    } else if (getMax().getBlockY() == getMin().getBlockY() && getWorld().getHighestBlockYAt(x, z) == getMin().getBlockY()) {
+		// min y == max y == highest y at random location
+		// arena is flat
+		y = getWorld().getHighestBlockYAt(x, z) + 1;
+	    } else if (getMax().getBlockY() == getMin().getBlockY()) {
+		// arena is flat but has a ceiling
+		y = getMin().getBlockY() + 1;
 	    } else {
-		if (getMax().getBlockY() == getMin().getBlockY()) {
-		    y = getMax().getBlockY() + 1;
-		} else {
-		    if (getWorld().getHighestBlockYAt(getMax()) > getMax().getBlockY() + 1 || getWorld().getHighestBlockYAt(getMin()) > getMin().getBlockY() + 1) {
-			y = getMax().getBlockY() + 1;
-		    } else {
-			y = getWorld().getHighestBlockYAt(x, z) + 1;
+		// iterate over y from min to max to find a perfect y
+		// not very performant but needed in worst case (above doesnt match)
+		
+		for (int iy = 0; iy < (getMax().getBlockY() - getMin().getBlockY()); iy++) {
+		    if (isValidLocation(getMin().clone().add(0, iy, 0))) {
+			y = getMin().getBlockY() + iy;
+			System.out.println("ny:" + y);
+			break;
 		    }
+		}
+		if (y == 0) {
+		    return getNewRandomLocation(player);
 		}
 	    }
 	    Location startLoc = new Location(getWorld(), x, y, z);
 	    
+	    // System.out.println("valid? " + isValidLocation(startLoc) + " Y:" + startLoc.getBlockY());
 	    if (isValidLocation(startLoc)) {
 		return startLoc.clone();
 	    } else {
@@ -395,6 +408,8 @@ public class Arena implements Comparable<Arena> {
     }
     
     public Location getNewSaveLocation() {
+	// Save means Location with no players nearby
+	// ---> Spawn zombies in a location save for players
 	
 	final double distance = getSaveRadius();
 	
@@ -411,7 +426,7 @@ public class Arena implements Comparable<Arena> {
 		    return getNewSaveLocation();
 		}
 		for (Location loc : this.staticSpawnLocations) {
-		    if (spawnLoc.distanceSquared(loc) <= (distance * distance)) {
+		    if (spawnLoc.distanceSquared(loc) <= ((distance * distance) * 0.5)) {
 			return getNewSaveLocation();
 		    }
 		}
@@ -423,7 +438,24 @@ public class Arena implements Comparable<Arena> {
 	} else {
 	    return getNewSaveLocation();
 	}
+    }
+    
+    public Location getNewUnsaveLocation(double maxDistance) {
+	// Exact opposite of getNewSaveLocation
+	// ---> Spawn zombies in a location nearby the player
 	
+	Location saveLoc = getNewSaveLocation(); // Do not break the save radius rule
+	
+	if (maxDistance < this.saveRadius) {
+	    maxDistance += this.saveRadius;
+	}
+	
+	for (ZvPPlayer player : getPlayers()) {
+	    if (saveLoc.distanceSquared(player.getLocation()) <= Math.pow(this.saveRadius + maxDistance, 2)) {
+		return saveLoc.clone();
+	    }
+	}
+	return getNewUnsaveLocation(maxDistance);
     }
     
     public ZvPPlayer getRandomPlayer() {
