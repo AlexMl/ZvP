@@ -168,14 +168,14 @@ public class ZvPCommands implements CommandExecutor {
 	    ZvP.getPluginLogger().log(Level.INFO, "Player " + playerSender.getName() + " attempts to execute Command: " + cmd.getName() + arguments, true);
 	    
 	    if (args.length == 0) {
-		printCommands(playerSender);
+		printCommands(playerSender, 1);
 		return true;
 	    }
 	    
 	    if (args.length == 1) {
 		
 		if (args[0].equalsIgnoreCase("help")) {
-		    printCommands(playerSender);
+		    printCommands(playerSender, 1);
 		    return true;
 		}
 		if (args[0].equalsIgnoreCase("update")) {
@@ -291,11 +291,22 @@ public class ZvPCommands implements CommandExecutor {
 		    }
 		}
 		
-		printCommands(playerSender);
+		printCommands(playerSender, 1);
 		return true;
 	    }
 	    
 	    if (args.length == 2) {
+		if (args[0].equalsIgnoreCase("help")) {
+		    try {
+			int page = Integer.parseInt(args[1]);
+			printCommands(playerSender, page);
+			return true;
+		    } catch (NumberFormatException e) {
+			printCommands(playerSender, 1);
+			return true;
+		    }
+		}
+		
 		if (args[0].equalsIgnoreCase("list")) {
 		    if (playerSender.hasPermission("zvp.status")) {
 			list(playerSender, args[1]);
@@ -370,7 +381,7 @@ public class ZvPCommands implements CommandExecutor {
 			}
 		    }
 		    
-		    printCommands(playerSender);
+		    printCommands(playerSender, 2);
 		    return true;
 		}
 		if (args[0].equalsIgnoreCase("stop")) {
@@ -390,7 +401,7 @@ public class ZvPCommands implements CommandExecutor {
 		    }
 		}
 		
-		printCommands(playerSender);
+		printCommands(playerSender, 2);
 		return true;
 	    }
 	    
@@ -418,14 +429,14 @@ public class ZvPCommands implements CommandExecutor {
 			}
 		    }
 		    
-		    printCommands(playerSender);
+		    printCommands(playerSender, 2);
 		    return true;
 		}
-		printCommands(playerSender);
+		printCommands(playerSender, 2);
 		return true;
 	    }
 	    
-	    printCommands(playerSender);
+	    printCommands(playerSender, 1);
 	    return true;
 	}
 	return true;
@@ -487,35 +498,49 @@ public class ZvPCommands implements CommandExecutor {
 	
     }
     
-    private void printCommands(Player player) {
+    private void printCommands(Player player, int page) {
 	
 	if (player.hasPermission("zvp.help")) {
+	    
+	    if (page > 2 || page < 1) {
+		printCommands(player, 1);
+		return;
+	    }
+	    
 	    String pluginName = ZvP.getInstance().getDescription().getName();
 	    String pluginVersion = ZvP.getInstance().getDescription().getVersion();
 	    
 	    player.sendMessage("\n\n");
-	    player.sendMessage(ChatColor.GRAY + "|------------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Help" + ChatColor.GRAY + " -------------|");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp help");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp update");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp status");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp save");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp reload");
+	    player.sendMessage(ChatColor.GRAY + "|---------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Help: Page (" + page + "/2)" + ChatColor.GRAY + " ----------|");
+	    player.sendMessage(ChatColor.GRAY + "| Use /zvp help [n] to get page [n] of help.\n|");
 	    
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp leave");
-	    
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp addkit [Name]");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp removekit [Name]");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add lobby");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add position");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos1");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos2");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove arena [Arena-ID]");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove lobby [Lobby-ID]");
-	    
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop [Arena-ID]");
+	    switch (page) {
+		case 1:
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp help [page]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp status");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp reload");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp update");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp leave");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop [Arena-ID]");
+		    break;
+		
+		case 2:
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp addkit [Name]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp removekit [Name]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add lobby");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add position");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos1");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos2");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove arena [Arena-ID]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove lobby [Lobby-ID]");
+		    break;
+		
+		default:
+		    break;
+	    }
 	    
 	} else {
 	    commandDenied(player);
