@@ -291,8 +291,14 @@ public class ZvPCommands implements CommandExecutor {
 		    }
 		}
 		
-		printCommands(playerSender, 1);
-		return true;
+		try {
+		    int page = Integer.parseInt(args[0]);
+		    printCommands(playerSender, page);
+		    return true;
+		} catch (NumberFormatException e) {
+		    printCommands(playerSender, 1);
+		    return true;
+		}
 	    }
 	    
 	    if (args.length == 2) {
