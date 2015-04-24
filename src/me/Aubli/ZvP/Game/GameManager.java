@@ -324,16 +324,26 @@ public class GameManager {
 	ZvP.getPluginLogger().log(Level.INFO, "New Lobby added!", true);
     }
     
-    public void removeArena(Arena arena) {
-	ZvP.getPluginLogger().log(Level.INFO, "Arena " + arena.getID() + " removed!", true);
-	this.arenas.remove(arena);
-	arena.delete();
+    public boolean removeArena(Arena arena) {
+	if (arena != null && this.arenas.contains(arena)) {
+	    ZvP.getPluginLogger().log(Level.INFO, "Arena " + arena.getID() + " removed!", true);
+	    this.arenas.remove(arena);
+	    arena.delete();
+	    return true;
+	} else {
+	    return false;
+	}
     }
     
-    public void removeLobby(Lobby lobby) {
-	ZvP.getPluginLogger().log(Level.INFO, "Lobby " + lobby.getID() + " removed!", true);
-	this.lobbys.remove(lobby);
-	lobby.delete();
+    public boolean removeLobby(Lobby lobby) {
+	if (lobby != null && this.lobbys.contains(lobby)) {
+	    ZvP.getPluginLogger().log(Level.INFO, "Lobby " + lobby.getID() + " removed!", true);
+	    this.lobbys.remove(lobby);
+	    lobby.delete();
+	    return true;
+	} else {
+	    return false;
+	}
     }
     
     // Manage Players
