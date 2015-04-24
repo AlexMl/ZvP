@@ -294,26 +294,14 @@ public class ZvPCommands implements CommandExecutor {
 		    }
 		}
 		
-		try {
-		    int page = Integer.parseInt(args[0]);
-		    printCommands(playerSender, page);
-		    return true;
-		} catch (NumberFormatException e) {
-		    printCommands(playerSender, 1);
-		    return true;
-		}
+		printCommands(playerSender, parseInt(args[0]));
+		return true;
 	    }
 	    
 	    if (args.length == 2) {
 		if (args[0].equalsIgnoreCase("help")) {
-		    try {
-			int page = Integer.parseInt(args[1]);
-			printCommands(playerSender, page);
-			return true;
-		    } catch (NumberFormatException e) {
-			printCommands(playerSender, 1);
-			return true;
-		    }
+		    printCommands(playerSender, parseInt(args[1]));
+		    return true;
 		}
 		
 		if (args[0].equalsIgnoreCase("list")) {
@@ -395,7 +383,7 @@ public class ZvPCommands implements CommandExecutor {
 		}
 		if (args[0].equalsIgnoreCase("stop")) {
 		    if (playerSender.hasPermission("zvp.stop")) {
-			Arena a = this.game.getArena(Integer.parseInt(args[1]));
+			Arena a = this.game.getArena(parseInt(args[1]));
 			if (a != null) {
 			    a.stop();
 			    playerSender.sendMessage(MessageManager.getFormatedMessage("arena:stop", a.getID()));
@@ -418,9 +406,15 @@ public class ZvPCommands implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("remove")) {
 		    if (args[1].equalsIgnoreCase("arena")) {
 			if (playerSender.hasPermission("zvp.manage.arena")) {
-			    GameManager.getManager().removeArena(GameManager.getManager().getArena(Integer.parseInt(args[2])));
-			    playerSender.sendMessage(MessageManager.getMessage("manage:arena_removed"));
-			    return true;
+			    boolean success = GameManager.getManager().removeArena(GameManager.getManager().getArena(parseInt(args[2])));
+			    
+			    if (success) {
+				playerSender.sendMessage(MessageManager.getMessage("manage:arena_removed"));
+				return true;
+			    } else {
+				playerSender.sendMessage(MessageManager.getMessage("error:arena_not_available"));
+				return true;
+			    }
 			} else {
 			    commandDenied(playerSender);
 			    return true;
@@ -429,9 +423,15 @@ public class ZvPCommands implements CommandExecutor {
 		    
 		    if (args[1].equalsIgnoreCase("lobby")) {
 			if (playerSender.hasPermission("zvp.manage.lobby")) {
-			    GameManager.getManager().removeLobby(GameManager.getManager().getLobby(Integer.parseInt(args[2])));
-			    playerSender.sendMessage(MessageManager.getMessage("manage:lobby_removed"));
-			    return true;
+			    boolean success = GameManager.getManager().removeLobby(GameManager.getManager().getLobby(parseInt(args[2])));
+			    
+			    if (success) {
+				playerSender.sendMessage(MessageManager.getMessage("manage:lobby_removed"));
+				return true;
+			    } else {
+				playerSender.sendMessage(MessageManager.getMessage("error:lobby_not_available"));
+				return true;
+			    }
 			} else {
 			    commandDenied(playerSender);
 			    return true;
@@ -553,6 +553,14 @@ public class ZvPCommands implements CommandExecutor {
 	    
 	} else {
 	    commandDenied(player);
+	}
+    }
+    
+    private int parseInt(String s) {
+	try {
+	    return Integer.parseInt(s);
+	} catch (NumberFormatException e) {
+	    return -1;
 	}
     }
     
