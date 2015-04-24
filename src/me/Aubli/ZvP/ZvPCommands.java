@@ -523,10 +523,10 @@ public class ZvPCommands implements CommandExecutor {
 	    switch (page) {
 		case 1:
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp help [page]");
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list");
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp status");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp reload");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp update");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp status");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp leave");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop [Arena-ID]");
