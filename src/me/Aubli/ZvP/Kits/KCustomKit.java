@@ -44,8 +44,8 @@ public class KCustomKit implements IZvPKit, Comparable<IZvPKit> {
 	    
 	    kitConfig.set("name", name);
 	    kitConfig.set("enabled", true);
-	    kitConfig.set("icon", icon.getType().toString());
 	    kitConfig.set("price", price);
+	    kitConfig.set("icon", icon.getType().toString());
 	    kitConfig.addDefault("version", ZvP.getInstance().getDescription().getVersion());
 	    kitConfig.options().copyDefaults(true);
 	    ItemStorage.saveItemsToFile(this.kitFile, "items", content);
