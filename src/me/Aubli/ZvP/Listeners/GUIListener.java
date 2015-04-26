@@ -75,7 +75,7 @@ public class GUIListener implements Listener {
 			
 			if (ZvPConfig.getEnableEcon()) {
 			    // if economy and sellKits is true withdraw some money
-			    if (ZvPConfig.getSellKits()) {
+			    if (ZvPConfig.getIntegrateKits()) {
 				if (ZvP.getEconProvider().has(eventPlayer, kit.getPrice())) {
 				    EconomyResponse response = ZvP.getEconProvider().withdrawPlayer(eventPlayer, kit.getPrice());
 				    if (response.transactionSuccess()) {
