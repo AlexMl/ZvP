@@ -5,9 +5,16 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Translation.MessageManager;
+import net.milkbowl.vault.economy.EconomyResponse;
 
 
 public class ArenaScore {
+    
+    public enum ScoreType {
+	ZOMBIE_SCORE,
+	SHOP_SCORE;
+    }
     
     private Arena arena;
     
@@ -16,13 +23,14 @@ public class ArenaScore {
     private HashMap<ZvPPlayer, Double> playerScore;
     
     private final boolean separated;
+    private final boolean vaultEcon;
     
-    public ArenaScore(Arena arena, boolean separated) {
+    public ArenaScore(Arena arena, boolean separated, boolean econSupport, boolean econGameIntegration) {
 	this.arena = arena;
-	this.separated = separated;
+	this.vaultEcon = (econSupport && econGameIntegration);
+	this.separated = useVaultEconomy() ? true : separated;
 	
-	if (separated) {
-	    this.playerScore = new HashMap<ZvPPlayer, Double>();
+	if (isSeparated()) {
 	    initMap();
 	} else {
 	    this.score = 0.0;
@@ -30,8 +38,16 @@ public class ArenaScore {
     }
     
     private void initMap() {
-	for (ZvPPlayer player : getArena().getPlayers()) {
-	    this.playerScore.put(player, 0.0);
+	this.playerScore = new HashMap<ZvPPlayer, Double>();
+	
+	if (useVaultEconomy()) {
+	    for (ZvPPlayer player : getArena().getPlayers()) {
+		this.playerScore.put(player, ZvP.getEconProvider().getBalance(player.getPlayer()));
+	    }
+	} else {
+	    for (ZvPPlayer player : getArena().getPlayers()) {
+		this.playerScore.put(player, 0.0);
+	    }
 	}
     }
     
@@ -60,7 +76,11 @@ public class ArenaScore {
 	return this.separated;
     }
     
-    public void addScore(ZvPPlayer player, double score) {
+    public boolean useVaultEconomy() {
+	return this.vaultEcon;
+    }
+    
+    public void addScore(ZvPPlayer player, double score, ScoreType type) {
 	if (isSeparated()) {
 	    this.playerScore.put(player, this.playerScore.get(player) + score);
 	    player.updateScoreboard();
@@ -68,9 +88,20 @@ public class ArenaScore {
 	    this.score += score;
 	    this.arena.updatePlayerBoards();
 	}
+	
+	if (useVaultEconomy()) {
+	    EconomyResponse response = ZvP.getEconProvider().depositPlayer(player.getPlayer(), score);
+	    printResponse(response);
+	    
+	    if (!response.transactionSuccess()) {
+		player.sendMessage(MessageManager.getMessage("error:transaction_failed"));
+		ZvP.getPluginLogger().log(Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + "; Task:" + type.name(), false);
+	    }
+	}
+	ZvP.getPluginLogger().log(Level.FINE, player.getName() + " ++ " + score + " --> " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")) + "; Task:" + type, true);
     }
     
-    public void subtractScore(ZvPPlayer player, double score) {
+    public void subtractScore(ZvPPlayer player, double score, ScoreType type) {
 	if (isSeparated()) {
 	    double prevScore = this.playerScore.get(player);
 	    if (prevScore <= score) {
@@ -87,5 +118,20 @@ public class ArenaScore {
 	    }
 	    this.arena.updatePlayerBoards();
 	}
+	
+	if (useVaultEconomy()) {
+	    EconomyResponse response = ZvP.getEconProvider().withdrawPlayer(player.getPlayer(), score);
+	    printResponse(response);
+	    
+	    if (!response.transactionSuccess()) {
+		player.sendMessage(MessageManager.getMessage("error:transaction_failed"));
+		ZvP.getPluginLogger().log(Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + "; Task:" + type.name(), false);
+	    }
+	}
+	ZvP.getPluginLogger().log(Level.FINE, player.getName() + " -- " + score + " --> " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")) + "; Task:" + type, true);
+    }
+    
+    private void printResponse(EconomyResponse res) {
+	System.out.println(res.type + " B:" + res.amount + "-->" + res.balance);
     }
 }

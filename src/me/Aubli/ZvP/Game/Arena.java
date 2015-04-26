@@ -732,7 +732,7 @@ public class Arena implements Comparable<Arena> {
 	this.round = 0;
 	this.wave = 0;
 	
-	this.score = new ArenaScore(this, ZvPConfig.getSeparatePlayerScores());
+	this.score = new ArenaScore(this, ZvPConfig.getSeparatePlayerScores(), ZvPConfig.getEnableEcon(), ZvPConfig.getIntegrateGame());
 	getWorld().setDifficulty(Difficulty.NORMAL);
 	getWorld().setTime(15000L);
 	getWorld().setMonsterSpawnLimit(0);
