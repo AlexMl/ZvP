@@ -153,6 +153,7 @@ public class KitManager {
 	    ItemMeta kitMeta = kitItem.getItemMeta();
 	    
 	    ArrayList<String> lore = new ArrayList<String>();
+	    lore.add(ChatColor.GOLD + "Price: " + kit.getPrice());
 	    lore.add(ChatColor.GOLD + "Content:");
 	    
 	    for (ItemStack stack : kit.getContents()) {
