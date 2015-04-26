@@ -1,14 +1,11 @@
 package me.Aubli.ZvP;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Scanner;
 import java.util.logging.Level;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.util.File.InsertComment.CommentUtil;
 
 
 public class ZvPConfig {
@@ -86,23 +83,22 @@ public class ZvPConfig {
 	getConfig().addDefault("money.DeathFee", 3);
 	saveConfig();
 	
-	insertComment(configFile, "enableEcon", "Enable or disable economy support.#If enabled your bank account will be used for the game!#Note that you need Vault for working economics on your server!");
-	insertComment(configFile, "integrateKits", "If enabled kits costs money too.#Note that the price of the kit is set in their kit-file.");
-	insertComment(configFile, "integrateGame", "If enabled your bank account will be used for purchasing/selling and Kill/death bonuses.#Note that this game could ruin your bank balance!");
-	insertComment(configFile, "enableKits", "Enable kits for the game.#If disabled player will start the game with their current items.#The inventory will be restored after the game.");
-	insertComment(configFile, "enableFirework", "Fireworks will shoot when the game ends.#Note that Fireworks take extra time!");
-	insertComment(configFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
-	insertComment(configFile, "separatePlayerScores", "True: Each player will have his own score.#False: All players have the same score. They pay and earn together.");
-	insertComment(configFile, "maximal_Players", "Maximal amount of players in an arena.");
-	insertComment(configFile, "default_rounds", "Amount of rounds a newly created arena will have by default.");
-	insertComment(configFile, "default_waves", "Amount of waves a newly created arena will have by default.");
-	insertComment(configFile, "joinTime", "Time in seconds the game will wait before it starts.#Note that the arena specific minimum has to be reached.");
-	insertComment(configFile, "timeBetweenWaves", "Time in seconds the game will wait until a new wave starts.#Only applies if useVoteSystem is false!");
-	insertComment(configFile, "default_spawnRate", "Default zombie spawnrate for newly created arenas.#The spawnrate defines how many zombies will spawn.#The calculation uses arena size, amount of player, spawnrate and difficulty setting.");
-	insertComment(configFile, "default_saveRadius", "Default zombie spawnrate for newly created arenas.#The save radius is the radius in blocks in which no zombies will spawn.");
-	insertComment(configFile, "ZombieFund", "Amount of money you will get from killing a zombie.");
-	insertComment(configFile, "DeathFee", "Amount of money you have to pay when you die.");
-	
+	CommentUtil.insertComment(configFile, "enableEcon", "Enable or disable economy support.#If enabled your bank account will be used for the game!#Note that you need Vault for working economics on your server!");
+	CommentUtil.insertComment(configFile, "integrateKits", "If enabled kits costs money too.#Note that the price of the kit is set in their kit-file.");
+	CommentUtil.insertComment(configFile, "integrateGame", "If enabled your bank account will be used for purchasing/selling and Kill/death bonuses.#Note that this game could ruin your bank balance!");
+	CommentUtil.insertComment(configFile, "enableKits", "Enable kits for the game.#If disabled player will start the game with their current items.#The inventory will be restored after the game.");
+	CommentUtil.insertComment(configFile, "enableFirework", "Fireworks will shoot when the game ends.#Note that Fireworks take extra time!");
+	CommentUtil.insertComment(configFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
+	CommentUtil.insertComment(configFile, "separatePlayerScores", "True: Each player will have his own score.#False: All players have the same score. They pay and earn together.");
+	CommentUtil.insertComment(configFile, "maximal_Players", "Maximal amount of players in an arena.");
+	CommentUtil.insertComment(configFile, "default_rounds", "Amount of rounds a newly created arena will have by default.");
+	CommentUtil.insertComment(configFile, "default_waves", "Amount of waves a newly created arena will have by default.");
+	CommentUtil.insertComment(configFile, "joinTime", "Time in seconds the game will wait before it starts.#Note that the arena specific minimum has to be reached.");
+	CommentUtil.insertComment(configFile, "timeBetweenWaves", "Time in seconds the game will wait until a new wave starts.#Only applies if useVoteSystem is false!");
+	CommentUtil.insertComment(configFile, "default_spawnRate", "Default zombie spawnrate for newly created arenas.#The spawnrate defines how many zombies will spawn.#The calculation uses arena size, amount of player, spawnrate and difficulty setting.");
+	CommentUtil.insertComment(configFile, "default_saveRadius", "Default zombie spawnrate for newly created arenas.#The save radius is the radius in blocks in which no zombies will spawn.");
+	CommentUtil.insertComment(configFile, "ZombieFund", "Amount of money you will get from killing a zombie.");
+	CommentUtil.insertComment(configFile, "DeathFee", "Amount of money you have to pay when you die.");
     }
     
     private static void load() {
@@ -252,36 +248,5 @@ public class ZvPConfig {
     private static void saveConfig() {
 	getConfig().options().copyDefaults(true);
 	ZvP.getInstance().saveConfig();
-    }
-    
-    public static boolean insertComment(File file, String option, String comment) {
-	comment = comment.replace("#", "\n# ");
-	comment = "\n# " + comment;
-	
-	try {
-	    ArrayList<String> fileContent = new ArrayList<String>();
-	    Scanner scan = new Scanner(file);
-	    
-	    while (scan.hasNextLine()) {
-		String line = scan.nextLine();
-		
-		if (line.trim().split(":")[0].equalsIgnoreCase(option)) {
-		    fileContent.add(comment);
-		}
-		fileContent.add(line);
-	    }
-	    
-	    PrintWriter writer = new PrintWriter(file);
-	    for (String string : fileContent) {
-		writer.write(string + "\n");
-	    }
-	    writer.flush();
-	    writer.close();
-	    
-	} catch (FileNotFoundException e) {
-	    e.printStackTrace();
-	}
-	
-	return false;
     }
 }
