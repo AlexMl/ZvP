@@ -25,9 +25,8 @@ public class ZvPConfig {
     private static boolean logUpdate = false;
     
     private static boolean enableEcon = false;
+    private static boolean integrateGame = true;
     private static boolean integrateKits = true;
-    private static boolean integrateShop = true;
-    private static boolean integrateKills = true;
     
     private static boolean enableKits = true;
     private static boolean enableFirework = true;
@@ -67,8 +66,7 @@ public class ZvPConfig {
 	
 	getConfig().addDefault("economy.enableEcon", false);
 	getConfig().addDefault("economy.integrateKits", true);
-	getConfig().addDefault("economy.integrateShop", true);
-	getConfig().addDefault("economy.integrateKills", true);
+	getConfig().addDefault("economy.integrateGame", true);
 	
 	getConfig().addDefault("game.enableKits", true);
 	getConfig().addDefault("game.enableFirework", true);
@@ -90,8 +88,7 @@ public class ZvPConfig {
 	
 	insertComment(configFile, "enableEcon", "Enable or disable economy support.#If enabled your bank account will be used for the game!#Note that you need Vault for working economics on your server!");
 	insertComment(configFile, "integrateKits", "If enabled kits costs money too.#Note that the price of the kit is set in their kit-file.");
-	insertComment(configFile, "integrateShop", "If enabled the shop will use your bank account for purchasing/selling");
-	insertComment(configFile, "integrateKills", "If enabled kills and deaths will be counted on your bank account.#Note that a high deathFee value can empty your account real quick!");
+	insertComment(configFile, "integrateGame", "If enabled your bank account will be used for purchasing/selling and Kill/death bonuses.#Note that this game could ruin your bank balance!");
 	insertComment(configFile, "enableKits", "Enable kits for the game.#If disabled player will start the game with their current items.#The inventory will be restored after the game.");
 	insertComment(configFile, "enableFirework", "Fireworks will shoot when the game ends.#Note that Fireworks take extra time!");
 	insertComment(configFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
@@ -119,9 +116,8 @@ public class ZvPConfig {
 	logUpdate = getConfig().getBoolean("plugin.update.showUpdateInConsole", false);
 	
 	enableEcon = getConfig().getBoolean("economy.enableEcon", false);
-	integrateKills = getConfig().getBoolean("economy.integrateKills", true);
-	integrateShop = getConfig().getBoolean("economy.integrateShop", true);
-	integrateKills = getConfig().getBoolean("economy.integrateKills", true);
+	integrateKits = getConfig().getBoolean("economy.integrateKits", true);
+	integrateGame = getConfig().getBoolean("economy.integrateGame", true);
 	
 	enableKits = getConfig().getBoolean("game.enableKits", true);
 	enableFirework = getConfig().getBoolean("game.enableFirework", true);
@@ -187,12 +183,8 @@ public class ZvPConfig {
 	return integrateKits;
     }
     
-    public static boolean getIntegrateShop() {
-	return integrateShop;
-    }
-    
-    public static boolean getIntegrateKills() {
-	return integrateKills;
+    public static boolean getIntegrateGame() {
+	return integrateGame;
     }
     
     public static boolean getSeparatePlayerScores() {
