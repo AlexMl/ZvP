@@ -21,13 +21,16 @@ public class KCustomKit implements IZvPKit, Comparable<IZvPKit> {
     
     private final ItemStack icon;
     
+    private final double price;
+    
     private final ItemStack[] items;
     
     private final boolean enabled;
     
-    public KCustomKit(String path, String name, ItemStack icon, ItemStack[] content) {
+    public KCustomKit(String path, String name, ItemStack icon, double price, ItemStack[] content) {
 	this.name = name;
 	this.icon = icon;
+	this.price = price;
 	this.items = content;
 	this.enabled = true;
 	
@@ -36,12 +39,15 @@ public class KCustomKit implements IZvPKit, Comparable<IZvPKit> {
 	
 	if (!this.kitFile.exists()) {
 	    
-	    kitConfig.options().header("This is the config file used in ZvP to store a customm kit.\n\n" + "'name:' The name of the kit\n" + "'icon:' An item used as an icon\n\n" + "'id:' The id describes the item material. A list of all items can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html\n" + "'amount:' The amount of the item (Should be 1!)\n" + "'data:' Used by potions\n" + "'ench: {}' A list of enchantings (ench: {ENCHANTMENT:LEVEL}). A list of enchantments can be found here:\n https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/enchantments/Enchantment.html\n");
+	    kitConfig.options().header("This is the config file used in ZvP to store a customm kit.\n\n'name:' The name of the kit\n'enabled:' State of the kit\n'price:'The price of the kit if economy is used\n'icon:' An item used as an icon\n\n" + "'id:' The id describes the item material. A list of all items can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html\n" + "'amount:' The amount of the item (Should be 1!)\n" + "'data:' Used by potions\n" + "'ench: {}' A list of enchantings (ench: {ENCHANTMENT:LEVEL}). A list of enchantments can be found here:\n https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/enchantments/Enchantment.html\n");
 	    kitConfig.options().copyHeader(true);
 	    
 	    kitConfig.set("name", name);
-	    kitConfig.set("icon", icon.getType().toString());
 	    kitConfig.set("enabled", true);
+	    kitConfig.set("icon", icon.getType().toString());
+	    kitConfig.set("price", price);
+	    kitConfig.addDefault("version", ZvP.getInstance().getDescription().getVersion());
+	    kitConfig.options().copyDefaults(true);
 	    ItemStorage.saveItemsToFile(this.kitFile, "items", content);
 	    
 	    try {
@@ -59,9 +65,10 @@ public class KCustomKit implements IZvPKit, Comparable<IZvPKit> {
 	FileConfiguration kitConfig = YamlConfiguration.loadConfiguration(kitFile);
 	
 	this.name = kitConfig.getString("name");
+	this.enabled = kitConfig.getBoolean("enabled");
 	this.icon = parseIcon(kitConfig.getString("icon"));
+	this.price = kitConfig.getDouble("price");
 	this.items = parseItemStack(kitConfig.getList("items"));
-	this.enabled = kitConfig.getBoolean("enabled", true);
     }
     
     private ItemStack[] parseItemStack(List<?> itemList) {
@@ -95,6 +102,11 @@ public class KCustomKit implements IZvPKit, Comparable<IZvPKit> {
     @Override
     public ItemStack getIcon() {
 	return this.icon;
+    }
+    
+    @Override
+    public double getPrice() {
+	return this.price;
     }
     
     @Override
