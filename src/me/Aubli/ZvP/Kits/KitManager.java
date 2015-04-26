@@ -1,6 +1,7 @@
 package me.Aubli.ZvP.Kits;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.Potion;
+import org.util.Converter.FileConverter.FileType;
 
 
 public class KitManager {
@@ -29,6 +31,7 @@ public class KitManager {
     private boolean enabled;
     
     private File kitPath;
+    private FilenameFilter filter;
     
     private ArrayList<IZvPKit> kits;
     
@@ -39,6 +42,17 @@ public class KitManager {
 	this.enabled = enableKits;
 	this.kits = new ArrayList<IZvPKit>();
 	this.kitPath = new File(ZvP.getInstance().getDataFolder().getPath() + "/Kits");
+	
+	this.filter = new FilenameFilter() {
+	    
+	    @Override
+	    public boolean accept(File dir, String name) {
+		if (name.contains(".old")) {
+		    return false;
+		}
+		return true;
+	    }
+	};
 	
 	loadKits();
     }
@@ -56,7 +70,9 @@ public class KitManager {
 	new KSwordKit();
 	new KNullKit();
 	
-	for (File f : this.kitPath.listFiles()) {
+	for (File f : this.kitPath.listFiles(this.filter)) {
+	    ZvP.getConverter().convert(FileType.KITFILE, f, 250.0);
+	    // Version 2.5 needs converted kit files
 	    IZvPKit kit = new KCustomKit(f);
 	    if (kit.isEnabled()) {
 		this.kits.add(kit);
@@ -119,7 +135,7 @@ public class KitManager {
 	    }
 	}
 	
-	IZvPKit kit = new KCustomKit(this.kitPath.getAbsolutePath(), kitName, icon, items);
+	IZvPKit kit = new KCustomKit(this.kitPath.getAbsolutePath(), kitName, icon, 0.0, items);
 	this.kits.add(kit);
 	loadKits();
     }
