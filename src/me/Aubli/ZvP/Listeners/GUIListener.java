@@ -3,10 +3,12 @@ package me.Aubli.ZvP.Listeners;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Game.ZvPPlayer;
+import me.Aubli.ZvP.Kits.IZvPKit;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Shop.ShopItem;
 import me.Aubli.ZvP.Shop.ShopManager;
@@ -15,6 +17,7 @@ import me.Aubli.ZvP.Sign.ShopSign;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
 import me.Aubli.ZvP.Translation.MessageManager;
+import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -66,9 +69,32 @@ public class GUIListener implements Listener {
 		    
 		    String kitName = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
 		    ZvPPlayer player = GameManager.getManager().getPlayer(eventPlayer);
+		    IZvPKit kit = KitManager.getManager().getKit(kitName);
 		    
-		    if (KitManager.getManager().getKit(kitName) != null && player != null) {
-			player.setKit(KitManager.getManager().getKit(kitName));
+		    if (kit != null && player != null) {
+			// TODO player messages
+			if (ZvPConfig.getEnableEcon()) {
+			    // if economy and sellKits is true withdraw some money
+			    if (ZvPConfig.getSellKits()) {
+				if (ZvP.getEconProvider().has(eventPlayer, kit.getPrice())) {
+				    EconomyResponse response = ZvP.getEconProvider().withdrawPlayer(eventPlayer, kit.getPrice());
+				    if (response.transactionSuccess()) {
+					player.setKit(kit);
+				    } else {
+					player.setKit(kit);
+					player.sendMessage(MessageManager.getMessage(""));
+					ZvP.getPluginLogger().log(Level.FINE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + " for Kit " + kit.getName(), false);
+				    }
+				} else {
+				    player.sendMessage(MessageManager.getMessage(""));
+				}
+			    } else {
+				player.setKit(kit);
+			    }
+			} else {
+			    player.setKit(kit);
+			}
+			
 			ZvP.getPluginLogger().log(Level.INFO, player.getName() + " took the " + player.getKit().getName() + " Kit", true);
 			return;
 		    }
