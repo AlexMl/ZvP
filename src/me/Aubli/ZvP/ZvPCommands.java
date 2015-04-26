@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.ArenaScore.ScoreType;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Game.Lobby;
@@ -128,9 +129,11 @@ public class ZvPCommands implements CommandExecutor {
 		}
 		
 		if (args[0].equalsIgnoreCase("m")) {
-		    Double sum = Double.parseDouble(args[1]);
-		    this.game.getPlayer(playerSender).getArena().getScore().addScore(this.game.getPlayer(playerSender), sum);
-		    return true;
+		    if (!ZvPConfig.getEnableEcon() && !ZvPConfig.getIntegrateGame()) { // possibility of cheating money
+			Double sum = Double.parseDouble(args[1]);
+			this.game.getPlayer(playerSender).getArena().getScore().addScore(this.game.getPlayer(playerSender), sum, ScoreType.SHOP_SCORE);
+			return true;
+		    }
 		}
 		
 		Arena a = this.game.getArena(Integer.parseInt(args[0]));

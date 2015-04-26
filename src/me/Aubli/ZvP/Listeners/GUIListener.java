@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.ArenaScore.ScoreType;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Game.ZvPPlayer;
@@ -83,7 +84,7 @@ public class GUIListener implements Listener {
 				    } else {
 					player.setKit(kit);
 					player.sendMessage(MessageManager.getMessage("error:transaction_failed"));
-					ZvP.getPluginLogger().log(Level.FINE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + " for Kit " + kit.getName(), false);
+					ZvP.getPluginLogger().log(Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + " for Kit " + kit.getName(), false);
 				    }
 				} else {
 				    player.sendMessage(MessageManager.getMessage("game:no_money"));
@@ -142,7 +143,7 @@ public class GUIListener implements Listener {
 				    boughtItem.addUnsafeEnchantments(item.getItem().getEnchantments());
 				    boughtItem.setDurability(item.getItem().getDurability());
 				    
-				    player.getArena().getScore().subtractScore(player, item.getPrice());
+				    player.getArena().getScore().subtractScore(player, item.getPrice(), ScoreType.SHOP_SCORE);
 				    player.getPlayer().getInventory().addItem(boughtItem);
 				    player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_bought", player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
 				} else {
@@ -159,7 +160,7 @@ public class GUIListener implements Listener {
 				    boughtItem.addUnsafeEnchantments(item.getItem().getEnchantments());
 				    boughtItem.setDurability(item.getItem().getDurability());
 				    
-				    player.getArena().getScore().subtractScore(player, item.getPrice() * amount);
+				    player.getArena().getScore().subtractScore(player, item.getPrice() * amount, ScoreType.SHOP_SCORE);
 				    player.getPlayer().getInventory().addItem(boughtItem);
 				    player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_bought_more", player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
 				} else {
@@ -175,7 +176,7 @@ public class GUIListener implements Listener {
 				
 				if (player.getPlayer().getInventory().containsAtLeast(stack, 1)) {
 				    player.getPlayer().getInventory().removeItem(stack);
-				    player.getArena().getScore().addScore(player, item.getPrice());
+				    player.getArena().getScore().addScore(player, item.getPrice(), ScoreType.SHOP_SCORE);
 				    player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_sold", player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
 				} else {
 				    player.sendMessage(MessageManager.getMessage("game:no_item_to_sell"));
@@ -203,7 +204,7 @@ public class GUIListener implements Listener {
 					}
 				    }
 				    
-				    player.getArena().getScore().addScore(player, item.getPrice() * amount);
+				    player.getArena().getScore().addScore(player, item.getPrice() * amount, ScoreType.SHOP_SCORE);
 				    player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_sold_more", player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
 				} else {
 				    player.sendMessage(MessageManager.getMessage("game:no_item_to_sell"));

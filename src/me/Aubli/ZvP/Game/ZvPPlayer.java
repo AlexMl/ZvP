@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.UUID;
 
 import me.Aubli.ZvP.ZvPConfig;
+import me.Aubli.ZvP.Game.ArenaScore.ScoreType;
 import me.Aubli.ZvP.Kits.IZvPKit;
 import me.Aubli.ZvP.Kits.KitManager;
 
@@ -214,12 +215,12 @@ public class ZvPPlayer {
     
     public void addKill() {
 	setKills(getKills() + 1);
-	getArena().getScore().addScore(this, ZvPConfig.getZombieFund());
+	getArena().getScore().addScore(this, ZvPConfig.getZombieFund(), ScoreType.ZOMBIE_SCORE);
     }
     
     public void die() {
 	setDeaths(getDeaths() + 1);
-	getArena().getScore().subtractScore(this, ZvPConfig.getDeathFee());
+	getArena().getScore().subtractScore(this, ZvPConfig.getDeathFee(), ScoreType.ZOMBIE_SCORE);
     }
     
     public void removeScoreboard() {
