@@ -10,7 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.util.ItemStorageUtil.ItemStorage;
+import org.util.File.ItemStorageUtil.ItemStorage;
 
 
 public class KCustomKit implements IZvPKit, Comparable<IZvPKit> {

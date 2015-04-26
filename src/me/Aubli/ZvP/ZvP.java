@@ -32,7 +32,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.util.Converter.FileConverter;
+import org.util.File.Converter.FileConverter;
 import org.util.Logger.PluginOutput;
 import org.util.Metrics.Metrics;
 import org.util.Metrics.Metrics.Graph;

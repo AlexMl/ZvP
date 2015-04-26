@@ -21,7 +21,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.Potion;
-import org.util.Converter.FileConverter.FileType;
+import org.util.File.Converter.FileConverter.FileType;
 
 
 public class KitManager {
