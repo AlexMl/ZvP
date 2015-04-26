@@ -24,6 +24,10 @@ public class ZvPConfig {
     private static boolean autoUpdate = true;
     private static boolean logUpdate = false;
     
+    private static boolean enableEcon = false;
+    private static boolean sellKits = true;
+    private static boolean integrateShop = true;
+    
     private static boolean enableKits = true;
     private static boolean enableFirework = true;
     private static boolean useVoteSystem = true;
@@ -60,6 +64,10 @@ public class ZvPConfig {
 	getConfig().addDefault("plugin.update.autoUpdate", true);
 	getConfig().addDefault("plugin.update.showUpdateInConsole", true);
 	
+	getConfig().addDefault("economy.enableEcon", false);
+	getConfig().addDefault("economy.sellKits", true);
+	getConfig().addDefault("economy.integrateShop", true);
+	
 	getConfig().addDefault("game.enableKits", true);
 	getConfig().addDefault("game.enableFirework", true);
 	getConfig().addDefault("game.useVoteSystem", true);
@@ -78,6 +86,9 @@ public class ZvPConfig {
 	getConfig().addDefault("money.DeathFee", 3);
 	saveConfig();
 	
+	insertComment(configFile, "enableEcon", "Enable or disable economy support.#If enabled your bank account will be used for the game!#Note that you need Vault for working economics on your server!");
+	insertComment(configFile, "sellKits", "If enabled kits costs money too.#Note that the price of the kit is set in their kit-file.");
+	insertComment(configFile, "integrateShop", "If enabled the shop will use your bank account for purchasing/selling");
 	insertComment(configFile, "enableKits", "Enable kits for the game.#If disabled player will start the game with their current items.#The inventory will be restored after the game.");
 	insertComment(configFile, "enableFirework", "Fireworks will shoot when the game ends.#Note that Fireworks take extra time!");
 	insertComment(configFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
@@ -103,6 +114,10 @@ public class ZvPConfig {
 	enableUpdater = getConfig().getBoolean("plugin.update.enable", true);
 	autoUpdate = getConfig().getBoolean("plugin.update.autoUpdate", true);
 	logUpdate = getConfig().getBoolean("plugin.update.showUpdateInConsole", false);
+	
+	enableEcon = getConfig().getBoolean("economy.enableEcon", false);
+	sellKits = getConfig().getBoolean("economy.sellKits", true);
+	integrateShop = getConfig().getBoolean("economy.integrateShop", true);
 	
 	enableKits = getConfig().getBoolean("game.enableKits", true);
 	enableFirework = getConfig().getBoolean("game.enableFirework", true);
@@ -160,6 +175,18 @@ public class ZvPConfig {
 	return enableFirework;
     }
     
+    public static boolean getEnableEcon() {
+	return enableEcon;
+    }
+    
+    public static boolean getSellKits() {
+	return sellKits;
+    }
+    
+    public static boolean getIntegrateShop() {
+	return integrateShop;
+    }
+    
     public static boolean getSeparatePlayerScores() {
 	return separatePlayerScores;
     }
@@ -210,6 +237,12 @@ public class ZvPConfig {
     
     public static double getDeathFee() {
 	return deathFee;
+    }
+    
+    public static void setEconEnabled(boolean enabled) {
+	getConfig().set("economy.enableEcon", enabled);
+	saveConfig();
+	reloadConfig();
     }
     
     private static FileConfiguration getConfig() {
