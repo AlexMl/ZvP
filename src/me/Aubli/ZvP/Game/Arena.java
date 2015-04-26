@@ -32,6 +32,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
+import org.util.File.InsertComment.CommentUtil;
 import org.util.SortMap.SortMap;
 
 
@@ -192,6 +193,7 @@ public class Arena implements Comparable<Arena> {
 	    this.arenaConfig.options().copyDefaults(true);
 	    
 	    this.arenaConfig.save(this.arenaFile);
+	    insertComments();
 	} catch (IOException e) {
 	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena " + getID() + ": " + e.getMessage(), true, false, e);
 	}
@@ -199,6 +201,19 @@ public class Arena implements Comparable<Arena> {
     
     void delete() {
 	this.arenaFile.delete();
+    }
+    
+    private void insertComments() {
+	// TODO Fix double comment
+	CommentUtil.insertComment(this.arenaFile, "ID", "The internal identifier of the arena.");
+	CommentUtil.insertComment(this.arenaFile, "Online", "'true': The arena is online and can be used.#'false': The arena is offline and can not be used.");
+	CommentUtil.insertComment(this.arenaFile, "Difficulty", "The Difficulty of the arena. There are three modes: EASY, NORMAL, HARD#Each mode will increase amount and health of zombies.");
+	CommentUtil.insertComment(this.arenaFile, "minPlayers", "Minimum amount of players. Set at least to 1.");
+	CommentUtil.insertComment(this.arenaFile, "maxPlayers", "Maximal amount of players.");
+	CommentUtil.insertComment(this.arenaFile, "spawnRate", "SpawnRate defines the amount of spawning zombies. Default is 8.");
+	CommentUtil.insertComment(this.arenaFile, "SpawnProtection", "SpawnProtection will protect you when you respawn.#Note that you can not hit zombies during the protection!");
+	CommentUtil.insertComment(this.arenaFile, "duration", "The duration of the spawn protection in seconds.");
+	CommentUtil.insertComment(this.arenaFile, "saveRadius", "The save radius is the radius in blocks around you in which no zombies will spawn.");
     }
     
     public void setStatus(ArenaStatus status) {
