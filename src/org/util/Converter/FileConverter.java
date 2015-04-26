@@ -113,12 +113,17 @@ public class FileConverter {
 			file.createNewFile();
 			
 			conf = YamlConfiguration.loadConfiguration(file);
+			conf.options().header("This is the config file used in ZvP to store a customm kit.\n\n'name:' The name of the kit\n'enabled:' State of the kit\n'price:' The price of the kit if economy is used\n'icon:' An item used as an icon\n\n" + "'id:' The id describes the item material. A list of all items can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html\n" + "'amount:' The amount of the item (Should be 1!)\n" + "'data:' Used by potions\n" + "'ench: {}' A list of enchantings (ench: {ENCHANTMENT:LEVEL}). A list of enchantments can be found here:\n https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/enchantments/Enchantment.html\n");
+			conf.options().copyHeader(true);
 			conf.set("name", name);
 			conf.set("enabled", enabled);
 			conf.set("price", 0.0);
 			conf.set("icon", icon);
 			conf.set("items", itemList);
 			conf.set("version", this.currentVersion);
+			
+			conf.save(file);
+			ZvP.getPluginLogger().log(Level.INFO, "Updated " + file.getName() + " to " + uptadeRequired + " successfully!", true, false);
 			return true;
 			
 		    default:
