@@ -31,6 +31,7 @@ public class DefaultTranslation extends ListResourceBundle {
 	    {"game:player_bought_more", ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " bought " + ChatColor.GOLD + "%s %s " + ChatColor.DARK_GRAY + "for " + ChatColor.GOLD + "%s " + ChatColor.DARK_GRAY + "!"},
 	    {"game:player_sold", ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " sold " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " for " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " !"},
 	    {"game:player_sold_more", ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " sold " + ChatColor.GOLD + "%s %s " + ChatColor.DARK_GRAY + "for " + ChatColor.GOLD + "%s " + ChatColor.DARK_GRAY + "!"},
+	    {"game:player_bought_kit", ChatColor.GREEN + "You bought the " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " Kit for " + ChatColor.GOLD + "%s" + ChatColor.GREEN + "! You have " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " left!"},
 	    {"game:no_money", ChatColor.RED + "You do not own enough money!"},
 	    {"game:no_item_to_sell", ChatColor.RED + "You do not have this item!"},
 	    {"game:wrong_inventory", ChatColor.RED + "You clicked the wrong Inventory! Try the top one!"},

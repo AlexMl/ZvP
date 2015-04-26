@@ -1,5 +1,6 @@
 package me.Aubli.ZvP.Listeners;
 
+import java.text.DecimalFormat;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
@@ -80,6 +81,7 @@ public class GUIListener implements Listener {
 				if (ZvP.getEconProvider().has(eventPlayer, kit.getPrice())) {
 				    EconomyResponse response = ZvP.getEconProvider().withdrawPlayer(eventPlayer, kit.getPrice());
 				    if (response.transactionSuccess()) {
+					player.sendMessage(MessageManager.getFormatedMessage("game:player_bought_kit", kitName, new DecimalFormat("#0.00").format(response.amount) + " " + ZvP.getEconProvider().currencyNamePlural(), new DecimalFormat("#0.00").format(response.balance) + " " + ZvP.getEconProvider().currencyNamePlural()));
 					player.setKit(kit);
 				    } else {
 					player.setKit(kit);
