@@ -72,7 +72,7 @@ public class GUIListener implements Listener {
 		    IZvPKit kit = KitManager.getManager().getKit(kitName);
 		    
 		    if (kit != null && player != null) {
-			// TODO player messages
+			
 			if (ZvPConfig.getEnableEcon()) {
 			    // if economy and sellKits is true withdraw some money
 			    if (ZvPConfig.getSellKits()) {
@@ -82,11 +82,12 @@ public class GUIListener implements Listener {
 					player.setKit(kit);
 				    } else {
 					player.setKit(kit);
-					player.sendMessage(MessageManager.getMessage(""));
+					player.sendMessage(MessageManager.getMessage("error:transaction_failed"));
 					ZvP.getPluginLogger().log(Level.FINE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + " for Kit " + kit.getName(), false);
 				    }
 				} else {
-				    player.sendMessage(MessageManager.getMessage(""));
+				    player.sendMessage(MessageManager.getMessage("game:no_money"));
+				    return;
 				}
 			    } else {
 				player.setKit(kit);

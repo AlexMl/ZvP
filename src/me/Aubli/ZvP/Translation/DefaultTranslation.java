@@ -74,6 +74,7 @@ public class DefaultTranslation extends ListResourceBundle {
 	    {"error:arena_not_available", ChatColor.RED + "This Arena is not available!"},
 	    {"error:kit_already_exists", ChatColor.RED + "The Kit " + ChatColor.GOLD + "%s" + ChatColor.RED + " already exists! Choose another name!"},
 	    {"error:kit_does_not_exists", ChatColor.RED + "The Kit " + ChatColor.GOLD + "%s" + ChatColor.RED + " does not exist!"},
+	    {"error:transaction_failed", ChatColor.RED + "The transaction failed!"},
 	    
 	    {"category:food", "Food"},
 	    {"category:armor", "Armor"},
