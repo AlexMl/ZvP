@@ -3,6 +3,7 @@ package me.Aubli.ZvP;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.GameManager;
@@ -34,6 +35,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.util.Converter.FileConverter;
 import org.util.Logger.PluginOutput;
 import org.util.Metrics.Metrics;
+import org.util.Metrics.Metrics.Graph;
 import org.util.Updater.Updater;
 import org.util.Updater.Updater.UpdateResult;
 import org.util.Updater.Updater.UpdateType;
@@ -131,6 +133,18 @@ public class ZvP extends JavaPlugin {
 	if (ZvPConfig.getUseMetrics() == true) {
 	    try {
 		Metrics metrics = new Metrics(this);
+		
+		Graph localeUsed = metrics.createGraph("Language Locale usage");
+		
+		localeUsed.addPlotter(new Metrics.Plotter(ZvPConfig.getLocale().getDisplayLanguage(Locale.ENGLISH)) {
+		    
+		    @Override
+		    public int getValue() {
+			return 1;
+		    }
+		    
+		});
+		
 		metrics.start();
 	    } catch (IOException e) {
 		logger.log(Level.WARNING, "Can't start Metrics! Skip!", true, false, e);
