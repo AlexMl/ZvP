@@ -72,7 +72,7 @@ public class Arena implements Comparable<Arena> {
     private Location maxLoc;
     private List<Location> staticSpawnLocations;
     
-    public Arena(int ID, int maxPlayers, String arenaPath, Location min, Location max, int rounds, int waves, int spawnRate, double saveRadius, ArenaDifficultyLevel difficulty, boolean spawnProtection) {
+    public Arena(int ID, int maxPlayers, String arenaPath, Location min, Location max, int rounds, int waves, int spawnRate, ArenaDifficultyLevel difficulty, boolean spawnProtection) {
 	
 	this.arenaID = ID;
 	
@@ -92,7 +92,7 @@ public class Arena implements Comparable<Arena> {
 	this.round = 0;
 	this.wave = 0;
 	
-	this.saveRadius = saveRadius;
+	this.saveRadius = ((Math.ceil(maxPlayers / 8))) + 2.5;
 	this.spawnRate = spawnRate;
 	
 	this.enableSpawnProtection = spawnProtection;
@@ -134,7 +134,7 @@ public class Arena implements Comparable<Arena> {
 	this.wave = 0;
 	
 	this.spawnRate = this.arenaConfig.getInt("arena.spawnRate", ZvPConfig.getDefaultZombieSpawnRate());
-	this.saveRadius = this.arenaConfig.getDouble("arena.safety.saveRadius", ZvPConfig.getDefaultSaveRadius());
+	this.saveRadius = this.arenaConfig.getDouble("arena.safety.saveRadius", 4.0);
 	
 	this.arenaWorld = Bukkit.getWorld(UUID.fromString(this.arenaConfig.getString("arena.Location.world")));
 	this.minLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.min.X"), this.arenaConfig.getInt("arena.Location.min.Y"), this.arenaConfig.getInt("arena.Location.min.Z"));

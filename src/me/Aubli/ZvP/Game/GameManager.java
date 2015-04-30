@@ -299,17 +299,17 @@ public class GameManager {
 	    
 	    double dist = min.clone().distance(tempMax);
 	    
-	    int mP = ((int) ((Math.ceil(dist + 2)) / 4)) + 1;
+	    int maxP = ((int) ((Math.ceil(dist + 2)) / 4)) + 1;
 	    
-	    if (mP < 3) {
-		mP = 3;
+	    if (maxP < 3) {
+		maxP = 3;
 	    }
 	    
-	    if (mP > ZvPConfig.getMaxPlayers()) {
-		mP = ZvPConfig.getMaxPlayers();
+	    if (maxP > ZvPConfig.getMaxPlayers()) {
+		maxP = ZvPConfig.getMaxPlayers();
 	    }
 	    
-	    Arena a = new Arena(getNewID(this.arenaPath), mP, this.arenaPath, min.clone(), max.clone(), ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ZvPConfig.getDefaultSaveRadius(), ArenaDifficultyLevel.NORMAL, true);
+	    Arena a = new Arena(getNewID(this.arenaPath), maxP, this.arenaPath, min.clone(), max.clone(), ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ArenaDifficultyLevel.NORMAL, true);
 	    this.arenas.add(a);
 	    
 	    ZvP.getPluginLogger().log(Level.INFO, "New Arena added!", true);

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
-import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.GameManager.ArenaDifficultyLevel;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -51,7 +50,7 @@ public class FileConverter {
 			int rounds = conf.getInt("arena.rounds");
 			int waves = conf.getInt("arena.waves");
 			int spawnRate = conf.getInt("arena.spawnRate");
-			double saveRadius = conf.getDouble("arena.saveRadius", ZvPConfig.getDefaultSaveRadius());
+			double saveRadius = conf.getDouble("arena.saveRadius", 4.0);
 			
 			String world = conf.getString("arena.Location.world");
 			int minX = conf.getInt("arena.Location.min.X");

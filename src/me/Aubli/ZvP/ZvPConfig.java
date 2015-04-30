@@ -37,7 +37,6 @@ public class ZvPConfig {
     private static int breakTime;
     
     private static int defaultZombieSpawnRate;
-    private static double defaultSaveRadius;
     
     private static double zombieFund;
     private static double deathFee;
@@ -77,7 +76,6 @@ public class ZvPConfig {
 	getConfig().addDefault("times.timeBetweenWaves", 90);
 	
 	getConfig().addDefault("zombies.default_spawnRate", 8);
-	getConfig().addDefault("zombies.default_saveRadius", 3.5);
 	
 	getConfig().addDefault("money.ZombieFund", 0.37);
 	getConfig().addDefault("money.DeathFee", 3);
@@ -96,7 +94,6 @@ public class ZvPConfig {
 	CommentUtil.insertComment(configFile, "joinTime", "Time in seconds the game will wait before it starts.#Note that the arena specific minimum has to be reached.");
 	CommentUtil.insertComment(configFile, "timeBetweenWaves", "Time in seconds the game will wait until a new wave starts.#Only applies if useVoteSystem is false!");
 	CommentUtil.insertComment(configFile, "default_spawnRate", "Default zombie spawnrate for newly created arenas.#The spawnrate defines how many zombies will spawn.#The calculation uses arena size, amount of player, spawnrate and difficulty setting.");
-	CommentUtil.insertComment(configFile, "default_saveRadius", "Default zombie spawnrate for newly created arenas.#The save radius is the radius in blocks in which no zombies will spawn.");
 	CommentUtil.insertComment(configFile, "ZombieFund", "Amount of money you will get from killing a zombie.");
 	CommentUtil.insertComment(configFile, "DeathFee", "Amount of money you have to pay when you die.");
     }
@@ -127,7 +124,6 @@ public class ZvPConfig {
 	breakTime = getConfig().getInt("times.timeBetweenWaves");
 	
 	defaultZombieSpawnRate = getConfig().getInt("zombies.default_spawnRate");
-	defaultSaveRadius = getConfig().getDouble("zombies.default_saveRadius");
 	
 	zombieFund = getConfig().getDouble("money.ZombieFund");
 	deathFee = getConfig().getDouble("money.DeathFee");
@@ -221,10 +217,6 @@ public class ZvPConfig {
     
     public static int getDefaultZombieSpawnRate() {
 	return defaultZombieSpawnRate;
-    }
-    
-    public static double getDefaultSaveRadius() {
-	return defaultSaveRadius;
     }
     
     public static double getZombieFund() {
