@@ -349,7 +349,7 @@ public class Arena implements Comparable<Arena> {
 		for (int iy = 0; iy < (getMax().getBlockY() - getMin().getBlockY()); iy++) {
 		    if (isValidLocation(getMin().clone().add(0, iy, 0))) {
 			y = getMin().getBlockY() + iy;
-			System.out.println("ny:" + y);
+			// System.out.println("ny:" + y);
 			break;
 		    }
 		}
