@@ -3,6 +3,7 @@ package me.Aubli.ZvP;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.GameManager;
@@ -19,6 +20,7 @@ import me.Aubli.ZvP.Listeners.SignChangelistener;
 import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Translation.MessageManager;
+import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,10 +30,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.util.Converter.FileConverter;
+import org.util.File.Converter.FileConverter;
 import org.util.Logger.PluginOutput;
 import org.util.Metrics.Metrics;
+import org.util.Metrics.Metrics.Graph;
 import org.util.Updater.Updater;
 import org.util.Updater.Updater.UpdateResult;
 import org.util.Updater.Updater.UpdateType;
@@ -45,12 +49,14 @@ public class ZvP extends JavaPlugin {
     
     private static ZvP instance;
     
+    private static Economy economy;
+    
     public static String ADDARENA = "Use this tool to add an arena!";
     public static String ADDPOSITION = "Use this tool to add a spawn position";
     
     private static String pluginPrefix = ChatColor.DARK_GREEN + "[" + ChatColor.DARK_RED + "Z" + ChatColor.DARK_GRAY + "v" + ChatColor.DARK_RED + "P" + ChatColor.DARK_GREEN + "]" + ChatColor.RESET + " ";
     
-    private int pluginID = 59021;
+    private final int pluginID = 59021;
     
     public static boolean updateAvailable = false;
     public static String newVersion = "";
@@ -91,6 +97,24 @@ public class ZvP extends JavaPlugin {
 	getCommand("zvp").setExecutor(new ZvPCommands());
 	getCommand("zvptest").setExecutor(new ZvPCommands());
 	
+	if (ZvPConfig.getEnableEcon()) {
+	    
+	    if (getServer().getPluginManager().getPlugin("Vault") != null) {
+		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+		
+		if (economyProvider != null) {
+		    economy = economyProvider.getProvider();
+		    getPluginLogger().log(Level.INFO, "Successfully hooked into Vault economy!", false, false);
+		} else {
+		    getPluginLogger().log(Level.WARNING, "Could not hook into Vault! Disabling economy ...", false);
+		    ZvPConfig.setEconEnabled(false);
+		}
+	    } else {
+		getPluginLogger().log(Level.WARNING, "Economy is enabled but Vault is not installed! Disabling economy ...", false);
+		ZvPConfig.setEconEnabled(false);
+	    }
+	}
+	
 	if (ZvPConfig.getEnableUpdater()) {
 	    UpdateType updType = UpdateType.DEFAULT;
 	    
@@ -109,6 +133,18 @@ public class ZvP extends JavaPlugin {
 	if (ZvPConfig.getUseMetrics() == true) {
 	    try {
 		Metrics metrics = new Metrics(this);
+		
+		Graph localeUsed = metrics.createGraph("Language Locale usage");
+		
+		localeUsed.addPlotter(new Metrics.Plotter(ZvPConfig.getLocale().getDisplayLanguage(Locale.ENGLISH)) {
+		    
+		    @Override
+		    public int getValue() {
+			return 1;
+		    }
+		    
+		});
+		
 		metrics.start();
 	    } catch (IOException e) {
 		logger.log(Level.WARNING, "Can't start Metrics! Skip!", true, false, e);
@@ -140,6 +176,10 @@ public class ZvP extends JavaPlugin {
     
     public static FileConverter getConverter() {
 	return converter;
+    }
+    
+    public static Economy getEconProvider() {
+	return economy;
     }
     
     public static String getPrefix() {

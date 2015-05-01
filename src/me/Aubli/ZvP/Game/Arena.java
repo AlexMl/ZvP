@@ -32,6 +32,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
+import org.util.File.InsertComment.CommentUtil;
 import org.util.SortMap.SortMap;
 
 
@@ -71,7 +72,7 @@ public class Arena implements Comparable<Arena> {
     private Location maxLoc;
     private List<Location> staticSpawnLocations;
     
-    public Arena(int ID, int maxPlayers, String arenaPath, Location min, Location max, int rounds, int waves, int spawnRate, double saveRadius, ArenaDifficultyLevel difficulty, boolean spawnProtection) {
+    public Arena(int ID, int maxPlayers, String arenaPath, Location min, Location max, int rounds, int waves, int spawnRate, ArenaDifficultyLevel difficulty, boolean spawnProtection) {
 	
 	this.arenaID = ID;
 	
@@ -91,7 +92,7 @@ public class Arena implements Comparable<Arena> {
 	this.round = 0;
 	this.wave = 0;
 	
-	this.saveRadius = saveRadius;
+	this.saveRadius = ((Math.ceil(maxPlayers / 8))) + 2.5;
 	this.spawnRate = spawnRate;
 	
 	this.enableSpawnProtection = spawnProtection;
@@ -133,7 +134,7 @@ public class Arena implements Comparable<Arena> {
 	this.wave = 0;
 	
 	this.spawnRate = this.arenaConfig.getInt("arena.spawnRate", ZvPConfig.getDefaultZombieSpawnRate());
-	this.saveRadius = this.arenaConfig.getDouble("arena.safety.saveRadius", ZvPConfig.getDefaultSaveRadius());
+	this.saveRadius = this.arenaConfig.getDouble("arena.safety.saveRadius", 4.0);
 	
 	this.arenaWorld = Bukkit.getWorld(UUID.fromString(this.arenaConfig.getString("arena.Location.world")));
 	this.minLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.min.X"), this.arenaConfig.getInt("arena.Location.min.Y"), this.arenaConfig.getInt("arena.Location.min.Z"));
@@ -189,9 +190,13 @@ public class Arena implements Comparable<Arena> {
 	    this.arenaConfig.set("arena.Location.staticPositions", locationList);
 	    
 	    this.arenaConfig.addDefault("version", ZvP.getInstance().getDescription().getVersion());
+	    this.arenaConfig.options().header("\nThis is the config file for arena " + getID() + "!\n");
 	    this.arenaConfig.options().copyDefaults(true);
+	    this.arenaConfig.options().copyHeader(true);
 	    
 	    this.arenaConfig.save(this.arenaFile);
+	    
+	    insertComments();
 	} catch (IOException e) {
 	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena " + getID() + ": " + e.getMessage(), true, false, e);
 	}
@@ -199,6 +204,18 @@ public class Arena implements Comparable<Arena> {
     
     void delete() {
 	this.arenaFile.delete();
+    }
+    
+    private void insertComments() {
+	CommentUtil.insertComment(this.arenaFile, "ID", "The internal identifier of the arena!");
+	CommentUtil.insertComment(this.arenaFile, "Online", "'true': The arena is online and can be used.#'false': The arena is offline and can not be used.");
+	CommentUtil.insertComment(this.arenaFile, "Difficulty", "The Difficulty of the arena. There are three modes: EASY, NORMAL, HARD#Each mode will increase amount and health of zombies.");
+	CommentUtil.insertComment(this.arenaFile, "minPlayers", "Minimum amount of players. Set at least to 1.");
+	CommentUtil.insertComment(this.arenaFile, "maxPlayers", "Maximal amount of players.");
+	CommentUtil.insertComment(this.arenaFile, "spawnRate", "SpawnRate defines the amount of spawning zombies. Default is 8.");
+	CommentUtil.insertComment(this.arenaFile, "SpawnProtection", "SpawnProtection will protect you when you respawn.#Note that you can not hit zombies during the protection!");
+	CommentUtil.insertComment(this.arenaFile, "duration", "The duration of the spawn protection in seconds.");
+	CommentUtil.insertComment(this.arenaFile, "saveRadius", "The save radius is the radius in blocks around you in which no zombies will spawn.");
     }
     
     public void setStatus(ArenaStatus status) {
@@ -309,27 +326,40 @@ public class Arena implements Comparable<Arena> {
 	} else {
 	    
 	    int x;
-	    int y;
+	    int y = 0;
 	    int z;
 	    
 	    x = this.rand.nextInt((getMax().getBlockX() - getMin().getBlockX() - 1)) + getMin().getBlockX() + 1;
 	    z = this.rand.nextInt((getMax().getBlockZ() - getMin().getBlockZ() - 1)) + getMin().getBlockZ() + 1;
 	    
-	    if (getWorld().getHighestBlockYAt(getMax()) == getMax().getBlockY() && getWorld().getHighestBlockYAt(getMin()) == getMin().getBlockY()) { // Asume that as arena without ceiling
+	    if (getWorld().getHighestBlockYAt(x, z) + 1 >= getMin().getBlockY() && getWorld().getHighestBlockYAt(x, z) + 1 <= getMax().getBlockY()) {
+		// If highest y is between min and max, go for it
 		y = getWorld().getHighestBlockYAt(x, z) + 1;
+	    } else if (getMax().getBlockY() == getMin().getBlockY() && getWorld().getHighestBlockYAt(x, z) == getMin().getBlockY()) {
+		// min y == max y == highest y at random location
+		// arena is flat
+		y = getWorld().getHighestBlockYAt(x, z) + 1;
+	    } else if (getMax().getBlockY() == getMin().getBlockY()) {
+		// arena is flat but has a ceiling
+		y = getMin().getBlockY() + 1;
 	    } else {
-		if (getMax().getBlockY() == getMin().getBlockY()) {
-		    y = getMax().getBlockY() + 1;
-		} else {
-		    if (getWorld().getHighestBlockYAt(getMax()) > getMax().getBlockY() + 1 || getWorld().getHighestBlockYAt(getMin()) > getMin().getBlockY() + 1) {
-			y = getMax().getBlockY() + 1;
-		    } else {
-			y = getWorld().getHighestBlockYAt(x, z) + 1;
+		// iterate over y from min to max to find a perfect y
+		// not very performant but needed in worst case (above doesnt match)
+		
+		for (int iy = 0; iy < (getMax().getBlockY() - getMin().getBlockY()); iy++) {
+		    if (isValidLocation(getMin().clone().add(0, iy, 0))) {
+			y = getMin().getBlockY() + iy;
+			// System.out.println("ny:" + y);
+			break;
 		    }
+		}
+		if (y == 0) {
+		    return getNewRandomLocation(player);
 		}
 	    }
 	    Location startLoc = new Location(getWorld(), x, y, z);
 	    
+	    // System.out.println("valid? " + isValidLocation(startLoc) + " Y:" + startLoc.getBlockY());
 	    if (isValidLocation(startLoc)) {
 		return startLoc.clone();
 	    } else {
@@ -395,6 +425,8 @@ public class Arena implements Comparable<Arena> {
     }
     
     public Location getNewSaveLocation() {
+	// Save means Location with no players nearby
+	// ---> Spawn zombies in a location save for players
 	
 	final double distance = getSaveRadius();
 	
@@ -411,7 +443,7 @@ public class Arena implements Comparable<Arena> {
 		    return getNewSaveLocation();
 		}
 		for (Location loc : this.staticSpawnLocations) {
-		    if (spawnLoc.distanceSquared(loc) <= (distance * distance)) {
+		    if (spawnLoc.distanceSquared(loc) <= ((distance * distance) * 0.5)) {
 			return getNewSaveLocation();
 		    }
 		}
@@ -423,7 +455,24 @@ public class Arena implements Comparable<Arena> {
 	} else {
 	    return getNewSaveLocation();
 	}
+    }
+    
+    public Location getNewUnsaveLocation(double maxDistance) {
+	// Exact opposite of getNewSaveLocation
+	// ---> Spawn zombies in a location nearby the player
 	
+	Location saveLoc = getNewSaveLocation(); // Do not break the save radius rule
+	
+	if (maxDistance < this.saveRadius) {
+	    maxDistance += this.saveRadius;
+	}
+	
+	for (ZvPPlayer player : getPlayers()) {
+	    if (saveLoc.distanceSquared(player.getLocation()) <= Math.pow(this.saveRadius + maxDistance, 2)) {
+		return saveLoc.clone();
+	    }
+	}
+	return getNewUnsaveLocation(maxDistance);
     }
     
     public ZvPPlayer getRandomPlayer() {
@@ -700,7 +749,7 @@ public class Arena implements Comparable<Arena> {
 	this.round = 0;
 	this.wave = 0;
 	
-	this.score = new ArenaScore(this, ZvPConfig.getSeparatePlayerScores());
+	this.score = new ArenaScore(this, ZvPConfig.getSeparatePlayerScores(), ZvPConfig.getEnableEcon(), ZvPConfig.getIntegrateGame());
 	getWorld().setDifficulty(Difficulty.NORMAL);
 	getWorld().setTime(15000L);
 	getWorld().setMonsterSpawnLimit(0);

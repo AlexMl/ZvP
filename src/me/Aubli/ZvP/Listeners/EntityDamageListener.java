@@ -35,7 +35,7 @@ public class EntityDamageListener implements Listener {
 		}
 		
 		if (event.getEntity() instanceof Zombie) {
-		    if (damager.getArena().getLivingZombieAmount() < (damager.getArena().getSpawningZombies() * 0.15)) {
+		    if (damager.getArena().getLivingZombieAmount() < (damager.getArena().getSpawningZombies() * 0.25)) {
 			if (this.task != null) {
 			    this.task.cancel();
 			    ZvP.getPluginLogger().log(Level.FINE, "Zombie Respawn Task killed caused by interaction!", true, true);
@@ -48,10 +48,11 @@ public class EntityDamageListener implements Listener {
 			    @Override
 			    public void run() {
 				
-				if (arena.getLivingZombieAmount() < (arena.getSpawningZombies() * 0.15)) {
+				if (arena.getLivingZombieAmount() < (arena.getSpawningZombies() * 0.25)) {
 				    
 				    for (Zombie zombie : arena.getLivingZombies()) {
-					zombie.teleport(arena.getNewSaveLocation(), TeleportCause.PLUGIN);
+					zombie.teleport(arena.getNewUnsaveLocation(arena.getSaveRadius() * 1.5 + 2.0 * arena.getDifficulty().getLevel()), TeleportCause.PLUGIN);
+					zombie.setTarget(arena.getRandomPlayer().getPlayer());
 				    }
 				    ZvP.getPluginLogger().log(Level.FINE, "Zombie teleport caused by no interaction!", true, true);
 				    EntityDamageListener.this.task = Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), this, 50 * 20L);

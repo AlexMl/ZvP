@@ -44,7 +44,7 @@ public class KBowKit implements IZvPKit, Comparable<IZvPKit> {
 	
 	this.items[8] = new ItemStack(Material.COOKED_BEEF, 5);
 	
-	new KCustomKit(KitManager.getManager().getKitPath().getAbsolutePath(), this.name, this.icon, this.items);
+	new KCustomKit(KitManager.getManager().getKitPath().getAbsolutePath(), this.name, this.icon, 5, this.items);
     }
     
     @Override
@@ -63,6 +63,11 @@ public class KBowKit implements IZvPKit, Comparable<IZvPKit> {
     }
     
     @Override
+    public double getPrice() {
+	return 0;
+    }
+    
+    @Override
     public ItemStack getIcon() {
 	return this.icon;
     }
@@ -76,4 +81,5 @@ public class KBowKit implements IZvPKit, Comparable<IZvPKit> {
     public int compareTo(IZvPKit o) {
 	return getName().compareTo(o.getName());
     }
+    
 }

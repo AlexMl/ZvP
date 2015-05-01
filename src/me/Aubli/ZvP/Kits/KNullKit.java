@@ -18,7 +18,7 @@ public class KNullKit implements IZvPKit {
 	this.content = new ItemStack[1];
 	
 	this.content[0] = new ItemStack(Material.AIR);
-	new KCustomKit(KitManager.getManager().getKitPath().getAbsolutePath(), this.name, this.icon, this.content);
+	new KCustomKit(KitManager.getManager().getKitPath().getAbsolutePath(), this.name, this.icon, 0, this.content);
     }
     
     @Override
@@ -34,6 +34,11 @@ public class KNullKit implements IZvPKit {
     @Override
     public String getName() {
 	return this.name;
+    }
+    
+    @Override
+    public double getPrice() {
+	return 0;
     }
     
     @Override

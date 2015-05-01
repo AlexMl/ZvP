@@ -1,14 +1,11 @@
 package me.Aubli.ZvP;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Scanner;
 import java.util.logging.Level;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.util.File.InsertComment.CommentUtil;
 
 
 public class ZvPConfig {
@@ -24,6 +21,10 @@ public class ZvPConfig {
     private static boolean autoUpdate = true;
     private static boolean logUpdate = false;
     
+    private static boolean enableEcon = false;
+    private static boolean integrateGame = true;
+    private static boolean integrateKits = true;
+    
     private static boolean enableKits = true;
     private static boolean enableFirework = true;
     private static boolean useVoteSystem = true;
@@ -36,7 +37,6 @@ public class ZvPConfig {
     private static int breakTime;
     
     private static int defaultZombieSpawnRate;
-    private static double defaultSaveRadius;
     
     private static double zombieFund;
     private static double deathFee;
@@ -60,6 +60,10 @@ public class ZvPConfig {
 	getConfig().addDefault("plugin.update.autoUpdate", true);
 	getConfig().addDefault("plugin.update.showUpdateInConsole", true);
 	
+	getConfig().addDefault("economy.enableEcon", false);
+	getConfig().addDefault("economy.integrateKits", true);
+	getConfig().addDefault("economy.integrateGame", true);
+	
 	getConfig().addDefault("game.enableKits", true);
 	getConfig().addDefault("game.enableFirework", true);
 	getConfig().addDefault("game.useVoteSystem", true);
@@ -72,26 +76,26 @@ public class ZvPConfig {
 	getConfig().addDefault("times.timeBetweenWaves", 90);
 	
 	getConfig().addDefault("zombies.default_spawnRate", 8);
-	getConfig().addDefault("zombies.default_saveRadius", 3.5);
 	
 	getConfig().addDefault("money.ZombieFund", 0.37);
 	getConfig().addDefault("money.DeathFee", 3);
 	saveConfig();
 	
-	insertComment(configFile, "enableKits", "Enable kits for the game.#If disabled player will start the game with their current items.#The inventory will be restored after the game.");
-	insertComment(configFile, "enableFirework", "Fireworks will shoot when the game ends.#Note that Fireworks take extra time!");
-	insertComment(configFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
-	insertComment(configFile, "separatePlayerScores", "True: Each player will have his own score.#False: All players have the same score. They pay and earn together.");
-	insertComment(configFile, "maximal_Players", "Maximal amount of players in an arena.");
-	insertComment(configFile, "default_rounds", "Amount of rounds a newly created arena will have by default.");
-	insertComment(configFile, "default_waves", "Amount of waves a newly created arena will have by default.");
-	insertComment(configFile, "joinTime", "Time in seconds the game will wait before it starts.#Note that the arena specific minimum has to be reached.");
-	insertComment(configFile, "timeBetweenWaves", "Time in seconds the game will wait until a new wave starts.#Only applies if useVoteSystem is false!");
-	insertComment(configFile, "default_spawnRate", "Default zombie spawnrate for newly created arenas.#The spawnrate defines how many zombies will spawn.#The calculation uses arena size, amount of player, spawnrate and difficulty setting.");
-	insertComment(configFile, "default_saveRadius", "Default zombie spawnrate for newly created arenas.#The save radius is the radius in blocks in which no zombies will spawn.");
-	insertComment(configFile, "ZombieFund", "Amount of money you will get from killing a zombie.");
-	insertComment(configFile, "DeathFee", "Amount of money you have to pay when you die.");
-	
+	CommentUtil.insertComment(configFile, "enableEcon", "Enable or disable economy support.#If enabled your bank account will be used for the game!#Note that you need Vault for working economics on your server!");
+	CommentUtil.insertComment(configFile, "integrateKits", "If enabled kits costs money too.#Note that the price of the kit is set in their kit-file.");
+	CommentUtil.insertComment(configFile, "integrateGame", "If enabled your bank account will be used for purchasing/selling and Kill/death bonuses.#Note that this game could ruin your bank balance!");
+	CommentUtil.insertComment(configFile, "enableKits", "Enable kits for the game.#If disabled player will start the game with their current items.#The inventory will be restored after the game.");
+	CommentUtil.insertComment(configFile, "enableFirework", "Fireworks will shoot when the game ends.#Note that Fireworks take extra time!");
+	CommentUtil.insertComment(configFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
+	CommentUtil.insertComment(configFile, "separatePlayerScores", "True: Each player will have his own score.#False: All players have the same score. They pay and earn together.");
+	CommentUtil.insertComment(configFile, "maximal_Players", "Maximal amount of players in an arena.");
+	CommentUtil.insertComment(configFile, "default_rounds", "Amount of rounds a newly created arena will have by default.");
+	CommentUtil.insertComment(configFile, "default_waves", "Amount of waves a newly created arena will have by default.");
+	CommentUtil.insertComment(configFile, "joinTime", "Time in seconds the game will wait before it starts.#Note that the arena specific minimum has to be reached.");
+	CommentUtil.insertComment(configFile, "timeBetweenWaves", "Time in seconds the game will wait until a new wave starts.#Only applies if useVoteSystem is false!");
+	CommentUtil.insertComment(configFile, "default_spawnRate", "Default zombie spawnrate for newly created arenas.#The spawnrate defines how many zombies will spawn.#The calculation uses arena size, amount of player, spawnrate and difficulty setting.");
+	CommentUtil.insertComment(configFile, "ZombieFund", "Amount of money you will get from killing a zombie.");
+	CommentUtil.insertComment(configFile, "DeathFee", "Amount of money you have to pay when you die.");
     }
     
     private static void load() {
@@ -103,6 +107,10 @@ public class ZvPConfig {
 	enableUpdater = getConfig().getBoolean("plugin.update.enable", true);
 	autoUpdate = getConfig().getBoolean("plugin.update.autoUpdate", true);
 	logUpdate = getConfig().getBoolean("plugin.update.showUpdateInConsole", false);
+	
+	enableEcon = getConfig().getBoolean("economy.enableEcon", false);
+	integrateKits = getConfig().getBoolean("economy.integrateKits", true);
+	integrateGame = getConfig().getBoolean("economy.integrateGame", true);
 	
 	enableKits = getConfig().getBoolean("game.enableKits", true);
 	enableFirework = getConfig().getBoolean("game.enableFirework", true);
@@ -116,7 +124,6 @@ public class ZvPConfig {
 	breakTime = getConfig().getInt("times.timeBetweenWaves");
 	
 	defaultZombieSpawnRate = getConfig().getInt("zombies.default_spawnRate");
-	defaultSaveRadius = getConfig().getDouble("zombies.default_saveRadius");
 	
 	zombieFund = getConfig().getDouble("money.ZombieFund");
 	deathFee = getConfig().getDouble("money.DeathFee");
@@ -160,6 +167,18 @@ public class ZvPConfig {
 	return enableFirework;
     }
     
+    public static boolean getEnableEcon() {
+	return enableEcon;
+    }
+    
+    public static boolean getIntegrateKits() {
+	return integrateKits;
+    }
+    
+    public static boolean getIntegrateGame() {
+	return integrateGame;
+    }
+    
     public static boolean getSeparatePlayerScores() {
 	return separatePlayerScores;
     }
@@ -200,16 +219,18 @@ public class ZvPConfig {
 	return defaultZombieSpawnRate;
     }
     
-    public static double getDefaultSaveRadius() {
-	return defaultSaveRadius;
-    }
-    
     public static double getZombieFund() {
 	return zombieFund;
     }
     
     public static double getDeathFee() {
 	return deathFee;
+    }
+    
+    public static void setEconEnabled(boolean enabled) {
+	getConfig().set("economy.enableEcon", enabled);
+	saveConfig();
+	reloadConfig();
     }
     
     private static FileConfiguration getConfig() {
@@ -219,36 +240,5 @@ public class ZvPConfig {
     private static void saveConfig() {
 	getConfig().options().copyDefaults(true);
 	ZvP.getInstance().saveConfig();
-    }
-    
-    public static boolean insertComment(File file, String option, String comment) {
-	comment = comment.replace("#", "\n# ");
-	comment = "\n# " + comment;
-	
-	try {
-	    ArrayList<String> fileContent = new ArrayList<String>();
-	    Scanner scan = new Scanner(file);
-	    
-	    while (scan.hasNextLine()) {
-		String line = scan.nextLine();
-		
-		if (line.trim().split(":")[0].equalsIgnoreCase(option)) {
-		    fileContent.add(comment);
-		}
-		fileContent.add(line);
-	    }
-	    
-	    PrintWriter writer = new PrintWriter(file);
-	    for (String string : fileContent) {
-		writer.write(string + "\n");
-	    }
-	    writer.flush();
-	    writer.close();
-	    
-	} catch (FileNotFoundException e) {
-	    e.printStackTrace();
-	}
-	
-	return false;
     }
 }

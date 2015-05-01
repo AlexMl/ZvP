@@ -1,11 +1,17 @@
 package me.Aubli.ZvP.Translation;
 
 import java.util.ListResourceBundle;
+import java.util.Locale;
 
 import org.bukkit.ChatColor;
 
 
 public class DefaultTranslation extends ListResourceBundle {
+    
+    @Override
+    public Locale getLocale() {
+	return Locale.ENGLISH;
+    }
     
     @Override
     protected Object[][] getContents() {
@@ -15,7 +21,6 @@ public class DefaultTranslation extends ListResourceBundle {
     //@formatter:off
     private Object[][] contents = {
 	    
-	    {"config:saved", ChatColor.GREEN + "Config successfully saved!"},
 	    {"config:reloaded", ChatColor.GREEN + "Config successfully reloaded!"},
 	    {"commands:missing_Permission", ChatColor.DARK_RED + "You do not have enough permission for that!"},
 	    {"commands:only_for_Players", "Only Players can use this command!"},
@@ -31,19 +36,20 @@ public class DefaultTranslation extends ListResourceBundle {
 	    {"game:player_bought_more", ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " bought " + ChatColor.GOLD + "%s %s " + ChatColor.DARK_GRAY + "for " + ChatColor.GOLD + "%s " + ChatColor.DARK_GRAY + "!"},
 	    {"game:player_sold", ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " sold " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " for " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " !"},
 	    {"game:player_sold_more", ChatColor.DARK_GRAY + "Player " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " sold " + ChatColor.GOLD + "%s %s " + ChatColor.DARK_GRAY + "for " + ChatColor.GOLD + "%s " + ChatColor.DARK_GRAY + "!"},
+	    {"game:player_bought_kit", ChatColor.GREEN + "You bought the " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " Kit for " + ChatColor.GOLD + "%s" + ChatColor.GREEN + "! You have " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " left!"},
 	    {"game:no_money", ChatColor.RED + "You do not own enough money!"},
 	    {"game:no_item_to_sell", ChatColor.RED + "You do not have this item!"},
 	    {"game:wrong_inventory", ChatColor.RED + "You clicked the wrong Inventory! Try the top one!"},
 	    {"game:not_in_game", ChatColor.RED + "You are not in a game!"},
 	    {"game:already_in_game", ChatColor.RED + "You are already in a game!"},
-	    {"game:sign_interaction", ChatColor.DARK_PURPLE + "You need a free Hand to interact with this sign!"},
 	    {"game:vote_request", ChatColor.DARK_PURPLE + "Type '" + ChatColor.GOLD + "zvp vote" + ChatColor.DARK_PURPLE + "' in the chat to vote for the next round!"},
-	    {"game:voted_next_round", ChatColor.GREEN + "You have voted for the next round!"}, {"game:already_voted", ChatColor.RED + "You have already voted for the next round!"},
+	    {"game:voted_next_round", ChatColor.GREEN + "You have voted for the next round!"},
+	    {"game:already_voted", ChatColor.RED + "You have already voted for the next round!"},
 	    {"game:no_voting", ChatColor.RED + "It is not the Time to vote now!"},
 	    {"game:voting_disabled", ChatColor.RED + "The vote system is disabled!"},
 	    {"game:spawn_protection_enabled", ChatColor.GREEN + "You are protected for " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " seconds!"},
 	    {"game:spawn_protection_over", ChatColor.RED + "ATTENTION! "+ ChatColor.GREEN + "Spawnprotection is over!"},
-	    {"game:won", ChatColor.GOLD + "" + ChatColor.BOLD + "Grongrats!" + ChatColor.RESET + "" + ChatColor.DARK_GRAY + " You won against the Zombies.\nYou fought against " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Zombies in " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " waves and have died " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " times. The remains of your acquired money " + ChatColor.GOLD + "( %s )" + ChatColor.DARK_GRAY + " will be donated to the " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + "." + ChatColor.BOLD + "" + ChatColor.DARK_GREEN + " Thanks for playing!"},
+	    {"game:won", ChatColor.GOLD + "" + ChatColor.BOLD + "Grongrats!\n" + ChatColor.RESET + "" + ChatColor.DARK_GRAY + "You won against the Zombies.\nYou fought against " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Zombies in " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " waves and have died " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " times. The remains of your acquired money " + ChatColor.GOLD + "( %s )" + ChatColor.DARK_GRAY + " will be donated to the " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + "." + ChatColor.BOLD + "" + ChatColor.DARK_GREEN + " Thanks for playing!"},
 	    {"game:won_messages", "Notch Hospital;Minecraft Factory;Creeper farms;Sheep resorts;Jeb Academy"},
 	    
 	    {"arena:stop_all", ChatColor.DARK_GRAY + "All arenas halted!"},
@@ -61,6 +67,7 @@ public class DefaultTranslation extends ListResourceBundle {
 	    {"manage:arena_saved", ChatColor.GREEN + "Arena saved!"},
 	    {"manage:lobby_removed", ChatColor.GREEN + "Lobby removed from Config!"},
 	    {"manage:arena_removed", ChatColor.GREEN + "Arena removed from Config!"},
+	    {"manage:arena_status_changed", ChatColor.GREEN + "Arena is now " + ChatColor.GOLD + "%s" + ChatColor.GREEN + "!"},
 	    {"manage:sign_saved", ChatColor.GREEN + "Sign successfully placed!"},
 	    {"manage:sign_removed", ChatColor.GREEN + "Sign successfully removed!"},
 	    {"manage:kit_saved", ChatColor.GREEN + "Kit " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " successfully saved!"},
@@ -73,6 +80,7 @@ public class DefaultTranslation extends ListResourceBundle {
 	    {"error:arena_not_available", ChatColor.RED + "This Arena is not available!"},
 	    {"error:kit_already_exists", ChatColor.RED + "The Kit " + ChatColor.GOLD + "%s" + ChatColor.RED + " already exists! Choose another name!"},
 	    {"error:kit_does_not_exists", ChatColor.RED + "The Kit " + ChatColor.GOLD + "%s" + ChatColor.RED + " does not exist!"},
+	    {"error:transaction_failed", ChatColor.RED + "The transaction failed!"},
 	    
 	    {"category:food", "Food"},
 	    {"category:armor", "Armor"},

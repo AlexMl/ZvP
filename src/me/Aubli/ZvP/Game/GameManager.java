@@ -19,7 +19,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
-import org.util.Converter.FileConverter.FileType;
+import org.util.File.Converter.FileConverter.FileType;
 
 
 public class GameManager {
@@ -299,17 +299,17 @@ public class GameManager {
 	    
 	    double dist = min.clone().distance(tempMax);
 	    
-	    int mP = ((int) ((Math.ceil(dist + 2)) / 4)) + 1;
+	    int maxP = ((int) ((Math.ceil(dist + 2)) / 4)) + 1;
 	    
-	    if (mP < 3) {
-		mP = 3;
+	    if (maxP < 3) {
+		maxP = 3;
 	    }
 	    
-	    if (mP > ZvPConfig.getMaxPlayers()) {
-		mP = ZvPConfig.getMaxPlayers();
+	    if (maxP > ZvPConfig.getMaxPlayers()) {
+		maxP = ZvPConfig.getMaxPlayers();
 	    }
 	    
-	    Arena a = new Arena(getNewID(this.arenaPath), mP, this.arenaPath, min.clone(), max.clone(), ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ZvPConfig.getDefaultSaveRadius(), ArenaDifficultyLevel.NORMAL, true);
+	    Arena a = new Arena(getNewID(this.arenaPath), maxP, this.arenaPath, min.clone(), max.clone(), ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ArenaDifficultyLevel.NORMAL, true);
 	    this.arenas.add(a);
 	    
 	    ZvP.getPluginLogger().log(Level.INFO, "New Arena added!", true);
@@ -324,16 +324,26 @@ public class GameManager {
 	ZvP.getPluginLogger().log(Level.INFO, "New Lobby added!", true);
     }
     
-    public void removeArena(Arena arena) {
-	ZvP.getPluginLogger().log(Level.INFO, "Arena " + arena.getID() + " removed!", true);
-	this.arenas.remove(arena);
-	arena.delete();
+    public boolean removeArena(Arena arena) {
+	if (arena != null && this.arenas.contains(arena)) {
+	    ZvP.getPluginLogger().log(Level.INFO, "Arena " + arena.getID() + " removed!", true);
+	    this.arenas.remove(arena);
+	    arena.delete();
+	    return true;
+	} else {
+	    return false;
+	}
     }
     
-    public void removeLobby(Lobby lobby) {
-	ZvP.getPluginLogger().log(Level.INFO, "Lobby " + lobby.getID() + " removed!", true);
-	this.lobbys.remove(lobby);
-	lobby.delete();
+    public boolean removeLobby(Lobby lobby) {
+	if (lobby != null && this.lobbys.contains(lobby)) {
+	    ZvP.getPluginLogger().log(Level.INFO, "Lobby " + lobby.getID() + " removed!", true);
+	    this.lobbys.remove(lobby);
+	    lobby.delete();
+	    return true;
+	} else {
+	    return false;
+	}
     }
     
     // Manage Players

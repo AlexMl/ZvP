@@ -149,7 +149,7 @@ public class GameRunnable extends BukkitRunnable {
 			    this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, ZvPConfig.getBreakTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
 			    this.cancel();
 			}
-		    } else {			// End of Game
+		    } else { // End of Game
 		    
 			this.arena.setTaskID(new BukkitRunnable() {
 			    
@@ -227,7 +227,7 @@ public class GameRunnable extends BukkitRunnable {
 			String[] donP = MessageManager.getMessage("game:won_messages").split(";");
 			int index = this.rand.nextInt(donP.length);
 			String endMessage = MessageManager.getFormatedMessage("game:won", kills, (this.arena.getMaxRounds() * this.arena.getMaxWaves()), deaths, Math.round(money), donP[index]);
-			
+			// TODO change message. Econ doesnt make much sense here
 			this.arena.sendMessage(endMessage);
 			this.cancel();
 			return;

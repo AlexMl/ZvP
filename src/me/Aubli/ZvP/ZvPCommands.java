@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.ArenaScore.ScoreType;
 import me.Aubli.ZvP.Game.GameManager;
+import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Kits.IZvPKit;
@@ -127,9 +129,11 @@ public class ZvPCommands implements CommandExecutor {
 		}
 		
 		if (args[0].equalsIgnoreCase("m")) {
-		    Double sum = Double.parseDouble(args[1]);
-		    this.game.getPlayer(playerSender).getArena().getScore().addScore(this.game.getPlayer(playerSender), sum);
-		    return true;
+		    if (!ZvPConfig.getEnableEcon() && !ZvPConfig.getIntegrateGame()) { // possibility of cheating money
+			Double sum = Double.parseDouble(args[1]);
+			this.game.getPlayer(playerSender).getArena().getScore().addScore(this.game.getPlayer(playerSender), sum, ScoreType.SHOP_SCORE);
+			return true;
+		    }
 		}
 		
 		Arena a = this.game.getArena(Integer.parseInt(args[0]));
@@ -168,14 +172,14 @@ public class ZvPCommands implements CommandExecutor {
 	    ZvP.getPluginLogger().log(Level.INFO, "Player " + playerSender.getName() + " attempts to execute Command: " + cmd.getName() + arguments, true);
 	    
 	    if (args.length == 0) {
-		printCommands(playerSender);
+		printCommands(playerSender, 1);
 		return true;
 	    }
 	    
 	    if (args.length == 1) {
 		
 		if (args[0].equalsIgnoreCase("help")) {
-		    printCommands(playerSender);
+		    printCommands(playerSender, 1);
 		    return true;
 		}
 		if (args[0].equalsIgnoreCase("update")) {
@@ -203,7 +207,10 @@ public class ZvPCommands implements CommandExecutor {
 			playerSender.sendMessage(ChatColor.GRAY + "|------------ " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Status" + ChatColor.GRAY + " ------------|");
 			
 			for (Arena a : this.game.getArenas()) {
-			    playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "A: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Money: " + ChatColor.BLUE + a.getScore().getScore(null) + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Zombies: " + ChatColor.BLUE + a.getLivingZombies() + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getRound() * a.getWave() * a.getSpawnRate() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Killed: " + ChatColor.BLUE + a.getKilledZombies());
+			    
+			    String status = a.isRunning() ? ChatColor.GRAY + "| " + ChatColor.RED + "A: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Money: " + ChatColor.BLUE + a.getScore().getScore(null) + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Zombies: " + ChatColor.BLUE + a.getLivingZombieAmount() + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getSpawningZombies() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Killed: " + ChatColor.BLUE + a.getKilledZombies() : ChatColor.GRAY + "| " + ChatColor.RED + "A: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers();
+			    
+			    playerSender.sendMessage(status);
 			}
 			
 			return true;
@@ -291,11 +298,16 @@ public class ZvPCommands implements CommandExecutor {
 		    }
 		}
 		
-		printCommands(playerSender);
+		printCommands(playerSender, parseInt(args[0]));
 		return true;
 	    }
 	    
 	    if (args.length == 2) {
+		if (args[0].equalsIgnoreCase("help")) {
+		    printCommands(playerSender, parseInt(args[1]));
+		    return true;
+		}
+		
 		if (args[0].equalsIgnoreCase("list")) {
 		    if (playerSender.hasPermission("zvp.status")) {
 			list(playerSender, args[1]);
@@ -370,12 +382,12 @@ public class ZvPCommands implements CommandExecutor {
 			}
 		    }
 		    
-		    printCommands(playerSender);
+		    printCommands(playerSender, 2);
 		    return true;
 		}
 		if (args[0].equalsIgnoreCase("stop")) {
 		    if (playerSender.hasPermission("zvp.stop")) {
-			Arena a = this.game.getArena(Integer.parseInt(args[1]));
+			Arena a = this.game.getArena(parseInt(args[1]));
 			if (a != null) {
 			    a.stop();
 			    playerSender.sendMessage(MessageManager.getFormatedMessage("arena:stop", a.getID()));
@@ -390,17 +402,52 @@ public class ZvPCommands implements CommandExecutor {
 		    }
 		}
 		
-		printCommands(playerSender);
+		printCommands(playerSender, 2);
 		return true;
 	    }
 	    
 	    if (args.length == 3) {
+		if (args[0].equalsIgnoreCase("set")) {
+		    if (playerSender.hasPermission("zvp.manage.arena")) {
+			Arena arena = this.game.getArena(parseInt(args[1]));
+			if (arena != null) {
+			    if (args[2].equalsIgnoreCase("offline") || args[2].equalsIgnoreCase("off")) {
+				arena.setStatus(ArenaStatus.STOPED);
+				arena.save();
+				playerSender.sendMessage(MessageManager.getFormatedMessage("manage:arena_status_changed", "Offline"));
+				return true;
+			    } else if (args[2].equalsIgnoreCase("online") || args[2].equalsIgnoreCase("on")) {
+				if (!arena.isOnline()) {
+				    arena.setStatus(ArenaStatus.STANDBY);
+				    arena.save();
+				    playerSender.sendMessage(MessageManager.getFormatedMessage("manage:arena_status_changed", "Online"));
+				    return true;
+				}
+			    } else {
+				printCommands(playerSender, 2);
+				return true;
+			    }
+			} else {
+			    playerSender.sendMessage(MessageManager.getMessage("error:arena_not_available"));
+			    return true;
+			}
+		    } else {
+			commandDenied(playerSender);
+			return true;
+		    }
+		}
 		if (args[0].equalsIgnoreCase("remove")) {
 		    if (args[1].equalsIgnoreCase("arena")) {
 			if (playerSender.hasPermission("zvp.manage.arena")) {
-			    GameManager.getManager().removeArena(GameManager.getManager().getArena(Integer.parseInt(args[2])));
-			    playerSender.sendMessage(MessageManager.getMessage("manage:arena_removed"));
-			    return true;
+			    boolean success = GameManager.getManager().removeArena(GameManager.getManager().getArena(parseInt(args[2])));
+			    
+			    if (success) {
+				playerSender.sendMessage(MessageManager.getMessage("manage:arena_removed"));
+				return true;
+			    } else {
+				playerSender.sendMessage(MessageManager.getMessage("error:arena_not_available"));
+				return true;
+			    }
 			} else {
 			    commandDenied(playerSender);
 			    return true;
@@ -409,23 +456,29 @@ public class ZvPCommands implements CommandExecutor {
 		    
 		    if (args[1].equalsIgnoreCase("lobby")) {
 			if (playerSender.hasPermission("zvp.manage.lobby")) {
-			    GameManager.getManager().removeLobby(GameManager.getManager().getLobby(Integer.parseInt(args[2])));
-			    playerSender.sendMessage(MessageManager.getMessage("manage:lobby_removed"));
-			    return true;
+			    boolean success = GameManager.getManager().removeLobby(GameManager.getManager().getLobby(parseInt(args[2])));
+			    
+			    if (success) {
+				playerSender.sendMessage(MessageManager.getMessage("manage:lobby_removed"));
+				return true;
+			    } else {
+				playerSender.sendMessage(MessageManager.getMessage("error:lobby_not_available"));
+				return true;
+			    }
 			} else {
 			    commandDenied(playerSender);
 			    return true;
 			}
 		    }
 		    
-		    printCommands(playerSender);
+		    printCommands(playerSender, 2);
 		    return true;
 		}
-		printCommands(playerSender);
+		printCommands(playerSender, 2);
 		return true;
 	    }
 	    
-	    printCommands(playerSender);
+	    printCommands(playerSender, 1);
 	    return true;
 	}
 	return true;
@@ -487,38 +540,61 @@ public class ZvPCommands implements CommandExecutor {
 	
     }
     
-    private void printCommands(Player player) {
+    private void printCommands(Player player, int page) {
 	
 	if (player.hasPermission("zvp.help")) {
+	    
+	    if (page > 2 || page < 1) {
+		printCommands(player, 1);
+		return;
+	    }
+	    
 	    String pluginName = ZvP.getInstance().getDescription().getName();
 	    String pluginVersion = ZvP.getInstance().getDescription().getVersion();
 	    
 	    player.sendMessage("\n\n");
-	    player.sendMessage(ChatColor.GRAY + "|------------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Help" + ChatColor.GRAY + " -------------|");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp help");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp update");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp status");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp save");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp reload");
+	    player.sendMessage(ChatColor.GRAY + "|---------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Help: Page (" + page + "/2)" + ChatColor.GRAY + " ----------|");
+	    player.sendMessage(ChatColor.GRAY + "| Use /zvp help [n] to get page [n] of help.\n|");
 	    
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp leave");
-	    
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp addkit [Name]");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp removekit [Name]");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add lobby");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add position");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos1");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos2");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove arena [Arena-ID]");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove lobby [Lobby-ID]");
-	    
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop");
-	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop [Arena-ID]");
+	    switch (page) {
+		case 1:
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp help [page]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp reload");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp update");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp status");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp leave");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop [Arena-ID]");
+		    break;
+		
+		case 2:
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp addkit [Name]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp removekit [Name]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add lobby");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add position");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos1");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos2");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp set [Arena-ID] [online|offline]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove arena [Arena-ID]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove lobby [Lobby-ID]");
+		    break;
+		
+		default:
+		    break;
+	    }
 	    
 	} else {
 	    commandDenied(player);
+	}
+    }
+    
+    private int parseInt(String s) {
+	try {
+	    return Integer.parseInt(s);
+	} catch (NumberFormatException e) {
+	    return -1;
 	}
     }
     

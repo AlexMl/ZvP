@@ -41,7 +41,7 @@ public class KSwordKit implements IZvPKit, Comparable<IZvPKit> {
 	
 	this.items[6] = new Potion(PotionType.INSTANT_HEAL, 2).splash().toItemStack(2);
 	
-	new KCustomKit(KitManager.getManager().getKitPath().getAbsolutePath(), this.name, this.icon, this.items);
+	new KCustomKit(KitManager.getManager().getKitPath().getAbsolutePath(), this.name, this.icon, 9, this.items);
     }
     
     @Override
@@ -57,6 +57,11 @@ public class KSwordKit implements IZvPKit, Comparable<IZvPKit> {
     @Override
     public String getName() {
 	return this.name;
+    }
+    
+    @Override
+    public double getPrice() {
+	return 0;
     }
     
     @Override
