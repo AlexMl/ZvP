@@ -23,9 +23,13 @@ public class MessageManager {
     private File languageFile;
     private FileConfiguration conf;
     
+    private final static String[] bundleBaseNames = new String[] {"me.Aubli.ZvP.Translation.DefaultTranslation", "me.Aubli.ZvP.Translation.Resources.GermanTranslation", "me.Aubli.ZvP.Translation.Resources.HungarianTranslation"};
+    
     private static Map<String, String> messages;
     
     public MessageManager(Locale locale) {
+	
+	copyTranslations();
 	
 	this.languageFile = new File(ZvP.getInstance().getDataFolder().getPath() + "/Messages/" + locale.toString() + ".yml");
 	this.conf = YamlConfiguration.loadConfiguration(this.languageFile);
@@ -70,6 +74,46 @@ public class MessageManager {
 	}
 	getConfig().options().copyDefaults(true);
 	save();
+    }
+    
+    private void copyTranslations() {
+	
+	for (String baseName : bundleBaseNames) {
+	    ResourceBundle bundle = ResourceBundle.getBundle(baseName);
+	    
+	    try {
+		this.languageFile = new File(ZvP.getInstance().getDataFolder().getPath() + "/Messages/" + bundle.getLocale().toString() + ".yml");
+		this.conf = YamlConfiguration.loadConfiguration(this.languageFile);
+		
+		if (!this.languageFile.exists() || isOutdated()) {
+		    ZvP.getPluginLogger().log(Level.INFO, "Copying new translation for " + bundle.getLocale().toString() + "!", false);
+		    this.languageFile.getParentFile().mkdirs();
+		    this.languageFile.createNewFile();
+		    
+		    getConfig().options().header("This file contains all Text messages used in ZvP.\n" + "A guide for translation can be found here: http://dev.bukkit.org/bukkit-plugins/zombievsplayer/pages/language-setup/\n");
+		    getConfig().options().copyHeader(true);
+		    
+		    getConfig().set("version", ZvP.getInstance().getDescription().getVersion());
+		    save();
+		    
+		    SortedMap<String, String> sortedBundle = new TreeMap<String, String>();
+		    
+		    for (String key : bundle.keySet()) {
+			sortedBundle.put(key, bundle.getString(key));
+		    }
+		    
+		    for (String key : sortedBundle.keySet()) {
+			getConfig().addDefault("messages." + key, sortedBundle.get(key));
+		    }
+		    getConfig().options().copyDefaults(true);
+		    save();
+		}
+	    } catch (IOException e) {
+		ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Message file for Locale " + bundle.getLocale().toString() + ": " + e.getMessage(), true, false, e);
+	    }
+	}
+	this.languageFile = null;
+	this.conf = null;
     }
     
     private Map<String, String> getTranslation() {
