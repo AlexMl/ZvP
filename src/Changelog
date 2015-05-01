@@ -1,4 +1,14 @@
 Changelog:
+2.5.0:
+*Better zombie respawn
+*Full Vault integration
+*Comments in config and arena files
+*Added command to toggle arenas
+*Added custom mcstats graph
+*Display help messages in pages
+*Default save radius is now arena dependent
+*Added translations to plugin
+
 2.4.3:
 *Fixed canceling other plugins tasks
 
