@@ -132,6 +132,6 @@ public class ArenaScore {
     }
     
     private void printResponse(EconomyResponse res) {
-	System.out.println(res.type + " B:" + res.amount + "-->" + res.balance);
+	ZvP.getPluginLogger().log(Level.INFO, "EconomyResponse: " + res.type + " Amount:" + res.amount + " ---> " + res.balance, true);
     }
 }
