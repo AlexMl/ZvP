@@ -19,8 +19,8 @@ public class CommentUtil {
      * @return boolean - Success
      */
     public static boolean insertComment(File file, String option, String comment) {
-	comment = comment.replace("#", "\n# ");
-	comment = "\n# " + comment;
+	String insertion = comment.replace("#", "\n# ");
+	insertion = "\n# " + insertion;
 	
 	try {
 	    ArrayList<String> fileContent = new ArrayList<String>();
@@ -30,7 +30,7 @@ public class CommentUtil {
 		String line = scan.nextLine();
 		
 		if (line.trim().split(":")[0].equalsIgnoreCase(option)) {
-		    fileContent.add(comment);
+		    fileContent.add(insertion);
 		}
 		fileContent.add(line);
 	    }
