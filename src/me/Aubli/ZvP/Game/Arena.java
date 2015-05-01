@@ -190,9 +190,12 @@ public class Arena implements Comparable<Arena> {
 	    this.arenaConfig.set("arena.Location.staticPositions", locationList);
 	    
 	    this.arenaConfig.addDefault("version", ZvP.getInstance().getDescription().getVersion());
+	    this.arenaConfig.options().header("\nThis is the config file for arena " + getID() + "!\n");
 	    this.arenaConfig.options().copyDefaults(true);
+	    this.arenaConfig.options().copyHeader(true);
 	    
 	    this.arenaConfig.save(this.arenaFile);
+	    
 	    insertComments();
 	} catch (IOException e) {
 	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena " + getID() + ": " + e.getMessage(), true, false, e);
@@ -204,8 +207,7 @@ public class Arena implements Comparable<Arena> {
     }
     
     private void insertComments() {
-	// TODO Fix double comment
-	CommentUtil.insertComment(this.arenaFile, "ID", "The internal identifier of the arena.");
+	CommentUtil.insertComment(this.arenaFile, "ID", "The internal identifier of the arena!");
 	CommentUtil.insertComment(this.arenaFile, "Online", "'true': The arena is online and can be used.#'false': The arena is offline and can not be used.");
 	CommentUtil.insertComment(this.arenaFile, "Difficulty", "The Difficulty of the arena. There are three modes: EASY, NORMAL, HARD#Each mode will increase amount and health of zombies.");
 	CommentUtil.insertComment(this.arenaFile, "minPlayers", "Minimum amount of players. Set at least to 1.");
