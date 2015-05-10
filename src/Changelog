@@ -1,4 +1,9 @@
 Changelog:
+2.5.1:
+*Added option to keep the inventory
+*Added option to disable chat modifications
+*Fixed bug with disabled kits
+
 2.5.0:
 *Better zombie respawn
 *Full Vault integration
