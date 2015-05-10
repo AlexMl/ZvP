@@ -82,7 +82,12 @@ public class ZvP extends JavaPlugin {
     private void initialize() {
 	instance = this;
 	
-	new ZvPConfig(getConfig());
+	try {
+	    new ZvPConfig(getConfig());
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	
 	logger = new PluginOutput(this, ZvPConfig.getDebugMode(), ZvPConfig.getLogLevel());
 	
 	converter = new FileConverter(this);

@@ -25,6 +25,9 @@ public class ZvPConfig {
     private static boolean integrateGame = true;
     private static boolean integrateKits = true;
     
+    private static boolean keepXP = false;
+    private static boolean keepInventory = false;
+    
     private static boolean enableKits = true;
     private static boolean enableFirework = true;
     private static boolean modifyChat = true;
@@ -42,7 +45,7 @@ public class ZvPConfig {
     private static double zombieFund;
     private static double deathFee;
     
-    public ZvPConfig(FileConfiguration configuration) {
+    public ZvPConfig(FileConfiguration configuration) throws Exception {
 	config = configuration;
 	init();
 	load();
@@ -69,6 +72,8 @@ public class ZvPConfig {
 	getConfig().addDefault("game.enableFirework", true);
 	getConfig().addDefault("game.modifyChat", true);
 	getConfig().addDefault("game.useVoteSystem", true);
+	getConfig().addDefault("game.keepInventory", false);
+	getConfig().addDefault("game.keepXP", false);
 	getConfig().addDefault("game.separatePlayerScores", false);
 	getConfig().addDefault("game.maximal_Players", 25);
 	getConfig().addDefault("game.default_rounds", 2);
@@ -86,10 +91,12 @@ public class ZvPConfig {
 	CommentUtil.insertComment(configFile, "enableEcon", "Enable or disable economy support.#If enabled your bank account will be used for the game!#Note that you need Vault for working economics on your server!");
 	CommentUtil.insertComment(configFile, "integrateKits", "If enabled kits costs money too.#Note that the price of the kit is set in their kit-file.");
 	CommentUtil.insertComment(configFile, "integrateGame", "If enabled your bank account will be used for purchasing/selling and Kill/death bonuses.#Note that this game could ruin your bank balance!");
-	CommentUtil.insertComment(configFile, "enableKits", "Enable kits for the game.#If disabled player will start the game with their current items.#The inventory will be restored after the game.");
+	CommentUtil.insertComment(configFile, "enableKits", "Enable kits for the game.#If disabled the player will start and end the game with their current items.#The inventory will be restored after the game.#Note that this has to be false if you use keepInventory!");
 	CommentUtil.insertComment(configFile, "enableFirework", "Fireworks will shoot when the game ends.#Note that Fireworks take extra time!");
 	CommentUtil.insertComment(configFile, "modifyChat", "If enabled the chat will be modified to match ZvP colors.#If disabled the chat will not be changed at all!");
 	CommentUtil.insertComment(configFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
+	CommentUtil.insertComment(configFile, "keepInventory", "If set to true, the inventory will not get cleared after the game.#Important: Does not work with kits enabled!");
+	CommentUtil.insertComment(configFile, "keepXP", "!NOT AVAILABLE YET!#If set to false, the game will not reset/change your current XP level.");
 	CommentUtil.insertComment(configFile, "separatePlayerScores", "True: Each player will have his own score.#False: All players have the same score. They pay and earn together.");
 	CommentUtil.insertComment(configFile, "maximal_Players", "Maximal amount of players in an arena.");
 	CommentUtil.insertComment(configFile, "default_rounds", "Amount of rounds a newly created arena will have by default.");
@@ -101,7 +108,7 @@ public class ZvPConfig {
 	CommentUtil.insertComment(configFile, "DeathFee", "Amount of money you have to pay when you die.");
     }
     
-    private static void load() {
+    private static void load() throws Exception {
 	useMetrics = getConfig().getBoolean("plugin.enableMetrics", true);
 	debugMode = getConfig().getBoolean("plugin.debugMode", false);
 	locale = new Locale(getConfig().getString("plugin.Locale", "en"));
@@ -119,6 +126,8 @@ public class ZvPConfig {
 	enableFirework = getConfig().getBoolean("game.enableFirework", true);
 	modifyChat = getConfig().getBoolean("game.modifyChat", true);
 	useVoteSystem = getConfig().getBoolean("game.useVoteSystem", true);
+	keepInventory = getConfig().getBoolean("game.keepInventory", false);
+	keepXP = getConfig().getBoolean("game.keepXP", false);
 	separatePlayerScores = getConfig().getBoolean("game.separatePlayerScores", false);
 	maxPlayers = getConfig().getInt("game.maximal_Players");
 	defaultRounds = getConfig().getInt("game.default_rounds");
@@ -134,13 +143,24 @@ public class ZvPConfig {
 	
 	// this.getConfig().addDefault("config.misc.portOnJoinGame", true);
 	// this.getConfig().addDefault("config.misc.changeToSpectatorAfterDeath", false);
+	
+	if (keepInventory == true && enableKits == true) {
+	    setValue("game.keepInventory", false);
+	    throw new IllegalArgumentException("keepInventory is set to true but Kits are enabled! Disable keepInventory ...");
+	}
     }
     
     public static void reloadConfig() {
 	ZvP.getInstance().reloadConfig();
 	config = ZvP.getInstance().getConfig();
 	init();
-	load();
+	
+	try {
+	    load();
+	} catch (Exception e) {
+	    // Do nothing here!
+	    // Wrong configurations are catched on init
+	}
     }
     
     public static boolean getUseMetrics() {
@@ -195,6 +215,14 @@ public class ZvPConfig {
 	return modifyChat;
     }
     
+    public static boolean getKeepInventory() {
+	return keepInventory;
+    }
+    
+    public static boolean getKeepXP() {
+	return keepXP;
+    }
+    
     public static Locale getLocale() {
 	return locale;
     }
@@ -236,7 +264,11 @@ public class ZvPConfig {
     }
     
     public static void setEconEnabled(boolean enabled) {
-	getConfig().set("economy.enableEcon", enabled);
+	setValue("economy.enableEcon", enabled);
+    }
+    
+    public static void setValue(String path, Object value) {
+	getConfig().set(path, value);
 	saveConfig();
 	reloadConfig();
     }

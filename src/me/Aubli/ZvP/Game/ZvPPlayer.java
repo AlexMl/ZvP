@@ -7,6 +7,7 @@ import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.ArenaScore.ScoreType;
 import me.Aubli.ZvP.Kits.IZvPKit;
+import me.Aubli.ZvP.Kits.KNullKit;
 import me.Aubli.ZvP.Kits.KitManager;
 
 import org.bukkit.Bukkit;
@@ -65,8 +66,8 @@ public class ZvPPlayer {
 	this.zombieKills = 0;
 	this.deaths = 0;
 	
-	this.contents = player.getInventory().getContents();
-	this.armorContents = player.getInventory().getArmorContents();
+	this.contents = player.getInventory().getContents().clone();
+	this.armorContents = player.getInventory().getArmorContents().clone();
 	
 	this.totalXP = player.getTotalExperience();
 	this.mode = player.getGameMode();
@@ -77,7 +78,7 @@ public class ZvPPlayer {
 	if (KitManager.getManager().isEnabled()) {
 	    KitManager.getManager().openSelectKitGUI(this);
 	} else {
-	    this.kit = KitManager.getManager().getKit("No Kit");
+	    this.kit = new KNullKit();
 	}
 	
 	arena.addPlayer(this);
@@ -159,6 +160,7 @@ public class ZvPPlayer {
     
     public void setXPLevel(int level) {
 	getPlayer().setLevel(level);
+	// TODO: Figure out how it affects keepXP
     }
     
     public void setStartPosition(Location position) throws Exception {
@@ -299,9 +301,12 @@ public class ZvPPlayer {
 	    this.player.updateInventory();
 	}
 	
+	// if (!ZvPConfig.getKeepXP()) {
 	this.player.setTotalExperience(0);
 	this.player.setExp(0F);
 	this.player.setLevel(0);
+	// }
+	
 	this.player.setGameMode(GameMode.SURVIVAL);
 	this.player.resetPlayerTime();
 	this.player.resetPlayerWeather();
@@ -324,7 +329,11 @@ public class ZvPPlayer {
 	    removeScoreboard();
 	}
 	
-	this.player.getInventory().clear();
+	if (!ZvPConfig.getKeepInventory()) {
+	    this.player.getInventory().clear();
+	    this.player.getInventory().setArmorContents(this.armorContents);
+	    this.player.getInventory().setContents(this.contents);
+	}
 	
 	this.player.teleport(this.lobby.getLocation());
 	this.player.setVelocity(new Vector(0, 0, 0));
@@ -333,10 +342,10 @@ public class ZvPPlayer {
 	this.player.setFoodLevel(20);
 	
 	this.player.setGameMode(this.mode);
-	this.player.setTotalExperience(this.totalXP);
 	
-	this.player.getInventory().setArmorContents(this.armorContents);
-	this.player.getInventory().setContents(this.contents);
+	// if (!ZvPConfig.getKeepXP()) {
+	this.player.setTotalExperience(this.totalXP);
+	// }
 	
 	for (PotionEffectType effect : PotionEffectType.values()) {
 	    if (effect != null) {
