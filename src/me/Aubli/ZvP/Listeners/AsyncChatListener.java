@@ -27,10 +27,10 @@ public class AsyncChatListener implements Listener {
 	Player chatPlayer = event.getPlayer();
 	
 	if (GameManager.getManager().getPlayer(chatPlayer) != null && GameManager.getManager().isInGame(chatPlayer)) {
-	    event.setCancelled(true);
 	    final ZvPPlayer player = GameManager.getManager().getPlayer(chatPlayer);
 	    
 	    if (event.getMessage().equalsIgnoreCase("zvp vote")) {
+		event.setCancelled(true);
 		if (ZvPConfig.getUseVoteSystem()) {
 		    if (player.getArena().getStatus() == ArenaStatus.VOTING) {
 			if (!player.hasVoted()) {
@@ -70,7 +70,10 @@ public class AsyncChatListener implements Listener {
 		    player.sendMessage(MessageManager.getMessage("game:voting_disabled"));
 		}
 	    } else {
-		player.getArena().sendMessage(ChatColor.BLACK + "[" + ChatColor.GOLD + player.getName() + ChatColor.BLACK + "] " + ChatColor.RESET + event.getMessage());
+		if (ZvPConfig.getModifyChat()) {
+		    event.setCancelled(true);
+		    player.getArena().sendMessage(ChatColor.BLACK + "[" + ChatColor.GOLD + player.getName() + ChatColor.BLACK + "] " + ChatColor.RESET + event.getMessage());
+		}
 	    }
 	    return;
 	}

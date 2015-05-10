@@ -27,6 +27,7 @@ public class ZvPConfig {
     
     private static boolean enableKits = true;
     private static boolean enableFirework = true;
+    private static boolean modifyChat = true;
     private static boolean useVoteSystem = true;
     private static boolean separatePlayerScores = false;
     private static int maxPlayers;
@@ -66,6 +67,7 @@ public class ZvPConfig {
 	
 	getConfig().addDefault("game.enableKits", true);
 	getConfig().addDefault("game.enableFirework", true);
+	getConfig().addDefault("game.modifyChat", true);
 	getConfig().addDefault("game.useVoteSystem", true);
 	getConfig().addDefault("game.separatePlayerScores", false);
 	getConfig().addDefault("game.maximal_Players", 25);
@@ -86,6 +88,7 @@ public class ZvPConfig {
 	CommentUtil.insertComment(configFile, "integrateGame", "If enabled your bank account will be used for purchasing/selling and Kill/death bonuses.#Note that this game could ruin your bank balance!");
 	CommentUtil.insertComment(configFile, "enableKits", "Enable kits for the game.#If disabled player will start the game with their current items.#The inventory will be restored after the game.");
 	CommentUtil.insertComment(configFile, "enableFirework", "Fireworks will shoot when the game ends.#Note that Fireworks take extra time!");
+	CommentUtil.insertComment(configFile, "modifyChat", "If enabled the chat will be modified to match ZvP colors.#If disabled the chat will not be changed at all!");
 	CommentUtil.insertComment(configFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
 	CommentUtil.insertComment(configFile, "separatePlayerScores", "True: Each player will have his own score.#False: All players have the same score. They pay and earn together.");
 	CommentUtil.insertComment(configFile, "maximal_Players", "Maximal amount of players in an arena.");
@@ -114,6 +117,7 @@ public class ZvPConfig {
 	
 	enableKits = getConfig().getBoolean("game.enableKits", true);
 	enableFirework = getConfig().getBoolean("game.enableFirework", true);
+	modifyChat = getConfig().getBoolean("game.modifyChat", true);
 	useVoteSystem = getConfig().getBoolean("game.useVoteSystem", true);
 	separatePlayerScores = getConfig().getBoolean("game.separatePlayerScores", false);
 	maxPlayers = getConfig().getInt("game.maximal_Players");
@@ -185,6 +189,10 @@ public class ZvPConfig {
     
     public static boolean getUseVoteSystem() {
 	return useVoteSystem;
+    }
+    
+    public static boolean getModifyChat() {
+	return modifyChat;
     }
     
     public static Locale getLocale() {
