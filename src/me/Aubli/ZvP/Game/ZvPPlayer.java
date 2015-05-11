@@ -23,6 +23,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
+import org.util.Experience.ExperienceManager;
 
 
 public class ZvPPlayer {
@@ -45,7 +46,8 @@ public class ZvPPlayer {
     private ItemStack[] contents;
     private ItemStack[] armorContents;
     
-    private int totalXP;
+    private final ExperienceManager xpManager;
+    private int prevTotalXP;
     private GameMode mode;
     
     private Scoreboard board;
@@ -69,7 +71,8 @@ public class ZvPPlayer {
 	this.contents = player.getInventory().getContents().clone();
 	this.armorContents = player.getInventory().getArmorContents().clone();
 	
-	this.totalXP = player.getTotalExperience();
+	this.xpManager = new ExperienceManager(getPlayer());
+	this.prevTotalXP = getXPManager().getCurrentExp();
 	this.mode = player.getGameMode();
 	
 	this.startPosition = null;
@@ -136,6 +139,10 @@ public class ZvPPlayer {
 	return this.board;
     }
     
+    public ExperienceManager getXPManager() {
+	return this.xpManager;
+    }
+    
     public void setArena(Arena arena) {
 	this.arena = arena;
     }
@@ -159,8 +166,10 @@ public class ZvPPlayer {
     }
     
     public void setXPLevel(int level) {
-	getPlayer().setLevel(level);
-	// TODO: Figure out how it affects keepXP
+	if (!ZvPConfig.getKeepXP()) {
+	    getPlayer().setLevel(level);
+	}
+	// TODO: Find a better way with keepXP enabled. Level countdown is needed -_-
     }
     
     public void setStartPosition(Location position) throws Exception {
@@ -301,11 +310,9 @@ public class ZvPPlayer {
 	    this.player.updateInventory();
 	}
 	
-	// if (!ZvPConfig.getKeepXP()) {
-	this.player.setTotalExperience(0);
-	this.player.setExp(0F);
-	this.player.setLevel(0);
-	// }
+	if (!ZvPConfig.getKeepXP()) {
+	    this.xpManager.setExp(0);
+	}
 	
 	this.player.setGameMode(GameMode.SURVIVAL);
 	this.player.resetPlayerTime();
@@ -343,9 +350,9 @@ public class ZvPPlayer {
 	
 	this.player.setGameMode(this.mode);
 	
-	// if (!ZvPConfig.getKeepXP()) {
-	this.player.setTotalExperience(this.totalXP);
-	// }
+	if (!ZvPConfig.getKeepXP()) {
+	    getXPManager().setExp(this.prevTotalXP);
+	}
 	
 	for (PotionEffectType effect : PotionEffectType.values()) {
 	    if (effect != null) {
