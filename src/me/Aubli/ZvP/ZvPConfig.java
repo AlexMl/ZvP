@@ -96,7 +96,7 @@ public class ZvPConfig {
 	CommentUtil.insertComment(configFile, "modifyChat", "If enabled the chat will be modified to match ZvP colors.#If disabled the chat will not be changed at all!");
 	CommentUtil.insertComment(configFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
 	CommentUtil.insertComment(configFile, "keepInventory", "If set to true, the inventory will not get cleared after the game.#Important: Does not work with kits enabled!");
-	CommentUtil.insertComment(configFile, "keepXP", "!NOT AVAILABLE YET!#If set to false, the game will not reset/change your current XP level.");
+	CommentUtil.insertComment(configFile, "keepXP", "If set to false, the game will not reset/change your current XP level.");
 	CommentUtil.insertComment(configFile, "separatePlayerScores", "True: Each player will have his own score.#False: All players have the same score. They pay and earn together.");
 	CommentUtil.insertComment(configFile, "maximal_Players", "Maximal amount of players in an arena.");
 	CommentUtil.insertComment(configFile, "default_rounds", "Amount of rounds a newly created arena will have by default.");
