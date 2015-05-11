@@ -691,7 +691,7 @@ public class Arena implements Comparable<Arena> {
 	    player.sendMessage(MessageManager.getFormatedMessage("game:joined", getID()));
 	    this.players.add(player);
 	    
-	    ZvP.getPluginLogger().log(Level.INFO, "Player " + player.getName() + " has joined Arena " + getID(), true);
+	    ZvP.getPluginLogger().log(Level.INFO, "Player " + player.getName() + " has joined Arena " + getID() + "! ASTATUS: " + getStatus().name(), true);
 	    
 	    if (this.players.size() >= this.minPlayers && !isRunning()) {
 		
@@ -709,6 +709,14 @@ public class Arena implements Comparable<Arena> {
 		if (!isWaiting()) {
 		    GameManager.getManager().startGame(this, player.getLobby());
 		}
+	    } else if (this.players.size() >= this.minPlayers && isRunning()) {
+		// Seems like a player who joined during game.
+		// Needs scoreboard updates and a new score entry
+//		System.out.println("ud called");
+		getScore().reInitPlayer(player);
+		setPlayerBoards();
+		removePlayerBoards();
+		updatePlayerBoards();
 	    }
 	    return true;
 	}

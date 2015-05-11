@@ -350,19 +350,19 @@ public class GameManager {
     public boolean createPlayer(Player player, Arena arena, Lobby lobby) {
 	
 	if (!arena.isFull() && arena.isOnline()) {
-	    if (!arena.isRunning()) {
-		try {
-		    new ZvPPlayer(player, arena, lobby);
-		    SignManager.getManager().updateSigns(lobby);
-		    SignManager.getManager().updateSigns(arena);
-		    return true;
-		} catch (Exception e) {
-		    ZvP.getPluginLogger().log(Level.WARNING, "Error while creating Player: " + e.getMessage(), true, false, e);
-		    return false;
-		}
-	    } else {
+	    // if (!arena.isRunning()) {
+	    try {
+		new ZvPPlayer(player, arena, lobby);
+		SignManager.getManager().updateSigns(lobby);
+		SignManager.getManager().updateSigns(arena);
+		return true;
+	    } catch (Exception e) {
+		ZvP.getPluginLogger().log(Level.WARNING, "Error while creating Player: " + e.getMessage(), true, false, e);
 		return false;
 	    }
+	    // } else {
+	    // return false;
+	    // }
 	} else {
 	    return false;
 	}

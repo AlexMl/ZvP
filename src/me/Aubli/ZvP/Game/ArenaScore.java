@@ -40,14 +40,22 @@ public class ArenaScore {
     private void initMap() {
 	this.playerScore = new HashMap<ZvPPlayer, Double>();
 	
+	for (ZvPPlayer player : getArena().getPlayers()) {
+	    initPlayer(player);
+	}
+    }
+    
+    private void initPlayer(ZvPPlayer player) {
 	if (useVaultEconomy()) {
-	    for (ZvPPlayer player : getArena().getPlayers()) {
-		this.playerScore.put(player, ZvP.getEconProvider().getBalance(player.getPlayer()));
-	    }
+	    this.playerScore.put(player, ZvP.getEconProvider().getBalance(player.getPlayer()));
 	} else {
-	    for (ZvPPlayer player : getArena().getPlayers()) {
-		this.playerScore.put(player, 0.0);
-	    }
+	    this.playerScore.put(player, 0.0);
+	}
+    }
+    
+    public void reInitPlayer(ZvPPlayer player) {
+	if (isSeparated()) {
+	    initPlayer(player);
 	}
     }
     
