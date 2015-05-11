@@ -227,12 +227,12 @@ public class ZvPPlayer {
     
     public void addKill() {
 	setKills(getKills() + 1);
-	getArena().getScore().addScore(this, ZvPConfig.getZombieFund(), ScoreType.ZOMBIE_SCORE);
+	getArena().getScore().addScore(this, ZvPConfig.getZombieFund() * getArena().getDifficultyTool().getMoneyFactor(), ScoreType.ZOMBIE_SCORE);
     }
     
     public void die() {
 	setDeaths(getDeaths() + 1);
-	getArena().getScore().subtractScore(this, ZvPConfig.getDeathFee(), ScoreType.ZOMBIE_SCORE);
+	getArena().getScore().subtractScore(this, ZvPConfig.getDeathFee() * getArena().getDifficultyTool().getMoneyFactor(), ScoreType.ZOMBIE_SCORE);
     }
     
     public void removeScoreboard() {

@@ -39,6 +39,10 @@ public class ArenaDifficulty {
 	return (getDifficulty().getLevel() + 1.0) / 2.0;
     }
     
+    public double getMoneyFactor() {
+	return (getDifficulty().getLevel() + 1.0) / 2.0;
+    }
+    
     public void customizeEntity(Entity zombie) {
 	Zombie z = (Zombie) zombie;
 	z.setRemoveWhenFarAway(false);
