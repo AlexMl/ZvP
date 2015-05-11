@@ -36,7 +36,7 @@ public class ArenaDifficulty {
     }
     
     public double getExpFactor() {
-	return (getDifficulty().getLevel() + 1.0) / 2.0;
+	return (getDifficulty().getLevel() + 3.0) / 2.0;
     }
     
     public double getMoneyFactor() {

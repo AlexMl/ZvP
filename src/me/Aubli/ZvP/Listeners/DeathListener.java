@@ -35,7 +35,7 @@ public class DeathListener implements Listener {
 		    // entity.remove() does cancel xp spawn.
 		    // --> spawn xp
 		    
-		    int droppedExp = (int) Math.ceil((event.getDroppedExp() / 2.0) + player.getArena().getDifficultyTool().getExpFactor());
+		    int droppedExp = (int) Math.ceil((event.getDroppedExp() / 2.0) * player.getArena().getDifficultyTool().getExpFactor());
 		    
 		    for (int xp = 0; xp < droppedExp; xp++) {
 			event.getEntity().getWorld().spawn(event.getEntity().getLocation().clone(), ExperienceOrb.class).setExperience(1);
