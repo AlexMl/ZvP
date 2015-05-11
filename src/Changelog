@@ -1,4 +1,8 @@
 Changelog:
+2.5.2:
+*Added option to keep xp
+*Money gained by zombies depends on the difficulty
+
 2.5.1:
 *Added option to keep the inventory
 *Added option to disable chat modifications
