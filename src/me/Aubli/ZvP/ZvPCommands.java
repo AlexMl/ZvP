@@ -1,6 +1,8 @@
 package me.Aubli.ZvP;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.Arena;
@@ -11,10 +13,14 @@ import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Kits.IZvPKit;
 import me.Aubli.ZvP.Kits.KitManager;
+import me.Aubli.ZvP.Shop.ShopItem;
+import me.Aubli.ZvP.Shop.ShopManager;
+import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 import me.Aubli.ZvP.Sign.ISign;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Translation.MessageManager;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -23,7 +29,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 
 public class ZvPCommands implements CommandExecutor {
@@ -124,6 +132,31 @@ public class ZvPCommands implements CommandExecutor {
 			for (ItemStack item : zKit.getContents()) {
 			    playerSender.getInventory().addItem(item);
 			}
+		    }
+		    return true;
+		}
+		
+		if (args[0].equalsIgnoreCase("shop")) {
+		    ItemCategory cat = ItemCategory.valueOf(args[1]);
+		    
+		    if (cat != null) {
+			Inventory shopInv = Bukkit.createInventory(playerSender, ((int) Math.ceil(ShopManager.getManager().getItems(cat).size() / 9.0)) * 9, "Items: " + cat.toString());
+			
+			for (ShopItem shopItem : ShopManager.getManager().getItems(cat)) {
+			    
+			    ItemStack item = shopItem.getItem();
+			    ItemMeta meta = item.getItemMeta();
+			    List<String> lore = new ArrayList<String>();
+			    
+			    lore.add("Category: " + shopItem.getCategory().toString());
+			    lore.add(ChatColor.RED + "Price: " + shopItem.getPrice());
+			    
+			    meta.setLore(lore);
+			    item.setItemMeta(meta);
+			    shopInv.addItem(item);
+			}
+			playerSender.closeInventory();
+			playerSender.openInventory(shopInv);
 		    }
 		    return true;
 		}
