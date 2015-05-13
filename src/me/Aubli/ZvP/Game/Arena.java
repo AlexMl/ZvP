@@ -50,6 +50,8 @@ public class Arena implements Comparable<Arena> {
     private ArenaScore score;
     private ArenaDifficulty difficultyTool;
     
+    private ArenaLobby preLobby;
+    
     private Random rand;
     
     private ArrayList<ZvPPlayer> players;
@@ -157,7 +159,6 @@ public class Arena implements Comparable<Arena> {
 	this.round = 0;
 	this.wave = 0;
 	
-	// INFO: Start values
 	this.keepXP = this.arenaConfig.getBoolean("arena.keepXP", false);
 	this.keepInventory = this.arenaConfig.getBoolean("arena.keepInventory", false);
 	this.useVoteSystem = this.arenaConfig.getBoolean("arena.useVoteSystem", true);
@@ -172,7 +173,6 @@ public class Arena implements Comparable<Arena> {
 	this.breakTime = this.arenaConfig.getInt("arena.timeBetweenWaves", 90);
 	this.zombieFund = this.arenaConfig.getDouble("arena.zombieFund", 0.37);
 	this.deathFee = this.arenaConfig.getDouble("arena.deathFee", 3.0);
-	// END
 	
 	this.spawnRate = this.arenaConfig.getInt("arena.spawnRate", ZvPConfig.getDefaultZombieSpawnRate());
 	this.saveRadius = this.arenaConfig.getDouble("arena.safety.saveRadius", 4.0);
@@ -191,6 +191,7 @@ public class Arena implements Comparable<Arena> {
 	this.difficultyTool = new ArenaDifficulty(this, getDifficulty());
 	this.players = new ArrayList<ZvPPlayer>();
 	this.rand = new Random();
+	this.preLobby = loadArenaLobby();
     }
     
     public void save() {
@@ -207,7 +208,6 @@ public class Arena implements Comparable<Arena> {
 	    this.arenaConfig.set("arena.waves", this.maxWaves);
 	    this.arenaConfig.set("arena.spawnRate", this.spawnRate);
 	    
-	    // New
 	    this.arenaConfig.set("arena.keepXP", this.keepXP);
 	    this.arenaConfig.set("arena.keepInventory", this.keepInventory);
 	    this.arenaConfig.set("arena.useVoteSystem", this.useVoteSystem);
@@ -216,7 +216,6 @@ public class Arena implements Comparable<Arena> {
 	    this.arenaConfig.set("arena.timeBetweenWaves", this.breakTime);
 	    this.arenaConfig.set("arena.zombieFund", this.zombieFund);
 	    this.arenaConfig.set("arena.deathFee", this.deathFee);
-	    // END
 	    
 	    this.arenaConfig.set("arena.enableSpawnProtection", this.enableSpawnProtection);
 	    this.arenaConfig.set("arena.spawnProtectionDuration", this.protectionDuration);
@@ -249,6 +248,58 @@ public class Arena implements Comparable<Arena> {
 	    insertComments();
 	} catch (IOException e) {
 	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Arena " + getID() + ": " + e.getMessage(), true, false, e);
+	}
+    }
+    
+    private void saveArenaLobby(ArenaLobby preLobby) {
+	
+	try {
+	    this.arenaConfig.set("arena.Location.PreLobby.X", preLobby.getCenterLoc().getBlockX());
+	    this.arenaConfig.set("arena.Location.PreLobby.Y", preLobby.getCenterLoc().getBlockY());
+	    this.arenaConfig.set("arena.Location.PreLobby.Z", preLobby.getCenterLoc().getBlockZ());
+	    
+	    List<String> locationList = new ArrayList<String>();
+	    
+	    for (Location loc : preLobby.getLocationList()) {
+		locationList.add(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+	    }
+	    
+	    this.arenaConfig.set("arena.Location.PreLobby.extraPositions", locationList);
+	    
+	    this.arenaConfig.save(this.arenaFile);
+	    
+	    insertComments();
+	} catch (IOException e) {
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving ArenaLobby for Arena " + getID() + ": " + e.getMessage(), true, false, e);
+	}
+	
+    }
+    
+    private ArenaLobby loadArenaLobby() {
+	
+	Location centerLoc = new Location(getWorld(), this.arenaConfig.getInt("arena.Location.PreLobby.X"), this.arenaConfig.getInt("arena.Location.PreLobby.Y"), this.arenaConfig.getInt("arena.Location.PreLobby.Z"));
+	
+	ArrayList<Location> locations = new ArrayList<Location>();
+	for (String locationString : this.arenaConfig.getStringList("arena.Location.PreLobby.extraPositions")) {
+	    String[] cords = locationString.split(",");
+	    Location loc = new Location(getWorld(), Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
+	    locations.add(loc);
+	}
+	
+	try {
+	    return new ArenaLobby(this, centerLoc, locations, this.rand);
+	} catch (Exception e) {
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while loading ArenaLobby for Arena " + getID() + ": " + e.getMessage(), true, false, e);
+	    return null;
+	}
+    }
+    
+    void deleteArenaLobby() {
+	try {
+	    this.arenaConfig.set("arena.Location.PreLobby", null);
+	    this.arenaConfig.save(this.arenaFile);
+	} catch (IOException e) {
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while deleting ArenaLobby for Arena " + getID() + ": " + e.getMessage(), true, false, e);
 	}
     }
     
@@ -372,6 +423,10 @@ public class Arena implements Comparable<Arena> {
     
     public ArenaDifficulty getDifficultyTool() {
 	return this.difficultyTool;
+    }
+    
+    public ArenaLobby getPreLobby() {
+	return this.preLobby;
     }
     
     public boolean getSpawnProtection() {
@@ -674,6 +729,10 @@ public class Arena implements Comparable<Arena> {
 	return true;
     }
     
+    public boolean hasPreLobby() {
+	return getPreLobby() != null;
+    }
+    
     public boolean containsPlayer(Player player) {
 	for (ZvPPlayer zp : getPlayers()) {
 	    if (zp.getUuid() == player.getUniqueId()) {
@@ -743,6 +802,22 @@ public class Arena implements Comparable<Arena> {
 	    }
 	}
 	return false;
+    }
+    
+    public boolean addArenaLobby(Location center) {
+	
+	if (!center.getWorld().getUID().equals(getWorld().getUID())) {
+	    return false;
+	}
+	
+	try {
+	    this.preLobby = new ArenaLobby(this, center, null, this.rand);
+	    saveArenaLobby(this.preLobby);
+	    return true;
+	} catch (Exception e) {
+	    ZvP.getPluginLogger().log(Level.WARNING, "Error while creating ArenaLobby for Arena " + getID() + ": " + e.getMessage(), true, false, e);
+	    return false;
+	}
     }
     
     public boolean addPlayer(final ZvPPlayer player) {

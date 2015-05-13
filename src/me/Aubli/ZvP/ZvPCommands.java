@@ -469,6 +469,32 @@ public class ZvPCommands implements CommandExecutor {
 			return true;
 		    }
 		}
+		if (args[0].equalsIgnoreCase("add")) {
+		    if (playerSender.hasPermission("zvp.manage.arena")) {
+			Arena arena = this.game.getArena(parseInt(args[1]));
+			if (arena != null) {
+			    if (args[2].equalsIgnoreCase("prelobby") || args[2].equalsIgnoreCase("lobby")) {
+				boolean success = arena.addArenaLobby(playerSender.getLocation().clone());
+				
+				if (success) {// TODO: Message
+				    playerSender.sendMessage("success");
+				} else {
+				    playerSender.sendMessage("!success");
+				}
+				return true;
+			    } else {
+				printCommands(playerSender, 2);
+				return true;
+			    }
+			} else {
+			    playerSender.sendMessage(MessageManager.getMessage("error:arena_not_available"));
+			    return true;
+			}
+		    } else {
+			commandDenied(playerSender);
+			return true;
+		    }
+		}
 		if (args[0].equalsIgnoreCase("remove")) {
 		    if (args[1].equalsIgnoreCase("arena")) {
 			if (playerSender.hasPermission("zvp.manage.arena")) {
@@ -570,7 +596,6 @@ public class ZvPCommands implements CommandExecutor {
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list lobbys");
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list kits");
 	}
-	
     }
     
     private void printCommands(Player player, int page) {
@@ -604,11 +629,12 @@ public class ZvPCommands implements CommandExecutor {
 		case 2:
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp addkit [Name]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp removekit [Name]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos1");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos2");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add lobby");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add position");
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos1");
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos2");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add [Arena-ID] preLobby");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp set [Arena-ID] [online|offline]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove arena [Arena-ID]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove lobby [Lobby-ID]");
