@@ -28,6 +28,8 @@ public class ZvPConfig {
     private static boolean keepXP = false;
     private static boolean keepInventory = false;
     
+    private static boolean allowDuringGameJoin = true;
+    
     private static boolean enableKits = true;
     private static boolean enableFirework = true;
     private static boolean modifyChat = true;
@@ -70,6 +72,7 @@ public class ZvPConfig {
 	
 	getConfig().addDefault("game.enableKits", true);
 	getConfig().addDefault("game.enableFirework", true);
+	getConfig().addDefault("game.allowDuringGameJoin", true);
 	getConfig().addDefault("game.modifyChat", true);
 	getConfig().addDefault("game.useVoteSystem", true);
 	getConfig().addDefault("game.keepInventory", false);
@@ -93,6 +96,7 @@ public class ZvPConfig {
 	CommentUtil.insertComment(configFile, "integrateGame", "If enabled your bank account will be used for purchasing/selling and Kill/death bonuses.#Note that this game could ruin your bank balance!");
 	CommentUtil.insertComment(configFile, "enableKits", "Enable kits for the game.#If disabled the player will start and end the game with their current items.#The inventory will be restored after the game.#Note that this has to be false if you use keepInventory!");
 	CommentUtil.insertComment(configFile, "enableFirework", "Fireworks will shoot when the game ends.#Note that Fireworks take extra time!");
+	CommentUtil.insertComment(configFile, "allowDuringGameJoin", "If set to true the game will allow players to join a running game.#Note that a change of players affects the number of Zombies!");
 	CommentUtil.insertComment(configFile, "modifyChat", "If enabled the chat will be modified to match ZvP colors.#If disabled the chat will not be changed at all!");
 	CommentUtil.insertComment(configFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
 	CommentUtil.insertComment(configFile, "keepInventory", "If set to true, the inventory will not get cleared after the game.#Important: Does not work with kits enabled!");
@@ -121,6 +125,8 @@ public class ZvPConfig {
 	enableEcon = getConfig().getBoolean("economy.enableEcon", false);
 	integrateKits = getConfig().getBoolean("economy.integrateKits", true);
 	integrateGame = getConfig().getBoolean("economy.integrateGame", true);
+	
+	allowDuringGameJoin = getConfig().getBoolean("game.allowDuringGameJoin", true);
 	
 	enableKits = getConfig().getBoolean("game.enableKits", true);
 	enableFirework = getConfig().getBoolean("game.enableFirework", true);
@@ -205,6 +211,10 @@ public class ZvPConfig {
     
     public static boolean getSeparatePlayerScores() {
 	return separatePlayerScores;
+    }
+    
+    public static boolean getAllowDuringGameJoin() {
+	return allowDuringGameJoin;
     }
     
     public static boolean getUseVoteSystem() {
