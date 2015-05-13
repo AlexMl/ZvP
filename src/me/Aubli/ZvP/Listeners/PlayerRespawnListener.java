@@ -29,7 +29,7 @@ public class PlayerRespawnListener implements Listener {
 	    
 	    if (player.getArena().getSpawnProtection()) {
 		player.setSpawnProtected(true);
-		player.sendMessage(MessageManager.getFormatedMessage("game:spawn_protection_enabled", player.getArena().getProtectionDuration()));
+		player.sendMessage(MessageManager.getFormatedMessage("game:spawn_protection_enabled", player.getArena().getArenaProtectionDuration()));
 		
 		Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
 		    
@@ -38,7 +38,7 @@ public class PlayerRespawnListener implements Listener {
 			player.setSpawnProtected(false);
 			player.sendMessage(MessageManager.getMessage("game:spawn_protection_over"));
 		    }
-		}, player.getArena().getProtectionDuration() * 20L);
+		}, player.getArena().getArenaProtectionDuration() * 20L);
 	    }
 	    return;
 	}

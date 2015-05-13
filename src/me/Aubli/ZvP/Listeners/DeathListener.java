@@ -1,7 +1,6 @@
 package me.Aubli.ZvP.Listeners;
 
 import me.Aubli.ZvP.ZvP;
-import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Translation.MessageManager;
@@ -31,7 +30,7 @@ public class DeathListener implements Listener {
 		
 		final ZvPPlayer player = this.game.getPlayer(this.eventPlayer);
 		
-		if (ZvPConfig.getKeepXP()) {
+		if (player.getArena().keepExp()) {
 		    // entity.remove() does cancel xp spawn.
 		    // --> spawn xp
 		    
@@ -69,7 +68,7 @@ public class DeathListener implements Listener {
 	if (this.game.isInGame(this.eventPlayer)) {
 	    ZvPPlayer player = this.game.getPlayer(this.eventPlayer);
 	    
-	    if (ZvPConfig.getKeepXP()) {
+	    if (player.getArena().keepExp()) {
 		player.getXPManager().setExp(0);
 	    }
 	    

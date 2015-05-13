@@ -130,7 +130,7 @@ public class GameRunnable extends BukkitRunnable {
 		    boolean stop = this.arena.next(); // Stop checks if the last round is over
 		    
 		    if (!stop) {
-			if (ZvPConfig.getUseVoteSystem()) {
+			if (this.arena.useVoteSystem()) {
 			    this.arena.setStatus(ArenaStatus.VOTING);
 			    this.arena.setTaskID(new BukkitRunnable() {
 				
@@ -148,7 +148,7 @@ public class GameRunnable extends BukkitRunnable {
 			    this.cancel();
 			} else {
 			    this.arena.setStatus(ArenaStatus.BREAKWAITING);
-			    this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, ZvPConfig.getBreakTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+			    this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, this.arena.getArenaBreakTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
 			    this.cancel();
 			}
 		    } else { // End of Game

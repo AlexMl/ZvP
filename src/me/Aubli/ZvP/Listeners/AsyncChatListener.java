@@ -28,11 +28,11 @@ public class AsyncChatListener implements Listener {
 	
 	if (GameManager.getManager().getPlayer(chatPlayer) != null && GameManager.getManager().isInGame(chatPlayer)) {
 	    final ZvPPlayer player = GameManager.getManager().getPlayer(chatPlayer);
-	    
+	    final Arena arena = player.getArena();
 	    if (event.getMessage().equalsIgnoreCase("zvp vote")) {
 		event.setCancelled(true);
-		if (ZvPConfig.getUseVoteSystem()) {
-		    if (player.getArena().getStatus() == ArenaStatus.VOTING) {
+		if (arena.useVoteSystem()) {
+		    if (arena.getStatus() == ArenaStatus.VOTING) {
 			if (!player.hasVoted()) {
 			    player.setVoted(true);
 			    player.sendMessage(MessageManager.getMessage("game:voted_next_round"));
@@ -45,15 +45,14 @@ public class AsyncChatListener implements Listener {
 				
 				@Override
 				public void run() {
-				    Arena a = player.getArena();
-				    a.updatePlayerBoards();
+				    arena.updatePlayerBoards();
 				    
-				    if (a.hasVoted()) {
-					for (ZvPPlayer p : a.getPlayers()) {
+				    if (arena.hasVoted()) {
+					for (ZvPPlayer p : arena.getPlayers()) {
 					    p.setVoted(false);
 					}
-					a.setTaskID(new GameRunnable(a, 0).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
-					a.setStatus(ArenaStatus.RUNNING);
+					arena.setTaskID(new GameRunnable(arena, 0).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+					arena.setStatus(ArenaStatus.RUNNING);
 					this.cancel();
 				    }
 				}

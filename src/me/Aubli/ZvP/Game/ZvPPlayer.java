@@ -166,7 +166,7 @@ public class ZvPPlayer {
     }
     
     public void setXPLevel(int level) {
-	if (!ZvPConfig.getKeepXP()) {
+	if (!getArena().keepExp()) {
 	    getPlayer().setLevel(level);
 	}
 	// TODO: Find a better way with keepXP enabled. Level countdown is needed -_-
@@ -227,12 +227,12 @@ public class ZvPPlayer {
     
     public void addKill() {
 	setKills(getKills() + 1);
-	getArena().getScore().addScore(this, ZvPConfig.getZombieFund() * getArena().getDifficultyTool().getMoneyFactor(), ScoreType.ZOMBIE_SCORE);
+	getArena().getScore().addScore(this, getArena().getArenaZombieFund() * getArena().getDifficultyTool().getMoneyFactor(), ScoreType.ZOMBIE_SCORE);
     }
     
     public void die() {
 	setDeaths(getDeaths() + 1);
-	getArena().getScore().subtractScore(this, ZvPConfig.getDeathFee() * getArena().getDifficultyTool().getMoneyFactor(), ScoreType.ZOMBIE_SCORE);
+	getArena().getScore().subtractScore(this, getArena().getArenaDeathFee() * getArena().getDifficultyTool().getMoneyFactor(), ScoreType.ZOMBIE_SCORE);
     }
     
     public void removeScoreboard() {
@@ -310,7 +310,7 @@ public class ZvPPlayer {
 	    this.player.updateInventory();
 	}
 	
-	if (!ZvPConfig.getKeepXP()) {
+	if (!getArena().keepExp()) {
 	    this.xpManager.setExp(0);
 	}
 	
@@ -336,7 +336,7 @@ public class ZvPPlayer {
 	    removeScoreboard();
 	}
 	
-	if (!ZvPConfig.getKeepInventory()) {
+	if (!getArena().keepInventory()) {
 	    this.player.getInventory().clear();
 	    this.player.getInventory().setArmorContents(this.armorContents);
 	    this.player.getInventory().setContents(this.contents);
@@ -350,7 +350,7 @@ public class ZvPPlayer {
 	
 	this.player.setGameMode(this.mode);
 	
-	if (!ZvPConfig.getKeepXP()) {
+	if (!getArena().keepExp()) {
 	    getXPManager().setExp(this.prevTotalXP);
 	}
 	
