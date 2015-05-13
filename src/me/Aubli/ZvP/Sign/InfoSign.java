@@ -2,6 +2,7 @@ package me.Aubli.ZvP.Sign;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -70,7 +71,7 @@ public class InfoSign implements ISign, Comparable<ISign> {
 	    delete();
 	    throw new Exception("Location is not a Sign!");
 	}
-	update();
+	update(SignManager.getManager().getColorMap(getType()));
     }
     
     public InfoSign(File signFile) throws Exception {
@@ -90,7 +91,7 @@ public class InfoSign implements ISign, Comparable<ISign> {
 		
 		this.arena = GameManager.getManager().getArena(this.signConfig.getInt("sign.Arena"));
 		this.lobby = GameManager.getManager().getLobby(this.signConfig.getInt("sign.Lobby"));
-		update();
+		update(SignManager.getManager().getColorMap(getType()));
 	    } else {
 		throw new Exception("Location " + this.signLoc.getBlockX() + ":" + this.signLoc.getBlockY() + ":" + this.signLoc.getBlockZ() + " in World " + this.signLoc.getWorld().getName() + " is not a Sign! (File:" + signFile.getAbsolutePath());
 	    }
@@ -138,20 +139,19 @@ public class InfoSign implements ISign, Comparable<ISign> {
     }
     
     @Override
-    public void update() {
+    public void update(Map<String, ChatColor> colorMap) {
+	this.sign.setLine(0, ZvP.getPrefix().trim());
+	
 	if (this.arena != null) {
-	    this.sign.setLine(0, ZvP.getPrefix().trim());
 	    this.sign.setLine(1, "Arena: " + this.arena.getID());
-	    this.sign.setLine(2, ChatColor.AQUA + "" + this.arena.getPlayers().length + ChatColor.RESET + " / " + ChatColor.DARK_RED + this.arena.getMaxPlayers());
-	    this.sign.setLine(3, ChatColor.BLUE + "" + this.arena.getRound() + ":" + this.arena.getWave() + ChatColor.RESET + " / " + ChatColor.DARK_RED + this.arena.getMaxRounds() + ":" + this.arena.getMaxWaves());
-	    this.sign.update(true);
+	    this.sign.setLine(2, colorMap.get("currentAmountOfPlayers") + "" + this.arena.getPlayers().length + ChatColor.RESET + " / " + colorMap.get("maxAmountOfPlayers") + this.arena.getMaxPlayers());
+	    this.sign.setLine(3, colorMap.get("currentWave") + "" + this.arena.getRound() + ":" + this.arena.getWave() + ChatColor.RESET + " / " + colorMap.get("maxWave") + this.arena.getMaxRounds() + ":" + this.arena.getMaxWaves());
 	} else {
-	    this.sign.setLine(0, ZvP.getPrefix().trim());
 	    this.sign.setLine(1, "");
 	    this.sign.setLine(2, ChatColor.DARK_RED + "Arena is not");
 	    this.sign.setLine(3, ChatColor.DARK_RED + "available!");
-	    this.sign.update(true);
 	}
+	this.sign.update(true);
     }
     
     @Override

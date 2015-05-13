@@ -3,6 +3,8 @@ package me.Aubli.ZvP.Sign;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
@@ -30,12 +32,20 @@ public class SignManager {
     
     private File signFolder;
     
+    private Map<SignType, Map<String, ChatColor>> colorMap;
+    
     private ArrayList<ISign> signs;
     
     public SignManager() {
 	instance = this;
 	
 	this.signFolder = new File(ZvP.getInstance().getDataFolder().getPath() + "/Signs");
+	
+	this.colorMap = new HashMap<SignManager.SignType, Map<String, ChatColor>>();
+	for (SignType type : SignType.values()) {
+	    this.colorMap.put(type, new HashMap<String, ChatColor>());
+	}
+	
 	reloadConfig();
     }
     
@@ -44,6 +54,7 @@ public class SignManager {
 	    this.signFolder.mkdirs();
 	}
 	
+	loadColorMap();
 	loadSigns();
 	updateSigns();
     }
@@ -88,6 +99,51 @@ public class SignManager {
 	}
     }
     
+    private void loadColorMap() {
+	
+	try {
+	    File colorMapFile = new File(ZvP.getInstance().getDataFolder(), "SignColor.map");
+	    
+	    if (!colorMapFile.exists()) {
+		colorMapFile.createNewFile();
+	    }
+	    
+	    FileConfiguration mapConf = YamlConfiguration.loadConfiguration(colorMapFile);
+	    mapConf.options().header("This file contains color codes for the signs used by zvp!\nYou have to provide the color codes in lower case and !without the color indicator('&' or '§').\nChange them like you want.\n");
+	    
+	    mapConf.addDefault("map." + SignType.INTERACT_SIGN.name() + ".statusLineRunning", 2);
+	    mapConf.addDefault("map." + SignType.INTERACT_SIGN.name() + ".statusLineWaiting", 6);
+	    mapConf.addDefault("map." + SignType.INTERACT_SIGN.name() + ".statusLineStoped", 4);
+	    mapConf.addDefault("map." + SignType.INTERACT_SIGN.name() + ".joinLine", 'a');
+	    mapConf.addDefault("map." + SignType.INTERACT_SIGN.name() + ".inProgressLine", 4);
+	    
+	    mapConf.addDefault("map." + SignType.SHOP_SIGN.name() + ".header", 1);
+	    mapConf.addDefault("map." + SignType.SHOP_SIGN.name() + ".category", 0);
+	    mapConf.addDefault("map." + SignType.SHOP_SIGN.name() + ".categoryName", 4);
+	    
+	    mapConf.addDefault("map." + SignType.INFO_SIGN.name() + ".currentAmountOfPlayers", 'b');
+	    mapConf.addDefault("map." + SignType.INFO_SIGN.name() + ".maxAmountOfPlayers", 4);
+	    mapConf.addDefault("map." + SignType.INFO_SIGN.name() + ".currentWave", 1);
+	    mapConf.addDefault("map." + SignType.INFO_SIGN.name() + ".maxWave", 4);
+	    
+	    mapConf.options().copyDefaults(true);
+	    mapConf.options().copyHeader(false);
+	    mapConf.save(colorMapFile);
+	    
+	    for (SignType type : SignType.values()) {
+		Map<String, ChatColor> signColorMap = this.colorMap.get(type);
+		
+		for (String confSectionKey : mapConf.getConfigurationSection("map." + type.name()).getValues(false).keySet()) {
+		    ChatColor confColor = ChatColor.getByChar(mapConf.getString("map." + type.name() + "." + confSectionKey).trim().toLowerCase().replace("&", "").replace("§", ""));
+		    signColorMap.put(confSectionKey, confColor != null ? confColor : ChatColor.RESET);
+		}
+		this.colorMap.put(type, signColorMap);
+	    }
+	} catch (Exception e) {
+	    ZvP.getPluginLogger().log(Level.WARNING, e.getMessage(), true, false, e);
+	}
+    }
+    
     public static SignManager getManager() {
 	return instance;
     }
@@ -129,6 +185,10 @@ public class SignManager {
 	
 	Arrays.sort(signArray);
 	return signArray;
+    }
+    
+    public Map<String, ChatColor> getColorMap(SignType type) {
+	return this.colorMap.get(type);
     }
     
     public boolean isZVPSign(Location loc) {
@@ -198,7 +258,7 @@ public class SignManager {
     
     public void updateSigns() {
 	for (ISign s : this.signs) {
-	    s.update();
+	    s.update(getColorMap(s.getType()));
 	}
     }
     
@@ -206,7 +266,7 @@ public class SignManager {
 	for (ISign s : this.signs) {
 	    if (s.getLobby() != null) {
 		if (s.getLobby().equals(lobby)) {
-		    s.update();
+		    s.update(getColorMap(s.getType()));
 		}
 	    }
 	}
@@ -216,7 +276,7 @@ public class SignManager {
 	for (ISign s : this.signs) {
 	    if (s.getArena() != null) {
 		if (s.getArena().equals(arena)) {
-		    s.update();
+		    s.update(getColorMap(s.getType()));
 		}
 	    }
 	}

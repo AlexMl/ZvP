@@ -2,6 +2,7 @@ package me.Aubli.ZvP.Sign;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -72,7 +73,7 @@ public class InteractSign implements ISign, Comparable<ISign> {
 	    delete();
 	    throw new Exception("Location is not a Sign!");
 	}
-	update();
+	update(SignManager.getManager().getColorMap(getType()));
     }
     
     public InteractSign(File signFile) throws Exception {
@@ -92,7 +93,7 @@ public class InteractSign implements ISign, Comparable<ISign> {
 		
 		this.arena = GameManager.getManager().getArena(this.signConfig.getInt("sign.Arena"));
 		this.lobby = GameManager.getManager().getLobby(this.signConfig.getInt("sign.Lobby"));
-		update();
+		update(SignManager.getManager().getColorMap(getType()));
 	    } else {
 		throw new Exception("Location " + this.signLoc.getBlockX() + ":" + this.signLoc.getBlockY() + ":" + this.signLoc.getBlockZ() + " in World " + this.signLoc.getWorld().getName() + " is not a Sign! (File:" + signFile.getAbsolutePath());
 	    }
@@ -140,36 +141,34 @@ public class InteractSign implements ISign, Comparable<ISign> {
     }
     
     @Override
-    public void update() {
+    public void update(Map<String, ChatColor> colorMap) {
+	this.sign.setLine(0, ZvP.getPrefix().trim());
+	
 	if (this.arena != null) {
-	    this.sign.setLine(0, ZvP.getPrefix().trim());
 	    this.sign.setLine(1, "Arena: " + this.arena.getID());
 	    
 	    if (getArena().getStatus() == ArenaStatus.RUNNING || getArena().getStatus() == ArenaStatus.VOTING || getArena().getStatus() == ArenaStatus.BREAKWAITING) {
-		this.sign.setLine(2, ChatColor.DARK_GREEN + getArena().getStatus().getName());
-		this.sign.setLine(3, ChatColor.DARK_RED + "In Progress!");
+		this.sign.setLine(2, colorMap.get("statusLineRunning") + getArena().getStatus().getName());
+		this.sign.setLine(3, colorMap.get("inProgressLine") + "In Progress!");
 	    }
 	    if (ZvPConfig.getAllowDuringGameJoin()) {
-		this.sign.setLine(2, ChatColor.DARK_GREEN + getArena().getStatus().getName());
-		this.sign.setLine(3, ChatColor.GREEN + "[JOIN]");
+		this.sign.setLine(2, colorMap.get("statusLineRunning") + getArena().getStatus().getName());
+		this.sign.setLine(3, colorMap.get("joinLine") + "[JOIN]");
 	    }
 	    if (getArena().getStatus() == ArenaStatus.WAITING || getArena().getStatus() == ArenaStatus.STANDBY) {
-		this.sign.setLine(2, ChatColor.YELLOW + getArena().getStatus().getName());
-		this.sign.setLine(3, ChatColor.GREEN + "[JOIN]");
+		this.sign.setLine(2, colorMap.get("statusLineWaiting") + getArena().getStatus().getName());
+		this.sign.setLine(3, colorMap.get("joinLine") + "[JOIN]");
 	    }
 	    if (getArena().getStatus() == ArenaStatus.STOPED) {
-		this.sign.setLine(2, ChatColor.DARK_RED + getArena().getStatus().getName());
-		this.sign.setLine(3, ChatColor.DARK_RED + "Arena is offline!");
+		this.sign.setLine(2, colorMap.get("statusLineStoped") + getArena().getStatus().getName());
+		this.sign.setLine(3, colorMap.get("statusLineStoped") + "Arena is offline!");
 	    }
-	    
-	    this.sign.update(true);
 	} else {
-	    this.sign.setLine(0, ZvP.getPrefix().trim());
 	    this.sign.setLine(1, "");
 	    this.sign.setLine(2, ChatColor.DARK_RED + "Arena is not");
 	    this.sign.setLine(3, ChatColor.DARK_RED + "available!");
-	    this.sign.update(true);
 	}
+	this.sign.update(true);
     }
     
     @Override
