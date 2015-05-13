@@ -154,7 +154,8 @@ public class GameManager {
     private void loadArenas() {
 	for (File arenaFile : new File(this.arenaPath).listFiles(this.fileFilter)) {
 	    // Version 2.4.0 needs converted arena files
-	    ZvP.getConverter().convert(FileType.ARENAFILE, arenaFile, 240.0);
+	    // Version 2.6.0 needs converted arena files too
+	    ZvP.getConverter().convert(FileType.ARENAFILE, arenaFile, 260.0);
 	    
 	    Arena arena = new Arena(arenaFile);
 	    if (arena.getWorld() != null) {

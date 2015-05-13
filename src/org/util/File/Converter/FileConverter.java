@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
-import me.Aubli.ZvP.Game.GameManager.ArenaDifficultyLevel;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -35,13 +34,13 @@ public class FileConverter {
 	FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
 	
 	try {
-	    String localVersion = conf.getString("version");
+	    String fileVersion = conf.getString("version");
 	    
-	    if (localVersion == null || parseVersion(localVersion) < uptadeRequired) { // Version that needs upgrade
+	    if (fileVersion == null || parseVersion(fileVersion) < uptadeRequired) { // Version that needs upgrade
 	    
 		switch (type) {
 		    case ARENAFILE:
-			ZvP.getPluginLogger().log(Level.INFO, "Found outdated arena file(" + file.getName() + ")! Converting to " + uptadeRequired + " ...", true, false);
+			ZvP.getPluginLogger().log(Level.INFO, "Found outdated arena file(" + file.getName() + " v" + fileVersion + ")! Converting to " + uptadeRequired + " ...", true, false);
 			int arenaID = conf.getInt("arena.ID");
 			String status = conf.getString("arena.Online");
 			
@@ -50,7 +49,6 @@ public class FileConverter {
 			int rounds = conf.getInt("arena.rounds");
 			int waves = conf.getInt("arena.waves");
 			int spawnRate = conf.getInt("arena.spawnRate");
-			double saveRadius = conf.getDouble("arena.saveRadius", 4.0);
 			
 			String world = conf.getString("arena.Location.world");
 			int minX = conf.getInt("arena.Location.min.X");
@@ -63,7 +61,48 @@ public class FileConverter {
 			
 			List<String> staticPositions = conf.getStringList("arena.Location.staticPositions");
 			
-			file.renameTo(new File(file.getParentFile(), file.getName() + ".old"));
+			boolean keepXP = conf.getBoolean("arena.keepXP", false);
+			boolean keepInventory = conf.getBoolean("arena.keepInventory", false);
+			boolean useVoteSystem = conf.getBoolean("arena.useVoteSystem", true);
+			boolean separateScores = conf.getBoolean("arena.separatePlayerScores", false);
+			
+			int joinTime = conf.getInt("arena.joinTime", 15);
+			int breakTime = conf.getInt("arena.timeBetweenWaves", 90);
+			double zombieFund = conf.getDouble("arena.zombieFund", 0.37);
+			double deathFee = conf.getDouble("arena.deathFee", 3);
+			
+			double saveRadius;
+			boolean spawnProtection;
+			int duration;
+			String difficulty;
+			if (fileVersion == null || parseVersion(fileVersion) < 240.0) {
+			    saveRadius = conf.getDouble("arena.saveRadius", 4.0);
+			    spawnProtection = true;
+			    duration = 5;
+			    difficulty = "NORMAL";
+			} else if (parseVersion(fileVersion) > 240.0 && parseVersion(fileVersion) < 260.0) {
+			    saveRadius = conf.getDouble("arena.safety.saveRadius", 4.0);
+			    spawnProtection = conf.getBoolean("arena.safety.SpawnProtection.enabled", true);
+			    duration = conf.getInt("arena.safety.SpawnProtection.duration", 5);
+			    difficulty = conf.getString("arena.Difficulty");
+			} else {
+			    saveRadius = 4.0;
+			    spawnProtection = true;
+			    duration = 5;
+			    difficulty = "NORMAL";
+			}
+			
+			boolean success = file.renameTo(new File(file.getParentFile(), file.getName() + ".old"));
+			
+			if (!success) {
+			    boolean deleteSuccess = new File(file.getParentFile(), file.getName() + ".old").delete();
+			    if (!deleteSuccess) {
+				if (!file.renameTo(new File(file.getParentFile(), file.getName() + ".old" + System.currentTimeMillis()))) {
+				    return false;
+				}
+			    }
+			}
+			
 			file.delete();
 			file.createNewFile();
 			
@@ -71,7 +110,7 @@ public class FileConverter {
 			
 			conf.set("arena.ID", arenaID);
 			conf.set("arena.Online", status);
-			conf.set("arena.Difficulty", ArenaDifficultyLevel.NORMAL.name());
+			conf.set("arena.Difficulty", difficulty);
 			
 			conf.set("arena.minPlayers", minPlayers);
 			conf.set("arena.maxPlayers", maxPlayers);
@@ -79,9 +118,18 @@ public class FileConverter {
 			conf.set("arena.waves", waves);
 			conf.set("arena.spawnRate", spawnRate);
 			
-			conf.set("arena.safety.SpawnProtection.enabled", true);
-			conf.set("arena.safety.SpawnProtection.duration", 5);
-			conf.set("arena.safety.saveRadius", saveRadius);
+			conf.set("arena.keepXP", keepXP);
+			conf.set("arena.keepInventory", keepInventory);
+			conf.set("arena.useVoteSystem", useVoteSystem);
+			conf.set("arena.separatePlayerScores", separateScores);
+			conf.set("arena.joinTime", joinTime);
+			conf.set("arena.timeBetweenWaves", breakTime);
+			conf.set("arena.zombieFund", zombieFund);
+			conf.set("arena.deathFee", deathFee);
+			
+			conf.set("arena.enableSpawnProtection", spawnProtection);
+			conf.set("arena.spawnProtectionDuration", duration);
+			conf.set("arena.saveRadius", saveRadius);
 			
 			conf.set("arena.Location.world", world);
 			conf.set("arena.Location.min.X", minX);
@@ -101,7 +149,7 @@ public class FileConverter {
 			return true;
 			
 		    case KITFILE:
-			ZvP.getPluginLogger().log(Level.INFO, "Found outdated kit file(" + file.getName() + ")! Converting to " + uptadeRequired + " ...", true, false);
+			ZvP.getPluginLogger().log(Level.INFO, "Found outdated kit file(" + file.getName() + " v" + fileVersion + ")! Converting to " + uptadeRequired + " ...", true, false);
 			String name = conf.getString("name");
 			boolean enabled = conf.getBoolean("enabled", true);
 			String icon = conf.getString("icon");

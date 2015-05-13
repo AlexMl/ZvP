@@ -218,9 +218,9 @@ public class Arena implements Comparable<Arena> {
 	    this.arenaConfig.set("arena.deathFee", this.deathFee);
 	    // END
 	    
-	    this.arenaConfig.set("arena.safety.SpawnProtection.enabled", getSpawnProtection());
-	    this.arenaConfig.set("arena.safety.SpawnProtection.duration", getArenaProtectionDuration());
-	    this.arenaConfig.set("arena.safety.saveRadius", this.saveRadius);
+	    this.arenaConfig.set("arena.enableSpawnProtection", this.enableSpawnProtection);
+	    this.arenaConfig.set("arena.spawnProtectionDuration", this.protectionDuration);
+	    this.arenaConfig.set("arena.saveRadius", this.saveRadius);
 	    
 	    this.arenaConfig.set("arena.Location.world", this.arenaWorld.getUID().toString());
 	    this.arenaConfig.set("arena.Location.min.X", this.minLoc.getBlockX());
@@ -242,7 +242,7 @@ public class Arena implements Comparable<Arena> {
 	    this.arenaConfig.addDefault("version", ZvP.getInstance().getDescription().getVersion());
 	    this.arenaConfig.options().header("\nThis is the config file for arena " + getID() + "!\n");
 	    this.arenaConfig.options().copyDefaults(true);
-	    this.arenaConfig.options().copyHeader(true);
+	    this.arenaConfig.options().copyHeader(false);
 	    
 	    this.arenaConfig.save(this.arenaFile);
 	    
@@ -266,14 +266,15 @@ public class Arena implements Comparable<Arena> {
 	CommentUtil.insertComment(this.arenaFile, "keepXP", "If set to false, the game will not reset/change your current XP level.");
 	CommentUtil.insertComment(this.arenaFile, "keepInventory", "If set to true, the inventory will not get cleared after the game.#Important: Does not work with kits enabled!#Look into the main config file to disable kits!");
 	CommentUtil.insertComment(this.arenaFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
-	CommentUtil.insertComment(this.arenaFile, "seperatePlayerScores", "True: Each player will have his own score.#False: All players have the same score. They pay and earn together.");
+	CommentUtil.insertComment(this.arenaFile, "separatePlayerScores", "True: Each player will have his own score.#False: All players have the same score. They pay and earn together.");
 	CommentUtil.insertComment(this.arenaFile, "joinTime", "Time in seconds the game will wait before it starts.#Note that the arena specific minimum has to be reached.");
 	CommentUtil.insertComment(this.arenaFile, "timeBetweenWaves", "Time in seconds the game will wait until a new wave starts.#Only applies if useVoteSystem is false!");
 	CommentUtil.insertComment(this.arenaFile, "zombieFund", "Amount of money you will get from killing a zombie.");
 	CommentUtil.insertComment(this.arenaFile, "deathFee", "Amount of money you have to pay when you die.");
-	CommentUtil.insertComment(this.arenaFile, "SpawnProtection", "SpawnProtection will protect you when you respawn.#Note that you can not hit zombies during the protection!");
-	CommentUtil.insertComment(this.arenaFile, "duration", "The duration of the spawn protection in seconds.");
+	CommentUtil.insertComment(this.arenaFile, "enableSpawnProtection", "SpawnProtection will protect you when you respawn.#Note that you can not hit zombies during the protection!");
+	CommentUtil.insertComment(this.arenaFile, "spawnProtectionDuration", "The duration of the spawn protection in seconds.");
 	CommentUtil.insertComment(this.arenaFile, "saveRadius", "The save radius is the radius in blocks around you in which no zombies will spawn.");
+	CommentUtil.insertComment(this.arenaFile, "Location", "This is the location section of the arena. It contains min, max and custom spawn location.#If you are not sure what you are doing do not touch this!");
     }
     
     public void setStatus(ArenaStatus status) {
