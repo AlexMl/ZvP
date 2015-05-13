@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
@@ -147,6 +148,10 @@ public class InteractSign implements ISign, Comparable<ISign> {
 	    if (getArena().getStatus() == ArenaStatus.RUNNING || getArena().getStatus() == ArenaStatus.VOTING || getArena().getStatus() == ArenaStatus.BREAKWAITING) {
 		this.sign.setLine(2, ChatColor.DARK_GREEN + getArena().getStatus().getName());
 		this.sign.setLine(3, ChatColor.DARK_RED + "In Progress!");
+	    }
+	    if (ZvPConfig.getAllowDuringGameJoin()) {
+		this.sign.setLine(2, ChatColor.DARK_GREEN + getArena().getStatus().getName());
+		this.sign.setLine(3, ChatColor.GREEN + "[JOIN]");
 	    }
 	    if (getArena().getStatus() == ArenaStatus.WAITING || getArena().getStatus() == ArenaStatus.STANDBY) {
 		this.sign.setLine(2, ChatColor.YELLOW + getArena().getStatus().getName());
