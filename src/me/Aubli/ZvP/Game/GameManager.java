@@ -350,7 +350,7 @@ public class GameManager {
     public boolean createPlayer(Player player, Arena arena, Lobby lobby) {
 	
 	if (!arena.isFull() && arena.isOnline()) {
-	    if (ZvPConfig.getAllowDuringGameJoin()) {
+	    if (ZvPConfig.getAllowDuringGameJoin() || !arena.isRunning()) {
 		try {
 		    new ZvPPlayer(player, arena, lobby);
 		    SignManager.getManager().updateSigns(lobby);
