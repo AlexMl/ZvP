@@ -96,7 +96,7 @@ public class ZvPConfig {
 	CommentUtil.insertComment(configFile, "integrateGame", "If enabled your bank account will be used for purchasing/selling and Kill/death bonuses.#Note that this game could ruin your bank balance!");
 	CommentUtil.insertComment(configFile, "enableKits", "Enable kits for the game.#If disabled the player will start and end the game with their current items.#The inventory will be restored after the game.#Note that this has to be false if you use keepInventory!");
 	CommentUtil.insertComment(configFile, "enableFirework", "Fireworks will shoot when the game ends.#Note that Fireworks take extra time!");
-	CommentUtil.insertComment(configFile, "allowDuringGameJoin", "If set to true the game will allow players to join a running game.#Note that a change of players affects the number of Zombies!");
+	CommentUtil.insertComment(configFile, "allowDuringGameJoin", "If set to true the game will allow players to join a running game.#Note that a change of players will affect the number of Zombies!");
 	CommentUtil.insertComment(configFile, "modifyChat", "If enabled the chat will be modified to match ZvP colors.#If disabled the chat will not be changed at all!");
 	CommentUtil.insertComment(configFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
 	CommentUtil.insertComment(configFile, "keepInventory", "If set to true, the inventory will not get cleared after the game.#Important: Does not work with kits enabled!");
