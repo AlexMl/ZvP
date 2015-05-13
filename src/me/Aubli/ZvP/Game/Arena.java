@@ -712,7 +712,7 @@ public class Arena implements Comparable<Arena> {
 	    } else if (this.players.size() >= this.minPlayers && isRunning()) {
 		// Seems like a player who joined during game.
 		// Needs scoreboard updates and a new score entry
-//		System.out.println("ud called");
+		// INFO: maybe inform players on increased zombies
 		getScore().reInitPlayer(player);
 		setPlayerBoards();
 		removePlayerBoards();

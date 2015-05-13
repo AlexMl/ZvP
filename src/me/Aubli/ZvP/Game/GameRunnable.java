@@ -98,8 +98,10 @@ public class GameRunnable extends BukkitRunnable {
 		this.firstSpawn = false;
 		this.spawnZombies = true;
 	    } else {
+		// INFO: More zombies will spawn if player joins while firstSpawn or spawnZombies is true
+		// could be fixed by setting a global int in firstspawn. Depends on players opinion
 		final int nextZombies = this.arena.getSpawningZombies();
-		
+		// System.out.println(this.spawnGoal + " < " + nextZombies + " && " + this.spawnZombies);
 		if ((this.spawnGoal < nextZombies) && this.spawnZombies) {
 		    double missing = nextZombies - this.spawnGoal;
 		    ZvP.getPluginLogger().log(Level.FINER, "Arena: " + this.arena.getID() + " Missing: " + (int) missing, true);
