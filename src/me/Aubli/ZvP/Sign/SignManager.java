@@ -111,20 +111,20 @@ public class SignManager {
 	    FileConfiguration mapConf = YamlConfiguration.loadConfiguration(colorMapFile);
 	    mapConf.options().header("This file contains color codes for the signs used by zvp!\nYou have to provide the color codes in lower case and !without the color indicator('&' or '§').\nChange them like you want.\n");
 	    
-	    mapConf.addDefault("map." + SignType.INTERACT_SIGN.name() + ".statusLineRunning", 2);
-	    mapConf.addDefault("map." + SignType.INTERACT_SIGN.name() + ".statusLineWaiting", 6);
-	    mapConf.addDefault("map." + SignType.INTERACT_SIGN.name() + ".statusLineStoped", 4);
-	    mapConf.addDefault("map." + SignType.INTERACT_SIGN.name() + ".joinLine", 'a');
-	    mapConf.addDefault("map." + SignType.INTERACT_SIGN.name() + ".inProgressLine", 4);
+	    mapConf.addDefault(SignType.INTERACT_SIGN.name() + ".statusLineRunning", 2);
+	    mapConf.addDefault(SignType.INTERACT_SIGN.name() + ".statusLineWaiting", 6);
+	    mapConf.addDefault(SignType.INTERACT_SIGN.name() + ".statusLineStoped", 4);
+	    mapConf.addDefault(SignType.INTERACT_SIGN.name() + ".joinLine", 'a');
+	    mapConf.addDefault(SignType.INTERACT_SIGN.name() + ".inProgressLine", 4);
 	    
-	    mapConf.addDefault("map." + SignType.SHOP_SIGN.name() + ".header", 1);
-	    mapConf.addDefault("map." + SignType.SHOP_SIGN.name() + ".category", 0);
-	    mapConf.addDefault("map." + SignType.SHOP_SIGN.name() + ".categoryName", 4);
+	    mapConf.addDefault(SignType.SHOP_SIGN.name() + ".header", 1);
+	    mapConf.addDefault(SignType.SHOP_SIGN.name() + ".category", 0);
+	    mapConf.addDefault(SignType.SHOP_SIGN.name() + ".categoryName", 4);
 	    
-	    mapConf.addDefault("map." + SignType.INFO_SIGN.name() + ".currentAmountOfPlayers", 'b');
-	    mapConf.addDefault("map." + SignType.INFO_SIGN.name() + ".maxAmountOfPlayers", 4);
-	    mapConf.addDefault("map." + SignType.INFO_SIGN.name() + ".currentWave", 1);
-	    mapConf.addDefault("map." + SignType.INFO_SIGN.name() + ".maxWave", 4);
+	    mapConf.addDefault(SignType.INFO_SIGN.name() + ".currentAmountOfPlayers", 'b');
+	    mapConf.addDefault(SignType.INFO_SIGN.name() + ".maxAmountOfPlayers", 4);
+	    mapConf.addDefault(SignType.INFO_SIGN.name() + ".currentWave", 1);
+	    mapConf.addDefault(SignType.INFO_SIGN.name() + ".maxWave", 4);
 	    
 	    mapConf.options().copyDefaults(true);
 	    mapConf.options().copyHeader(false);
@@ -133,8 +133,8 @@ public class SignManager {
 	    for (SignType type : SignType.values()) {
 		Map<String, ChatColor> signColorMap = this.colorMap.get(type);
 		
-		for (String confSectionKey : mapConf.getConfigurationSection("map." + type.name()).getValues(false).keySet()) {
-		    ChatColor confColor = ChatColor.getByChar(mapConf.getString("map." + type.name() + "." + confSectionKey).trim().toLowerCase().replace("&", "").replace("§", ""));
+		for (String confSectionKey : mapConf.getConfigurationSection(type.name()).getValues(false).keySet()) {
+		    ChatColor confColor = ChatColor.getByChar(mapConf.getString(type.name() + "." + confSectionKey).trim().toLowerCase().replace("&", "").replace("§", ""));
 		    signColorMap.put(confSectionKey, confColor != null ? confColor : ChatColor.RESET);
 		}
 		this.colorMap.put(type, signColorMap);
