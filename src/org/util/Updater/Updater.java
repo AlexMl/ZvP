@@ -58,10 +58,10 @@ public class Updater {
     private static final String USER_AGENT = "Updater (by Gravity)";
     // Used for locating version numbers in file names
     private static final String DELIMETER = "^v|[\\s_-]v";
-    // If the local version number contains one of these, don't update.
-    private static final String[] NO_UPDATE_TAG_LOCAL = {"_DEV"};
+    // If the local version number contains one of these and the version equals the remote version, force update.
+    private static final String[] UPDATE_TAG_LOCAL = {"_DEV", "_PRE"};
     // If the remote version number contains one of these, don't update.
-    private static final String[] NO_UPDATE_TAG_REMOTE = {"_DEV", "_LP"};
+    private static final String[] NO_UPDATE_TAG_REMOTE = {"_DEV"};
     // Used for downloading files
     private static final int BYTE_SIZE = 1024;
     // Config key for api key
@@ -565,7 +565,7 @@ public class Updater {
 		final String remoteVersion = title.split(DELIMETER)[1].split(" ")[0];
 		// System.out.println("LT:" + this.hasTag(localVersion, true) + " RT:" + this.hasTag(remoteVersion, false) + " SU:" + this.shouldUpdate(localVersion, remoteVersion) + " ---> Update?" +
 		// !(this.hasTag(localVersion, true) || this.hasTag(remoteVersion, false) || !this.shouldUpdate(localVersion, remoteVersion)));
-		if (this.hasTag(localVersion, true) || this.hasTag(remoteVersion, false) || !this.shouldUpdate(localVersion, remoteVersion)) {
+		if (this.hasTag(remoteVersion, false) || !this.shouldUpdate(localVersion, remoteVersion, hasTag(localVersion, true))) {
 		    // We already have the latest version, or the build is tagged for no-update
 		    this.result = Updater.UpdateResult.NO_UPDATE;
 		    return false;
@@ -606,12 +606,12 @@ public class Updater {
      *        the remote version
      * @return true if Updater should consider the remote version an update, false if not.
      */
-    public boolean shouldUpdate(String localVersion, String remoteVersion) {
+    public boolean shouldUpdate(String localVersion, String remoteVersion, boolean updateTag) {
 	double local = parseVersion(localVersion);
 	double remote = parseVersion(remoteVersion);
-	ZvP.getPluginLogger().log(Level.FINE, "LV=" + local + " : RV=" + remote + " Update? " + (remote > local), true, true);
+	ZvP.getPluginLogger().log(Level.FINE, "LV=" + local + " : RV=" + remote + " Update? " + (updateTag ? remote >= local : remote > local), true, true);
 	
-	return remote > local;
+	return updateTag ? remote >= local : remote > local;
     }
     
     private double parseVersion(String version) {
@@ -632,14 +632,14 @@ public class Updater {
      */
     private boolean hasTag(String version, boolean local) {
 	if (local) {
-	    for (final String string : Updater.NO_UPDATE_TAG_LOCAL) {
-		if (version.contains(string)) {
+	    for (final String string : Updater.UPDATE_TAG_LOCAL) {
+		if (version.toLowerCase().contains(string.toLowerCase())) {
 		    return true;
 		}
 	    }
 	} else {
 	    for (final String string : Updater.NO_UPDATE_TAG_REMOTE) {
-		if (version.contains(string)) {
+		if (version.toLowerCase().contains(string.toLowerCase())) {
 		    return true;
 		}
 	    }
