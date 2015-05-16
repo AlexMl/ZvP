@@ -1,4 +1,10 @@
 Changelog:
+2.6.0:
+*Sign colors are now adjustable
+*ZvP now supports joins during games
+*A lot of options moved into arena configuration
+*Added optional PreLobby to Arena
+
 2.5.2:
 *Added option to keep xp
 *Money gained by zombies depends on the difficulty
