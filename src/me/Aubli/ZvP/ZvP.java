@@ -11,10 +11,10 @@ import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Listeners.AsyncChatListener;
 import me.Aubli.ZvP.Listeners.BlockListener;
 import me.Aubli.ZvP.Listeners.DeathListener;
-import me.Aubli.ZvP.Listeners.EntityDamageListener;
+import me.Aubli.ZvP.Listeners.EntityListener;
 import me.Aubli.ZvP.Listeners.GUIListener;
-import me.Aubli.ZvP.Listeners.PlayerConnectionListener;
-import me.Aubli.ZvP.Listeners.PlayerInteractListener;
+import me.Aubli.ZvP.Listeners.PlayerListener;
+import me.Aubli.ZvP.Listeners.InteractListener;
 import me.Aubli.ZvP.Listeners.PlayerRespawnListener;
 import me.Aubli.ZvP.Listeners.SignChangelistener;
 import me.Aubli.ZvP.Shop.ShopManager;
@@ -162,12 +162,12 @@ public class ZvP extends JavaPlugin {
 	
 	pm.registerEvents(new BlockListener(), this);
 	pm.registerEvents(new DeathListener(), this);
-	pm.registerEvents(new PlayerInteractListener(), this);
-	pm.registerEvents(new PlayerConnectionListener(), this);
+	pm.registerEvents(new InteractListener(), this);
+	pm.registerEvents(new PlayerListener(), this);
 	pm.registerEvents(new PlayerRespawnListener(), this);
 	pm.registerEvents(new SignChangelistener(), this);
 	pm.registerEvents(new GUIListener(), this);
-	pm.registerEvents(new EntityDamageListener(), this);
+	pm.registerEvents(new EntityListener(), this);
 	pm.registerEvents(new AsyncChatListener(), this);
     }
     

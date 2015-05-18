@@ -18,7 +18,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scheduler.BukkitTask;
 
 
-public class EntityDamageListener implements Listener {
+public class EntityListener implements Listener {
     
     private BukkitTask task;
     
@@ -55,7 +55,7 @@ public class EntityDamageListener implements Listener {
 					zombie.setTarget(arena.getRandomPlayer().getPlayer());
 				    }
 				    ZvP.getPluginLogger().log(Level.FINE, "Zombie teleport caused by no interaction!", true, true);
-				    EntityDamageListener.this.task = Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), this, 50 * 20L);
+				    EntityListener.this.task = Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), this, 50 * 20L);
 				}
 			    }
 			}, 50 * 20L); // Time to wait until zombie respawn

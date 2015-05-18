@@ -31,7 +31,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 
-public class PlayerInteractListener implements Listener {
+public class InteractListener implements Listener {
     
     private HashMap<Action, Location> clickLoc = new HashMap<Action, Location>();
     
