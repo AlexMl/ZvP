@@ -115,12 +115,13 @@ public class ArenaLobby {
 	    public void run() {
 		player.openKitSelectGUI();
 		addPlayer(player);
-		
 	    }
-	}, 1 * 20L);
+	}, (int) Math.ceil(this.arena.getArenaJoinTime() / 4) * 20L);
+	
 	player.getPlayer().teleport(getRandomLocation(), TeleportCause.PLUGIN);
 	player.getPlayer().setGameMode(GameMode.SURVIVAL);
 	player.getArena().addPreLobbyPlayer(player);
+	this.joinProcessRunning = true;
     }
     
     private void addPlayer(final ZvPPlayer player) {
