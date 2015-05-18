@@ -250,6 +250,13 @@ public class GameManager {
 		    return zp;
 		}
 	    }
+	    if (a.hasPreLobby()) {
+		for (ZvPPlayer zp : a.getPreLobby().getPlayers()) {
+		    if (zp.getUuid().equals(player.getUniqueId())) {
+			return zp;
+		    }
+		}
+	    }
 	}
 	return null;
     }
@@ -402,6 +409,11 @@ public class GameManager {
 	for (Arena a : getArenas()) {
 	    if (a.containsPlayer(player)) {
 		return true;
+	    }
+	    if (a.hasPreLobby()) {
+		if (a.getPreLobby().containsPlayer(player)) {
+		    return true;
+		}
 	    }
 	}
 	return false;

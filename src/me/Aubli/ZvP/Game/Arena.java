@@ -277,21 +277,24 @@ public class Arena implements Comparable<Arena> {
     
     private ArenaLobby loadArenaLobby() {
 	
-	Location centerLoc = new Location(getWorld(), this.arenaConfig.getInt("arena.Location.PreLobby.X"), this.arenaConfig.getInt("arena.Location.PreLobby.Y"), this.arenaConfig.getInt("arena.Location.PreLobby.Z"));
-	
-	ArrayList<Location> locations = new ArrayList<Location>();
-	for (String locationString : this.arenaConfig.getStringList("arena.Location.PreLobby.extraPositions")) {
-	    String[] cords = locationString.split(",");
-	    Location loc = new Location(getWorld(), Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
-	    locations.add(loc);
+	if (this.arenaConfig.get("arena.Location.PreLobby.X") != null) {
+	    Location centerLoc = new Location(getWorld(), this.arenaConfig.getInt("arena.Location.PreLobby.X"), this.arenaConfig.getInt("arena.Location.PreLobby.Y"), this.arenaConfig.getInt("arena.Location.PreLobby.Z"));
+	    
+	    ArrayList<Location> locations = new ArrayList<Location>();
+	    for (String locationString : this.arenaConfig.getStringList("arena.Location.PreLobby.extraPositions")) {
+		String[] cords = locationString.split(",");
+		Location loc = new Location(getWorld(), Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
+		locations.add(loc);
+	    }
+	    
+	    try {
+		return new ArenaLobby(this, centerLoc, locations, this.rand);
+	    } catch (Exception e) {
+		ZvP.getPluginLogger().log(Level.WARNING, "Error while loading ArenaLobby for Arena " + getID() + ": " + e.getMessage(), true, false, e);
+		return null;
+	    }
 	}
-	
-	try {
-	    return new ArenaLobby(this, centerLoc, locations, this.rand);
-	} catch (Exception e) {
-	    ZvP.getPluginLogger().log(Level.WARNING, "Error while loading ArenaLobby for Arena " + getID() + ": " + e.getMessage(), true, false, e);
-	    return null;
-	}
+	return null;
     }
     
     void deleteArenaLobby() {
@@ -853,14 +856,16 @@ public class Arena implements Comparable<Arena> {
 		return false;
 	    }
 	    
-	    sendMessage(MessageManager.getFormatedMessage("game:player_joined", player.getName()));
-	    player.sendMessage(MessageManager.getFormatedMessage("game:joined", getID()));
+	    if (!hasPreLobby()) {
+		sendMessage(MessageManager.getFormatedMessage("game:player_joined", player.getName()));
+		player.sendMessage(MessageManager.getFormatedMessage("game:joined", getID()));
+	    }
 	    this.players.add(player);
 	    
 	    ZvP.getPluginLogger().log(Level.INFO, "Player " + player.getName() + " has joined Arena " + getID() + "! ASTATUS: " + getStatus().name(), true);
 	    
 	    if (this.players.size() >= this.minPlayers && !isRunning()) {
-		
+		/*
 		for (ZvPPlayer p : this.players) {
 		    if (!p.hasKit()) {
 			for (ZvPPlayer p2 : this.players) {
@@ -871,9 +876,13 @@ public class Arena implements Comparable<Arena> {
 			return false;
 		    }
 		}
-		
-		if (!isWaiting()) {
-		    GameManager.getManager().startGame(this, player.getLobby());
+		*/
+		if (getStatus() == ArenaStatus.STANDBY) {
+		    if (hasPreLobby()) {
+			start(0, 0, 5); // INFO: magic number.
+		    } else {
+			GameManager.getManager().startGame(this, player.getLobby());
+		    }
 		}
 	    } else if (this.players.size() >= this.minPlayers && isRunning()) {
 		// Seems like a player who joined during game.
@@ -889,14 +898,40 @@ public class Arena implements Comparable<Arena> {
 	return false;
     }
     
+    // INFO: I guess not the best way
+    @Deprecated
+    void addPreLobbyPlayer(ZvPPlayer player) {
+	this.players.add(player);
+    }
+    
+    @Deprecated
+    void removePreLobbyPlayer(ZvPPlayer player) {
+	this.players.remove(player);
+    }
+    
     public boolean removePlayer(ZvPPlayer player) {
-	if (this.players.contains(player)) {
+	if (this.players.contains(player) || (hasPreLobby() && getPreLobby().containsPlayer(player.getPlayer()))) {
 	    this.players.remove(player);
+	    
+	    if (hasPreLobby()) {
+		if (getPreLobby().containsPlayer(player.getPlayer())) {
+		    getPreLobby().removePlayer(player);
+		}
+	    }
+	    
 	    updatePlayerBoards();
 	    SignManager.getManager().updateSigns(this);
 	    
-	    if (this.players.size() == 0 && getStatus() != ArenaStatus.STANDBY) {
-		this.stop();
+	    if (hasPreLobby()) {
+		if (getPreLobby().getPlayers().length == 0 && this.players.size() == 0 && getStatus() != ArenaStatus.STANDBY) {
+		    this.stop();
+		} else if (getPreLobby().getPlayers().length == 0 && this.players.size() == 0) {
+		    getPreLobby().stopPreLobbyTask();
+		}
+	    } else {
+		if (this.players.size() == 0 && getStatus() != ArenaStatus.STANDBY) {
+		    this.stop();
+		}
 	    }
 	    
 	    return true;
@@ -920,8 +955,12 @@ public class Arena implements Comparable<Arena> {
     }
     
     public void start() {
-	this.round = 0;
-	this.wave = 0;
+	start(0, 0, getArenaJoinTime());
+    }
+    
+    public void start(int startRound, int startWave, int startDelay) {
+	this.round = startRound;
+	this.wave = startWave;
 	
 	this.score = new ArenaScore(this, separatePlayerScores(), ZvPConfig.getEnableEcon(), ZvPConfig.getIntegrateGame());
 	getWorld().setDifficulty(Difficulty.NORMAL);
@@ -929,7 +968,7 @@ public class Arena implements Comparable<Arena> {
 	getWorld().setMonsterSpawnLimit(0);
 	clearArena();
 	
-	this.TaskId = new GameRunnable(this, getArenaJoinTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
+	this.TaskId = new GameRunnable(this, startDelay).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
 	ZvP.getPluginLogger().log(Level.INFO, "Arena " + getID() + " started a new Task!", true);
     }
     
@@ -937,6 +976,10 @@ public class Arena implements Comparable<Arena> {
 	
 	setStatus(ArenaStatus.STANDBY);
 	Bukkit.getScheduler().cancelTask(getTaskId());
+	
+	if (hasPreLobby()) {
+	    getPreLobby().stopPreLobbyTask();
+	}
 	
 	for (ZvPPlayer zp : getPlayers()) {
 	    zp.reset();

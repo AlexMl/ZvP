@@ -78,13 +78,12 @@ public class ZvPPlayer {
 	this.startPosition = null;
 	this.kit = null;
 	
-	if (KitManager.getManager().isEnabled()) {
-	    KitManager.getManager().openSelectKitGUI(this);
+	if (!arena.hasPreLobby()) {
+	    openKitSelectGUI();
+	    arena.addPlayer(this);
 	} else {
-	    this.kit = new KNullKit();
+	    arena.getPreLobby().addPlayerToLobby(this);
 	}
-	
-	arena.addPlayer(this);
     }
     
     public UUID getUuid() {
@@ -225,6 +224,14 @@ public class ZvPPlayer {
 	getPlayer().openInventory(inv);
     }
     
+    public void openKitSelectGUI() {
+	if (KitManager.getManager().isEnabled()) {
+	    KitManager.getManager().openSelectKitGUI(this);
+	} else {
+	    this.kit = new KNullKit();
+	}
+    }
+    
     public void addKill() {
 	setKills(getKills() + 1);
 	getArena().getScore().addScore(this, getArena().getArenaZombieFund() * getArena().getDifficultyTool().getMoneyFactor(), ScoreType.ZOMBIE_SCORE);
@@ -341,6 +348,8 @@ public class ZvPPlayer {
 	    this.player.getInventory().setArmorContents(this.armorContents);
 	    this.player.getInventory().setContents(this.contents);
 	}
+	
+	setCanceled(true);
 	
 	this.player.teleport(this.lobby.getLocation());
 	this.player.setVelocity(new Vector(0, 0, 0));

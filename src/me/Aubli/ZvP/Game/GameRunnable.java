@@ -49,7 +49,7 @@ public class GameRunnable extends BukkitRunnable {
 	    this.arena.sendMessage("A:" + this.arena.getID() + " ;" + ChatColor.RED + this.arena.getStatus().toString() + ChatColor.RESET + "; " + this.arena.getRound() + ":" + this.arena.getWave() + " Z:" + this.arena.getLivingZombieAmount() + ":" + this.arena.getSpawningZombies() + " FS:" + this.firstSpawn + " SZ:" + this.spawnZombies + " T:" + this.seconds);
 	}
 	
-	if (this.seconds <= this.startDelay) {	// Waiting for players
+	if (this.seconds < this.startDelay) {	// Waiting for players
 	    if (this.arena.getRound() == 0 && this.arena.getWave() == 0) {
 		this.arena.setStatus(ArenaStatus.WAITING);
 	    }
@@ -72,25 +72,26 @@ public class GameRunnable extends BukkitRunnable {
 	    return;
 	}
 	
-	if (this.seconds > this.startDelay && this.arena.getPlayers().length > 0) {	// game start
-	    if (this.arena.getRound() == 0 && this.arena.getWave() == 0) { // set game settings
-		this.arena.setPlayerBoards();
-		this.arena.removePlayerBoards();
-		this.arena.updatePlayerBoards();
-		
-		this.arena.setStatus(ArenaStatus.RUNNING);
+	if (this.seconds == this.startDelay) {  // set game settings
+	    if (this.arena.getRound() == 0 && this.arena.getWave() == 0) {
 		this.arena.setPlayerLevel(0);
 		this.arena.setRound(1);
 		this.arena.setWave(1);
-		
-		this.firstSpawn = true;
-		this.spawnZombies = false;
 	    }
+	    this.arena.setPlayerBoards();
+	    this.arena.removePlayerBoards();
+	    this.arena.updatePlayerBoards();
 	    
-	    if (this.arena.getStatus() != ArenaStatus.RUNNING) {
-		this.arena.setStatus(ArenaStatus.RUNNING);
-	    }
+	    this.arena.setStatus(ArenaStatus.RUNNING);
 	    
+	    this.firstSpawn = true;
+	    this.spawnZombies = false;
+	    this.seconds++;
+	    return;
+	}
+	
+	if (this.seconds > this.startDelay && this.arena.getPlayers().length > 0) { // actuall game start
+	
 	    if (this.firstSpawn) {
 		final int nextZombies = this.arena.getSpawningZombies();
 		this.spawnGoal = nextZombies - (int) (nextZombies * this.spawnRate);

@@ -3,9 +3,18 @@ package me.Aubli.ZvP.Game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 
+import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Translation.MessageManager;
+
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.scheduler.BukkitRunnable;
 
 
 public class ArenaLobby {
@@ -18,13 +27,19 @@ public class ArenaLobby {
     
     private Random rand;
     
+    private BukkitRunnable task;
+    
+    private boolean joinProcessRunning;
+    
+    private ArrayList<ZvPPlayer> playerList;
+    
     public ArenaLobby(Arena arena, Location center, List<Location> locations, Random arenaRandom) throws Exception {
 	
 	if (arena == null) {
 	    throw new NullPointerException("Arena can not be null!");
 	}
-	if (center == null) {
-	    throw new NullPointerException("Center Location can not be null!");
+	if (center == null || (center.getBlockX() == 0 && center.getBlockY() == 0 && center.getBlockZ() == 0)) {
+	    throw new IllegalArgumentException("Center Location is not valid!");
 	}
 	if (center.getWorld() == null) {
 	    throw new IllegalArgumentException("Center Location is not available! The World is not loaded!");
@@ -34,6 +49,7 @@ public class ArenaLobby {
 	this.centerLoc = center.clone();
 	this.locations = locations != null ? locations : new ArrayList<Location>();
 	
+	this.playerList = new ArrayList<ZvPPlayer>();
 	this.rand = arenaRandom;
     }
     
@@ -54,6 +70,156 @@ public class ArenaLobby {
     }
     
     public Location getRandomLocation() {
-	return getLocationList() != null ? getLocationList().get(this.rand.nextInt(getLocationList().size())).clone() : getCenterLoc();
+	return (getLocationList() != null && !getLocationList().isEmpty()) ? getLocationList().get(this.rand.nextInt(getLocationList().size())).clone() : getCenterLoc();
+    }
+    
+    public ZvPPlayer[] getPlayers() {
+	ZvPPlayer[] parray = new ZvPPlayer[this.playerList.size()];
+	
+	for (int i = 0; i < this.playerList.size(); i++) {
+	    parray[i] = this.playerList.get(i);
+	}
+	return parray;
+    }
+    
+    public boolean containsPlayer(Player player) {
+	for (ZvPPlayer zp : this.playerList) {
+	    if (zp.getUuid() == player.getUniqueId()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+    
+    public void setPlayerLevel(int level) {
+	for (ZvPPlayer p : this.playerList) {
+	    p.setXPLevel(level);
+	}
+    }
+    
+    public void sendMessage(Object message) {
+	for (ZvPPlayer p : this.playerList) {
+	    p.sendMessage(message.toString());
+	}
+    }
+    
+    public void removePlayer(ZvPPlayer player) {
+	this.playerList.remove(player);
+    }
+    
+    public void addPlayerToLobby(final ZvPPlayer player) {
+	
+	Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
+	    
+	    @Override
+	    public void run() {
+		player.openKitSelectGUI();
+		addPlayer(player);
+		
+	    }
+	}, 1 * 20L);
+	player.getPlayer().teleport(getRandomLocation(), TeleportCause.PLUGIN);
+	player.getPlayer().setGameMode(GameMode.SURVIVAL);
+	player.getArena().addPreLobbyPlayer(player);
+    }
+    
+    private void addPlayer(final ZvPPlayer player) {
+	ZvP.getPluginLogger().log(Level.FINER, "Player " + player.getName() + " inGame: " + GameManager.getManager().isInGame(player.getPlayer()) + ", hasCanceled: " + player.hasCanceled() + " , Kit: " + player.hasKit(), true);
+	this.joinProcessRunning = true;
+	
+	if (player.hasCanceled()) {
+	    this.joinProcessRunning = false;
+	    removePlayer(player);
+	    return;
+	}
+	
+	if (!player.hasKit() && !player.hasCanceled()) {
+	    
+	    if (!this.playerList.contains(player)) {
+		this.playerList.add(player);
+	    }
+	    
+	    Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
+		
+		@Override
+		public void run() {
+		    addPlayer(player);
+		}
+	    }, 20L);
+	    return;
+	    
+	} else if (player.hasKit() && this.playerList.contains(player)) {
+	    removePlayer(player);
+	}
+	
+	if (!this.playerList.contains(player) && !player.hasCanceled()) {
+	    player.getArena().removePreLobbyPlayer(player);
+	    
+	    player.sendMessage(MessageManager.getFormatedMessage("game:joined", this.arena.getID()));
+	    sendMessage(MessageManager.getFormatedMessage("game:player_joined", player.getName()));
+	    getArena().sendMessage(MessageManager.getFormatedMessage("game:player_joined", player.getName()));
+	    
+	    this.joinProcessRunning = false;
+	    this.playerList.add(player);
+	    startPreLobbyTask(player);
+	}
+	return;
+    }
+    
+    private void startPreLobbyTask(ZvPPlayer player) {
+	
+	if (this.task == null) {
+	    this.task = new BukkitRunnable() {
+		
+		private int seconds = 0;
+		
+		@Override
+		public void run() {
+		    // TODO: PluginLogger
+		    if (this.seconds < getArena().getArenaJoinTime() * 20) {
+			setPlayerLevel(ArenaLobby.this.arena.getArenaJoinTime() * 20 - this.seconds);
+		    } else if (this.seconds > getArena().getArenaJoinTime() && ArenaLobby.this.playerList.size() > 0) {
+			System.out.println("over... ADDING");
+			
+			for (int i = 0; i < ArenaLobby.this.playerList.size();) {
+			    ZvPPlayer player = ArenaLobby.this.playerList.get(i);
+			    boolean success = getArena().addPlayer(player);
+			    System.out.println(player.getName() + " joined: " + success);
+			    removePlayer(player);
+			    return;
+			}
+			
+		    } else if (this.seconds > getArena().getArenaJoinTime() && ArenaLobby.this.playerList.size() == 0) {
+			ArenaLobby.this.playerList.clear();
+			this.cancel();
+		    }
+		    if (!ArenaLobby.this.joinProcessRunning) {
+			this.seconds++;
+		    }
+		}
+	    };
+	    this.task.runTaskTimer(ZvP.getInstance(), 0L, 1L);
+	} else if (getArena().getPlayers().length >= getArena().getMinPlayers() && getArena().isRunning()) {
+	    boolean success = getArena().addPlayer(player);
+	    System.out.println(player.getName() + " joined: " + success);
+	    removePlayer(player);
+	}
+    }
+    
+    public void stopPreLobbyTask() {
+	
+	if (this.task != null) {
+	    this.task.cancel();
+	    this.task = null;
+	}
+	
+	if (!this.playerList.isEmpty()) {
+	    for (ZvPPlayer player : getPlayers()) {
+		player.reset();
+	    }
+	}
+	
+	this.playerList.clear();
+	this.joinProcessRunning = false;
     }
 }

@@ -13,8 +13,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 
 public class PlayerListener implements Listener {
@@ -62,6 +64,7 @@ public class PlayerListener implements Listener {
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
+    // INFO: Highest, otherwise overridden by essentials
     public void onPlayerRespawn(PlayerRespawnEvent event) {
 	
 	this.eventPlayer = event.getPlayer();
@@ -86,5 +89,24 @@ public class PlayerListener implements Listener {
 	    }
 	    return;
 	}
+    }
+    
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+	this.eventPlayer = event.getPlayer();
+	
+	if (this.game.getPlayer(this.eventPlayer) != null) {
+	    ZvPPlayer zPlayer = this.game.getPlayer(this.eventPlayer);
+	    if (zPlayer.getArena().hasPreLobby()) {
+		if (zPlayer.getArena().isWaiting()) {
+		    
+		    if (event.getTo().distanceSquared(event.getFrom()) > 0.0) {
+			this.eventPlayer.teleport(event.getFrom(), TeleportCause.PLUGIN);
+			return;
+		    }
+		}
+	    }
+	}
+	
     }
 }
