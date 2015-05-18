@@ -316,6 +316,8 @@ public class Arena implements Comparable<Arena> {
 	CommentUtil.insertComment(this.arenaFile, "Difficulty", "The Difficulty of the arena. There are three modes: EASY, NORMAL, HARD#Each mode will increase amount and health of zombies.");
 	CommentUtil.insertComment(this.arenaFile, "minPlayers", "Minimum amount of players. Set at least to 1.");
 	CommentUtil.insertComment(this.arenaFile, "maxPlayers", "Maximal amount of players.");
+	CommentUtil.insertComment(this.arenaFile, "rounds", "The amount of rounds you will play.#Note that one round has several waves. To get the full number of waves multiple rounds and waves.");
+	CommentUtil.insertComment(this.arenaFile, "waves", "The amount of waves you will play. To get the full number of waves multiple rounds and waves.");
 	CommentUtil.insertComment(this.arenaFile, "spawnRate", "SpawnRate defines the amount of spawning zombies. Default is 8.");
 	CommentUtil.insertComment(this.arenaFile, "keepXP", "If set to false, the game will not reset/change your current XP level.");
 	CommentUtil.insertComment(this.arenaFile, "keepInventory", "If set to true, the inventory will not get cleared after the game.#Important: Does not work with kits enabled!#Look into the main config file to disable kits!");
