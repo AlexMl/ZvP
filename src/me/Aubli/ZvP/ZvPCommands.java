@@ -202,7 +202,7 @@ public class ZvPCommands implements CommandExecutor {
 		arguments += " " + arg;
 	    }
 	    
-	    ZvP.getPluginLogger().log(Level.INFO, "Player " + playerSender.getName() + " attempts to execute Command: " + cmd.getName() + arguments, true);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Player " + playerSender.getName() + " attempts to execute Command: " + cmd.getName() + arguments, true);
 	    
 	    if (args.length == 0) {
 		printCommands(playerSender, 1);

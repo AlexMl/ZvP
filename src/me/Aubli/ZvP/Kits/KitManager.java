@@ -76,9 +76,9 @@ public class KitManager {
 	    IZvPKit kit = new KCustomKit(f);
 	    if (kit.isEnabled()) {
 		this.kits.add(kit);
-		ZvP.getPluginLogger().log(Level.FINER, "Loaded " + kit.getName() + " from " + f.getPath(), true);
+		ZvP.getPluginLogger().log(this.getClass(), Level.FINER, "Loaded " + kit.getName() + " from " + f.getPath(), true);
 	    } else {
-		ZvP.getPluginLogger().log(Level.FINEST, "Kit " + kit.getName() + " is disabled through config " + f.getPath(), true);
+		ZvP.getPluginLogger().log(this.getClass(), Level.FINEST, "Kit " + kit.getName() + " is disabled through config " + f.getPath(), true);
 	    }
 	}
     }

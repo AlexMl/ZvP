@@ -40,7 +40,7 @@ public class FileConverter {
 	    
 		switch (type) {
 		    case ARENAFILE:
-			ZvP.getPluginLogger().log(Level.INFO, "Found outdated arena file(" + file.getName() + " v" + fileVersion + ")! Converting to " + uptadeRequired + " ...", true, false);
+			ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Found outdated arena file(" + file.getName() + " v" + fileVersion + ")! Converting to " + uptadeRequired + " ...", true, false);
 			int arenaID = conf.getInt("arena.ID");
 			String status = conf.getString("arena.Online");
 			
@@ -145,11 +145,11 @@ public class FileConverter {
 			conf.set("version", this.currentVersion);
 			
 			conf.save(file);
-			ZvP.getPluginLogger().log(Level.INFO, "Updated " + file.getName() + " to " + uptadeRequired + " successfully!", true, false);
+			ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Updated " + file.getName() + " to " + uptadeRequired + " successfully!", true, false);
 			return true;
 			
 		    case KITFILE:
-			ZvP.getPluginLogger().log(Level.INFO, "Found outdated kit file(" + file.getName() + " v" + fileVersion + ")! Converting to " + uptadeRequired + " ...", true, false);
+			ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Found outdated kit file(" + file.getName() + " v" + fileVersion + ")! Converting to " + uptadeRequired + " ...", true, false);
 			String name = conf.getString("name");
 			boolean enabled = conf.getBoolean("enabled", true);
 			String icon = conf.getString("icon");
@@ -170,7 +170,7 @@ public class FileConverter {
 			conf.set("version", this.currentVersion);
 			
 			conf.save(file);
-			ZvP.getPluginLogger().log(Level.INFO, "Updated " + file.getName() + " to " + uptadeRequired + " successfully!", true, false);
+			ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Updated " + file.getName() + " to " + uptadeRequired + " successfully!", true, false);
 			return true;
 			
 		    default:
@@ -179,7 +179,7 @@ public class FileConverter {
 	    }
 	    
 	} catch (IOException e) {
-	    ZvP.getPluginLogger().log(Level.WARNING, "Failed saving converted file for " + file.getAbsolutePath() + "!", true, false, e);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Failed saving converted file for " + file.getAbsolutePath() + "!", true, false, e);
 	    return false;
 	}
 	return false;

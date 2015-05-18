@@ -86,7 +86,7 @@ public class GUIListener implements Listener {
 				    } else {
 					player.setKit(kit);
 					player.sendMessage(MessageManager.getMessage("error:transaction_failed"));
-					ZvP.getPluginLogger().log(Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + " for Kit " + kit.getName(), false);
+					ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + " for Kit " + kit.getName(), false);
 				    }
 				} else {
 				    player.sendMessage(MessageManager.getMessage("game:no_money"));
@@ -99,7 +99,7 @@ public class GUIListener implements Listener {
 			    player.setKit(kit);
 			}
 			
-			ZvP.getPluginLogger().log(Level.INFO, player.getName() + " took the " + player.getKit().getName() + " Kit", true);
+			ZvP.getPluginLogger().log(this.getClass(), Level.INFO, player.getName() + " took the " + player.getKit().getName() + " Kit", true);
 			return;
 		    }
 		}
@@ -123,10 +123,10 @@ public class GUIListener implements Listener {
 		}
 		if (event.getInventory().getTitle().contains("Items: ")) {
 		    event.setCancelled(true);
-		    ZvP.getPluginLogger().log(Level.FINEST, "ShopClick: Slot: " + event.getSlot() + " RawSlot: " + event.getRawSlot() + " Result: " + event.getResult().toString(), true);
+		    ZvP.getPluginLogger().log(this.getClass(), Level.FINEST, "ShopClick: Slot: " + event.getSlot() + " RawSlot: " + event.getRawSlot() + " Result: " + event.getResult().toString(), true);
 		    
 		    if (event.getRawSlot() > event.getInventory().getSize()) {
-			ZvP.getPluginLogger().log(Level.WARNING, "Player " + eventPlayer.getName() + " tryed to acces slot " + event.getRawSlot() + " (index:" + event.getInventory().getSize() + ")", true);
+			ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Player " + eventPlayer.getName() + " tryed to acces slot " + event.getRawSlot() + " (index:" + event.getInventory().getSize() + ")", true);
 			return;
 		    }
 		    

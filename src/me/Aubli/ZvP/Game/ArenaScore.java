@@ -71,7 +71,7 @@ public class ArenaScore {
 	} else if (isSeparated() && player != null) {
 	    return this.playerScore.get(player);
 	} else {
-	    ZvP.getPluginLogger().log(Level.WARNING, "Error while returning score for Arena:" + this.arena.getID() + "; separated:" + isSeparated() + " player==null:" + (player == null), true, true);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while returning score for Arena:" + this.arena.getID() + "; separated:" + isSeparated() + " player==null:" + (player == null), true, true);
 	    return 0.0;
 	}
     }
@@ -103,10 +103,10 @@ public class ArenaScore {
 	    
 	    if (!response.transactionSuccess()) {
 		player.sendMessage(MessageManager.getMessage("error:transaction_failed"));
-		ZvP.getPluginLogger().log(Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + "; Task:" + type.name(), false);
+		ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + "; Task:" + type.name(), false);
 	    }
 	}
-	ZvP.getPluginLogger().log(Level.FINE, "A" + getArena().getID() + ": " + player.getName() + " ++ " + score + " --> " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")) + "; Task:" + type, true);
+	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "A" + getArena().getID() + ": " + player.getName() + " ++ " + score + " --> " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")) + "; Task:" + type, true);
     }
     
     public void subtractScore(ZvPPlayer player, double score, ScoreType type) {
@@ -133,13 +133,13 @@ public class ArenaScore {
 	    
 	    if (!response.transactionSuccess()) {
 		player.sendMessage(MessageManager.getMessage("error:transaction_failed"));
-		ZvP.getPluginLogger().log(Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + "; Task:" + type.name(), false);
+		ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + "; Task:" + type.name(), false);
 	    }
 	}
-	ZvP.getPluginLogger().log(Level.FINE, "A" + getArena().getID() + ": " + player.getName() + " -- " + score + " --> " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")) + "; Task:" + type, true);
+	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "A" + getArena().getID() + ": " + player.getName() + " -- " + score + " --> " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")) + "; Task:" + type, true);
     }
     
     private void printResponse(EconomyResponse res) {
-	ZvP.getPluginLogger().log(Level.INFO, "EconomyResponse: " + res.type + " Amount:" + res.amount + " ---> " + res.balance, true);
+	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "EconomyResponse: " + res.type + " Amount:" + res.amount + " ---> " + res.balance, true);
     }
 }

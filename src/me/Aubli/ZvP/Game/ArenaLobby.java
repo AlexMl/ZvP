@@ -125,7 +125,7 @@ public class ArenaLobby {
     }
     
     private void addPlayer(final ZvPPlayer player) {
-	ZvP.getPluginLogger().log(Level.FINER, "Player " + player.getName() + " inGame: " + GameManager.getManager().isInGame(player.getPlayer()) + ", hasCanceled: " + player.hasCanceled() + " , Kit: " + player.hasKit(), true);
+	ZvP.getPluginLogger().log(this.getClass(), Level.FINER, "Player " + player.getName() + " inGame: " + GameManager.getManager().isInGame(player.getPlayer()) + ", hasCanceled: " + player.hasCanceled() + " , Kit: " + player.hasKit(), true);
 	this.joinProcessRunning = true;
 	
 	if (player.hasCanceled()) {

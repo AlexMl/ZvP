@@ -38,12 +38,12 @@ public class MessageManager {
 	
 	if (!this.languageFile.exists() || isOutdated()) {
 	    try {
-		ZvP.getPluginLogger().log("Updating message file for locale " + getLocale().toString() + "!", true);
+		ZvP.getPluginLogger().log(this.getClass(), "Updating message file for locale " + getLocale().toString() + "!", true);
 		this.languageFile.getParentFile().mkdirs();
 		this.languageFile.createNewFile();
 		writeDefaults();
 	    } catch (IOException e) {
-		ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Message file: " + e.getMessage(), true, false, e);
+		ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while saving Message file: " + e.getMessage(), true, false, e);
 	    }
 	}
 	
@@ -86,7 +86,7 @@ public class MessageManager {
 		this.conf = YamlConfiguration.loadConfiguration(this.languageFile);
 		
 		if (!this.languageFile.exists() || isOutdated()) {
-		    ZvP.getPluginLogger().log(Level.INFO, "Copying new translation for " + bundle.getLocale().toString() + "!", false);
+		    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Copying new translation for " + bundle.getLocale().toString() + "!", false);
 		    this.languageFile.getParentFile().mkdirs();
 		    this.languageFile.createNewFile();
 		    
@@ -109,7 +109,7 @@ public class MessageManager {
 		    save();
 		}
 	    } catch (IOException e) {
-		ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Message file for Locale " + bundle.getLocale().toString() + ": " + e.getMessage(), true, false, e);
+		ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while saving Message file for Locale " + bundle.getLocale().toString() + ": " + e.getMessage(), true, false, e);
 	    }
 	}
 	this.languageFile = null;
@@ -136,7 +136,7 @@ public class MessageManager {
 	try {
 	    getConfig().save(this.languageFile);
 	} catch (IOException e) {
-	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Message file: " + e.getMessage(), true, false, e);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while saving Message file: " + e.getMessage(), true, false, e);
 	}
     }
     

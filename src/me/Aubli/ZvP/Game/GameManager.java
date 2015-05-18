@@ -320,7 +320,7 @@ public class GameManager {
 	    Arena a = new Arena(getNewID(this.arenaPath), maxP, this.arenaPath, min.clone(), max.clone(), ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ArenaDifficultyLevel.NORMAL, true);
 	    this.arenas.add(a);
 	    
-	    ZvP.getPluginLogger().log(Level.INFO, "New Arena added!", true);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "New Arena added!", true);
 	    return true;
 	}
 	return false;
@@ -329,12 +329,12 @@ public class GameManager {
     public void addLobby(Location loc) {
 	Lobby l = new Lobby(getNewID(this.lobbyPath), this.lobbyPath, loc.clone());
 	this.lobbys.add(l);
-	ZvP.getPluginLogger().log(Level.INFO, "New Lobby added!", true);
+	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "New Lobby added!", true);
     }
     
     public boolean removeArena(Arena arena) {
 	if (arena != null && this.arenas.contains(arena)) {
-	    ZvP.getPluginLogger().log(Level.INFO, "Arena " + arena.getID() + " removed!", true);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + arena.getID() + " removed!", true);
 	    this.arenas.remove(arena);
 	    arena.delete();
 	    return true;
@@ -345,7 +345,7 @@ public class GameManager {
     
     public boolean removeLobby(Lobby lobby) {
 	if (lobby != null && this.lobbys.contains(lobby)) {
-	    ZvP.getPluginLogger().log(Level.INFO, "Lobby " + lobby.getID() + " removed!", true);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Lobby " + lobby.getID() + " removed!", true);
 	    this.lobbys.remove(lobby);
 	    lobby.delete();
 	    return true;
@@ -365,7 +365,7 @@ public class GameManager {
 		    SignManager.getManager().updateSigns(arena);
 		    return true;
 		} catch (Exception e) {
-		    ZvP.getPluginLogger().log(Level.WARNING, "Error while creating Player: " + e.getMessage(), true, false, e);
+		    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while creating Player: " + e.getMessage(), true, false, e);
 		    return false;
 		}
 	    } else {
@@ -379,7 +379,7 @@ public class GameManager {
     public boolean removePlayer(ZvPPlayer player) {
 	boolean success = player.getArena().removePlayer(player);
 	player.reset();
-	ZvP.getPluginLogger().log(Level.INFO, "Player " + player.getName() + " removed from Game!", true);
+	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Player " + player.getName() + " removed from Game!", true);
 	return success;
     }
     

@@ -42,22 +42,22 @@ public class PluginOutput {
 	return this.debugMode;
     }
     
-    public void log(String message, boolean logMessage) {
-	log(Level.INFO, message, logMessage, false);
+    public void log(Class<?> senderClass, String message, boolean logMessage) {
+	log(senderClass, Level.INFO, message, logMessage, false);
     }
     
-    public void log(Level level, String message, boolean debugMessage) {
-	log(level, message, true, debugMessage, null);
+    public void log(Class<?> senderClass, Level level, String message, boolean debugMessage) {
+	log(senderClass, level, message, true, debugMessage, null);
     }
     
-    public void log(Level level, String message, boolean logMessage, boolean debugMessage) {
-	log(level, message, logMessage, debugMessage, null);
+    public void log(Class<?> senderClass, Level level, String message, boolean logMessage, boolean debugMessage) {
+	log(senderClass, level, message, logMessage, debugMessage, null);
     }
     
-    public void log(Level level, String message, boolean logMessage, boolean debugMessage, Exception e) {
+    public void log(Class<?> senderClass, Level level, String message, boolean logMessage, boolean debugMessage, Exception e) {
 	
 	if (logMessage) {
-	    logData(level, message, e);
+	    logData(senderClass, level, message, e);
 	}
 	
 	if (e != null) {
@@ -85,7 +85,7 @@ public class PluginOutput {
 	}
     }
     
-    private void logData(Level level, String message, Exception exception) {
+    private void logData(Class<?> senderClass, Level level, String message, Exception exception) {
 	SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 	Date currentTime = new Date();
 	
@@ -96,7 +96,7 @@ public class PluginOutput {
 		message += "\n" + exception.toString();
 	    }
 	    
-	    writer.write("[" + formatter.format(currentTime) + "] [" + level.getName() + "] " + message);
+	    writer.write("[" + formatter.format(currentTime) + "] [" + senderClass.getSimpleName() + "] [" + level.getName() + "] " + message);
 	    writer.write(System.getProperty("line.separator"));
 	    writer.flush();
 	    writer.close();

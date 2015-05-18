@@ -105,7 +105,7 @@ public class GameRunnable extends BukkitRunnable {
 		// System.out.println(this.spawnGoal + " < " + nextZombies + " && " + this.spawnZombies);
 		if ((this.spawnGoal < nextZombies) && this.spawnZombies) {
 		    double missing = nextZombies - this.spawnGoal;
-		    ZvP.getPluginLogger().log(Level.FINER, "Arena: " + this.arena.getID() + " Missing: " + (int) missing, true);
+		    ZvP.getPluginLogger().log(this.getClass(), Level.FINER, "Arena: " + this.arena.getID() + " Missing: " + (int) missing, true);
 		    
 		    if (missing >= ((int) (nextZombies * 0.17)) && ((int) (nextZombies * 0.10)) > 0) {
 			this.spawnGoal += this.arena.spawnZombies((int) (nextZombies * 0.10));;

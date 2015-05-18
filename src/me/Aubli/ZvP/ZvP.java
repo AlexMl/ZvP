@@ -67,14 +67,14 @@ public class ZvP extends JavaPlugin {
 	}
 	GameManager.getManager().shutdown();
 	
-	logger.log("Plugin is disabled!", false);
+	logger.log(this.getClass(), "Plugin is disabled!", false);
     }
     
     @Override
     public void onEnable() {
 	initialize();
 	
-	logger.log("Plugin is enabled!", false);
+	logger.log(this.getClass(), "Plugin is enabled!", false);
     }
     
     private void initialize() {
@@ -107,13 +107,13 @@ public class ZvP extends JavaPlugin {
 		
 		if (economyProvider != null) {
 		    economy = economyProvider.getProvider();
-		    getPluginLogger().log(Level.INFO, "Successfully hooked into Vault economy!", false, false);
+		    getPluginLogger().log(this.getClass(), Level.INFO, "Successfully hooked into Vault economy!", false, false);
 		} else {
-		    getPluginLogger().log(Level.WARNING, "Could not hook into Vault! Disabling economy ...", false);
+		    getPluginLogger().log(this.getClass(), Level.WARNING, "Could not hook into Vault! Disabling economy ...", false);
 		    ZvPConfig.setEconEnabled(false);
 		}
 	    } else {
-		getPluginLogger().log(Level.WARNING, "Economy is enabled but Vault is not installed! Disabling economy ...", false);
+		getPluginLogger().log(this.getClass(), Level.WARNING, "Economy is enabled but Vault is not installed! Disabling economy ...", false);
 		ZvPConfig.setEconEnabled(false);
 	    }
 	}
@@ -150,7 +150,7 @@ public class ZvP extends JavaPlugin {
 		
 		metrics.start();
 	    } catch (IOException e) {
-		logger.log(Level.WARNING, "Can't start Metrics! Skip!", true, false, e);
+		logger.log(this.getClass(), Level.WARNING, "Can't start Metrics! Skip!", true, false, e);
 	    }
 	}
     }

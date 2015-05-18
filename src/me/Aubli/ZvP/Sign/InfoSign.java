@@ -62,7 +62,7 @@ public class InfoSign implements ISign, Comparable<ISign> {
 	    
 	    this.signConfig.save(this.signFile);
 	} catch (IOException e) {
-	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving " + getType().toString() + " " + ID + ": " + e.getMessage(), true, false, e);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while saving " + getType().toString() + " " + ID + ": " + e.getMessage(), true, false, e);
 	}
 	
 	if (signLoc.getBlock().getState() instanceof Sign) {

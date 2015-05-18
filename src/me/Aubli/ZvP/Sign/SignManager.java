@@ -94,7 +94,7 @@ public class SignManager {
 			break;
 		}
 	    } catch (Exception e) {
-		ZvP.getPluginLogger().log(Level.WARNING, e.getMessage(), true, false, e);
+		ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, e.getMessage(), true, false, e);
 	    }
 	}
     }
@@ -140,7 +140,7 @@ public class SignManager {
 		this.colorMap.put(type, signColorMap);
 	    }
 	} catch (Exception e) {
-	    ZvP.getPluginLogger().log(Level.WARNING, e.getMessage(), true, false, e);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, e.getMessage(), true, false, e);
 	}
     }
     
@@ -231,7 +231,7 @@ public class SignManager {
 		}
 		
 	    } catch (Exception e) {
-		ZvP.getPluginLogger().log(Level.WARNING, "Error while creating new " + type.toString() + ": " + e.getMessage(), true, false, e);
+		ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while creating new " + type.toString() + ": " + e.getMessage(), true, false, e);
 		return false;
 	    }
 	}

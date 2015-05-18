@@ -36,7 +36,7 @@ public class Lobby implements Comparable<Lobby> {
 	    this.lobbyFile.createNewFile();
 	    save();
 	} catch (IOException e) {
-	    ZvP.getPluginLogger().log(Level.WARNING, "Error while saving Lobby config: " + e.getMessage(), true, false, e);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while saving Lobby config: " + e.getMessage(), true, false, e);
 	}
     }
     
