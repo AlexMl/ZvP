@@ -8,27 +8,30 @@ import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scheduler.BukkitTask;
 
 
 public class EntityListener implements Listener {
     
+    private GameManager game = GameManager.getManager();
     private BukkitTask task;
     
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
 	
 	if (event.getDamager() instanceof Player) {
-	    ZvPPlayer damager = GameManager.getManager().getPlayer((Player) event.getDamager());
+	    ZvPPlayer damager = this.game.getPlayer((Player) event.getDamager());
 	    
-	    if (damager != null && GameManager.getManager().isInGame(damager.getPlayer())) {
+	    if (damager != null && this.game.isInGame(damager.getPlayer())) {
 		if (damager.hasProtection()) {
 		    event.setCancelled(true);
 		    return;
@@ -66,9 +69,9 @@ public class EntityListener implements Listener {
 	
 	if (event.getEntity() instanceof Player) {
 	    
-	    ZvPPlayer victim = GameManager.getManager().getPlayer((Player) event.getEntity());
+	    ZvPPlayer victim = this.game.getPlayer((Player) event.getEntity());
 	    
-	    if (victim != null && GameManager.getManager().isInGame(victim.getPlayer())) {
+	    if (victim != null && this.game.isInGame(victim.getPlayer())) {
 		if (victim.hasProtection()) {
 		    event.setCancelled(true);
 		    return;
@@ -83,8 +86,8 @@ public class EntityListener implements Listener {
 		    Player p1 = (Player) p.getShooter();
 		    
 		    if (p1 != null && victim != null) {
-			if (GameManager.getManager().isInGame(p1) && GameManager.getManager().isInGame(victim.getPlayer())) {
-			    if (GameManager.getManager().getPlayer(p1).getArena().equals(victim.getArena())) {
+			if (this.game.isInGame(p1) && this.game.isInGame(victim.getPlayer())) {
+			    if (this.game.getPlayer(p1).getArena().equals(victim.getArena())) {
 				event.setCancelled(true);
 				return;
 			    }
@@ -97,8 +100,8 @@ public class EntityListener implements Listener {
 		Player p1 = (Player) event.getDamager();
 		
 		if (p1 != null && victim != null) {
-		    if (GameManager.getManager().isInGame(p1) && GameManager.getManager().isInGame(victim.getPlayer())) {
-			if (GameManager.getManager().getPlayer(p1).getArena().equals(victim.getArena())) {
+		    if (this.game.isInGame(p1) && this.game.isInGame(victim.getPlayer())) {
+			if (this.game.getPlayer(p1).getArena().equals(victim.getArena())) {
 			    event.setCancelled(true);
 			    return;
 			}
@@ -106,6 +109,45 @@ public class EntityListener implements Listener {
 		}
 	    }
 	}
+    }
+    
+    @EventHandler
+    public void onEntityDeath(EntityDeathEvent event) {
 	
+	if (event.getEntity().getKiller() != null) {
+	    
+	    Player eventPlayer = event.getEntity().getKiller();
+	    if (this.game.isInGame(eventPlayer)) {
+		
+		final ZvPPlayer player = this.game.getPlayer(eventPlayer);
+		
+		if (player.getArena().keepExp()) {
+		    // entity.remove() does cancel xp spawn.
+		    // --> spawn xp
+		    
+		    int droppedExp = (int) Math.ceil((event.getDroppedExp() / 2.0) * player.getArena().getDifficultyTool().getExpFactor());
+		    
+		    for (int xp = 0; xp < droppedExp; xp++) {
+			event.getEntity().getWorld().spawn(event.getEntity().getLocation().clone(), ExperienceOrb.class).setExperience(1);
+		    }
+		}
+		
+		if (event.getEntity() instanceof Zombie) {
+		    event.getEntity().remove();
+		    
+		    // Task is needed because entity.remove() is asyncron and takes longer
+		    // therefor the scoreboard gets updated to early!
+		    Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
+			
+			@Override
+			public void run() {
+			    player.addKill();
+			}
+		    }, 5L);
+		    
+		    return;
+		}
+	    }
+	}
     }
 }
