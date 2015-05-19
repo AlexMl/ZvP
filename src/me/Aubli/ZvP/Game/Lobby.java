@@ -59,8 +59,8 @@ public class Lobby implements Comparable<Lobby> {
 	this.lobbyConfig.save(this.lobbyFile);
     }
     
-    void delete() {
-	this.lobbyFile.delete();
+    boolean delete() {
+	return this.lobbyFile.delete();
     }
     
     public int getID() {

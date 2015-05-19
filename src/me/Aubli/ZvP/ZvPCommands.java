@@ -74,7 +74,7 @@ public class ZvPCommands implements CommandExecutor {
 			sender.sendMessage(MessageManager.getMessage("config:reloaded"));
 			return true;
 		    }
-		    if (args[0].equalsIgnoreCase("stop-all")) {
+		    if (args[0].equalsIgnoreCase("stop-all") || args[0].equalsIgnoreCase("stop")) {
 			GameManager.getManager().stopGames();
 			sender.sendMessage(MessageManager.getMessage("arena:stop_all"));
 			return true;
@@ -242,7 +242,6 @@ public class ZvPCommands implements CommandExecutor {
 			for (Arena a : this.game.getArenas()) {
 			    
 			    String status = a.isRunning() ? ChatColor.GRAY + "| " + ChatColor.RED + "A: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Money: " + ChatColor.BLUE + a.getScore().getScore(null) + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Zombies: " + ChatColor.BLUE + a.getLivingZombieAmount() + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getSpawningZombies() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Killed: " + ChatColor.BLUE + a.getKilledZombies() : ChatColor.GRAY + "| " + ChatColor.RED + "A: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers();
-			    
 			    playerSender.sendMessage(status);
 			}
 			
@@ -476,10 +475,10 @@ public class ZvPCommands implements CommandExecutor {
 			    if (args[2].equalsIgnoreCase("prelobby") || args[2].equalsIgnoreCase("lobby")) {
 				boolean success = arena.addArenaLobby(playerSender.getLocation().clone());
 				
-				if (success) {// TODO: Message
-				    playerSender.sendMessage("success");
+				if (success) {
+				    playerSender.sendMessage(MessageManager.getFormatedMessage("manage:position_saved", "PreLobby"));
 				} else {
-				    playerSender.sendMessage("!success");
+				    playerSender.sendMessage(MessageManager.getMessage("error:prelobby_add"));
 				}
 				return true;
 			    } else {
@@ -565,7 +564,7 @@ public class ZvPCommands implements CommandExecutor {
 		player.sendMessage(ChatColor.GRAY + "|----------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Arenas" + ChatColor.GRAY + " ------------|");
 		
 		for (Arena a : this.game.getArenas()) {
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "ID: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Mode: " + ChatColor.BLUE + a.getDifficulty().name() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "World: " + ChatColor.BLUE + a.getWorld().getName());
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "ID: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Max. Players: " + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "PreLobby: " + ChatColor.BLUE + a.hasPreLobby() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Mode: " + ChatColor.BLUE + a.getDifficulty().name() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "World: " + ChatColor.BLUE + a.getWorld().getName());
 		}
 	    }
 	} else if (option.equalsIgnoreCase("lobbys") || option.equalsIgnoreCase("lobby")) {

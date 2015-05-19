@@ -251,7 +251,7 @@ public class Arena implements Comparable<Arena> {
 	}
     }
     
-    private void saveArenaLobby(ArenaLobby preLobby) {
+    private boolean saveArenaLobby(ArenaLobby preLobby) {
 	
 	try {
 	    this.arenaConfig.set("arena.Location.PreLobby.X", preLobby.getCenterLoc().getBlockX());
@@ -269,10 +269,12 @@ public class Arena implements Comparable<Arena> {
 	    this.arenaConfig.save(this.arenaFile);
 	    
 	    insertComments();
+	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "PreLobby was successfully added to Arena " + getID(), true, true);
+	    return true;
 	} catch (IOException e) {
-	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while saving ArenaLobby for Arena " + getID() + ": " + e.getMessage(), true, false, e);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while saving PreLobby for Arena " + getID() + ": " + e.getMessage(), true, false, e);
+	    return false;
 	}
-	
     }
     
     private ArenaLobby loadArenaLobby() {
@@ -297,17 +299,20 @@ public class Arena implements Comparable<Arena> {
 	return null;
     }
     
-    void deleteArenaLobby() {
+    boolean deleteArenaLobby() {
 	try {
 	    this.arenaConfig.set("arena.Location.PreLobby", null);
 	    this.arenaConfig.save(this.arenaFile);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Deleted PreLobby from Arena " + getID() + " successfully!", true, true);
+	    return true;
 	} catch (IOException e) {
 	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while deleting ArenaLobby for Arena " + getID() + ": " + e.getMessage(), true, false, e);
+	    return false;
 	}
     }
     
-    void delete() {
-	this.arenaFile.delete();
+    boolean delete() {
+	return this.arenaFile.delete();
     }
     
     private void insertComments() {
@@ -684,8 +689,7 @@ public class Arena implements Comparable<Arena> {
     }
     
     public int getSpawningZombies(int w, int r, int p, int d) {
-	int spawn = (int) Math.sqrt(r * w * getSpawnRate() * getMin().distance(getMax()) * p * ((d + 1.0) / 2.0));
-	return spawn;
+	return ((int) Math.sqrt(r * w * getSpawnRate() * getMin().distance(getMax()) * p * ((d + 1.0) / 2.0)));
     }
     
     public ZvPPlayer getBestPlayer() {
@@ -803,22 +807,22 @@ public class Arena implements Comparable<Arena> {
 	    if (!this.staticSpawnLocations.contains(loc)) {
 		this.staticSpawnLocations.add(loc);
 		save();
+		ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Added spawnpoint (X:" + loc.getBlockX() + "Y:" + loc.getBlockY() + "Z:" + loc.getBlockZ() + ") to Arena " + getID(), true, true);
 		return true;
 	    }
 	}
 	return false;
     }
     
-    public boolean addArenaLobby(Location center) {
-	
+    public boolean addArenaLobby(Location center) {// INFO: return class would make sense here
+    
 	if (!center.getWorld().getUID().equals(getWorld().getUID())) {
 	    return false;
 	}
 	
 	try {
 	    this.preLobby = new ArenaLobby(this, center, null, this.rand);
-	    saveArenaLobby(this.preLobby);
-	    return true;
+	    return saveArenaLobby(this.preLobby);
 	} catch (Exception e) {
 	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while creating ArenaLobby for Arena " + getID() + ": " + e.getMessage(), true, false, e);
 	    return false;

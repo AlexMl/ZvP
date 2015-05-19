@@ -64,7 +64,7 @@ public class PlayerListener implements Listener {
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
-    // INFO: Highest, otherwise overridden by essentials
+    // INFO: Highest Priority, otherwise overridden by essentials
     public void onPlayerRespawn(PlayerRespawnEvent event) {
 	
 	this.eventPlayer = event.getPlayer();

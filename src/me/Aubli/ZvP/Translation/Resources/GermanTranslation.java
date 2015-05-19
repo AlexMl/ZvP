@@ -76,6 +76,7 @@ public class GermanTranslation extends ListResourceBundle {
 	    {"error:sign_remove", ChatColor.RED + "Ein Fehler ist beim Entfernen dieses Schildes aufgetreten!"},
 	    {"error:sign_place", ChatColor.RED + "Ein Fehler ist beim Platzieren dieses Schildes aufgetreten!"},
 	    {"error:sign_layout", ChatColor.RED + "Das Schild Layout ist falsch!"},
+	    {"error:prelobby_add", ChatColor.RED + "Ein Fehler ist beim Speichern der PreLobby aufgetreten!"},
 	    {"error:lobby_not_available", ChatColor.RED + "Diese Lobby ist nicht verfügbar!"},
 	    {"error:arena_not_available", ChatColor.RED + "Diese Arena ist nicht verfügbar!"},
 	    {"error:kit_already_exists", ChatColor.RED + "Das Kit " + ChatColor.GOLD + "%s" + ChatColor.RED + " existiert bereits! Wähle einen anderen Namen!"},

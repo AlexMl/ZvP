@@ -35,6 +35,7 @@ public class ArenaScore {
 	} else {
 	    this.score = 0.0;
 	}
+	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Finished init of ArenaScore for arena " + arena.getID(), true);
     }
     
     private void initMap() {

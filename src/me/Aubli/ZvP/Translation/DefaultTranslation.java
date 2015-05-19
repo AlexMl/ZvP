@@ -76,6 +76,7 @@ public class DefaultTranslation extends ListResourceBundle {
 	    {"error:sign_remove", ChatColor.RED + "An Error occured while removing this Sign!"},
 	    {"error:sign_place", ChatColor.RED + "An Error occured while placing this Sign!"},
 	    {"error:sign_layout", ChatColor.RED + "The sign layout is wrong!"},
+	    {"error:prelobby_add", ChatColor.RED + "An Error occured while saving PreLobby!"},
 	    {"error:lobby_not_available", ChatColor.RED + "This Lobby is not available!"},
 	    {"error:arena_not_available", ChatColor.RED + "This Arena is not available!"},
 	    {"error:kit_already_exists", ChatColor.RED + "The Kit " + ChatColor.GOLD + "%s" + ChatColor.RED + " already exists! Choose another name!"},

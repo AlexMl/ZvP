@@ -320,7 +320,7 @@ public class GameManager {
 	    Arena a = new Arena(getNewID(this.arenaPath), maxP, this.arenaPath, min.clone(), max.clone(), ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ArenaDifficultyLevel.NORMAL, true);
 	    this.arenas.add(a);
 	    
-	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "New Arena added!", true);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + a.getID() + " in World " + a.getWorld().getUID().toString() + " added! MaxPlayer=" + maxP, true);
 	    return true;
 	}
 	return false;
@@ -329,15 +329,15 @@ public class GameManager {
     public void addLobby(Location loc) {
 	Lobby l = new Lobby(getNewID(this.lobbyPath), this.lobbyPath, loc.clone());
 	this.lobbys.add(l);
-	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "New Lobby added!", true);
+	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Lobby " + l.getID() + " in World " + l.getWorld().getUID().toString() + " added!", true);
     }
     
     public boolean removeArena(Arena arena) {
 	if (arena != null && this.arenas.contains(arena)) {
-	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + arena.getID() + " removed!", true);
-	    this.arenas.remove(arena);
-	    arena.delete();
-	    return true;
+	    boolean arrayRemove = this.arenas.remove(arena);
+	    boolean fileDelete = arena.delete();
+	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + arena.getID() + " removed! Removed from list " + (arrayRemove ? "successfully" : "failed") + "; Deleted File " + (fileDelete ? "successfully" : "failed") + "!", true);
+	    return (arrayRemove && fileDelete);
 	} else {
 	    return false;
 	}
@@ -345,9 +345,9 @@ public class GameManager {
     
     public boolean removeLobby(Lobby lobby) {
 	if (lobby != null && this.lobbys.contains(lobby)) {
-	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Lobby " + lobby.getID() + " removed!", true);
-	    this.lobbys.remove(lobby);
-	    lobby.delete();
+	    boolean arrayRemove = this.lobbys.remove(lobby);
+	    boolean fileDelete = lobby.delete();
+	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Lobby " + lobby.getID() + " removed! Removed from list " + (arrayRemove ? "successfully" : "failed") + "; Deleted File " + (fileDelete ? "successfully" : "failed") + "!", true);
 	    return true;
 	} else {
 	    return false;
