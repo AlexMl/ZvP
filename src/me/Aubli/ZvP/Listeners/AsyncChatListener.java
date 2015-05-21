@@ -71,7 +71,7 @@ public class AsyncChatListener implements Listener {
 	    } else {
 		if (ZvPConfig.getModifyChat()) {
 		    event.setCancelled(true);
-		    player.getArena().sendMessage(ChatColor.BLACK + "[" + ChatColor.GOLD + player.getName() + ChatColor.BLACK + "] " + ChatColor.RESET + event.getMessage());
+		    player.getArena().sendMessage(ZvP.getPrefix() + " " + ChatColor.BLACK + "[" + ChatColor.GOLD + player.getName() + ChatColor.BLACK + "] " + ChatColor.RESET + event.getMessage());
 		}
 	    }
 	    return;
