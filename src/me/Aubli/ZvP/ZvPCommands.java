@@ -529,6 +529,24 @@ public class ZvPCommands implements CommandExecutor {
 			}
 		    }
 		    
+		    if (args[1].equalsIgnoreCase("prelobby")) {
+			if (playerSender.hasPermission("zvp.manage.arena")) {
+			    Arena arena = GameManager.getManager().getArena(parseInt(args[2]));
+			    
+			    if (arena != null) {
+				arena.deleteArenaLobby();
+				playerSender.sendMessage(MessageManager.getMessage("manage:lobby_removed"));
+				return true;
+			    } else {
+				playerSender.sendMessage(MessageManager.getMessage("error:arena_not_available"));
+				return true;
+			    }
+			} else {
+			    commandDenied(playerSender);
+			    return true;
+			}
+		    }
+		    
 		    printCommands(playerSender, 2);
 		    return true;
 		}
@@ -637,6 +655,7 @@ public class ZvPCommands implements CommandExecutor {
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp set [Arena-ID] [online|offline]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove arena [Arena-ID]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove lobby [Lobby-ID]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove preLobby [Arena-ID]");
 		    break;
 		
 		default:

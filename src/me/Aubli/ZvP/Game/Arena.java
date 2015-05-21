@@ -299,10 +299,12 @@ public class Arena implements Comparable<Arena> {
 	return null;
     }
     
-    boolean deleteArenaLobby() {
+    public boolean deleteArenaLobby() {
 	try {
+	    this.preLobby = null;
 	    this.arenaConfig.set("arena.Location.PreLobby", null);
 	    this.arenaConfig.save(this.arenaFile);
+	    save();
 	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Deleted PreLobby from Arena " + getID() + " successfully!", true, true);
 	    return true;
 	} catch (IOException e) {
