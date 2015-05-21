@@ -573,13 +573,14 @@ public class Arena implements Comparable<Arena> {
 	final Location spawnLoc = getNewRandomLocation(false);
 	
 	for (ZvPPlayer p : getPlayers()) {
+	    final Location playerLoc = p.getLocation().clone();
 	    
 	    if (this.staticSpawnLocations.isEmpty()) {
-		if (p.getLocation().distanceSquared(spawnLoc) <= (distance * distance)) {
+		if (playerLoc.distanceSquared(spawnLoc) <= (distance * distance)) {
 		    return getNewSaveLocation();
 		}
 	    } else {
-		if (p.getLocation().distanceSquared(spawnLoc) <= (distance * distance)) {
+		if (playerLoc.distanceSquared(spawnLoc) <= (distance * distance)) {
 		    return getNewSaveLocation();
 		}
 		for (Location loc : this.staticSpawnLocations) {
@@ -871,7 +872,6 @@ public class Arena implements Comparable<Arena> {
 	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Player " + player.getName() + " has joined Arena " + getID() + "! ASTATUS: " + getStatus().name(), true);
 	    
 	    if (this.players.size() >= this.minPlayers && !isRunning()) {
-		/*
 		for (ZvPPlayer p : this.players) {
 		    if (!p.hasKit()) {
 			for (ZvPPlayer p2 : this.players) {
@@ -882,8 +882,8 @@ public class Arena implements Comparable<Arena> {
 			return false;
 		    }
 		}
-		*/
-		if (getStatus() == ArenaStatus.STANDBY) {
+		
+		if (getStatus() == ArenaStatus.STANDBY && !isWaiting()) {
 		    if (hasPreLobby()) {
 			start(0, 0, 5); // INFO: magic number.
 		    } else {
