@@ -152,8 +152,8 @@ public class Arena implements Comparable<Arena> {
 	    this.status = ArenaStatus.STOPED;
 	}
 	
-	this.enableSpawnProtection = this.arenaConfig.getBoolean("arena.safety.SpawnProtection.enabled", true);
-	this.protectionDuration = this.arenaConfig.getInt("arena.safety.SpawnProtection.duration");
+	this.enableSpawnProtection = this.arenaConfig.getBoolean("arena.enableSpawnProtection", true);
+	this.protectionDuration = this.arenaConfig.getInt("arena.spawnProtectionDuration");
 	this.difficulty = ArenaDifficultyLevel.valueOf(this.arenaConfig.getString("arena.Difficulty", "NORMAL"));
 	
 	this.round = 0;
@@ -175,7 +175,7 @@ public class Arena implements Comparable<Arena> {
 	this.deathFee = this.arenaConfig.getDouble("arena.deathFee", 3.0);
 	
 	this.spawnRate = this.arenaConfig.getInt("arena.spawnRate", ZvPConfig.getDefaultZombieSpawnRate());
-	this.saveRadius = this.arenaConfig.getDouble("arena.safety.saveRadius", 4.0);
+	this.saveRadius = this.arenaConfig.getDouble("arena.saveRadius", 4.0);
 	
 	this.arenaWorld = Bukkit.getWorld(UUID.fromString(this.arenaConfig.getString("arena.Location.world")));
 	this.minLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.min.X"), this.arenaConfig.getInt("arena.Location.min.Y"), this.arenaConfig.getInt("arena.Location.min.Z"));
