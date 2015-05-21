@@ -5,6 +5,7 @@ Changelog:
 *A lot of options moved into arena configuration
 *Added optional PreLobby to Arena
 *Improved log data
+*Fixed bugs with joining
 
 2.5.2:
 *Added option to keep xp
