@@ -35,7 +35,7 @@ public class ArenaScore {
 	} else {
 	    this.score = 0.0;
 	}
-	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Finished init of ArenaScore for arena " + arena.getID(), true);
+	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Finished init of " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")) + " for arena " + arena.getID(), true);
     }
     
     private void initMap() {
@@ -49,8 +49,10 @@ public class ArenaScore {
     private void initPlayer(ZvPPlayer player) {
 	if (useVaultEconomy()) {
 	    this.playerScore.put(player, ZvP.getEconProvider().getBalance(player.getPlayer()));
+	    ZvP.getPluginLogger().log(this.getClass(), Level.FINEST, "Finished init for " + player.getName() + ": " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")), true, true);
 	} else {
 	    this.playerScore.put(player, 0.0);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.FINEST, "Finished init for " + player.getName() + ": " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")), true, true);
 	}
     }
     
