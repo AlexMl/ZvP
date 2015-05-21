@@ -4,6 +4,7 @@ Changelog:
 *ZvP now supports joins during games
 *A lot of options moved into arena configuration
 *Added optional PreLobby to Arena
+*Improved log data
 
 2.5.2:
 *Added option to keep xp
