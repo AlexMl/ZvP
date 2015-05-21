@@ -772,6 +772,18 @@ public class Arena implements Comparable<Arena> {
 	return this.separatePlayerScores;
     }
     
+    public boolean initArenaScore(boolean force) {
+	if (this.score == null) {
+	    this.score = new ArenaScore(this, separatePlayerScores(), ZvPConfig.getEnableEcon(), ZvPConfig.getIntegrateGame());
+	    return true;
+	} else {
+	    if (force) {
+		this.score = new ArenaScore(this, separatePlayerScores(), ZvPConfig.getEnableEcon(), ZvPConfig.getIntegrateGame());
+	    }
+	}
+	return false;
+    }
+    
     public void setPlayerBoards() {
 	for (ZvPPlayer p : getPlayers()) {
 	    p.setScoreboard(GameManager.getManager().getNewBoard());
@@ -968,7 +980,6 @@ public class Arena implements Comparable<Arena> {
 	this.round = startRound;
 	this.wave = startWave;
 	
-	this.score = new ArenaScore(this, separatePlayerScores(), ZvPConfig.getEnableEcon(), ZvPConfig.getIntegrateGame());
 	getWorld().setDifficulty(Difficulty.NORMAL);
 	getWorld().setTime(15000L);
 	getWorld().setMonsterSpawnLimit(0);

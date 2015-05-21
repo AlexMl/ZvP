@@ -74,6 +74,7 @@ public class GameRunnable extends BukkitRunnable {
 	
 	if (this.seconds == this.startDelay) {  // set game settings
 	    if (this.arena.getRound() == 0 && this.arena.getWave() == 0) {
+		this.arena.initArenaScore(false);
 		this.arena.setPlayerLevel(0);
 		this.arena.setRound(1);
 		this.arena.setWave(1);
