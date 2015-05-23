@@ -276,7 +276,7 @@ public class GameManager {
     }
     
     // Manage Arenas and Lobbys
-    public boolean addArena(Location min, Location max) {
+    public Arena addArena(Location min, Location max) {
 	
 	if (min.getWorld().equals(max.getWorld())) {
 	    
@@ -321,9 +321,9 @@ public class GameManager {
 	    this.arenas.add(a);
 	    
 	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + a.getID() + " in World " + a.getWorld().getUID().toString() + " added! MaxPlayer=" + maxP, true);
-	    return true;
+	    return a;
 	}
-	return false;
+	return null;
     }
     
     public void addLobby(Location loc) {
