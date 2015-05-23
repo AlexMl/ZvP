@@ -58,8 +58,13 @@ public class InteractListener implements Listener {
 		    }
 		    
 		    if (this.clickLoc.containsKey(Action.RIGHT_CLICK_BLOCK) && this.clickLoc.containsKey(Action.LEFT_CLICK_BLOCK)) {
-			GameManager.getManager().addArena(this.clickLoc.get(Action.LEFT_CLICK_BLOCK), this.clickLoc.get(Action.RIGHT_CLICK_BLOCK));
-			eventPlayer.sendMessage(MessageManager.getMessage("manage:arena_saved"));
+			Arena arena = GameManager.getManager().addArena(this.clickLoc.get(Action.LEFT_CLICK_BLOCK), this.clickLoc.get(Action.RIGHT_CLICK_BLOCK));
+			if (arena != null) {
+			    eventPlayer.sendMessage(MessageManager.getFormatedMessage("manage:arena_saved", arena.getID()));
+			} else {
+			    eventPlayer.sendMessage(MessageManager.getMessage("error:arena_place"));
+			}
+			
 			this.clickLoc.clear();
 			return;
 		    }
