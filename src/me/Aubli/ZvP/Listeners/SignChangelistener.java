@@ -6,6 +6,7 @@ import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
+import me.Aubli.ZvP.Sign.ISign;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
 import me.Aubli.ZvP.Translation.MessageManager;
@@ -54,9 +55,9 @@ public class SignChangelistener implements Listener {
 			    
 			    if (a != null) {
 				if (l != null) {
-				    boolean success = SignManager.getManager().createSign(type, event.getBlock().getLocation().clone(), a, l, null);
+				    ISign sign = SignManager.getManager().createSign(type, event.getBlock().getLocation().clone(), a, l, null);
 				    
-				    if (success) {
+				    if (sign != null) {
 					event.setLine(0, ZvP.getPrefix().trim());
 					event.setLine(1, "Arena: " + arenaID);
 					

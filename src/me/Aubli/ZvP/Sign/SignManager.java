@@ -237,7 +237,7 @@ public class SignManager {
 	return false;
     }
     
-    public boolean createSign(SignType type, Location signLoc, Arena arena, Lobby lobby, ItemCategory category) {
+    public ISign createSign(SignType type, Location signLoc, Arena arena, Lobby lobby, ItemCategory category) {
 	if (signLoc.getBlock().getState() instanceof Sign) {
 	    
 	    String path = this.signFolder.getPath();
@@ -248,12 +248,12 @@ public class SignManager {
 		    case INFO_SIGN:
 			ISign info = new InfoSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby);
 			this.signs.add(info);
-			return true;
+			return info;
 			
 		    case INTERACT_SIGN:
 			ISign inter = new InteractSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby);
 			this.signs.add(inter);
-			return true;
+			return inter;
 			
 		    case SHOP_SIGN:
 			if (category == null) {
@@ -261,15 +261,15 @@ public class SignManager {
 			}
 			ISign shop = new ShopSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby, category);
 			this.signs.add(shop);
-			return true;
+			return shop;
 		}
 		
 	    } catch (Exception e) {
 		ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while creating new " + type.toString() + ": " + e.getMessage(), true, false, e);
-		return false;
+		return null;
 	    }
 	}
-	return false;
+	return null;
     }
     
     public boolean removeSign(Location signLoc) {
