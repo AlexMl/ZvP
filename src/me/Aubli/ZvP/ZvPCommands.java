@@ -476,7 +476,7 @@ public class ZvPCommands implements CommandExecutor {
 				boolean success = arena.addArenaLobby(playerSender.getLocation().clone());
 				
 				if (success) {
-				    playerSender.sendMessage(MessageManager.getFormatedMessage("manage:position_saved", "PreLobby"));
+				    playerSender.sendMessage(MessageManager.getFormatedMessage("manage:lobby_saved"));
 				} else {
 				    playerSender.sendMessage(MessageManager.getMessage("error:prelobby_add"));
 				}
