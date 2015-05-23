@@ -326,7 +326,7 @@ public class Arena implements Comparable<Arena> {
 	CommentUtil.insertComment(this.arenaFile, "rounds", "The amount of rounds you will play.#Note that one round has several waves. To get the full number of waves multiple rounds and waves.");
 	CommentUtil.insertComment(this.arenaFile, "waves", "The amount of waves you will play. To get the full number of waves multiple rounds and waves.");
 	CommentUtil.insertComment(this.arenaFile, "spawnRate", "SpawnRate defines the amount of spawning zombies. Default is 8.");
-	CommentUtil.insertComment(this.arenaFile, "keepXP", "If set to false, the game will not reset/change your current XP level.");
+	CommentUtil.insertComment(this.arenaFile, "keepXP", "If set to false, the game will not reset/change your current XP level.#Note that the countdown system uses the xp level which overrides experience!#The plugin will not show countdowns if keepXP is enabled!");
 	CommentUtil.insertComment(this.arenaFile, "keepInventory", "If set to true, the inventory will not get cleared after the game.#Important: Does not work with kits enabled!#Look into the main config file to disable kits!");
 	CommentUtil.insertComment(this.arenaFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
 	CommentUtil.insertComment(this.arenaFile, "separatePlayerScores", "True: Each player will have his own score.#False: All players have the same score. They pay and earn together.");
