@@ -100,6 +100,12 @@ public class InfoSign implements ISign, Comparable<ISign> {
     
     @Override
     public void delete() {
+	
+	for (int i = 0; i < 4; i++) {
+	    this.sign.setLine(i, "");
+	}
+	this.sign.update(true);
+	
 	this.signFile.delete();
     }
     

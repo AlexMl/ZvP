@@ -11,6 +11,7 @@ import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Shop.ShopManager;
+import me.Aubli.ZvP.Sign.ISign;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Translation.MessageManager;
 
@@ -336,8 +337,13 @@ public class GameManager {
 	if (arena != null && this.arenas.contains(arena)) {
 	    boolean arrayRemove = this.arenas.remove(arena);
 	    boolean fileDelete = arena.delete();
+	    
+	    for (ISign arenaSign : SignManager.getManager().getSigns(arena)) {
+		SignManager.getManager().removeSign(arenaSign.getID());
+	    }
+	    
 	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + arena.getID() + " removed! Removed from list " + (arrayRemove ? "successfully" : "failed") + "; Deleted File " + (fileDelete ? "successfully" : "failed") + "!", true);
-	    return (arrayRemove && fileDelete);
+	    return (arrayRemove && fileDelete); // INFO: return class would make sense here
 	} else {
 	    return false;
 	}
@@ -347,8 +353,13 @@ public class GameManager {
 	if (lobby != null && this.lobbys.contains(lobby)) {
 	    boolean arrayRemove = this.lobbys.remove(lobby);
 	    boolean fileDelete = lobby.delete();
+	    
+	    for (ISign lobbySign : SignManager.getManager().getSigns(lobby)) {
+		SignManager.getManager().removeSign(lobbySign.getID());
+	    }
+	    
 	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Lobby " + lobby.getID() + " removed! Removed from list " + (arrayRemove ? "successfully" : "failed") + "; Deleted File " + (fileDelete ? "successfully" : "failed") + "!", true);
-	    return true;
+	    return (arrayRemove && fileDelete); // INFO: return class would make sense here
 	} else {
 	    return false;
 	}

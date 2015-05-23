@@ -187,6 +187,40 @@ public class SignManager {
 	return signArray;
     }
     
+    public ISign[] getSigns(Arena arena) {
+	ArrayList<ISign> arenaSigns = new ArrayList<ISign>();
+	
+	for (ISign sign : getSigns()) {
+	    if (sign.getArena().equals(arena)) {
+		arenaSigns.add(sign);
+	    }
+	}
+	
+	ISign[] signArray = new ISign[arenaSigns.size()];
+	
+	for (ISign sign : arenaSigns) {
+	    signArray[arenaSigns.indexOf(sign)] = sign;
+	}
+	return signArray;
+    }
+    
+    public ISign[] getSigns(Lobby lobby) {
+	ArrayList<ISign> lobbySigns = new ArrayList<ISign>();
+	
+	for (ISign sign : getSigns()) {
+	    if (sign.getLobby().equals(lobby)) {
+		lobbySigns.add(sign);
+	    }
+	}
+	
+	ISign[] signArray = new ISign[lobbySigns.size()];
+	
+	for (ISign sign : lobbySigns) {
+	    signArray[lobbySigns.indexOf(sign)] = sign;
+	}
+	return signArray;
+    }
+    
     public Map<String, ChatColor> getColorMap(SignType type) {
 	return this.colorMap.get(type);
     }
