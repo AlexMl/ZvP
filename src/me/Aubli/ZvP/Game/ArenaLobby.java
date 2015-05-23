@@ -178,7 +178,7 @@ public class ArenaLobby {
 		public void run() {
 		    
 		    if (this.seconds < getArena().getArenaJoinTime() * 20) {
-			setPlayerLevel(ArenaLobby.this.arena.getArenaJoinTime() * 20 - this.seconds);
+			setPlayerLevel((ArenaLobby.this.arena.getArenaJoinTime() * 20 - this.seconds) / 20);
 		    } else if (this.seconds > getArena().getArenaJoinTime() && ArenaLobby.this.playerList.size() > 0) {
 			ZvP.getPluginLogger().log(this.getClass(), Level.FINER, "PreLobby Task is over! Adding players to Arena " + getArena().getID() + ".", true);
 			
