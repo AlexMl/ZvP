@@ -476,32 +476,40 @@ public class Arena implements Comparable<Arena> {
 	    
 	    if (getWorld().getHighestBlockYAt(x, z) + 1 >= getMin().getBlockY() && getWorld().getHighestBlockYAt(x, z) + 1 <= getMax().getBlockY()) {
 		// If highest y is between min and max, go for it
+		// ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "Highest point is between min and max", true, true);
+		
 		y = getWorld().getHighestBlockYAt(x, z) + 1;
 	    } else if (getMax().getBlockY() == getMin().getBlockY() && getWorld().getHighestBlockYAt(x, z) == getMin().getBlockY()) {
 		// min y == max y == highest y at random location
 		// arena is flat
+		// ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "Arena is flat", true, true);
+		
 		y = getWorld().getHighestBlockYAt(x, z) + 1;
 	    } else if (getMax().getBlockY() == getMin().getBlockY()) {
 		// arena is flat but has a ceiling
+		// ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "Arena is flat but has a ceiling", true, true);
+		
 		y = getMin().getBlockY() + 1;
 	    } else {
 		// iterate over y from min to max to find a perfect y
 		// not very performant but needed in worst case (above doesnt match)
+		// ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "Iterate from 0 - " + (getMax().getBlockY() - getMin().getBlockY()), true, true);
 		
+		ArrayList<Integer> yList = new ArrayList<Integer>();
 		for (int iy = 0; iy < (getMax().getBlockY() - getMin().getBlockY()); iy++) {
 		    if (isValidLocation(getMin().clone().add(0, iy, 0))) {
-			y = getMin().getBlockY() + iy;
-			// System.out.println("ny:" + y);
-			break;
+			yList.add(getMin().getBlockY() + iy);
 		    }
 		}
-		if (y == 0) {
+		if (yList.isEmpty()) {
 		    return getNewRandomLocation(player);
+		} else {
+		    y = yList.get(this.rand.nextInt(yList.size()));
 		}
 	    }
 	    Location startLoc = new Location(getWorld(), x, y, z);
 	    
-	    // System.out.println("valid? " + isValidLocation(startLoc) + " Y:" + startLoc.getBlockY());
+	    ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "valid? " + isValidLocation(startLoc) + " Y:" + startLoc.getBlockY(), true, true);
 	    if (isValidLocation(startLoc)) {
 		return startLoc.clone();
 	    } else {
