@@ -303,12 +303,9 @@ public class GameManager {
 		max.setZ(tempZ);
 	    }
 	    
-	    Location tempMax = max.clone();
-	    tempMax.setY(min.getY());
+	    double dist = min.distance(max);
 	    
-	    double dist = min.clone().distance(tempMax);
-	    
-	    int maxP = ((int) ((Math.ceil(dist + 2)) / 4)) + 1;
+	    int maxP = ((int) ((Math.ceil(dist + 2)) / 4));
 	    
 	    if (maxP < 3) {
 		maxP = 3;
