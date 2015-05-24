@@ -1,4 +1,14 @@
 Changelog:
+2.6.1:
+*Fixed several messages
+*Fixed countdown bug
+*Signs will be removed on arena or lobby removal
+*Fixed bug which prevents replay without reload
+*Fixed y coordinates in arenas with more floors
+*Logger will save version dependend log files
+*Removed pos1/pos2 command. Use the tool
+*Countdown in prelobby is in seconds now
+
 2.6.0:
 *Sign colors are now adjustable
 *ZvP now supports joins during games
