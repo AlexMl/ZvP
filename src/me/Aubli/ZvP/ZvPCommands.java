@@ -1,7 +1,6 @@
 package me.Aubli.ZvP;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -22,7 +21,6 @@ import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -60,7 +58,6 @@ public class ZvPCommands implements CommandExecutor {
      *
      */
     
-    private HashMap<String, Location> positions = new HashMap<String, Location>();
     private GameManager game = GameManager.getManager();
     
     @Override
@@ -304,25 +301,6 @@ public class ZvPCommands implements CommandExecutor {
 		    if (playerSender.hasPermission("zvp.stop.all")) {
 			this.game.stopGames();
 			playerSender.sendMessage(MessageManager.getMessage("arena:stop_all"));
-			return true;
-		    } else {
-			commandDenied(playerSender);
-			return true;
-		    }
-		}
-		
-		if (args[0].equalsIgnoreCase("pos1") || args[0].equalsIgnoreCase("pos2")) {
-		    if (playerSender.hasPermission("zvp.manage.arena")) {
-			
-			this.positions.put(args[0].toLowerCase(), playerSender.getLocation());
-			playerSender.sendMessage(MessageManager.getFormatedMessage("manage:position_saved", args[0].toLowerCase()));
-			
-			if (this.positions.containsKey("pos1") && this.positions.containsKey("pos2")) {
-			    this.game.addArena(this.positions.get("pos1"), this.positions.get("pos2"));
-			    playerSender.sendMessage(MessageManager.getMessage("manage:arena_saved"));
-			    this.positions.clear();
-			    return true;
-			}
 			return true;
 		    } else {
 			commandDenied(playerSender);
@@ -646,8 +624,6 @@ public class ZvPCommands implements CommandExecutor {
 		case 2:
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp addkit [Name]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp removekit [Name]");
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos1");
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos2");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add lobby");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add position");
