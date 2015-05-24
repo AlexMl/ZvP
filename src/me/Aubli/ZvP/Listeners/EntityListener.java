@@ -57,7 +57,7 @@ public class EntityListener implements Listener {
 					zombie.teleport(arena.getNewUnsaveLocation(arena.getSaveRadius() * 1.5 + 2.0 * arena.getDifficulty().getLevel()), TeleportCause.PLUGIN);
 					zombie.setTarget(arena.getRandomPlayer().getPlayer());
 				    }
-				    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Zombie teleport caused by no interaction!", true, true);
+				    ZvP.getPluginLogger().log(EntityListener.class, Level.FINE, "Zombie teleport caused by no interaction!", true, true);
 				    EntityListener.this.task = Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), this, 50 * 20L);
 				}
 			    }

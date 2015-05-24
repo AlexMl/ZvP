@@ -180,13 +180,13 @@ public class ArenaLobby {
 		    if (this.seconds < getArena().getArenaJoinTime() * 20) {
 			setPlayerLevel((ArenaLobby.this.arena.getArenaJoinTime() * 20 - this.seconds) / 20);
 		    } else if (this.seconds > getArena().getArenaJoinTime() && ArenaLobby.this.playerList.size() > 0) {
-			ZvP.getPluginLogger().log(this.getClass(), Level.FINER, "PreLobby Task is over! Adding players to Arena " + getArena().getID() + ".", true);
+			ZvP.getPluginLogger().log(ArenaLobby.class, Level.FINER, "PreLobby Task is over! Adding players to Arena " + getArena().getID() + ".", true);
 			
 			for (int i = 0; i < ArenaLobby.this.playerList.size();) {
 			    ZvPPlayer player = ArenaLobby.this.playerList.get(i);
 			    boolean success = getArena().addPlayer(player);
 			    removePlayer(player);
-			    ZvP.getPluginLogger().log(this.getClass(), Level.FINER, "Added player " + player.getName() + "! Arena returned: " + (success ? "success" : "failure").toUpperCase() + "!", true);
+			    ZvP.getPluginLogger().log(ArenaLobby.class, Level.FINER, "Added player " + player.getName() + "! Arena returned: " + (success ? "success" : "failure").toUpperCase() + "!", true);
 			    return;
 			}
 			
