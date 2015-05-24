@@ -981,6 +981,7 @@ public class Arena implements Comparable<Arena> {
     public void start(int startRound, int startWave, int startDelay) {
 	this.round = startRound;
 	this.wave = startWave;
+	this.score = null;
 	
 	getWorld().setDifficulty(Difficulty.NORMAL);
 	getWorld().setTime(15000L);
@@ -1007,6 +1008,7 @@ public class Arena implements Comparable<Arena> {
 	
 	this.round = 0;
 	this.wave = 0;
+	this.score = null;
 	
 	getWorld().setMonsterSpawnLimit(-1);
 	getWorld().setTime(5000L);
