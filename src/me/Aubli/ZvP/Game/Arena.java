@@ -509,7 +509,7 @@ public class Arena implements Comparable<Arena> {
 	    }
 	    Location startLoc = new Location(getWorld(), x, y, z);
 	    
-	    ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "valid? " + isValidLocation(startLoc) + " Y:" + startLoc.getBlockY(), true, true);
+	    // ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "valid? " + isValidLocation(startLoc) + " Y:" + startLoc.getBlockY(), true, true);
 	    if (isValidLocation(startLoc)) {
 		return startLoc.clone();
 	    } else {
