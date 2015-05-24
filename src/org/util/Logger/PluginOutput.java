@@ -20,17 +20,22 @@ public class PluginOutput {
     private boolean debugMode;
     private int loglevel;
     
+    private String pluginVersion;
+    
     public PluginOutput(JavaPlugin plugin, boolean enableDebug, int minLevel) {
 	
 	this.log = plugin.getLogger();
+	
+	this.pluginVersion = plugin.getDescription().getVersion();
 	
 	this.debugMode = enableDebug;
 	
 	this.loglevel = minLevel;
 	
-	this.logFile = new File(plugin.getDataFolder().getAbsolutePath() + "/pluginlog.info");
+	this.logFile = new File(plugin.getDataFolder().getAbsolutePath() + "/logs/pluginlog-" + this.pluginVersion + ".info");
 	
 	try {
+	    this.logFile.getParentFile().mkdirs();
 	    this.logFile.createNewFile();
 	} catch (IOException e) {
 	    e.printStackTrace();
