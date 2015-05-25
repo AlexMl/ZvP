@@ -82,9 +82,7 @@ public class Arena implements Comparable<Arena> {
     private final int protectionDuration;
     private final double saveRadius;
     
-    private List<Location> staticSpawnLocations;
-    
-    public Arena(int ID, int maxPlayers, String arenaPath, ArenaArea area, int rounds, int waves, int spawnRate, ArenaDifficultyLevel difficulty, boolean spawnProtection) {
+    public Arena(int ID, String arenaPath, ArenaArea area, int rounds, int waves, int spawnRate, int maxPlayers, ArenaDifficultyLevel difficulty, boolean spawnProtection) {
 	
 	this.arenaID = ID;
 	
@@ -124,7 +122,6 @@ public class Arena implements Comparable<Arena> {
 	this.arenaConfig = YamlConfiguration.loadConfiguration(this.arenaFile);
 	
 	this.players = new ArrayList<ZvPPlayer>();
-	this.staticSpawnLocations = new ArrayList<Location>();
 	this.difficultyTool = new ArenaDifficulty(this, getDifficulty());
 	
 	this.rand = new Random();
@@ -134,6 +131,8 @@ public class Arena implements Comparable<Arena> {
     public Arena(File arenaFile) {
 	this.arenaFile = arenaFile;
 	this.arenaConfig = YamlConfiguration.loadConfiguration(arenaFile);
+	
+	this.rand = new Random();
 	
 	this.arenaID = this.arenaConfig.getInt("arena.ID");
 	this.maxPlayers = this.arenaConfig.getInt("arena.maxPlayers", ZvPConfig.getMaxPlayers());
@@ -174,20 +173,43 @@ public class Arena implements Comparable<Arena> {
 	this.saveRadius = this.arenaConfig.getDouble("arena.safety.saveRadius", 4.0);
 	
 	// TODO create arenaArea object from config values
-	this.arenaWorld = Bukkit.getWorld(UUID.fromString(this.arenaConfig.getString("arena.Location.world")));
-	this.minLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.min.X"), this.arenaConfig.getInt("arena.Location.min.Y"), this.arenaConfig.getInt("arena.Location.min.Z"));
-	this.maxLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.max.X"), this.arenaConfig.getInt("arena.Location.max.Y"), this.arenaConfig.getInt("arena.Location.max.Z"));
+	// this.arenaWorld = Bukkit.getWorld(UUID.fromString(this.arenaConfig.getString("arena.Location.world")));
+	// this.minLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.min.X"), this.arenaConfig.getInt("arena.Location.min.Y"),
+	// this.arenaConfig.getInt("arena.Location.min.Z"));
+	// this.maxLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.max.X"), this.arenaConfig.getInt("arena.Location.max.Y"),
+	// this.arenaConfig.getInt("arena.Location.max.Z"));
 	
-	this.staticSpawnLocations = new ArrayList<Location>();
+	// this.staticSpawnLocations = new ArrayList<Location>();
+	// for (String locationString : this.arenaConfig.getStringList("arena.Location.staticPositions")) {
+	// String[] cords = locationString.split(",");
+	// Location loc = new Location(getWorld(), Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
+	// this.staticSpawnLocations.add(loc);
+	// }
+	World arenaWorld = Bukkit.getWorld(UUID.fromString(this.arenaConfig.getString("arena.Location.world")));
+	
+	List<Location> cornerPoints = new ArrayList<Location>();
+	for (String locationString : this.arenaConfig.getStringList("arena.Location.cornerPoints")) {
+	    String[] cords = locationString.split(",");
+	    Location loc = new Location(arenaWorld, Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
+	    cornerPoints.add(loc);
+	}
+	
+	List<Location> spawnPositions = new ArrayList<Location>();
 	for (String locationString : this.arenaConfig.getStringList("arena.Location.staticPositions")) {
 	    String[] cords = locationString.split(",");
-	    Location loc = new Location(getWorld(), Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
-	    this.staticSpawnLocations.add(loc);
+	    Location loc = new Location(arenaWorld, Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
+	    spawnPositions.add(loc);
+	}
+	
+	try {
+	    this.arenaArea = new ArenaArea(arenaWorld, this, cornerPoints, spawnPositions, this.rand);
+	} catch (Exception e) {
+	    // TODO Logger
+	    e.printStackTrace();
 	}
 	
 	this.difficultyTool = new ArenaDifficulty(this, getDifficulty());
 	this.players = new ArrayList<ZvPPlayer>();
-	this.rand = new Random();
 	this.preLobby = loadArenaLobby();
     }
     
@@ -219,21 +241,26 @@ public class Arena implements Comparable<Arena> {
 	    this.arenaConfig.set("arena.saveRadius", this.saveRadius);
 	    
 	    // TODO save arenaArea correctly
-	    this.arenaConfig.set("arena.Location.world", this.arenaWorld.getUID().toString());
-	    this.arenaConfig.set("arena.Location.min.X", this.minLoc.getBlockX());
-	    this.arenaConfig.set("arena.Location.min.Y", this.minLoc.getBlockY());
-	    this.arenaConfig.set("arena.Location.min.Z", this.minLoc.getBlockZ());
+	    // this.arenaConfig.set("arena.Location.min.X", this.minLoc.getBlockX());
+	    // this.arenaConfig.set("arena.Location.min.Y", this.minLoc.getBlockY());
+	    // this.arenaConfig.set("arena.Location.min.Z", this.minLoc.getBlockZ());
 	    
-	    this.arenaConfig.set("arena.Location.max.X", this.maxLoc.getBlockX());
-	    this.arenaConfig.set("arena.Location.max.Y", this.maxLoc.getBlockY());
-	    this.arenaConfig.set("arena.Location.max.Z", this.maxLoc.getBlockZ());
+	    // this.arenaConfig.set("arena.Location.max.X", this.maxLoc.getBlockX());
+	    // this.arenaConfig.set("arena.Location.max.Y", this.maxLoc.getBlockY());
+	    // this.arenaConfig.set("arena.Location.max.Z", this.maxLoc.getBlockZ());
+	    
+	    List<String> cornerPoints = new ArrayList<String>();
+	    for (Location loc : getArea().getCornerLocations()) {
+		cornerPoints.add(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+	    }
 	    
 	    List<String> locationList = new ArrayList<String>();
-	    
-	    for (Location loc : this.staticSpawnLocations) {
+	    for (Location loc : getArea().getSpawnLocations()) {
 		locationList.add(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
 	    }
 	    
+	    this.arenaConfig.set("arena.Location.world", getWorld().getUID().toString());
+	    this.arenaConfig.set("arena.Location.cornerPoints", cornerPoints);
 	    this.arenaConfig.set("arena.Location.staticPositions", locationList);
 	    
 	    this.arenaConfig.addDefault("version", ZvP.getInstance().getDescription().getVersion());
@@ -495,7 +522,7 @@ public class Arena implements Comparable<Arena> {
     }
     
     public int getSpawningZombies(int w, int r, int p, int d) {
-	return ((int) Math.sqrt(r * w * getSpawnRate() * getArea().getSize() * p * ((d + 1.0) / 2.0)));
+	return ((int) Math.sqrt(r * w * getSpawnRate() * getArea().getDiagonal() * p * ((d + 1.0) / 2.0)));
     }
     
     public ZvPPlayer getBestPlayer() {
@@ -610,15 +637,7 @@ public class Arena implements Comparable<Arena> {
     
     // TODO move to arenaArea
     public boolean addSpawnLocation(Location loc) {
-	if (containsLocation(loc)) {
-	    if (!this.staticSpawnLocations.contains(loc)) {
-		this.staticSpawnLocations.add(loc);
-		save();
-		ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Added spawnpoint (X:" + loc.getBlockX() + "Y:" + loc.getBlockY() + "Z:" + loc.getBlockZ() + ") to Arena " + getID(), true, true);
-		return true;
-	    }
-	}
-	return false;
+	return getArea().addSpawnPosition(loc);
     }
     
     public boolean addArenaLobby(Location center) {// INFO: return class would make sense here
