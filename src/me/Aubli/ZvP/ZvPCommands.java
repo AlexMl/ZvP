@@ -1,11 +1,12 @@
 package me.Aubli.ZvP;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.ArenaArea;
 import me.Aubli.ZvP.Game.ArenaScore.ScoreType;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
@@ -23,6 +24,7 @@ import me.Aubli.ZvP.Translation.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -60,7 +62,7 @@ public class ZvPCommands implements CommandExecutor {
      *
      */
     
-    private HashMap<String, Location> positions = new HashMap<String, Location>();
+    private ArrayList<Location> positions = new ArrayList<Location>();
     private GameManager game = GameManager.getManager();
     
     @Override
@@ -102,6 +104,30 @@ public class ZvPCommands implements CommandExecutor {
 	    // Test command
 	    
 	    if (args.length == 1) {
+		
+		if (args[0].equalsIgnoreCase("pos")) {
+		    this.positions.add(playerSender.getLocation().clone());
+		    playerSender.getLocation().clone().subtract(0, 1, 0).getBlock().setType(Material.GLOWSTONE);
+		    System.out.println(this.positions);
+		}
+		if (args[0].equalsIgnoreCase("posf")) {
+		    System.out.println(this.positions);
+		    ArrayList<Location> spawn = new ArrayList<Location>();
+		    spawn.add(playerSender.getLocation());
+		    
+		    try {
+			ArenaArea aa = new ArenaArea(playerSender.getWorld(), GameManager.getManager().getArena(10), this.positions, spawn, new Random());
+			// aa.paintBounds();
+			
+			for (int i = 0; i < 3000; i++) {
+			    // aa.getNewRandomLocation(false).getBlock().setType(Material.SANDSTONE);
+			}
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+		    this.positions.clear();
+		}
+		
 		if (args[0].equalsIgnoreCase("u")) {
 		    SignManager.getManager().updateSigns();
 		    GameManager.getManager().getPlayer(playerSender).getArena().updatePlayerBoards();
@@ -304,25 +330,6 @@ public class ZvPCommands implements CommandExecutor {
 		    if (playerSender.hasPermission("zvp.stop.all")) {
 			this.game.stopGames();
 			playerSender.sendMessage(MessageManager.getMessage("arena:stop_all"));
-			return true;
-		    } else {
-			commandDenied(playerSender);
-			return true;
-		    }
-		}
-		
-		if (args[0].equalsIgnoreCase("pos1") || args[0].equalsIgnoreCase("pos2")) {
-		    if (playerSender.hasPermission("zvp.manage.arena")) {
-			
-			this.positions.put(args[0].toLowerCase(), playerSender.getLocation());
-			playerSender.sendMessage(MessageManager.getFormatedMessage("manage:position_saved", args[0].toLowerCase()));
-			
-			if (this.positions.containsKey("pos1") && this.positions.containsKey("pos2")) {
-			    this.game.addArena(this.positions.get("pos1"), this.positions.get("pos2"));
-			    playerSender.sendMessage(MessageManager.getMessage("manage:arena_saved"));
-			    this.positions.clear();
-			    return true;
-			}
 			return true;
 		    } else {
 			commandDenied(playerSender);
