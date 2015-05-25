@@ -155,14 +155,14 @@ public class GameManager {
 	for (File arenaFile : new File(this.arenaPath).listFiles(this.fileFilter)) {
 	    // Version 2.4.0 needs converted arena files
 	    // Version 2.6.0 needs converted arena files too
-	    ZvP.getConverter().convert(FileType.ARENAFILE, arenaFile, 260.0);
+	    // version 2.7.0 needs converted positions in arena file
+	    ZvP.getConverter().convert(FileType.ARENAFILE, arenaFile, 270.0);
 	    
 	    Arena arena = new Arena(arenaFile);
 	    if (arena.getWorld() != null) {
 		this.arenas.add(arena);
 		arena.save();
 	    }
-	    
 	}
     }
     
@@ -319,7 +319,7 @@ public class GameManager {
 	    
 	    // TODO create arenaAree object
 	    // TODO enable polygon input
-	    Arena a = new Arena(getNewID(this.arenaPath), maxP, this.arenaPath, min.clone(), max.clone(), ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ArenaDifficultyLevel.NORMAL, true);
+	    Arena a = new Arena(getNewID(this.arenaPath), this.arenaPath, null, ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), maxP, ArenaDifficultyLevel.NORMAL, true);
 	    this.arenas.add(a);
 	    
 	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + a.getID() + " in World " + a.getWorld().getUID().toString() + " added! MaxPlayer=" + maxP, true);

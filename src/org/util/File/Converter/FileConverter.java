@@ -2,6 +2,7 @@ package org.util.File.Converter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -51,14 +52,6 @@ public class FileConverter {
 			int spawnRate = conf.getInt("arena.spawnRate");
 			
 			String world = conf.getString("arena.Location.world");
-			int minX = conf.getInt("arena.Location.min.X");
-			int minY = conf.getInt("arena.Location.min.Y");
-			int minZ = conf.getInt("arena.Location.min.Z");
-			
-			int maxX = conf.getInt("arena.Location.max.X");
-			int maxY = conf.getInt("arena.Location.max.Y");
-			int maxZ = conf.getInt("arena.Location.max.Z");
-			
 			List<String> staticPositions = conf.getStringList("arena.Location.staticPositions");
 			
 			boolean keepXP = conf.getBoolean("arena.keepXP", false);
@@ -80,16 +73,38 @@ public class FileConverter {
 			    spawnProtection = true;
 			    duration = 5;
 			    difficulty = "NORMAL";
-			} else if (parseVersion(fileVersion) > 240.0 && parseVersion(fileVersion) < 260.0) {
+			} else if (parseVersion(fileVersion) >= 240.0 && parseVersion(fileVersion) < 260.0) {
 			    saveRadius = conf.getDouble("arena.safety.saveRadius", 4.0);
 			    spawnProtection = conf.getBoolean("arena.safety.SpawnProtection.enabled", true);
 			    duration = conf.getInt("arena.safety.SpawnProtection.duration", 5);
+			    difficulty = conf.getString("arena.Difficulty");
+			} else if (parseVersion(fileVersion) >= 260.0) {
+			    saveRadius = conf.getDouble("arena.saveRadius", 4.0);
+			    spawnProtection = conf.getBoolean("arena.enableSpawnProtection", true);
+			    duration = conf.getInt("arena.spawnProtectionDuration", 5);
 			    difficulty = conf.getString("arena.Difficulty");
 			} else {
 			    saveRadius = 4.0;
 			    spawnProtection = true;
 			    duration = 5;
 			    difficulty = "NORMAL";
+			}
+			
+			List<String> cornerPoints;
+			
+			if (fileVersion == null || parseVersion(fileVersion) < 270.0) {
+			    int minX = conf.getInt("arena.Location.min.X");
+			    int minY = conf.getInt("arena.Location.min.Y");
+			    int minZ = conf.getInt("arena.Location.min.Z");
+			    
+			    int maxX = conf.getInt("arena.Location.max.X");
+			    int maxY = conf.getInt("arena.Location.max.Y");
+			    int maxZ = conf.getInt("arena.Location.max.Z");
+			    cornerPoints = new ArrayList<String>();
+			    cornerPoints.add(minX + "," + minY + "," + minZ);
+			    cornerPoints.add(maxX + "," + maxY + "," + maxZ);
+			} else {
+			    cornerPoints = conf.getStringList("arena.Location.cornerPoints");
 			}
 			
 			boolean success = file.renameTo(new File(file.getParentFile(), file.getName() + ".old"));
@@ -132,14 +147,7 @@ public class FileConverter {
 			conf.set("arena.saveRadius", saveRadius);
 			
 			conf.set("arena.Location.world", world);
-			conf.set("arena.Location.min.X", minX);
-			conf.set("arena.Location.min.Y", minY);
-			conf.set("arena.Location.min.Z", minZ);
-			
-			conf.set("arena.Location.max.X", maxX);
-			conf.set("arena.Location.max.Y", maxY);
-			conf.set("arena.Location.max.Z", maxZ);
-			
+			conf.set("arena.Location.cornerPoints", cornerPoints);
 			conf.set("arena.Location.staticPositions", staticPositions);
 			
 			conf.set("version", this.currentVersion);
