@@ -54,7 +54,7 @@ public class EntityListener implements Listener {
 				if (arena.getLivingZombieAmount() < (arena.getSpawningZombies() * 0.25)) {
 				    
 				    for (Zombie zombie : arena.getLivingZombies()) {
-					zombie.teleport(arena.getNewUnsaveLocation(arena.getSaveRadius() * 1.5 + 2.0 * arena.getDifficulty().getLevel()), TeleportCause.PLUGIN);
+					zombie.teleport(arena.getArea().getNewUnsaveLocation(arena.getSaveRadius() * 1.5 + 2.0 * arena.getDifficulty().getLevel()), TeleportCause.PLUGIN);
 					zombie.setTarget(arena.getRandomPlayer().getPlayer());
 				    }
 				    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Zombie teleport caused by no interaction!", true, true);

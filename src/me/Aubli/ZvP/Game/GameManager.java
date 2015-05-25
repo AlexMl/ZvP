@@ -317,6 +317,8 @@ public class GameManager {
 		maxP = ZvPConfig.getMaxPlayers();
 	    }
 	    
+	    // TODO create arenaAree object
+	    // TODO enable polygon input
 	    Arena a = new Arena(getNewID(this.arenaPath), maxP, this.arenaPath, min.clone(), max.clone(), ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ArenaDifficultyLevel.NORMAL, true);
 	    this.arenas.add(a);
 	    
