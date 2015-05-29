@@ -77,6 +77,7 @@ public class HungarianTranslation extends ListResourceBundle {
 	    {"error:sign_layout", ChatColor.RED + "The sign layout is wrong!"},
 	    {"error:arena_place", ChatColor.RED + "Your positions are not in the same world!"},
 	    {"error:prelobby_add", ChatColor.RED + "An Error occured while saving PreLobby!"},
+	    {"error:no_prelobby", ChatColor.RED + "This arena does not have a PreLobby!"},
 	    {"error:lobby_not_available", ChatColor.RED + "Nincs lobby!"},
 	    {"error:arena_not_available", ChatColor.RED + "Aréna nem létezik!"},
 	    {"error:kit_already_exists", ChatColor.RED + "The Kit " + ChatColor.GOLD + "%s" + ChatColor.RED + " already exists! Choose another name!"},

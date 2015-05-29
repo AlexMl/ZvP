@@ -103,6 +103,11 @@ public class ArenaLobby {
 	}
     }
     
+    public void addSpawnLocation(Location location) {
+	this.locations.add(location.clone());
+	getArena().saveArenaLobby(this);
+    }
+    
     public void removePlayer(ZvPPlayer player) {
 	this.playerList.remove(player);
     }
