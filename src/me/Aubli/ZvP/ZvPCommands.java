@@ -560,7 +560,7 @@ public class ZvPCommands implements CommandExecutor {
 		player.sendMessage(ChatColor.GRAY + "|----------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Arenas" + ChatColor.GRAY + " ------------|");
 		
 		for (Arena a : this.game.getArenas()) {
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "ID: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Max. Players: " + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "PreLobby: " + ChatColor.BLUE + a.hasPreLobby() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Mode: " + ChatColor.BLUE + a.getDifficulty().name() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "World: " + ChatColor.BLUE + a.getWorld().getName());
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "ID: " + ChatColor.BLUE + a.getID() + "-" + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Max: " + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "PreLobby: " + ChatColor.BLUE + a.hasPreLobby() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Mode: " + ChatColor.BLUE + a.getDifficulty().name() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "World: " + ChatColor.BLUE + a.getWorld().getName());
 		}
 	    }
 	} else if (option.equalsIgnoreCase("lobbys") || option.equalsIgnoreCase("lobby")) {
@@ -606,7 +606,7 @@ public class ZvPCommands implements CommandExecutor {
 	    String pluginVersion = ZvP.getInstance().getDescription().getVersion();
 	    
 	    player.sendMessage("\n\n");
-	    player.sendMessage(ChatColor.GRAY + "|---------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Help: Page (" + page + "/2)" + ChatColor.GRAY + " ----------|");
+	    player.sendMessage(ChatColor.GRAY + "|--------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Help: Page (" + page + "/2)" + ChatColor.GRAY + " ---------|");
 	    player.sendMessage(ChatColor.GRAY + "| Use /zvp help [n] to get page [n] of help.\n|");
 	    
 	    switch (page) {
