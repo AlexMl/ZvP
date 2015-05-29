@@ -1,4 +1,8 @@
 Changelog:
+2.6.2:
+*Added command to add PreLobby Positions
+*Adjusted help pages
+
 2.6.1:
 *Fixed several messages
 *Fixed countdown bug
