@@ -251,7 +251,7 @@ public class Arena implements Comparable<Arena> {
 	}
     }
     
-    private boolean saveArenaLobby(ArenaLobby preLobby) {
+    boolean saveArenaLobby(ArenaLobby preLobby) {
 	
 	try {
 	    this.arenaConfig.set("arena.Location.PreLobby.X", preLobby.getCenterLoc().getBlockX());
@@ -269,7 +269,7 @@ public class Arena implements Comparable<Arena> {
 	    this.arenaConfig.save(this.arenaFile);
 	    
 	    insertComments();
-	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "PreLobby was successfully added to Arena " + getID(), true, true);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "PreLobby for Arena " + getID() + " was successfully saved!", true, true);
 	    return true;
 	} catch (IOException e) {
 	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while saving PreLobby for Arena " + getID() + ": " + e.getMessage(), true, false, e);
