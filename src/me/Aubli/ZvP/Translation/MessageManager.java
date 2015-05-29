@@ -87,6 +87,14 @@ public class MessageManager {
 		
 		if (!this.languageFile.exists() || isOutdated()) {
 		    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Copying new translation for " + bundle.getLocale().toString() + "!", false);
+		    
+		    if (isOutdated() && this.languageFile.exists()) {
+			this.languageFile.renameTo(new File(this.languageFile.getParentFile(), this.languageFile.getName() + "." + getConfig().getString("version")));
+			this.languageFile.delete();
+			this.languageFile.createNewFile();
+			this.conf = YamlConfiguration.loadConfiguration(this.languageFile);
+		    }
+		    
 		    this.languageFile.getParentFile().mkdirs();
 		    this.languageFile.createNewFile();
 		    
@@ -103,9 +111,8 @@ public class MessageManager {
 		    }
 		    
 		    for (String key : sortedBundle.keySet()) {
-			getConfig().addDefault("messages." + key, sortedBundle.get(key));
+			getConfig().set("messages." + key, sortedBundle.get(key));
 		    }
-		    getConfig().options().copyDefaults(true);
 		    save();
 		}
 	    } catch (IOException e) {
