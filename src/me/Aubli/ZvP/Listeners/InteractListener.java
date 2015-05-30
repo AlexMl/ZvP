@@ -74,7 +74,7 @@ public class InteractListener implements Listener {
 		    
 		    for (Arena arena : GameManager.getManager().getArenas()) {
 			if (arena.containsLocation(eventPlayer.getLocation())) {
-			    boolean success = arena.addSpawnLocation(event.getClickedBlock().getLocation().clone().add(0, 1, 0));
+			    boolean success = arena.getArea().addSpawnPosition(event.getClickedBlock().getLocation().clone().add(0, 1, 0));
 			    if (success) {
 				eventPlayer.sendMessage(MessageManager.getFormatedMessage("manage:position_saved", "Position in arena " + arena.getID()));
 			    } else {
