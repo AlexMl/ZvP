@@ -172,19 +172,6 @@ public class Arena implements Comparable<Arena> {
 	this.spawnRate = this.arenaConfig.getInt("arena.spawnRate", ZvPConfig.getDefaultZombieSpawnRate());
 	this.saveRadius = this.arenaConfig.getDouble("arena.safety.saveRadius", 4.0);
 	
-	// TODO create arenaArea object from config values
-	// this.arenaWorld = Bukkit.getWorld(UUID.fromString(this.arenaConfig.getString("arena.Location.world")));
-	// this.minLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.min.X"), this.arenaConfig.getInt("arena.Location.min.Y"),
-	// this.arenaConfig.getInt("arena.Location.min.Z"));
-	// this.maxLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.max.X"), this.arenaConfig.getInt("arena.Location.max.Y"),
-	// this.arenaConfig.getInt("arena.Location.max.Z"));
-	
-	// this.staticSpawnLocations = new ArrayList<Location>();
-	// for (String locationString : this.arenaConfig.getStringList("arena.Location.staticPositions")) {
-	// String[] cords = locationString.split(",");
-	// Location loc = new Location(getWorld(), Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
-	// this.staticSpawnLocations.add(loc);
-	// }
 	World arenaWorld = Bukkit.getWorld(UUID.fromString(this.arenaConfig.getString("arena.Location.world")));
 	
 	List<Location> cornerPoints = new ArrayList<Location>();
@@ -204,8 +191,7 @@ public class Arena implements Comparable<Arena> {
 	try {
 	    this.arenaArea = new ArenaArea(arenaWorld, this, cornerPoints, spawnPositions, this.rand);
 	} catch (Exception e) {
-	    // TODO Logger
-	    e.printStackTrace();
+	    ZvP.getPluginLogger().log(ArenaArea.class, Level.SEVERE, "Error while loading Arena: " + e.getMessage(), true, false, e);
 	}
 	
 	this.difficultyTool = new ArenaDifficulty(this, getDifficulty());
@@ -239,15 +225,6 @@ public class Arena implements Comparable<Arena> {
 	    this.arenaConfig.set("arena.enableSpawnProtection", this.enableSpawnProtection);
 	    this.arenaConfig.set("arena.spawnProtectionDuration", this.protectionDuration);
 	    this.arenaConfig.set("arena.saveRadius", this.saveRadius);
-	    
-	    // TODO save arenaArea correctly
-	    // this.arenaConfig.set("arena.Location.min.X", this.minLoc.getBlockX());
-	    // this.arenaConfig.set("arena.Location.min.Y", this.minLoc.getBlockY());
-	    // this.arenaConfig.set("arena.Location.min.Z", this.minLoc.getBlockZ());
-	    
-	    // this.arenaConfig.set("arena.Location.max.X", this.maxLoc.getBlockX());
-	    // this.arenaConfig.set("arena.Location.max.Y", this.maxLoc.getBlockY());
-	    // this.arenaConfig.set("arena.Location.max.Z", this.maxLoc.getBlockZ());
 	    
 	    List<String> cornerPoints = new ArrayList<String>();
 	    for (Location loc : getArea().getCornerLocations()) {
@@ -635,11 +612,6 @@ public class Arena implements Comparable<Arena> {
 	ZvP.getPluginLogger().log(this.getClass(), Level.FINEST, "[Message] " + ChatColor.stripColor(message), true);
     }
     
-    // TODO move to arenaArea
-    public boolean addSpawnLocation(Location loc) {
-	return getArea().addSpawnPosition(loc);
-    }
-    
     public boolean addArenaLobby(Location center) {// INFO: return class would make sense here
     
 	if (!center.getWorld().getUID().equals(getWorld().getUID())) {
@@ -868,15 +840,5 @@ public class Arena implements Comparable<Arena> {
     @Override
     public int compareTo(Arena other) {
 	return getID() == other.getID() ? 0 : (getID() < other.getID() ? -1 : 1);
-	//
-	// if (getID() == o.getID()) {
-	// return 0;
-	// } else if (getID() > o.getID()) {
-	// return 1;
-	// } else if (getID() < o.getID()) {
-	// return -1;
-	// }
-	//
-	// return 0;
     }
 }
