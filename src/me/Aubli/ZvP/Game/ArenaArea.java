@@ -51,17 +51,19 @@ public class ArenaArea {
 	this.cornerPoints = cornerPoints;
 	this.spawnPositions = new ArrayList<Location>();
 	
-	for (Location loc : spawnPositions) {
-	    if (contains(loc)) {
-		this.spawnPositions.add(loc.clone());
-	    } else {
-		// TODO Logger
-		System.out.println("A " + arena.getID() + " !contain " + loc.toString());
-		System.out.println(this.polygon.getRectangularMinimum() + "\n" + this.polygon.getRectangularMaximum());
+	if (spawnPositions != null && !spawnPositions.isEmpty()) {
+	    for (Location loc : spawnPositions) {
+		if (contains(loc)) {
+		    this.spawnPositions.add(loc.clone());
+		} else {
+		    // TODO Logger
+		    System.out.println("A " + arena.getID() + " !contain " + loc.toString());
+		    System.out.println(this.polygon.getRectangularMinimum() + "\n" + this.polygon.getRectangularMaximum());
+		}
 	    }
 	}
 	
-	System.out.println("Npoints:" + this.polygon.npoints + ", Xpoints:" + this.polygon.xpoints.length + ", YPoints:" + this.polygon.ypoints.length);
+	System.out.println("ArenaPositions:" + this.polygon.npoints + ", SpawnLocations:" + this.spawnPositions.size());
     }
     
     public Arena getArena() {
@@ -93,7 +95,7 @@ public class ArenaArea {
     }
     
     public boolean contains(Location location) {
-	return this.polygon.contains(location, true);
+	return this.polygon.contains(location);
     }
     
     public void paintBounds() {
@@ -157,25 +159,26 @@ public class ArenaArea {
 	} else {
 	    
 	    int x;
-	    int y = 0;
+	    double y = 0;
 	    int z;
 	    
 	    x = this.rand.nextInt((max.getBlockX() - min.getBlockX() - 1)) + min.getBlockX() + 1;
 	    z = this.rand.nextInt((max.getBlockZ() - min.getBlockZ() - 1)) + min.getBlockZ() + 1;
 	    
 	    if (contains(x, z)) {
-		
-		if (getWorld().getHighestBlockYAt(x, z) + 1 >= min.getBlockY() && getWorld().getHighestBlockYAt(x, z) + 1 <= max.getBlockY()) {
+		int highestY = getWorld().getHighestBlockYAt(x, z) - 1;
+		// System.out.println("max: " + max.getBlockY() + " min: " + min.getBlockY() + " hby@: " + highestY);
+		if (highestY >= min.getBlockY() && highestY <= max.getBlockY()) {
 		    // If highest y is between min and max, go for it
 		    // ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "Highest point is between min and max", true, true);
 		    
-		    y = getWorld().getHighestBlockYAt(x, z) + 1;
-		} else if (max.getBlockY() == min.getBlockY() && getWorld().getHighestBlockYAt(x, z) == min.getBlockY()) {
+		    y = highestY + 1.5;
+		} else if (max.getBlockY() == min.getBlockY() && highestY == min.getBlockY()) {
 		    // min y == max y == highest y at random location
 		    // arena is flat
 		    // ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "Arena is flat", true, true);
 		    
-		    y = getWorld().getHighestBlockYAt(x, z) + 1;
+		    y = highestY + 1.5;
 		} else if (max.getBlockY() == min.getBlockY()) {
 		    // arena is flat but has a ceiling
 		    // ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "Arena is flat but has a ceiling", true, true);
@@ -217,6 +220,7 @@ public class ArenaArea {
 	if (contains(location)) {
 	    if (isValidBlock(location) && isValidBlock(location.clone().add(0, 1, 0))) { // Make sure the location is not a Block
 		if (!isValidBlock(location.clone().subtract(0, 1, 0))) {
+		    // Make sure the location under the location is a Block
 		    return true;
 		}
 	    }
