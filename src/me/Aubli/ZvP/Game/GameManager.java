@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -16,6 +17,7 @@ import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
@@ -276,56 +278,61 @@ public class GameManager {
     }
     
     // Manage Arenas and Lobbys
-    public boolean addArena(Location min, Location max) {
+    public Arena addArena(Location min, Location max) {
 	
-	if (min.getWorld().equals(max.getWorld())) {
-	    
-	    double tempX;
-	    double tempY;
-	    double tempZ;
-	    
-	    if (min.getX() > max.getX()) {
-		tempX = min.getX();
-		min.setX(max.getX());
-		max.setX(tempX);
-	    }
-	    
-	    if (min.getY() > max.getY()) {
-		tempY = min.getY();
-		min.setY(max.getY());
-		max.setY(tempY);
-	    }
-	    
-	    if (min.getZ() > max.getZ()) {
-		tempZ = min.getZ();
-		min.setZ(max.getZ());
-		max.setZ(tempZ);
-	    }
-	    
-	    Location tempMax = max.clone();
-	    tempMax.setY(min.getY());
-	    
-	    double dist = min.clone().distance(tempMax);
-	    
-	    int maxP = ((int) ((Math.ceil(dist + 2)) / 4)) + 1;
-	    
-	    if (maxP < 3) {
-		maxP = 3;
-	    }
-	    
-	    if (maxP > ZvPConfig.getMaxPlayers()) {
-		maxP = ZvPConfig.getMaxPlayers();
-	    }
-	    
-	    // TODO create arenaAree object
-	    // TODO enable polygon input
-	    Arena a = new Arena(getNewID(this.arenaPath), this.arenaPath, null, ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), maxP, ArenaDifficultyLevel.NORMAL, true);
-	    this.arenas.add(a);
-	    
-	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + a.getID() + " in World " + a.getWorld().getUID().toString() + " added! MaxPlayer=" + maxP, true);
-	    return true;
+	double tempX;
+	double tempY;
+	double tempZ;
+	
+	if (min.getX() > max.getX()) {
+	    tempX = min.getX();
+	    min.setX(max.getX());
+	    max.setX(tempX);
 	}
-	return false;
+	
+	if (min.getY() > max.getY()) {
+	    tempY = min.getY();
+	    min.setY(max.getY());
+	    max.setY(tempY);
+	}
+	
+	if (min.getZ() > max.getZ()) {
+	    tempZ = min.getZ();
+	    min.setZ(max.getZ());
+	    max.setZ(tempZ);
+	}
+	
+	List<Location> locList = new ArrayList<Location>();
+	locList.add(min.clone());
+	locList.add(max.clone());
+	return addArena(locList);
+    }
+    
+    public Arena addArena(List<Location> arenaCorners) {
+	
+	if (arenaCorners.size() > 1) {
+	    World world = arenaCorners.get(0).getWorld();
+	    
+	    for (Location loc : arenaCorners) {
+		if (!world.equals(loc.getWorld())) {
+		    ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Could not add new arena: Locations are not in same world!", true, false);
+		    return null;
+		}
+	    }
+	    
+	    int arenaID = getNewID(this.arenaPath);
+	    
+	    try {
+		Arena arena = new Arena(arenaID, this.arenaPath, world, arenaCorners, ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ArenaDifficultyLevel.NORMAL, true);
+		this.arenas.add(arena);
+		
+		ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + arena.getID() + " in World " + arena.getWorld().getUID().toString() + " added! MaxPlayer=" + arena.getMaxPlayers() + ", Size=" + arena.getArea().getDiagonal(), true);
+		return arena;
+	    } catch (Exception e) {
+		ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Error while adding Arena " + arenaID + ": " + e.getMessage(), true, false, e);
+	    }
+	}
+	return null;
     }
     
     public void addLobby(Location loc) {
