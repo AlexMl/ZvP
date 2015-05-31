@@ -16,7 +16,7 @@ public class ArenaPolygon extends Polygon {
     private int minY;
     private int maxY;
     
-    public ArenaPolygon(World world, List<Location> points) throws Exception {
+    public ArenaPolygon(World world, List<Location> points) {
 	super();
 	
 	int[] xPoints = new int[points.size()];
