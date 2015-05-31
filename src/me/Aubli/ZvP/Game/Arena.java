@@ -82,17 +82,20 @@ public class Arena implements Comparable<Arena> {
     private final int protectionDuration;
     private final double saveRadius;
     
-    public Arena(int ID, String arenaPath, ArenaArea area, int rounds, int waves, int spawnRate, int maxPlayers, ArenaDifficultyLevel difficulty, boolean spawnProtection) {
+    public Arena(int ID, String arenaPath, World world, List<Location> arenaCorners, int rounds, int waves, int spawnRate, ArenaDifficultyLevel difficulty, boolean spawnProtection) throws Exception {
 	
 	this.arenaID = ID;
 	
-	this.maxPlayers = maxPlayers;
-	this.minPlayers = ((int) Math.ceil(maxPlayers / 4)) + 1;
+	this.rand = new Random();
+	this.arenaArea = new ArenaArea(world, this, arenaCorners, null, this.rand);
+	
+	int maxP = ((int) ((Math.ceil(getArea().getDiagonal() + 2)) / 4));
+	
+	this.maxPlayers = maxP < 3 ? 3 : (maxP > ZvPConfig.getMaxPlayers() ? ZvPConfig.getMaxPlayers() : maxP);
+	this.minPlayers = ((int) Math.ceil(this.maxPlayers / 4)) + 1;
 	
 	this.maxRounds = rounds;
 	this.maxWaves = waves;
-	
-	this.arenaArea = area;
 	
 	this.status = ArenaStatus.STANDBY;
 	this.difficulty = difficulty;
@@ -112,7 +115,7 @@ public class Arena implements Comparable<Arena> {
 	this.deathFee = 3;
 	// END
 	
-	this.saveRadius = ((Math.ceil(maxPlayers / 8))) + 2.5;
+	this.saveRadius = ((Math.ceil(getMaxPlayers() / 8))) + 2.5;
 	this.spawnRate = spawnRate;
 	
 	this.enableSpawnProtection = spawnProtection;
@@ -123,8 +126,6 @@ public class Arena implements Comparable<Arena> {
 	
 	this.players = new ArrayList<ZvPPlayer>();
 	this.difficultyTool = new ArenaDifficulty(this, getDifficulty());
-	
-	this.rand = new Random();
 	save();
     }
     
