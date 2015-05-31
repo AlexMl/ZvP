@@ -73,11 +73,11 @@ public class ArenaArea {
     }
     
     public double getDiagonal() {
-	return Math.sqrt(Math.pow(this.polygon.getBounds2D().getWidth(), 2) + Math.pow(this.polygon.getBounds2D().getHeight(), 2));
+	return this.polygon.getRectangularMaximum().distance(this.polygon.getRectangularMinimum());
     }
     
     public double getDiagonalSquared() {
-	return (Math.pow(this.polygon.getBounds2D().getWidth(), 2) + Math.pow(this.polygon.getBounds2D().getHeight(), 2));
+	return this.polygon.getRectangularMaximum().distanceSquared(this.polygon.getRectangularMinimum());
     }
     
     public List<Location> getCornerLocations() {
