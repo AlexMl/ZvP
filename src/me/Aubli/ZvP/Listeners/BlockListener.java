@@ -32,7 +32,7 @@ public class BlockListener implements Listener {
 	}
 	
 	if (this.eventPlayer.getItemInHand() != null) {
-	    if (this.eventPlayer.getItemInHand().isSimilar(ZvP.getTool(ZvP.ADDARENA)) || this.eventPlayer.getItemInHand().isSimilar(ZvP.getTool(ZvP.ADDPOSITION))) {
+	    if (this.eventPlayer.getItemInHand().isSimilar(ZvP.getTool(ZvP.ADDARENA_SINGLE)) || this.eventPlayer.getItemInHand().isSimilar(ZvP.getTool(ZvP.ADDARENA_POLYGON)) || this.eventPlayer.getItemInHand().isSimilar(ZvP.getTool(ZvP.ADDPOSITION))) {
 		if (this.eventPlayer.hasPermission("zvp.manage.arena")) {
 		    event.setCancelled(true);
 		    return;

@@ -14,6 +14,7 @@ import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Kits.IZvPKit;
 import me.Aubli.ZvP.Kits.KitManager;
+import me.Aubli.ZvP.Listeners.InteractListener;
 import me.Aubli.ZvP.Shop.ShopItem;
 import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
@@ -106,7 +107,7 @@ public class ZvPCommands implements CommandExecutor {
 	    if (args.length == 1) {
 		
 		if (args[0].equalsIgnoreCase("pos")) {
-		    this.positions.add(playerSender.getLocation().clone());
+		    this.positions.add(playerSender.getLocation().clone().subtract(0, 1, 0));
 		    playerSender.getLocation().clone().subtract(0, 1, 0).getBlock().setType(Material.GLOWSTONE);
 		    System.out.println(this.positions);
 		}
@@ -392,7 +393,7 @@ public class ZvPCommands implements CommandExecutor {
 		    if (args[1].equalsIgnoreCase("arena")) {
 			if (playerSender.hasPermission("zvp.manage.arena")) {
 			    playerSender.sendMessage(MessageManager.getMessage("manage:tool"));
-			    playerSender.getInventory().addItem(ZvP.getTool(ZvP.ADDARENA));
+			    playerSender.getInventory().addItem(ZvP.getTool(ZvP.ADDARENA_SINGLE));
 			    return true;
 			} else {
 			    commandDenied(playerSender);
@@ -477,6 +478,32 @@ public class ZvPCommands implements CommandExecutor {
 		}
 		if (args[0].equalsIgnoreCase("add")) {
 		    if (playerSender.hasPermission("zvp.manage.arena")) {
+			if (args[1].equalsIgnoreCase("arena")) {
+			    if (args[2].equalsIgnoreCase("polygon")) {
+				playerSender.sendMessage(MessageManager.getMessage("manage:tool"));
+				playerSender.getInventory().addItem(ZvP.getTool(ZvP.ADDARENA_POLYGON));
+				return true;
+			    }
+			    if (args[2].equalsIgnoreCase("clear")) {
+				InteractListener.clearPositionList();
+				// TODO message
+				return true;
+			    }
+			    if (args[2].equalsIgnoreCase("finish")) {
+				Arena arena = InteractListener.createArenaFromList();
+				InteractListener.clearPositionList();
+				
+				if (arena != null) {
+				    playerSender.sendMessage(MessageManager.getFormatedMessage("manage:arena_saved", arena.getID()));
+				} else {
+				    playerSender.sendMessage(MessageManager.getMessage("error:arena_place"));
+				}
+				return true;
+			    }
+			    printCommands(playerSender, 2);
+			    return true;
+			}
+			
 			Arena arena = this.game.getArena(parseInt(args[1]));
 			if (arena != null) {
 			    if (args[2].equalsIgnoreCase("prelobby") || args[2].equalsIgnoreCase("lobby")) {
@@ -630,15 +657,16 @@ public class ZvPCommands implements CommandExecutor {
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp leave");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop [Arena-ID]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp addkit [Name]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp removekit [Name]");
 		    break;
 		
 		case 2:
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp addkit [Name]");
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp removekit [Name]");
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos1");
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp pos2");
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add lobby");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena polygon");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena clear");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena finish");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add position");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add [Arena-ID] preLobby");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp set [Arena-ID] [online|offline]");
