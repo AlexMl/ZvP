@@ -334,4 +334,13 @@ public class ArenaArea {
 	}
 	return false;
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+	if (obj instanceof ArenaArea) {
+	    ArenaArea other = (ArenaArea) obj;
+	    return (other.getDiagonalSquared() == getDiagonalSquared() && other.getWorld().equals(getWorld()));
+	}
+	return false;
+    }
 }
