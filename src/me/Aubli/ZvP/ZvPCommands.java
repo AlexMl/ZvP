@@ -181,11 +181,12 @@ public class ZvPCommands implements CommandExecutor {
 		}
 		
 		if (args[0].equalsIgnoreCase("m")) {
-		    if (!ZvPConfig.getEnableEcon() && !ZvPConfig.getIntegrateGame()) { // possibility of cheating money
+		    if (!ZvPConfig.getEnableEcon() || (!ZvPConfig.getEnableEcon() && !ZvPConfig.getIntegrateGame())) { // possibility of cheating money
 			Double sum = Double.parseDouble(args[1]);
 			this.game.getPlayer(playerSender).getArena().getScore().addScore(this.game.getPlayer(playerSender), sum, ScoreType.SHOP_SCORE);
 			return true;
 		    }
+		    return true;
 		}
 		
 		Arena a = this.game.getArena(Integer.parseInt(args[0]));
