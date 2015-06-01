@@ -2,7 +2,6 @@ package me.Aubli.ZvP;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.Arena;
@@ -63,7 +62,6 @@ public class ZvPCommands implements CommandExecutor {
      *
      */
     
-    private ArrayList<Location> positions = new ArrayList<Location>();
     private GameManager game = GameManager.getManager();
     
     @Override
@@ -106,27 +104,21 @@ public class ZvPCommands implements CommandExecutor {
 	    
 	    if (args.length == 1) {
 		
-		if (args[0].equalsIgnoreCase("pos")) {
-		    this.positions.add(playerSender.getLocation().clone().subtract(0, 1, 0));
-		    playerSender.getLocation().clone().subtract(0, 1, 0).getBlock().setType(Material.GLOWSTONE);
-		    System.out.println(this.positions);
-		}
-		if (args[0].equalsIgnoreCase("posf")) {
-		    System.out.println(this.positions);
-		    ArrayList<Location> spawn = new ArrayList<Location>();
-		    spawn.add(playerSender.getLocation());
+		if (args[0].startsWith("pos")) {
+		    int arenaID = Integer.parseInt(args[0].substring(3, args[0].length()));
 		    
-		    try {
-			ArenaArea aa = new ArenaArea(playerSender.getWorld(), GameManager.getManager().getArena(10), this.positions, spawn, new Random());
-			// aa.paintBounds();
-			
-			for (int i = 0; i < 3000; i++) {
-			    // aa.getNewRandomLocation(false).getBlock().setType(Material.SANDSTONE);
+		    ArenaArea aa = GameManager.getManager().getArena(arenaID).getArea();
+		    Location spawn;
+		    for (int i = 0; i < 30000; i++) {
+			try {
+			    spawn = aa.getNewSaveLocation();
+			    if (spawn.getBlock().isEmpty()) { // Dont want to harm the arena hu?
+				spawn.getBlock().setType(Material.SANDSTONE);
+			    }
+			} catch (StackOverflowError e) {
+			    break;
 			}
-		    } catch (Exception e) {
-			e.printStackTrace();
 		    }
-		    this.positions.clear();
 		}
 		
 		if (args[0].equalsIgnoreCase("u")) {
