@@ -486,7 +486,7 @@ public class ZvPCommands implements CommandExecutor {
 			    }
 			    if (args[2].equalsIgnoreCase("clear")) {
 				InteractListener.clearPositionList();
-				// TODO message
+				playerSender.sendMessage(MessageManager.getMessage("manage:position_cleared"));
 				return true;
 			    }
 			    if (args[2].equalsIgnoreCase("finish")) {

@@ -74,7 +74,7 @@ public class InteractListener implements Listener {
 		    event.setCancelled(true);
 		    
 		    locationList.add(event.getClickedBlock().getLocation().clone());
-		    eventPlayer.sendMessage("pos " + locationList.size() + " added"); // TODO message
+		    eventPlayer.sendMessage(MessageManager.getFormatedMessage("manage:position_saved_poly", locationList.size()));
 		    return;
 		} else {
 		    ZvP.removeTool(eventPlayer);
