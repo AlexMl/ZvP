@@ -254,8 +254,22 @@ public class ZvPPlayer {
 	
 	if (getBoard() != null) {
 	    
+	    int entryLength = 9;
 	    for (String e : getBoard().getEntries()) {
+		
+		int length = ChatColor.stripColor(e).length();
+		if (!e.contains("----")) {
+		    if (length > entryLength) {
+			entryLength = length;
+		    }
+		}
 		getBoard().resetScores(e);
+	    }
+	    entryLength--;
+	    
+	    String seperator = "";
+	    for (int i = 0; i < entryLength; i++) {
+		seperator += "-";
 	    }
 	    
 	    Objective obj = getBoard().getObjective("zvp-main");
@@ -270,14 +284,14 @@ public class ZvPPlayer {
 	    obj.getScore(ChatColor.GRAY + "R: " + ChatColor.AQUA + getArena().getRound() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getMaxRounds()).setScore(13);
 	    obj.getScore(ChatColor.GRAY + "W: " + ChatColor.AQUA + getArena().getWave() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getMaxWaves()).setScore(12);
 	    
-	    obj.getScore(ChatColor.WHITE + "----------------").setScore(11);
+	    obj.getScore(ChatColor.WHITE + seperator).setScore(11);
 	    obj.getScore(ChatColor.GREEN + "Money: " + new DecimalFormat("#0.00").format(getArena().getScore().getScore(this)) + (ZvPConfig.getEnableEcon() ? " " + ZvP.getEconProvider().currencyNamePlural() : "")).setScore(10);
 	    
-	    obj.getScore("----------------").setScore(9);
+	    obj.getScore(seperator).setScore(9);
 	    obj.getScore(ChatColor.RED + "Left:  " + ChatColor.GREEN + getArena().getLivingZombieAmount()).setScore(8);
 	    obj.getScore(ChatColor.RED + "Killed: " + ChatColor.GREEN + getArena().getKilledZombies()).setScore(7);
 	    
-	    obj.getScore(ChatColor.RESET + "----------------").setScore(6);
+	    obj.getScore(ChatColor.RESET + seperator).setScore(6);
 	    obj.getScore(ChatColor.GOLD + "Kills: " + getKills()).setScore(5);
 	    obj.getScore(ChatColor.DARK_PURPLE + "Deaths: " + getDeaths()).setScore(4);
 	    
