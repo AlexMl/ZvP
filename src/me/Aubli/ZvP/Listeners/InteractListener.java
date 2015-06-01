@@ -34,6 +34,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class InteractListener implements Listener {
     
     private HashMap<Action, Location> clickLoc = new HashMap<Action, Location>();
+    private static List<Location> locationList = new ArrayList<Location>();
     
     private SignManager sm = SignManager.getManager();
     
@@ -43,7 +44,7 @@ public class InteractListener implements Listener {
 	Player eventPlayer = event.getPlayer();
 	
 	if (event.getItem() != null) {
-	    if (event.getItem().isSimilar(ZvP.getTool(ZvP.ADDARENA))) {
+	    if (event.getItem().isSimilar(ZvP.getTool(ZvP.ADDARENA_SINGLE))) {
 		if (eventPlayer.hasPermission("zvp.manage.arena")) {
 		    event.setCancelled(true);
 		    
@@ -73,13 +74,25 @@ public class InteractListener implements Listener {
 		    ZvPCommands.commandDenied(eventPlayer);
 		    return;
 		}
+	    } else if (event.getItem().isSimilar(ZvP.getTool(ZvP.ADDARENA_POLYGON))) {
+		if (eventPlayer.hasPermission("zvp.manage.arena")) {
+		    event.setCancelled(true);
+		    
+		    locationList.add(event.getClickedBlock().getLocation().clone());
+		    eventPlayer.sendMessage(MessageManager.getFormatedMessage("manage:position_saved_poly", locationList.size()));
+		    return;
+		} else {
+		    ZvP.removeTool(eventPlayer);
+		    ZvPCommands.commandDenied(eventPlayer);
+		    return;
+		}
 	    } else if (event.getItem().isSimilar(ZvP.getTool(ZvP.ADDPOSITION))) {
 		if (eventPlayer.hasPermission("zvp.manage.arena")) {
 		    event.setCancelled(true);
 		    
 		    for (Arena arena : GameManager.getManager().getArenas()) {
 			if (arena.containsLocation(eventPlayer.getLocation())) {
-			    boolean success = arena.addSpawnLocation(event.getClickedBlock().getLocation().clone().add(0, 1, 0));
+			    boolean success = arena.getArea().addSpawnPosition(event.getClickedBlock().getLocation().clone().add(0, 1, 0));
 			    if (success) {
 				eventPlayer.sendMessage(MessageManager.getFormatedMessage("manage:position_saved", "Position in arena " + arena.getID()));
 			    } else {
@@ -177,5 +190,13 @@ public class InteractListener implements Listener {
 		return;
 	    }
 	}
+    }
+    
+    public static void clearPositionList() {
+	locationList.clear();
+    }
+    
+    public static Arena createArenaFromList() {
+	return GameManager.getManager().addArena(locationList);
     }
 }

@@ -1,4 +1,8 @@
 Changelog:
+
+2.7.0:
+*Added polygon sized arena support
+
 2.6.2:
 *Added command to add PreLobby Positions
 *Adjusted help pages

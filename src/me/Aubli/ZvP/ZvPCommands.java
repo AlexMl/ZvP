@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.ArenaArea;
 import me.Aubli.ZvP.Game.ArenaScore.ScoreType;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
@@ -12,6 +13,7 @@ import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Kits.IZvPKit;
 import me.Aubli.ZvP.Kits.KitManager;
+import me.Aubli.ZvP.Listeners.InteractListener;
 import me.Aubli.ZvP.Shop.ShopItem;
 import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
@@ -21,6 +23,8 @@ import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -99,6 +103,24 @@ public class ZvPCommands implements CommandExecutor {
 	    // Test command
 	    
 	    if (args.length == 1) {
+		
+		if (args[0].startsWith("pos")) {
+		    int arenaID = Integer.parseInt(args[0].substring(3, args[0].length()));
+		    
+		    ArenaArea aa = GameManager.getManager().getArena(arenaID).getArea();
+		    Location spawn;
+		    for (int i = 0; i < 30000; i++) {
+			try {
+			    spawn = aa.getNewSaveLocation();
+			    if (spawn.getBlock().isEmpty()) { // Dont want to harm the arena hu?
+				spawn.getBlock().setType(Material.SANDSTONE);
+			    }
+			} catch (StackOverflowError e) {
+			    break;
+			}
+		    }
+		}
+		
 		if (args[0].equalsIgnoreCase("u")) {
 		    SignManager.getManager().updateSigns();
 		    GameManager.getManager().getPlayer(playerSender).getArena().updatePlayerBoards();
@@ -363,7 +385,7 @@ public class ZvPCommands implements CommandExecutor {
 		    if (args[1].equalsIgnoreCase("arena")) {
 			if (playerSender.hasPermission("zvp.manage.arena")) {
 			    playerSender.sendMessage(MessageManager.getMessage("manage:tool"));
-			    playerSender.getInventory().addItem(ZvP.getTool(ZvP.ADDARENA));
+			    playerSender.getInventory().addItem(ZvP.getTool(ZvP.ADDARENA_SINGLE));
 			    return true;
 			} else {
 			    commandDenied(playerSender);
@@ -448,6 +470,32 @@ public class ZvPCommands implements CommandExecutor {
 		}
 		if (args[0].equalsIgnoreCase("add")) {
 		    if (playerSender.hasPermission("zvp.manage.arena")) {
+			if (args[1].equalsIgnoreCase("arena")) {
+			    if (args[2].equalsIgnoreCase("polygon")) {
+				playerSender.sendMessage(MessageManager.getMessage("manage:tool"));
+				playerSender.getInventory().addItem(ZvP.getTool(ZvP.ADDARENA_POLYGON));
+				return true;
+			    }
+			    if (args[2].equalsIgnoreCase("clear")) {
+				InteractListener.clearPositionList();
+				playerSender.sendMessage(MessageManager.getMessage("manage:position_cleared"));
+				return true;
+			    }
+			    if (args[2].equalsIgnoreCase("finish")) {
+				Arena arena = InteractListener.createArenaFromList();
+				InteractListener.clearPositionList();
+				
+				if (arena != null) {
+				    playerSender.sendMessage(MessageManager.getFormatedMessage("manage:arena_saved", arena.getID()));
+				} else {
+				    playerSender.sendMessage(MessageManager.getMessage("error:arena_place"));
+				}
+				return true;
+			    }
+			    printCommands(playerSender, 2);
+			    return true;
+			}
+			
 			Arena arena = this.game.getArena(parseInt(args[1]));
 			if (arena != null) {
 			    if (args[2].equalsIgnoreCase("prelobby") || args[2].equalsIgnoreCase("lobby")) {
@@ -629,13 +677,16 @@ public class ZvPCommands implements CommandExecutor {
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp leave");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop [Arena-ID]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp addkit [Name]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp removekit [Name]");
 		    break;
 		
 		case 2:
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp addkit [Name]");
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp removekit [Name]");
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add lobby");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena polygon");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena clear");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena finish");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add position");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add [Arena-ID] preLobby");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add [Arena-ID] preLobbyPosition");

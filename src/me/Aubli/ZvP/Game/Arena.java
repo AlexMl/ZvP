@@ -19,7 +19,6 @@ import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -49,6 +48,8 @@ public class Arena implements Comparable<Arena> {
     
     private ArenaScore score;
     private ArenaDifficulty difficultyTool;
+    
+    private ArenaArea arenaArea;
     
     private ArenaLobby preLobby;
     
@@ -81,24 +82,20 @@ public class Arena implements Comparable<Arena> {
     private final int protectionDuration;
     private final double saveRadius;
     
-    private final World arenaWorld;
-    private final Location minLoc;
-    private final Location maxLoc;
-    private List<Location> staticSpawnLocations;
-    
-    public Arena(int ID, int maxPlayers, String arenaPath, Location min, Location max, int rounds, int waves, int spawnRate, ArenaDifficultyLevel difficulty, boolean spawnProtection) {
+    public Arena(int ID, String arenaPath, World world, List<Location> arenaCorners, int rounds, int waves, int spawnRate, ArenaDifficultyLevel difficulty, boolean spawnProtection) throws Exception {
 	
 	this.arenaID = ID;
 	
-	this.maxPlayers = maxPlayers;
-	this.minPlayers = ((int) Math.ceil(maxPlayers / 4)) + 1;
+	this.rand = new Random();
+	this.arenaArea = new ArenaArea(world, this, arenaCorners, null, this.rand);
+	
+	int maxP = ((int) ((Math.ceil(getArea().getDiagonal() + 2)) / 4));
+	
+	this.maxPlayers = maxP < 3 ? 3 : (maxP > ZvPConfig.getMaxPlayers() ? ZvPConfig.getMaxPlayers() : maxP);
+	this.minPlayers = ((int) Math.ceil(this.maxPlayers / 4)) + 1;
 	
 	this.maxRounds = rounds;
 	this.maxWaves = waves;
-	
-	this.arenaWorld = min.getWorld();
-	this.minLoc = min.clone();
-	this.maxLoc = max.clone();
 	
 	this.status = ArenaStatus.STANDBY;
 	this.difficulty = difficulty;
@@ -118,7 +115,7 @@ public class Arena implements Comparable<Arena> {
 	this.deathFee = 3;
 	// END
 	
-	this.saveRadius = ((Math.ceil(maxPlayers / 8))) + 2.5;
+	this.saveRadius = ((Math.ceil(getMaxPlayers() / 8))) + 2.5;
 	this.spawnRate = spawnRate;
 	
 	this.enableSpawnProtection = spawnProtection;
@@ -128,16 +125,15 @@ public class Arena implements Comparable<Arena> {
 	this.arenaConfig = YamlConfiguration.loadConfiguration(this.arenaFile);
 	
 	this.players = new ArrayList<ZvPPlayer>();
-	this.staticSpawnLocations = new ArrayList<Location>();
 	this.difficultyTool = new ArenaDifficulty(this, getDifficulty());
-	
-	this.rand = new Random();
 	save();
     }
     
     public Arena(File arenaFile) {
 	this.arenaFile = arenaFile;
 	this.arenaConfig = YamlConfiguration.loadConfiguration(arenaFile);
+	
+	this.rand = new Random();
 	
 	this.arenaID = this.arenaConfig.getInt("arena.ID");
 	this.maxPlayers = this.arenaConfig.getInt("arena.maxPlayers", ZvPConfig.getMaxPlayers());
@@ -177,20 +173,30 @@ public class Arena implements Comparable<Arena> {
 	this.spawnRate = this.arenaConfig.getInt("arena.spawnRate", ZvPConfig.getDefaultZombieSpawnRate());
 	this.saveRadius = this.arenaConfig.getDouble("arena.saveRadius", 4.0);
 	
-	this.arenaWorld = Bukkit.getWorld(UUID.fromString(this.arenaConfig.getString("arena.Location.world")));
-	this.minLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.min.X"), this.arenaConfig.getInt("arena.Location.min.Y"), this.arenaConfig.getInt("arena.Location.min.Z"));
-	this.maxLoc = new Location(this.arenaWorld, this.arenaConfig.getInt("arena.Location.max.X"), this.arenaConfig.getInt("arena.Location.max.Y"), this.arenaConfig.getInt("arena.Location.max.Z"));
+	World arenaWorld = Bukkit.getWorld(UUID.fromString(this.arenaConfig.getString("arena.Location.world")));
 	
-	this.staticSpawnLocations = new ArrayList<Location>();
+	List<Location> cornerPoints = new ArrayList<Location>();
+	for (String locationString : this.arenaConfig.getStringList("arena.Location.cornerPoints")) {
+	    String[] cords = locationString.split(",");
+	    Location loc = new Location(arenaWorld, Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
+	    cornerPoints.add(loc);
+	}
+	
+	List<Location> spawnPositions = new ArrayList<Location>();
 	for (String locationString : this.arenaConfig.getStringList("arena.Location.staticPositions")) {
 	    String[] cords = locationString.split(",");
-	    Location loc = new Location(getWorld(), Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
-	    this.staticSpawnLocations.add(loc);
+	    Location loc = new Location(arenaWorld, Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
+	    spawnPositions.add(loc);
+	}
+	
+	try {
+	    this.arenaArea = new ArenaArea(arenaWorld, this, cornerPoints, spawnPositions, this.rand);
+	} catch (Exception e) {
+	    ZvP.getPluginLogger().log(ArenaArea.class, Level.SEVERE, "Error while loading Arena: " + e.getMessage(), true, false, e);
 	}
 	
 	this.difficultyTool = new ArenaDifficulty(this, getDifficulty());
 	this.players = new ArrayList<ZvPPlayer>();
-	this.rand = new Random();
 	this.preLobby = loadArenaLobby();
     }
     
@@ -221,21 +227,18 @@ public class Arena implements Comparable<Arena> {
 	    this.arenaConfig.set("arena.spawnProtectionDuration", this.protectionDuration);
 	    this.arenaConfig.set("arena.saveRadius", this.saveRadius);
 	    
-	    this.arenaConfig.set("arena.Location.world", this.arenaWorld.getUID().toString());
-	    this.arenaConfig.set("arena.Location.min.X", this.minLoc.getBlockX());
-	    this.arenaConfig.set("arena.Location.min.Y", this.minLoc.getBlockY());
-	    this.arenaConfig.set("arena.Location.min.Z", this.minLoc.getBlockZ());
-	    
-	    this.arenaConfig.set("arena.Location.max.X", this.maxLoc.getBlockX());
-	    this.arenaConfig.set("arena.Location.max.Y", this.maxLoc.getBlockY());
-	    this.arenaConfig.set("arena.Location.max.Z", this.maxLoc.getBlockZ());
+	    List<String> cornerPoints = new ArrayList<String>();
+	    for (Location loc : getArea().getCornerLocations()) {
+		cornerPoints.add(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+	    }
 	    
 	    List<String> locationList = new ArrayList<String>();
-	    
-	    for (Location loc : this.staticSpawnLocations) {
+	    for (Location loc : getArea().getSpawnLocations()) {
 		locationList.add(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
 	    }
 	    
+	    this.arenaConfig.set("arena.Location.world", getWorld().getUID().toString());
+	    this.arenaConfig.set("arena.Location.cornerPoints", cornerPoints);
 	    this.arenaConfig.set("arena.Location.staticPositions", locationList);
 	    
 	    this.arenaConfig.addDefault("version", ZvP.getInstance().getDescription().getVersion());
@@ -445,185 +448,12 @@ public class Arena implements Comparable<Arena> {
 	return this.enableSpawnProtection;
     }
     
+    public ArenaArea getArea() {
+	return this.arenaArea;
+    }
+    
     public World getWorld() {
-	return this.arenaWorld;
-    }
-    
-    public Location getMin() {
-	return this.minLoc;
-    }
-    
-    public Location getMax() {
-	return this.maxLoc;
-    }
-    
-    public Location getNewRandomLocation(boolean player) {
-	
-	if (player && !this.staticSpawnLocations.isEmpty()) {
-	    Location location = this.staticSpawnLocations.get(this.rand.nextInt(this.staticSpawnLocations.size()));
-	    if (containsLocation(location)) {
-		return location.clone();
-	    }
-	    return getNewRandomLocation(player);
-	} else {
-	    
-	    int x;
-	    int y = 0;
-	    int z;
-	    
-	    x = this.rand.nextInt((getMax().getBlockX() - getMin().getBlockX() - 1)) + getMin().getBlockX() + 1;
-	    z = this.rand.nextInt((getMax().getBlockZ() - getMin().getBlockZ() - 1)) + getMin().getBlockZ() + 1;
-	    
-	    if (getWorld().getHighestBlockYAt(x, z) + 1 >= getMin().getBlockY() && getWorld().getHighestBlockYAt(x, z) + 1 <= getMax().getBlockY()) {
-		// If highest y is between min and max, go for it
-		// ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "Highest point is between min and max", true, true);
-		
-		y = getWorld().getHighestBlockYAt(x, z) + 1;
-	    } else if (getMax().getBlockY() == getMin().getBlockY() && getWorld().getHighestBlockYAt(x, z) == getMin().getBlockY()) {
-		// min y == max y == highest y at random location
-		// arena is flat
-		// ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "Arena is flat", true, true);
-		
-		y = getWorld().getHighestBlockYAt(x, z) + 1;
-	    } else if (getMax().getBlockY() == getMin().getBlockY()) {
-		// arena is flat but has a ceiling
-		// ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "Arena is flat but has a ceiling", true, true);
-		
-		y = getMin().getBlockY() + 1;
-	    } else {
-		// iterate over y from min to max to find a perfect y
-		// not very performant but needed in worst case (above doesnt match)
-		// ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "Iterate from 0 - " + (getMax().getBlockY() - getMin().getBlockY()), true, true);
-		
-		ArrayList<Integer> yList = new ArrayList<Integer>();
-		for (int iy = 0; iy < (getMax().getBlockY() - getMin().getBlockY()); iy++) {
-		    if (isValidLocation(getMin().clone().add(0, iy, 0))) {
-			yList.add(getMin().getBlockY() + iy);
-		    }
-		}
-		if (yList.isEmpty()) {
-		    return getNewRandomLocation(player);
-		} else {
-		    y = yList.get(this.rand.nextInt(yList.size()));
-		}
-	    }
-	    Location startLoc = new Location(getWorld(), x, y, z);
-	    
-	    // ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "valid? " + isValidLocation(startLoc) + " Y:" + startLoc.getBlockY(), true, true);
-	    if (isValidLocation(startLoc)) {
-		return startLoc.clone();
-	    } else {
-		return getNewRandomLocation(player);
-	    }
-	}
-    }
-    
-    private boolean isValidLocation(Location location) {
-	
-	if (containsLocation(location)) {
-	    if (isValidBlock(location) && isValidBlock(location.clone().add(0, 1, 0))) { // Make sure the location is not a Block
-		if (!isValidBlock(location.clone().subtract(0, 1, 0))) {
-		    return true;
-		}
-	    }
-	}
-	
-	return false;
-    }
-    
-    private boolean isValidBlock(Location location) {
-	
-	if (location.getBlock().isEmpty() || location.getBlock().isLiquid()) {
-	    return true;
-	}
-	
-	switch (location.getBlock().getType()) {
-	    case ACTIVATOR_RAIL:
-	    case ARMOR_STAND:
-	    case BREWING_STAND:
-	    case DEAD_BUSH:
-	    case DETECTOR_RAIL:
-	    case DOUBLE_PLANT:
-	    case ENDER_PORTAL:
-	    case FLOWER_POT:
-	    case GRASS:
-	    case LONG_GRASS:
-	    case PORTAL:
-	    case POWERED_RAIL:
-	    case PUMPKIN_STEM:
-	    case RAILS:
-	    case RED_MUSHROOM:
-	    case RED_ROSE:
-	    case REDSTONE_COMPARATOR:
-	    case REDSTONE_COMPARATOR_OFF:
-	    case REDSTONE_COMPARATOR_ON:
-	    case REDSTONE_TORCH_OFF:
-	    case REDSTONE_TORCH_ON:
-	    case REDSTONE_WIRE:
-	    case SAPLING:
-	    case SIGN_POST:
-	    case SUGAR_CANE_BLOCK:
-	    case TORCH:
-	    case TRIPWIRE:
-	    case WEB:
-	    case YELLOW_FLOWER:
-		return true;
-		
-	    default:
-		return false;
-	}
-    }
-    
-    public Location getNewSaveLocation() {
-	// Save means Location with no players nearby
-	// ---> Spawn zombies in a location save for players
-	
-	final double distance = getSaveRadius();
-	
-	final Location spawnLoc = getNewRandomLocation(false);
-	
-	for (ZvPPlayer p : getPlayers()) {
-	    final Location playerLoc = p.getLocation().clone();
-	    
-	    if (this.staticSpawnLocations.isEmpty()) {
-		if (playerLoc.distanceSquared(spawnLoc) <= (distance * distance)) {
-		    return getNewSaveLocation();
-		}
-	    } else {
-		if (playerLoc.distanceSquared(spawnLoc) <= (distance * distance)) {
-		    return getNewSaveLocation();
-		}
-		for (Location loc : this.staticSpawnLocations) {
-		    if (spawnLoc.distanceSquared(loc) <= ((distance * distance) * 0.5)) {
-			return getNewSaveLocation();
-		    }
-		}
-	    }
-	}
-	
-	if (containsLocation(spawnLoc)) {
-	    return spawnLoc.clone();
-	} else {
-	    return getNewSaveLocation();
-	}
-    }
-    
-    public Location getNewUnsaveLocation(double maxDistance) {
-	// Exact opposite of getNewSaveLocation
-	// ---> Spawn zombies in a location nearby the player
-	
-	Location saveLoc = getNewSaveLocation(); // Do not break the save radius rule
-	
-	if (maxDistance < this.saveRadius) {
-	    maxDistance += this.saveRadius;
-	}
-	
-	for (ZvPPlayer player : getPlayers()) {
-	    if (saveLoc.distanceSquared(player.getLocation()) <= Math.pow(this.saveRadius + maxDistance, 2)) {
-		return saveLoc.clone();
-	    }
-	}
-	return getNewUnsaveLocation(maxDistance);
+	return getArea().getWorld();
     }
     
     public ZvPPlayer getRandomPlayer() {
@@ -639,37 +469,9 @@ public class Arena implements Comparable<Arena> {
 	return parray;
     }
     
-    private Entity[] getEntities() {
-	List<Entity> eList = new ArrayList<Entity>();
-	Entity[] entities;
-	
-	Chunk minC = this.minLoc.getChunk();
-	Chunk maxC = this.maxLoc.getChunk();
-	
-	int minX = minC.getX();
-	int minZ = minC.getZ();
-	int maxX = maxC.getX();
-	int maxZ = maxC.getZ();
-	
-	for (int x = minX; x <= maxX; x++) {
-	    for (int z = minZ; z <= +maxZ; z++) {
-		Chunk entityChunk = getWorld().getChunkAt(x, z);
-		for (Entity e : entityChunk.getEntities()) {
-		    eList.add(e);
-		}
-	    }
-	}
-	
-	entities = new Entity[eList.size()];
-	for (int i = 0; i < eList.size(); i++) {
-	    entities[i] = eList.get(i);
-	}
-	return entities;
-    }
-    
     public Zombie[] getLivingZombies() {
 	List<Zombie> zombieList = new ArrayList<Zombie>();
-	for (Entity e : getEntities()) {
+	for (Entity e : getArea().getEntities()) {
 	    if (e instanceof Zombie) {
 		zombieList.add((Zombie) e);
 	    }
@@ -700,7 +502,7 @@ public class Arena implements Comparable<Arena> {
     }
     
     public int getSpawningZombies(int w, int r, int p, int d) {
-	return ((int) Math.sqrt(r * w * getSpawnRate() * getMin().distance(getMax()) * p * ((d + 1.0) / 2.0)));
+	return ((int) Math.sqrt(r * w * getSpawnRate() * getArea().getDiagonal() * p * ((d + 1.0) / 2.0)));
     }
     
     public ZvPPlayer getBestPlayer() {
@@ -763,7 +565,7 @@ public class Arena implements Comparable<Arena> {
     }
     
     public boolean containsLocation(Location location) {
-	return ((location.getX() <= getMax().getX() && location.getX() >= getMin().getX()) && (location.getZ() <= getMax().getZ() && location.getZ() >= getMin().getZ()));
+	return getArea().contains(location);
     }
     
     public boolean useVoteSystem() {
@@ -825,18 +627,6 @@ public class Arena implements Comparable<Arena> {
 	ZvP.getPluginLogger().log(this.getClass(), Level.FINEST, "[Message] " + ChatColor.stripColor(message), true);
     }
     
-    public boolean addSpawnLocation(Location loc) {
-	if (containsLocation(loc)) {
-	    if (!this.staticSpawnLocations.contains(loc)) {
-		this.staticSpawnLocations.add(loc);
-		save();
-		ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Added spawnpoint (X:" + loc.getBlockX() + "Y:" + loc.getBlockY() + "Z:" + loc.getBlockZ() + ") to Arena " + getID(), true, true);
-		return true;
-	    }
-	}
-	return false;
-    }
-    
     public boolean addArenaLobby(Location center) {// INFO: return class would make sense here
     
 	if (!center.getWorld().getUID().equals(getWorld().getUID())) {
@@ -877,7 +667,7 @@ public class Arena implements Comparable<Arena> {
 	
 	if (!this.players.contains(player) && !player.hasCanceled()) {
 	    try {
-		player.setStartPosition(getNewRandomLocation(true));
+		player.setStartPosition(getArea().getNewRandomLocation(true));
 		player.getReady();
 	    } catch (Exception e) {
 		ZvP.getPluginLogger().log(this.getClass(), Level.INFO, e.getMessage(), true, false, e);
@@ -971,7 +761,7 @@ public class Arena implements Comparable<Arena> {
 	int successfullySpawned = 0;
 	
 	for (int i = 0; i < amount; i++) {
-	    Entity zombie = getWorld().spawnEntity(getNewSaveLocation(), EntityType.ZOMBIE);
+	    Entity zombie = getWorld().spawnEntity(getArea().getNewSaveLocation(), EntityType.ZOMBIE);
 	    if (zombie != null) {
 		getDifficultyTool().customizeEntity(zombie);
 		successfullySpawned++;
@@ -1042,7 +832,7 @@ public class Arena implements Comparable<Arena> {
     }
     
     public void clearArena() {
-	for (Entity e : getEntities()) {
+	for (Entity e : getArea().getEntities()) {
 	    if (e instanceof Monster || e instanceof Item || e instanceof ExperienceOrb) {
 		e.remove();
 	    }
@@ -1054,7 +844,7 @@ public class Arena implements Comparable<Arena> {
 	if (obj instanceof Arena) {
 	    Arena a = (Arena) obj;
 	    if (a.getID() == this.getID()) {
-		if (a.getMin().equals(this.getMin()) && a.getMax().equals(this.getMax())) {
+		if (a.getArea().equals(this.getArea())) {
 		    return true;
 		}
 	    }
@@ -1063,16 +853,7 @@ public class Arena implements Comparable<Arena> {
     }
     
     @Override
-    public int compareTo(Arena o) {
-	
-	if (getID() == o.getID()) {
-	    return 0;
-	} else if (getID() > o.getID()) {
-	    return 1;
-	} else if (getID() < o.getID()) {
-	    return -1;
-	}
-	
-	return 0;
+    public int compareTo(Arena other) {
+	return getID() == other.getID() ? 0 : (getID() < other.getID() ? -1 : 1);
     }
 }

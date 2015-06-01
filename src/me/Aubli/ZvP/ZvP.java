@@ -49,8 +49,9 @@ public class ZvP extends JavaPlugin {
     
     private static Economy economy;
     
-    public static String ADDARENA = "Use this tool to add an arena!";
-    public static String ADDPOSITION = "Use this tool to add a spawn position";
+    public static final String ADDARENA_SINGLE = "Use this tool to create arenas with two positions!";
+    public static final String ADDARENA_POLYGON = "Use this tool to create polygon sized arenas";
+    public static final String ADDPOSITION = "Use this tool to add a spawn position";
     
     private static String pluginPrefix = ChatColor.DARK_GREEN + "[" + ChatColor.DARK_RED + "Z" + ChatColor.DARK_GRAY + "v" + ChatColor.DARK_RED + "P" + ChatColor.DARK_GREEN + "]" + ChatColor.RESET + " ";
     
@@ -208,14 +209,9 @@ public class ZvP extends JavaPlugin {
 	return tool;
     }
     
-    public static boolean removeTool(Player player) {
-	if (player.getInventory().contains(getTool(ADDARENA))) {
-	    player.getInventory().removeItem(getTool(ADDARENA));
-	    return true;
-	} else if (player.getInventory().contains(getTool(ADDPOSITION))) {
-	    player.getInventory().removeItem(getTool(ADDPOSITION));
-	    return true;
-	}
-	return false;
+    public static void removeTool(Player player) {
+	player.getInventory().removeItem(getTool(ADDARENA_POLYGON));
+	player.getInventory().removeItem(getTool(ADDARENA_SINGLE));
+	player.getInventory().removeItem(getTool(ADDPOSITION));
     }
 }
