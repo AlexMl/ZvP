@@ -56,13 +56,11 @@ public class ArenaArea {
 		if (contains(loc)) {
 		    this.spawnPositions.add(loc.clone());
 		} else {
-		    // TODO Logger
-		    System.out.println("A " + arena.getID() + " !contain " + loc.toString());
-		    System.out.println(this.polygon.getRectangularMinimum() + "\n" + this.polygon.getRectangularMaximum());
+		    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Arena " + arena.getID() + " does not contain custom spawn location X:" + loc.getBlockX() + " Y:" + loc.getBlockY() + " Z:" + loc.getBlockZ() + " in world " + getWorld().getName() + "!", true, true);
 		}
 	    }
 	}
-	
+	// TODO remove
 	System.out.println("ArenaPositions:" + this.polygon.npoints + ", SpawnLocations:" + this.spawnPositions.size());
     }
     
@@ -98,6 +96,8 @@ public class ArenaArea {
 	return this.polygon.contains(location);
     }
     
+    // INFO Debug
+    @Deprecated
     public void paintBounds() {
 	
 	Rectangle boundBox = this.polygon.getBounds();
