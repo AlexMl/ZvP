@@ -64,6 +64,7 @@ public class FileConverter {
 			double zombieFund = conf.getDouble("arena.zombieFund", 0.37);
 			double deathFee = conf.getDouble("arena.deathFee", 3);
 			
+			// Saveradius, spawnProtection, difficulty
 			double saveRadius;
 			boolean spawnProtection;
 			int duration;
@@ -90,8 +91,15 @@ public class FileConverter {
 			    difficulty = "NORMAL";
 			}
 			
-			List<String> cornerPoints;
+			// PreLobby
+			boolean hasPreLobby = conf.get("arena.Location.PreLobby.X") != null;
+			int preX = conf.getInt("arena.Location.PreLobby.X");
+			int preY = conf.getInt("arena.Location.PreLobby.Y");
+			int preZ = conf.getInt("arena.Location.PreLobby.Z");
+			List<String> preLobbyExtraPositions = conf.getStringList("arena.Location.PreLobby.extraPositions");
 			
+			// Locations to polygon format
+			List<String> cornerPoints;
 			if (fileVersion == null || parseVersion(fileVersion) < 270.0) {
 			    int minX = conf.getInt("arena.Location.min.X");
 			    int minY = conf.getInt("arena.Location.min.Y");
@@ -107,8 +115,8 @@ public class FileConverter {
 			    cornerPoints = conf.getStringList("arena.Location.cornerPoints");
 			}
 			
+			// Rename delete ...
 			boolean success = file.renameTo(new File(file.getParentFile(), file.getName() + ".old"));
-			
 			if (!success) {
 			    boolean deleteSuccess = new File(file.getParentFile(), file.getName() + ".old").delete();
 			    if (!deleteSuccess) {
@@ -149,6 +157,13 @@ public class FileConverter {
 			conf.set("arena.Location.world", world);
 			conf.set("arena.Location.cornerPoints", cornerPoints);
 			conf.set("arena.Location.staticPositions", staticPositions);
+			
+			if (hasPreLobby) {
+			    conf.set("arena.Location.PreLobby.X", preX);
+			    conf.set("arena.Location.PreLobby.Y", preY);
+			    conf.set("arena.Location.PreLobby.Z", preZ);
+			    conf.set("arena.Location.PreLobby.extraPositions", preLobbyExtraPositions);
+			}
 			
 			conf.set("version", this.currentVersion);
 			
