@@ -1,4 +1,7 @@
 Changelog:
+2.7.0:
+*Added polygon sized arena support
+
 2.6.0:
 *Sign colors are now adjustable
 *ZvP now supports joins during games
