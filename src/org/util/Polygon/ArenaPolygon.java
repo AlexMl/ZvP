@@ -65,7 +65,7 @@ public class ArenaPolygon extends Polygon {
     }
     
     public boolean contains(Location location) {
-	// TODO: May cause errors on wrong y coordinate
+	// INFO: May cause errors on wrong y coordinate
 	if (this.minY == this.maxY) {
 	    // Do not check y coordinate if min and max have the same height
 	    return contains(location.getX(), location.getZ());
