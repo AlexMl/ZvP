@@ -34,6 +34,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.util.TabText.TabText;
 
 
 public class ZvPCommands implements CommandExecutor {
@@ -607,40 +608,56 @@ public class ZvPCommands implements CommandExecutor {
 		
 		player.sendMessage("\n\n");
 		player.sendMessage(ChatColor.GRAY + "|------------ " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Signs" + ChatColor.GRAY + " -------------|");
+		String tableString = "Arena`Lobby`Type`ID`X`Y`Z`World\n";
 		
 		for (ISign sign : SignManager.getManager().getSigns()) {
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Type: " + ChatColor.BLUE + sign.getType() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Arena: " + ChatColor.BLUE + sign.getArena().getID() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Lobby: " + ChatColor.BLUE + sign.getLobby().getID() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Loc: " + ChatColor.BLUE + sign.getLocation().getBlockX() + ChatColor.DARK_GREEN + " | " + ChatColor.BLUE + sign.getLocation().getBlockY() + ChatColor.DARK_GREEN + " | " + ChatColor.BLUE + sign.getLocation().getBlockZ());
+		    tableString += ChatColor.BLUE + "" + sign.getArena().getID() + "`" + sign.getLobby().getID() + "`" + sign.getType() + "`" + sign.getID() + "`" + +sign.getLocation().getBlockX() + "`" + sign.getLocation().getBlockY() + "`" + sign.getLocation().getBlockZ() + "`" + sign.getWorld().getName() + "\n";
 		}
+		TabText text = new TabText(tableString);
+		text.setTabs(6, 12, 26, 29, 35, 38, 43);
+		player.sendMessage(text.getPage(0, false));
 	    }
 	} else if (option.equalsIgnoreCase("arenas") || option.equalsIgnoreCase("arena")) {
 	    if (this.game.getArenas().length > 0) {
 		
 		player.sendMessage("\n\n");
 		player.sendMessage(ChatColor.GRAY + "|----------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Arenas" + ChatColor.GRAY + " ------------|");
+		String tableString = "ID`Status`Min / Max`PreLobby`Mode`World\n";
 		
 		for (Arena a : this.game.getArenas()) {
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "ID: " + ChatColor.BLUE + a.getID() + "-" + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Max: " + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "PreLobby: " + ChatColor.BLUE + a.hasPreLobby() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Mode: " + ChatColor.BLUE + a.getDifficulty().name() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "World: " + ChatColor.BLUE + a.getWorld().getName());
+		    tableString += ChatColor.BLUE + "" + a.getID() + "`" + a.getStatus().toString() + "`" + a.getMinPlayers() + ChatColor.RED + " / " + ChatColor.BLUE + a.getMaxPlayers() + "`" + a.hasPreLobby() + "`" + a.getDifficulty().name() + "`" + a.getWorld().getName() + "\n";
 		}
+		TabText text = new TabText(tableString);
+		text.setTabs(3, 12, 22, 31, 40);
+		player.sendMessage(text.getPage(0, false));
 	    }
 	} else if (option.equalsIgnoreCase("lobbys") || option.equalsIgnoreCase("lobby")) {
 	    if (this.game.getLobbys().length > 0) {
 		
 		player.sendMessage("\n\n");
 		player.sendMessage(ChatColor.GRAY + "|----------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Lobbys" + ChatColor.GRAY + " ------------|");
+		String tableString = "ID`World\n";
 		
 		for (Lobby l : this.game.getLobbys()) {
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Lobby: " + ChatColor.BLUE + l.getID() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "World: " + ChatColor.BLUE + l.getWorld().getName());
+		    tableString += ChatColor.BLUE + "" + l.getID() + "`" + l.getWorld().getName() + "\n";
 		}
+		TabText text = new TabText(tableString);
+		text.setTabs(3);
+		player.sendMessage(text.getPage(0, false));
 	    }
 	} else if (option.equalsIgnoreCase("kits") || option.equalsIgnoreCase("kit")) {
 	    if (KitManager.getManager().getKits().length > 0) {
 		
 		player.sendMessage("\n\n");
 		player.sendMessage(ChatColor.GRAY + "|------------ " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Kits" + ChatColor.GRAY + " -------------|");
+		String tableString = "Name`Price`Enabled\n";
 		
 		for (IZvPKit kit : KitManager.getManager().getKits()) {
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Kit: " + ChatColor.BLUE + kit.getName() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Enabled: " + ChatColor.BLUE + kit.isEnabled());
+		    tableString += ChatColor.BLUE + "" + kit.getName() + "`" + kit.getPrice() + "`" + kit.isEnabled() + "\n";
 		}
+		TabText text = new TabText(tableString);
+		text.setTabs(15, 35);
+		player.sendMessage(text.getPage(0, false));
 	    }
 	} else {
 	    player.sendMessage("\n\n");
