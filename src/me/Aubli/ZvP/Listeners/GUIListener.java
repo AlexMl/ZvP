@@ -134,87 +134,89 @@ public class GUIListener implements Listener {
 		    ShopItem item = ShopManager.getManager().getItem(cat, event.getCurrentItem());
 		    ZvPPlayer player = GameManager.getManager().getPlayer(eventPlayer);
 		    
-		    if (item != null && player != null && GameManager.getManager().isInGame(player.getPlayer())) {
-			
-			switch (event.getClick()) {
-			
-			    case LEFT: // Buy
-				if (player.getArena().getScore().getScore(player) >= item.getPrice()) {
-				    
-				    ItemStack boughtItem = new ItemStack(item.getItem().getType(), item.getItem().getAmount());
-				    boughtItem.addUnsafeEnchantments(item.getItem().getEnchantments());
-				    boughtItem.setDurability(item.getItem().getDurability());
-				    
-				    player.getArena().getScore().subtractScore(player, item.getPrice(), ScoreType.SHOP_SCORE);
-				    player.getPlayer().getInventory().addItem(boughtItem);
-				    player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_bought", player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
-				} else {
-				    player.sendMessage(MessageManager.getMessage("game:no_money"));
-				}
-				break;
+		    if (item != null && player != null) {
+			if (GameManager.getManager().isInGame(player.getPlayer()) && !player.getArena().isWaiting()) {
 			    
-			    case SHIFT_LEFT: // Buy all
-				if (player.getArena().getScore().getScore(player) >= item.getPrice()) {
-				    
-				    int amount = (int) (player.getArena().getScore().getScore(player) / item.getPrice()) < 64 ? (int) (player.getArena().getScore().getScore(player) / item.getPrice()) : 64;
-				    
-				    ItemStack boughtItem = new ItemStack(item.getItem().getType(), amount);
-				    boughtItem.addUnsafeEnchantments(item.getItem().getEnchantments());
-				    boughtItem.setDurability(item.getItem().getDurability());
-				    
-				    player.getArena().getScore().subtractScore(player, item.getPrice() * amount, ScoreType.SHOP_SCORE);
-				    player.getPlayer().getInventory().addItem(boughtItem);
-				    player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_bought_more", player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
-				} else {
-				    player.sendMessage(MessageManager.getMessage("game:no_money"));
-				}
-				break;
+			    switch (event.getClick()) {
 			    
-			    case RIGHT: // Sell
-				
-				ItemStack stack = new ItemStack(item.getItem().getType());
-				stack.setDurability(item.getItem().getDurability());
-				stack.addUnsafeEnchantments(item.getItem().getEnchantments());
-				
-				if (player.getPlayer().getInventory().containsAtLeast(stack, 1)) {
-				    player.getPlayer().getInventory().removeItem(stack);
-				    player.getArena().getScore().addScore(player, item.getPrice(), ScoreType.SHOP_SCORE);
-				    player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_sold", player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
-				} else {
-				    player.sendMessage(MessageManager.getMessage("game:no_item_to_sell"));
-				}
-				
-				break;
-			    
-			    case SHIFT_RIGHT: // sell all
-				
-				ItemStack stack1 = new ItemStack(item.getItem().getType());
-				stack1.setDurability(item.getItem().getDurability());
-				stack1.addUnsafeEnchantments(item.getItem().getEnchantments());
-				
-				int amount = 0;
-				
-				if (player.getPlayer().getInventory().containsAtLeast(stack1, 1)) {
-				    for (int i = 0; i < player.getPlayer().getInventory().getSize(); i++) {
-					ItemStack invItem = player.getPlayer().getInventory().getItem(i);
+				case LEFT: // Buy
+				    if (player.getArena().getScore().getScore(player) >= item.getPrice()) {
 					
-					if (invItem != null && invItem.getType() != Material.AIR) {
-					    if (invItem.getType() == stack1.getType() && invItem.getDurability() == stack1.getDurability() && invItem.getEnchantments().equals(stack1.getEnchantments())) {
-						amount += invItem.getAmount();
-						player.getPlayer().getInventory().clear(i);
-					    }
-					}
+					ItemStack boughtItem = new ItemStack(item.getItem().getType(), item.getItem().getAmount());
+					boughtItem.addUnsafeEnchantments(item.getItem().getEnchantments());
+					boughtItem.setDurability(item.getItem().getDurability());
+					
+					player.getArena().getScore().subtractScore(player, item.getPrice(), ScoreType.SHOP_SCORE);
+					player.getPlayer().getInventory().addItem(boughtItem);
+					player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_bought", player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
+				    } else {
+					player.sendMessage(MessageManager.getMessage("game:no_money"));
+				    }
+				    break;
+				
+				case SHIFT_LEFT: // Buy all
+				    if (player.getArena().getScore().getScore(player) >= item.getPrice()) {
+					
+					int amount = (int) (player.getArena().getScore().getScore(player) / item.getPrice()) < 64 ? (int) (player.getArena().getScore().getScore(player) / item.getPrice()) : 64;
+					
+					ItemStack boughtItem = new ItemStack(item.getItem().getType(), amount);
+					boughtItem.addUnsafeEnchantments(item.getItem().getEnchantments());
+					boughtItem.setDurability(item.getItem().getDurability());
+					
+					player.getArena().getScore().subtractScore(player, item.getPrice() * amount, ScoreType.SHOP_SCORE);
+					player.getPlayer().getInventory().addItem(boughtItem);
+					player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_bought_more", player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
+				    } else {
+					player.sendMessage(MessageManager.getMessage("game:no_money"));
+				    }
+				    break;
+				
+				case RIGHT: // Sell
+				    
+				    ItemStack stack = new ItemStack(item.getItem().getType());
+				    stack.setDurability(item.getItem().getDurability());
+				    stack.addUnsafeEnchantments(item.getItem().getEnchantments());
+				    
+				    if (player.getPlayer().getInventory().containsAtLeast(stack, 1)) {
+					player.getPlayer().getInventory().removeItem(stack);
+					player.getArena().getScore().addScore(player, item.getPrice(), ScoreType.SHOP_SCORE);
+					player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_sold", player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
+				    } else {
+					player.sendMessage(MessageManager.getMessage("game:no_item_to_sell"));
 				    }
 				    
-				    player.getArena().getScore().addScore(player, item.getPrice() * amount, ScoreType.SHOP_SCORE);
-				    player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_sold_more", player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
-				} else {
-				    player.sendMessage(MessageManager.getMessage("game:no_item_to_sell"));
-				}
+				    break;
 				
-				break;
-			    default:
-				break;
+				case SHIFT_RIGHT: // sell all
+				    
+				    ItemStack stack1 = new ItemStack(item.getItem().getType());
+				    stack1.setDurability(item.getItem().getDurability());
+				    stack1.addUnsafeEnchantments(item.getItem().getEnchantments());
+				    
+				    int amount = 0;
+				    
+				    if (player.getPlayer().getInventory().containsAtLeast(stack1, 1)) {
+					for (int i = 0; i < player.getPlayer().getInventory().getSize(); i++) {
+					    ItemStack invItem = player.getPlayer().getInventory().getItem(i);
+					    
+					    if (invItem != null && invItem.getType() != Material.AIR) {
+						if (invItem.getType() == stack1.getType() && invItem.getDurability() == stack1.getDurability() && invItem.getEnchantments().equals(stack1.getEnchantments())) {
+						    amount += invItem.getAmount();
+						    player.getPlayer().getInventory().clear(i);
+						}
+					    }
+					}
+					
+					player.getArena().getScore().addScore(player, item.getPrice() * amount, ScoreType.SHOP_SCORE);
+					player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_sold_more", player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
+				    } else {
+					player.sendMessage(MessageManager.getMessage("game:no_item_to_sell"));
+				    }
+				    
+				    break;
+				default:
+				    break;
+			    }
 			}
 		    }
 		    event.getView().close();
