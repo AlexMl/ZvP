@@ -66,8 +66,6 @@ public class GameRunnable extends BukkitRunnable {
 	    
 	    this.arena.setPlayerLevel(this.startDelay - this.seconds);
 	    
-	    this.firstSpawn = true;
-	    this.spawnZombies = false;
 	    this.seconds++;
 	    return;
 	}
