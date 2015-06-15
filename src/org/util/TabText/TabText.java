@@ -93,7 +93,6 @@ public class TabText {
 	    tabs2[i] = tabs[i] - tabs[i - 1];
 	}
 	tabs2[tabs.length] = CHATLENGTH - tabs[tabs.length - 1];
-	System.out.println(Arrays.toString(tabs2));
 	this.tabs = tabs2;
     }
     
