@@ -2,8 +2,8 @@ Changelog:
 
 2.7.0:
 *Added polygon sized arena support
-*Scoreboard adjusts itself in width
-*Updated list command
+*Scoreboard adjusts itself in length
+*Updated list and status command
 
 2.6.2:
 *Added command to add PreLobby Positions
