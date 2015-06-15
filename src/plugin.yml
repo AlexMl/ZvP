@@ -1,6 +1,6 @@
 name: ZombieVsPlayer
 version: 2.7.0_DEV
-description: Zombie versus Player Minigame
+description: Fight against zombies with a lot of extra features!
 website: http://dev.bukkit.org/bukkit-plugins/zombievsplayer/
 author: Aubli
 load: POSTWORLD
