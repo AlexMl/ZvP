@@ -60,8 +60,7 @@ public class ArenaArea {
 		}
 	    }
 	}
-	// TODO remove
-	System.out.println("ArenaPositions:" + this.polygon.npoints + ", SpawnLocations:" + this.spawnPositions.size());
+	// System.out.println("ArenaPositions:" + this.polygon.npoints + ", SpawnLocations:" + this.spawnPositions.size());
     }
     
     public Arena getArena() {
