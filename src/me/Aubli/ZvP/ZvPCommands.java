@@ -260,12 +260,19 @@ public class ZvPCommands implements CommandExecutor {
 			playerSender.sendMessage("\n\n");
 			playerSender.sendMessage(ChatColor.GRAY + "|------------ " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Status" + ChatColor.GRAY + " ------------|");
 			
+			String tableString = "A ID`Status`P/MaxP`Score`Living`Spawning`Killed\n";
+			
 			for (Arena a : this.game.getArenas()) {
-			    
-			    String status = a.isRunning() ? ChatColor.GRAY + "| " + ChatColor.RED + "A: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Money: " + ChatColor.BLUE + a.getScore().getScore(null) + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Zombies: " + ChatColor.BLUE + a.getLivingZombieAmount() + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getSpawningZombies() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Killed: " + ChatColor.BLUE + a.getKilledZombies() : ChatColor.GRAY + "| " + ChatColor.RED + "A: " + ChatColor.BLUE + a.getID() + " - " + a.getStatus().toString() + ChatColor.DARK_GREEN + ", " + ChatColor.RED + "Player: " + ChatColor.BLUE + a.getPlayers().length + ChatColor.DARK_GREEN + "/" + ChatColor.BLUE + a.getMaxPlayers();
-			    playerSender.sendMessage(status);
+			    if (a.isRunning()) {
+				tableString += ChatColor.BLUE + "" + a.getID() + "`" + a.getStatus().toString() + "`" + a.getPlayers().length + ChatColor.RED + " / " + ChatColor.BLUE + a.getMaxPlayers() + "`" + (a.getScore().isSeparated() ? "separated" : "shared") + "`" + a.getLivingZombieAmount() + "`" + a.getSpawningZombies() + "`" + a.getKilledZombies() + "\n";
+			    } else {
+				tableString += ChatColor.BLUE + "" + a.getID() + "`" + a.getStatus().toString() + "`" + "0" + ChatColor.RED + " / " + ChatColor.BLUE + a.getMaxPlayers() + "`-`-`-`-\n";
+			    }
 			}
 			
+			TabText text = new TabText(tableString);
+			text.setTabs(5, 15, 23, 33, 39, 47);
+			playerSender.sendMessage("\n" + text.getPage(0, false));
 			return true;
 		    } else {
 			commandDenied(playerSender);
@@ -615,7 +622,7 @@ public class ZvPCommands implements CommandExecutor {
 		}
 		TabText text = new TabText(tableString);
 		text.setTabs(6, 12, 26, 29, 35, 38, 43);
-		player.sendMessage(text.getPage(0, false));
+		player.sendMessage("\n" + text.getPage(0, false));
 	    }
 	} else if (option.equalsIgnoreCase("arenas") || option.equalsIgnoreCase("arena")) {
 	    if (this.game.getArenas().length > 0) {
@@ -629,7 +636,7 @@ public class ZvPCommands implements CommandExecutor {
 		}
 		TabText text = new TabText(tableString);
 		text.setTabs(3, 12, 22, 31, 40);
-		player.sendMessage(text.getPage(0, false));
+		player.sendMessage("\n" + text.getPage(0, false));
 	    }
 	} else if (option.equalsIgnoreCase("lobbys") || option.equalsIgnoreCase("lobby")) {
 	    if (this.game.getLobbys().length > 0) {
@@ -642,8 +649,8 @@ public class ZvPCommands implements CommandExecutor {
 		    tableString += ChatColor.BLUE + "" + l.getID() + "`" + l.getWorld().getName() + "\n";
 		}
 		TabText text = new TabText(tableString);
-		text.setTabs(3);
-		player.sendMessage(text.getPage(0, false));
+		text.setTabs(10);
+		player.sendMessage("\n" + text.getPage(0, false));
 	    }
 	} else if (option.equalsIgnoreCase("kits") || option.equalsIgnoreCase("kit")) {
 	    if (KitManager.getManager().getKits().length > 0) {
@@ -657,7 +664,7 @@ public class ZvPCommands implements CommandExecutor {
 		}
 		TabText text = new TabText(tableString);
 		text.setTabs(15, 35);
-		player.sendMessage(text.getPage(0, false));
+		player.sendMessage("\n" + text.getPage(0, false));
 	    }
 	} else {
 	    player.sendMessage("\n\n");
