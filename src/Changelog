@@ -4,6 +4,8 @@ Changelog:
 *Added polygon sized arena support
 *Scoreboard adjusts itself in length
 *Updated list and status command
+*Do not send a transaction failed message if you do not have enough money to pay the death fee
+*Logger updates
 
 2.6.2:
 *Added command to add PreLobby Positions
