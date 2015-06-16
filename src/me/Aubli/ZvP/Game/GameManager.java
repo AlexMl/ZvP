@@ -410,10 +410,11 @@ public class GameManager {
 	SignManager.getManager().updateSigns(a);
     }
     
-    // TODO check if status !standby
     public void stopGames() {
 	for (Arena a : getArenas()) {
-	    a.stop();
+	    if (a.getStatus() != ArenaStatus.STANDBY || a.hasPreLobby()) {
+		a.stop();
+	    }
 	}
 	Bukkit.getScheduler().cancelTasks(ZvP.getInstance());;
     }
