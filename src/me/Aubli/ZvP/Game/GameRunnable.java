@@ -45,7 +45,7 @@ public class GameRunnable extends BukkitRunnable {
     @Override
     public void run() {
 	
-	if (ZvP.getPluginLogger().isDebugMode()) {
+	if (ZvP.getPluginLogger().isDebugMode() && (ZvP.getPluginLogger().getLogLevel() <= 100)) {
 	    this.arena.sendMessage("A:" + this.arena.getID() + " ;" + ChatColor.RED + this.arena.getStatus().toString() + ChatColor.RESET + "; " + this.arena.getRound() + ":" + this.arena.getWave() + " Z:" + this.arena.getLivingZombieAmount() + ":" + this.arena.getSpawningZombies() + " FS:" + this.firstSpawn + " SZ:" + this.spawnZombies + " T:" + this.seconds);
 	}
 	
