@@ -343,6 +343,7 @@ public class ZvPPlayer {
 	this.player.setFoodLevel(20);
 	this.player.resetMaxHealth();
 	
+	this.player.setAllowFlight(false);
 	this.player.setFlying(false);
 	this.player.setWalkSpeed((float) 0.2);
 	this.player.setFlySpeed((float) 0.2);
