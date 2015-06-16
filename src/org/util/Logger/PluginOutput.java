@@ -43,6 +43,10 @@ public class PluginOutput {
 	
     }
     
+    public int getLogLevel() {
+	return this.loglevel;
+    }
+    
     public boolean isDebugMode() {
 	return this.debugMode;
     }
@@ -79,7 +83,7 @@ public class PluginOutput {
 	}
 	
 	if (debugMessage) {
-	    if (this.debugMode && level.intValue() >= this.loglevel) {
+	    if (this.debugMode && level.intValue() >= getLogLevel()) {
 		if (level.intValue() >= Level.INFO.intValue()) {
 		    this.log.log(level, message);
 		    return;
