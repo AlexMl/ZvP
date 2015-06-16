@@ -143,6 +143,7 @@ public class ArenaScore {
 	    } else if (type == ScoreType.DEATH_SCORE) {
 		// Player does not have enough money! Should only fire on death. Set balance to zero!
 		subtractScore(player, ZvP.getEconProvider().getBalance(player.getPlayer()), type);
+		return;
 	    } else {
 		// This case should never be activated!
 		ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! Insufficent Balance!; Task:" + type.name(), false);
