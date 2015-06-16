@@ -73,21 +73,21 @@ public class SignManager {
 		
 		switch (t) {
 		    case INFO_SIGN:
-			InfoSign info = new InfoSign(f);
+			ISign info = new InfoSign(f);
 			if (info.getWorld() != null) {// && info.getArena() != null && info.getLobby() != null) {
 			    this.signs.add(info);
 			}
 			break;
 		    
 		    case INTERACT_SIGN:
-			InteractSign inter = new InteractSign(f);
+			ISign inter = new InteractSign(f);
 			if (inter.getWorld() != null) {// && inter.getArena() != null && inter.getLobby() != null) {
 			    this.signs.add(inter);
 			}
 			break;
 		    
 		    case SHOP_SIGN:
-			ShopSign shop = new ShopSign(f);
+			ISign shop = new ShopSign(f);
 			if (shop.getWorld() != null) {// && shop.getArena() != null && shop.getLobby() != null) {
 			    this.signs.add(shop);
 			}
@@ -140,7 +140,7 @@ public class SignManager {
 		this.colorMap.put(type, signColorMap);
 	    }
 	} catch (Exception e) {
-	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, e.getMessage(), true, false, e);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while saving color map: " + e.getMessage(), true, false, e);
 	}
     }
     

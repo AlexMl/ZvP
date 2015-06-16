@@ -410,14 +410,7 @@ public class GameManager {
 	SignManager.getManager().updateSigns(a);
     }
     
-    public void stopGame(Arena a) throws Exception {
-	if (a.isRunning()) {
-	    a.stop();
-	} else {
-	    throw new Exception("Arena is not running!");
-	}
-    }
-    
+    // TODO check if status !standby
     public void stopGames() {
 	for (Arena a : getArenas()) {
 	    a.stop();

@@ -295,7 +295,7 @@ public class Arena implements Comparable<Arena> {
 	    try {
 		return new ArenaLobby(this, centerLoc, locations, this.rand);
 	    } catch (Exception e) {
-		ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while loading ArenaLobby for Arena " + getID() + ": " + e.getMessage(), true, false, e);
+		ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while loading PreLobby for Arena " + getID() + ": " + e.getMessage(), true, false, e);
 		return null;
 	    }
 	}

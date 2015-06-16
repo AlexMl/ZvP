@@ -609,7 +609,7 @@ public class Updater {
     public boolean shouldUpdate(String localVersion, String remoteVersion, boolean updateTag) {
 	double local = parseVersion(localVersion);
 	double remote = parseVersion(remoteVersion);
-	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "LV=" + local + " : RV=" + remote + " Update? " + (updateTag ? remote >= local : remote > local), true, true);
+	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "LV=" + local + " : RV=" + remote + " Update? " + (updateTag ? remote >= local : remote > local), true, true);
 	
 	return updateTag ? remote >= local : remote > local;
     }

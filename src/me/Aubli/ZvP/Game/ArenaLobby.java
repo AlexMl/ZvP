@@ -127,6 +127,8 @@ public class ArenaLobby {
 	player.getPlayer().setGameMode(GameMode.SURVIVAL);
 	player.getArena().addPreLobbyPlayer(player);
 	this.joinProcessRunning = true;
+	
+	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Player " + player.getName() + " joined PreLobby " + this.arena.getID(), true, true);
     }
     
     private void addPlayer(final ZvPPlayer player) {
@@ -185,13 +187,13 @@ public class ArenaLobby {
 		    if (this.seconds < getArena().getArenaJoinTime() * 20) {
 			setPlayerLevel((ArenaLobby.this.arena.getArenaJoinTime() * 20 - this.seconds) / 20);
 		    } else if (this.seconds > getArena().getArenaJoinTime() && ArenaLobby.this.playerList.size() > 0) {
-			ZvP.getPluginLogger().log(ArenaLobby.class, Level.FINER, "PreLobby Task is over! Adding players to Arena " + getArena().getID() + ".", true);
+			ZvP.getPluginLogger().log(ArenaLobby.class, Level.FINE, "PreLobby Task is over! Adding players to Arena " + getArena().getID() + ".", true);
 			
 			for (int i = 0; i < ArenaLobby.this.playerList.size();) {
 			    ZvPPlayer player = ArenaLobby.this.playerList.get(i);
 			    boolean success = getArena().addPlayer(player);
 			    removePlayer(player);
-			    ZvP.getPluginLogger().log(ArenaLobby.class, Level.FINER, "Added player " + player.getName() + "! Arena returned: " + (success ? "success" : "failure").toUpperCase() + "!", true);
+			    ZvP.getPluginLogger().log(ArenaLobby.class, Level.FINE, "Added player " + player.getName() + "! Arena returned: " + (success ? "success" : "failure").toUpperCase() + "!", true);
 			    return;
 			}
 			
@@ -208,7 +210,7 @@ public class ArenaLobby {
 	} else if (getArena().getPlayers().length >= getArena().getMinPlayers() && getArena().isRunning()) {
 	    boolean success = getArena().addPlayer(player);
 	    removePlayer(player);
-	    ZvP.getPluginLogger().log(this.getClass(), Level.FINER, "Added player " + player.getName() + " to running game! Arena returned: " + (success ? "success" : "failure").toUpperCase() + "!", true);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Added player " + player.getName() + " to running game! Arena returned: " + (success ? "success" : "failure").toUpperCase() + "!", true);
 	}
     }
     
@@ -227,6 +229,6 @@ public class ArenaLobby {
 	
 	this.playerList.clear();
 	this.joinProcessRunning = false;
-	ZvP.getPluginLogger().log(this.getClass(), Level.FINER, "PreLobby (Arena:" + getArena().getID() + ") stopt tasks", false, true);
+	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "PreLobby (Arena:" + getArena().getID() + ") stopt tasks", false, true);
     }
 }
