@@ -105,7 +105,7 @@ public class ArenaScore {
 	    EconomyResponse response = ZvP.getEconProvider().depositPlayer(player.getPlayer(), score);
 	    printResponse(response);
 	    
-	    if (!response.transactionSuccess()) { // TODO losing money thru death with deathFee > balance causes transaction failed message
+	    if (!response.transactionSuccess()) {
 		player.sendMessage(MessageManager.getMessage("error:transaction_failed"));
 		ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + "; Task:" + type.name(), false);
 	    }
@@ -132,12 +132,20 @@ public class ArenaScore {
 	}
 	
 	if (useVaultEconomy()) {
-	    EconomyResponse response = ZvP.getEconProvider().withdrawPlayer(player.getPlayer(), score);
-	    printResponse(response);
-	    
-	    if (!response.transactionSuccess()) {
-		player.sendMessage(MessageManager.getMessage("error:transaction_failed"));
-		ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + "; Task:" + type.name(), false);
+	    if (ZvP.getEconProvider().has(player.getPlayer(), score)) {
+		EconomyResponse response = ZvP.getEconProvider().withdrawPlayer(player.getPlayer(), score);
+		printResponse(response);
+		
+		if (!response.transactionSuccess()) {
+		    player.sendMessage(MessageManager.getMessage("error:transaction_failed"));
+		    ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + "; Task:" + type.name(), false);
+		}
+	    } else if (type == ScoreType.DEATH_SCORE) {
+		// Player does not have enough money! Should only fire on death. Set balance to zero!
+		subtractScore(player, ZvP.getEconProvider().getBalance(player.getPlayer()), type);
+	    } else {
+		// This case should never be activated!
+		ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! Insufficent Balance!; Task:" + type.name(), false);
 	    }
 	}
 	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "A" + getArena().getID() + ": " + player.getName() + " -- " + score + " --> " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")) + "; Task:" + type, true);
