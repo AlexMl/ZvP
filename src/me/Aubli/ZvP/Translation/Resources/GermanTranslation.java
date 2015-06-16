@@ -36,7 +36,7 @@ public class GermanTranslation extends ListResourceBundle {
 	    {"game:player_bought_more", ChatColor.DARK_GRAY + "Spieler " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " hat " + ChatColor.GOLD + "%s %s" + ChatColor.DARK_GRAY + " für " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " gekauft!"},
 	    {"game:player_sold", ChatColor.DARK_GRAY + "Spieler " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " hat " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " für " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " verkauft!"},
 	    {"game:player_sold_more", ChatColor.DARK_GRAY + "Spieler " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " hat " + ChatColor.GOLD + "%s %s" + ChatColor.DARK_GRAY + " für " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " verkauft!"},
-	    {"game:player_bought_kit", ChatColor.GREEN + "Du hast das " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " Kit für " + ChatColor.GOLD + "%s" + ChatColor.GREEN + "gekauft! Du hast " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " übrig!"},
+	    {"game:player_bought_kit", ChatColor.GREEN + "Du hast das " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " Kit für " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " gekauft! Du hast " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " übrig!"},
 	    {"game:no_money", ChatColor.RED + "Du besitzt nicht genügend Geld!"},
 	    {"game:no_item_to_sell", ChatColor.RED + "Du besitzt diesen Gegenstand nicht!"},
 	    {"game:wrong_inventory", ChatColor.RED + "Du hast in das falsche Inventar geklickt! Versuchs im obrigen!"},
