@@ -14,6 +14,7 @@ import me.Aubli.ZvP.Translation.MessageManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -21,7 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class AsyncChatListener implements Listener {
     
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onChatEvent(AsyncPlayerChatEvent event) {
 	
 	Player chatPlayer = event.getPlayer();
@@ -56,7 +57,7 @@ public class AsyncChatListener implements Listener {
 					this.cancel();
 				    }
 				}
-			    }.runTask(ZvP.getInstance());
+			    }.runTaskTimer(ZvP.getInstance(), 20L, 4 * 20L);
 			    
 			} else {
 			    player.sendMessage(MessageManager.getMessage("game:already_voted"));
