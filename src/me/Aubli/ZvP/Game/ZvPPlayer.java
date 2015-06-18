@@ -322,6 +322,12 @@ public class ZvPPlayer {
 	
 	if (KitManager.getManager().isEnabled()) {
 	    this.player.getInventory().clear();
+	    
+	    // Security fix for Crafting field exploit
+	    for (int i = 0; i < 5; i++) {
+		this.player.getOpenInventory().getTopInventory().clear(i);
+	    }
+	    
 	    this.player.getInventory().setHelmet(null);
 	    this.player.getInventory().setChestplate(null);
 	    this.player.getInventory().setLeggings(null);
@@ -362,6 +368,11 @@ public class ZvPPlayer {
 	    this.player.getInventory().clear();
 	    this.player.getInventory().setArmorContents(this.armorContents);
 	    this.player.getInventory().setContents(this.contents);
+	}
+	
+	// Security fix for Crafting field exploit
+	for (int i = 0; i < 5; i++) {
+	    this.player.getOpenInventory().getTopInventory().clear(i);
 	}
 	
 	setCanceled(true);
