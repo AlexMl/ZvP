@@ -31,6 +31,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -120,11 +121,18 @@ public class ZvPCommands implements CommandExecutor {
 			    break;
 			}
 		    }
+		    return true;
 		}
 		
 		if (args[0].equalsIgnoreCase("u")) {
 		    SignManager.getManager().updateSigns();
 		    GameManager.getManager().getPlayer(playerSender).getArena().updatePlayerBoards();
+		    return true;
+		}
+		
+		if (args[0].equalsIgnoreCase("tpr")) {
+		    ZvPPlayer p = this.game.getPlayer(playerSender);
+		    playerSender.teleport(p.getArena().getArea().getNewRandomLocation(true), TeleportCause.PLUGIN);
 		    return true;
 		}
 		
