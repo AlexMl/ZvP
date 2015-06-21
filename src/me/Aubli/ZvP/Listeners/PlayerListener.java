@@ -63,7 +63,7 @@ public class PlayerListener implements Listener {
 	}
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     // INFO: Highest Priority, otherwise overridden by essentials
     public void onPlayerRespawn(PlayerRespawnEvent event) {
 	
