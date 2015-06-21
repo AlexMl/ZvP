@@ -122,6 +122,7 @@ public class SignManager {
 	    mapConf.addDefault(SignType.SHOP_SIGN.name() + ".categoryName", 4);
 	    
 	    mapConf.addDefault(SignType.INFO_SIGN.name() + ".currentAmountOfPlayers", 'b');
+	    mapConf.addDefault(SignType.INFO_SIGN.name() + ".minAmountOfPlayers", 9);
 	    mapConf.addDefault(SignType.INFO_SIGN.name() + ".maxAmountOfPlayers", 4);
 	    mapConf.addDefault(SignType.INFO_SIGN.name() + ".currentWave", 1);
 	    mapConf.addDefault(SignType.INFO_SIGN.name() + ".maxWave", 4);

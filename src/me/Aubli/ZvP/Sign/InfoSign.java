@@ -150,7 +150,7 @@ public class InfoSign implements ISign, Comparable<ISign> {
 	
 	if (this.arena != null) {
 	    this.sign.setLine(1, "Arena: " + this.arena.getID());
-	    this.sign.setLine(2, colorMap.get("currentAmountOfPlayers") + "" + (this.arena.hasPreLobby() ? this.arena.getPlayers().length + this.arena.getPreLobby().getPlayers().length : this.arena.getPlayers().length) + ChatColor.RESET + " / " + colorMap.get("maxAmountOfPlayers") + this.arena.getMaxPlayers());
+	    this.sign.setLine(2, colorMap.get("currentAmountOfPlayers") + "" + (this.arena.hasPreLobby() ? this.arena.getPlayers().length + this.arena.getPreLobby().getPlayers().length : this.arena.getPlayers().length) + ChatColor.RESET + " / " + colorMap.get("minAmountOfPlayers") + this.arena.getMinPlayers() + ChatColor.RESET + ":" + colorMap.get("maxAmountOfPlayers") + this.arena.getMaxPlayers());
 	    this.sign.setLine(3, colorMap.get("currentWave") + "" + this.arena.getRound() + ":" + this.arena.getWave() + ChatColor.RESET + " / " + colorMap.get("maxWave") + this.arena.getMaxRounds() + ":" + this.arena.getMaxWaves());
 	} else {
 	    this.sign.setLine(1, "");
