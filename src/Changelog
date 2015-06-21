@@ -1,5 +1,12 @@
 Changelog:
 
+2.7.1:
+*Fixed Vote bug.
+*Fixed exploit to get items in and out of the arena. (Thanks to AnomalyAlpha)
+*Fixed PreLobby starting with less players than arena minimum
+*Lowered chat priority to grab chat messages before other plugins do.
+*Added minPlayers to info sign
+
 2.7.0:
 *Added polygon sized arena support
 *Scoreboard adjusts itself in length
