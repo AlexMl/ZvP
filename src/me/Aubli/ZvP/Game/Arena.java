@@ -815,6 +815,11 @@ public class Arena implements Comparable<Arena> {
 	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + getID() + " stoped!", false, true);
     }
     
+    public boolean hasNext() {
+	System.out.println(getWave() * getRound() + " < " + getMaxWaves() * getMaxRounds() + " hasNext: " + ((getWave() * getRound()) < (getMaxWaves() * getMaxRounds())));
+	return (getWave() * getRound()) < (getMaxWaves() * getMaxRounds());
+    }
+    
     public boolean next() {
 	
 	if (getWave() == getMaxWaves()) {

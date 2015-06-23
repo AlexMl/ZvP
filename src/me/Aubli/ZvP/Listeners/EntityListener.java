@@ -25,6 +25,8 @@ public class EntityListener implements Listener {
     private GameManager game = GameManager.getManager();
     private BukkitTask task;
     
+    private static boolean entityInteraction = true;
+    
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
 	
@@ -41,6 +43,7 @@ public class EntityListener implements Listener {
 		    if (damager.getArena().getLivingZombieAmount() < (damager.getArena().getSpawningZombies() * 0.25)) {
 			if (this.task != null) {
 			    this.task.cancel();
+			    entityInteraction = true;
 			    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Zombie Respawn Task killed caused by interaction!", true, true);
 			}
 			
@@ -52,16 +55,18 @@ public class EntityListener implements Listener {
 			    public void run() {
 				
 				if (arena.getLivingZombieAmount() < (arena.getSpawningZombies() * 0.25)) {
+				    entityInteraction = false;
 				    
 				    for (Zombie zombie : arena.getLivingZombies()) {
 					zombie.teleport(arena.getArea().getNewUnsaveLocation(arena.getSaveRadius() * 1.5 + 2.0 * arena.getDifficulty().getLevel()), TeleportCause.PLUGIN);
 					zombie.setTarget(arena.getRandomPlayer().getPlayer());
 				    }
-				    ZvP.getPluginLogger().log(EntityListener.class, Level.FINE, "Zombie teleport caused by no interaction!", true, true);
+				    
 				    EntityListener.this.task = Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), this, 50 * 20L);
+				    ZvP.getPluginLogger().log(EntityListener.class, Level.FINE, "Zombie teleport caused by no interaction!", true, true);
 				}
 			    }
-			}, 50 * 20L); // Time to wait until zombie respawn
+			}, getArenaInteractionTime(arena) * 20L); // INFO: Time to wait until zombie respawn
 		    }
 		}
 	    }
@@ -149,5 +154,13 @@ public class EntityListener implements Listener {
 		}
 	    }
 	}
+    }
+    
+    public static boolean hasInteractionTimeout() {
+	return !entityInteraction;
+    }
+    
+    private long getArenaInteractionTime(Arena arena) {
+	return (long) (Math.floor(Math.floor(arena.getSpawningZombies() / 20.0) * 0.8) * 10 + 20);
     }
 }
