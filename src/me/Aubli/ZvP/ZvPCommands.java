@@ -657,13 +657,13 @@ public class ZvPCommands implements CommandExecutor {
 		
 		player.sendMessage("\n\n");
 		player.sendMessage(ChatColor.GRAY + "|------------ " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Kits" + ChatColor.GRAY + " -------------|");
-		String tableString = "Name`Price`Enabled\n";
+		String tableString = "Name`Price`Enabled`Permission\n";
 		
 		for (IZvPKit kit : KitManager.getManager().getKits()) {
-		    tableString += ChatColor.BLUE + "" + kit.getName() + "`" + kit.getPrice() + "`" + kit.isEnabled() + "\n";
+		    tableString += ChatColor.BLUE + "" + kit.getName() + "`" + kit.getPrice() + "`" + kit.isEnabled() + "`" + kit.getPermissionNode() + "\n";
 		}
 		TabText text = new TabText(tableString);
-		text.setTabs(15, 35);
+		text.setTabs(15, 22, 33);
 		player.sendMessage("\n" + text.getPage(0, false));
 	    }
 	} else {
