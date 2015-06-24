@@ -71,8 +71,9 @@ public class KitManager {
 	new KNullKit();
 	
 	for (File f : this.kitPath.listFiles(this.filter)) {
-	    ZvP.getConverter().convert(FileType.KITFILE, f, 250.0);
 	    // Version 2.5 needs converted kit files
+	    // Version 2.8 needs permissionNode in Kit file
+	    ZvP.getConverter().convert(FileType.KITFILE, f, 280.0);
 	    IZvPKit kit = new KCustomKit(f);
 	    if (kit.isEnabled()) {
 		this.kits.add(kit);
@@ -149,34 +150,37 @@ public class KitManager {
 	Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int) Math.ceil((getKitAmount() / 9.0))) * 9, MessageManager.getMessage("inventory:kit_select"));
 	
 	for (IZvPKit kit : this.kits) {
-	    ItemStack kitItem = kit.getIcon();
-	    ItemMeta kitMeta = kitItem.getItemMeta();
-	    
-	    ArrayList<String> lore = new ArrayList<String>();
-	    lore.add(ChatColor.GOLD + "Price: " + kit.getPrice());
-	    lore.add(ChatColor.GOLD + "Content:");
-	    
-	    for (ItemStack stack : kit.getContents()) {
+	    if (player.getPlayer().hasPermission(kit.getPermissionNode())) {
+		ItemStack kitItem = kit.getIcon();
+		ItemMeta kitMeta = kitItem.getItemMeta();
 		
-		lore.add(ChatColor.DARK_GREEN + "" + stack.getAmount() + "x " + stack.getType().toString());
+		ArrayList<String> lore = new ArrayList<String>();
+		lore.add(ChatColor.GOLD + "Price: " + kit.getPrice());
+		lore.add(ChatColor.GOLD + "Content:");
 		
-		if (stack.getType() == Material.POTION) {
-		    Potion p = Potion.fromItemStack(stack);
-		    lore.add(ChatColor.DARK_BLUE + "  -" + p.getType() + " L" + p.getLevel());
-		}
-		
-		Map<Enchantment, Integer> enchs = stack.getEnchantments();
-		if (enchs.size() > 0) {
-		    for (Enchantment e : enchs.keySet()) {
-			lore.add(ChatColor.DARK_RED + "  -" + e.getName() + " L" + enchs.get(e));
+		for (ItemStack stack : kit.getContents()) {
+		    
+		    lore.add(ChatColor.DARK_GREEN + "" + stack.getAmount() + "x " + stack.getType().toString());
+		    
+		    if (stack.getType() == Material.POTION) {
+			Potion p = Potion.fromItemStack(stack);
+			lore.add(ChatColor.DARK_BLUE + "  -" + p.getType() + " L" + p.getLevel());
+		    }
+		    
+		    Map<Enchantment, Integer> enchs = stack.getEnchantments();
+		    if (enchs.size() > 0) {
+			for (Enchantment e : enchs.keySet()) {
+			    lore.add(ChatColor.DARK_RED + "  -" + e.getName() + " L" + enchs.get(e));
+			}
 		    }
 		}
+		
+		kitMeta.setDisplayName(ChatColor.DARK_GRAY + kit.getName());
+		kitMeta.setLore(lore);
+		kitItem.setItemMeta(kitMeta);
+		kitInventory.addItem(kitItem);
+		// System.out.println(player.getName() + " hasPermission " + kit.getPermissionNode() + " for " + kit.getName());
 	    }
-	    
-	    kitMeta.setDisplayName(ChatColor.DARK_GRAY + kit.getName());
-	    kitMeta.setLore(lore);
-	    kitItem.setItemMeta(kitMeta);
-	    kitInventory.addItem(kitItem);
 	}
 	
 	player.openInventory(kitInventory);

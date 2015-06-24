@@ -13,6 +13,8 @@ public interface IZvPKit {
     
     public ItemStack getIcon();
     
+    public String getPermissionNode();
+    
     public double getPrice();
     
     public ItemStack[] getContents();

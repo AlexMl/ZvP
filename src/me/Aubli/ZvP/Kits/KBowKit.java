@@ -63,6 +63,11 @@ public class KBowKit implements IZvPKit, Comparable<IZvPKit> {
     }
     
     @Override
+    public String getPermissionNode() {
+	return ""; // Return "" because class is not used
+    }
+    
+    @Override
     public double getPrice() {
 	return 0;
     }
@@ -81,5 +86,4 @@ public class KBowKit implements IZvPKit, Comparable<IZvPKit> {
     public int compareTo(IZvPKit o) {
 	return getName().compareTo(o.getName());
     }
-    
 }
