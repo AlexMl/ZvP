@@ -17,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
@@ -80,4 +81,28 @@ public class ChatListener implements Listener {
 	
     }
     
+    @EventHandler
+    public void onCommandPreProcessing(PlayerCommandPreprocessEvent event) {
+	
+	Player eventPlayer = event.getPlayer();
+	String command = event.getMessage().substring(1, event.getMessage().length()).toLowerCase();
+	
+	if (ZvPConfig.getModifyChat()) {
+	    if (GameManager.getManager().isInGame(eventPlayer)) {
+		if (!eventPlayer.hasPermission("zvp.command")) {
+		    if (!command.startsWith("zvp")) {
+			if (!ZvPConfig.getCommandWhitelist().contains(command)) {
+			    event.setCancelled(true);
+			    // TODO message
+			    return;
+			} else {
+			    // TODO log?
+			}
+		    }
+		} else {
+		    // TODO log?
+		}
+	    }
+	}
+    }
 }

@@ -1,6 +1,7 @@
 package me.Aubli.ZvP;
 
 import java.io.File;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 
@@ -30,12 +31,14 @@ public class ZvPConfig {
     
     private static boolean enableKits = true;
     private static boolean enableFirework = true;
-    private static boolean modifyChat = true;
     private static int maxPlayers;
     private static int defaultRounds;
     private static int defaultWaves;
     
     private static int defaultZombieSpawnRate;
+    
+    private static boolean modifyChat = true;
+    private static List<String> commandWhiteList;
     
     public ZvPConfig(FileConfiguration configuration) {
 	config = configuration;
@@ -63,13 +66,20 @@ public class ZvPConfig {
 	getConfig().addDefault("game.enableKits", true);
 	getConfig().addDefault("game.enableFirework", true);
 	getConfig().addDefault("game.allowDuringGameJoin", true);
-	getConfig().addDefault("game.modifyChat", true);
 	getConfig().addDefault("game.maximal_Players", 25);
 	getConfig().addDefault("game.default_rounds", 2);
 	getConfig().addDefault("game.default_waves", 4);
 	
 	getConfig().addDefault("zombies.default_spawnRate", 8);
+	
+	getConfig().addDefault("chat.modifyChat", true);
+	getConfig().addDefault("chat.commandWhitelist", commandWhiteList);
+	
 	saveConfig();
+	
+	CommentUtil.insertComment(configFile, "Locale", "Language setting for the plugin. Currently supported are: en - English, de - German, hu - Hungarian#For language configuration look into the messages folder.");
+	CommentUtil.insertComment(configFile, "debugMode", "This option enables debugMode.#Only for development or testing purposes. This option can harm your game!");
+	CommentUtil.insertComment(configFile, "loglevel", "The loglevel is only used if debugMode is true.#It defines the amount of log messages on the console.");
 	
 	CommentUtil.insertComment(configFile, "enableEcon", "Enable or disable economy support.#If enabled your bank account will be used for the game!#Note that you need Vault for working economics on your server!");
 	CommentUtil.insertComment(configFile, "integrateKits", "If enabled kits costs money too.#Note that the price of the kit is set in their kit-file.");
@@ -77,11 +87,13 @@ public class ZvPConfig {
 	CommentUtil.insertComment(configFile, "enableKits", "Enable kits for the game.#If disabled the player will start and end the game with their current items.#The inventory will be restored after the game.#Note that this has to be false if you use keepInventory!");
 	CommentUtil.insertComment(configFile, "enableFirework", "Fireworks will shoot when the game ends.#Note that Fireworks take extra time!");
 	CommentUtil.insertComment(configFile, "allowDuringGameJoin", "If set to true the game will allow players to join a running game.#Note that a change of players will affect the number of Zombies!");
-	CommentUtil.insertComment(configFile, "modifyChat", "If enabled the chat will be modified to match ZvP colors.#If disabled the chat will not be changed at all!");
 	CommentUtil.insertComment(configFile, "maximal_Players", "Maximal amount of players in an arena.");
 	CommentUtil.insertComment(configFile, "default_rounds", "Amount of rounds a newly created arena will have by default.");
 	CommentUtil.insertComment(configFile, "default_waves", "Amount of waves a newly created arena will have by default.");
 	CommentUtil.insertComment(configFile, "default_spawnRate", "Default zombie spawnrate for newly created arenas.#The spawnrate defines how many zombies will spawn.#The calculation uses arena size, amount of player, spawnrate and difficulty setting.");
+	CommentUtil.insertComment(configFile, "modifyChat", "If enabled the chat will be modified to match ZvP colors and commands will be disabled.#If disabled the chat will not be changed at all!");
+	CommentUtil.insertComment(configFile, "commandWhitelist", "A list of commands that can be executed during a ZvP game.#Note that zvp commands are automatically included!");
+	
     }
     
     private static void load() {
@@ -102,14 +114,14 @@ public class ZvPConfig {
 	
 	enableKits = getConfig().getBoolean("game.enableKits", true);
 	enableFirework = getConfig().getBoolean("game.enableFirework", true);
-	modifyChat = getConfig().getBoolean("game.modifyChat", true);
 	maxPlayers = getConfig().getInt("game.maximal_Players");
 	defaultRounds = getConfig().getInt("game.default_rounds");
 	defaultWaves = getConfig().getInt("game.default_waves");
 	
 	defaultZombieSpawnRate = getConfig().getInt("zombies.default_spawnRate");
 	
-	// this.getConfig().addDefault("config.misc.portOnJoinGame", true);
+	modifyChat = getConfig().getBoolean("chat.modifyChat", true);
+	commandWhiteList = getConfig().getStringList("chat.commandWhitelist");
 	// this.getConfig().addDefault("config.misc.changeToSpectatorAfterDeath", false);
     }
     
@@ -117,13 +129,7 @@ public class ZvPConfig {
 	ZvP.getInstance().reloadConfig();
 	config = ZvP.getInstance().getConfig();
 	init();
-	
-	try {
-	    load();
-	} catch (Exception e) {
-	    // Do nothing here!
-	    // Wrong configurations are catched on init
-	}
+	load();
     }
     
     public static boolean getUseMetrics() {
@@ -196,6 +202,10 @@ public class ZvPConfig {
     
     public static int getDefaultZombieSpawnRate() {
 	return defaultZombieSpawnRate;
+    }
+    
+    public static List<String> getCommandWhitelist() {
+	return commandWhiteList;
     }
     
     public static void setEconEnabled(boolean enabled) {
