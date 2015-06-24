@@ -40,7 +40,7 @@ public class FileConverter {
 	    if (fileVersion == null || parseVersion(fileVersion) < uptadeRequired) { // Version that needs upgrade
 	    
 		switch (type) {
-		    case ARENAFILE:
+		    case ARENAFILE: {
 			ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Found outdated arena file(" + file.getName() + " v" + fileVersion + ")! Converting to " + uptadeRequired + " ...", true, false);
 			int arenaID = conf.getInt("arena.ID");
 			String status = conf.getString("arena.Online");
@@ -170,24 +170,43 @@ public class FileConverter {
 			conf.save(file);
 			ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Updated " + file.getName() + " to " + uptadeRequired + " successfully!", true, false);
 			return true;
-			
-		    case KITFILE:
+		    }
+		    case KITFILE: {
 			ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Found outdated kit file(" + file.getName() + " v" + fileVersion + ")! Converting to " + uptadeRequired + " ...", true, false);
 			String name = conf.getString("name");
 			boolean enabled = conf.getBoolean("enabled", true);
 			String icon = conf.getString("icon");
 			List<String> itemList = conf.getStringList("items");
+			double price;
 			
-			file.renameTo(new File(file.getParentFile(), file.getName() + ".old"));
+			if (fileVersion == null || parseVersion(fileVersion) < 250) {
+			    price = 0.0;
+			} else if (parseVersion(fileVersion) >= 250) {
+			    price = conf.getDouble("price");
+			} else {
+			    price = 0.0;
+			}
+			
+			// Rename delete ...
+			boolean success = file.renameTo(new File(file.getParentFile(), file.getName() + ".old"));
+			if (!success) {
+			    boolean deleteSuccess = new File(file.getParentFile(), file.getName() + ".old").delete();
+			    if (!deleteSuccess) {
+				if (!file.renameTo(new File(file.getParentFile(), file.getName() + ".old" + System.currentTimeMillis()))) {
+				    return false;
+				}
+			    }
+			}
 			file.delete();
 			file.createNewFile();
 			
 			conf = YamlConfiguration.loadConfiguration(file);
-			conf.options().header("This is the config file used in ZvP to store a customm kit.\n\n'name:' The name of the kit\n'enabled:' State of the kit\n'price:' The price of the kit if economy is used\n'icon:' An item used as an icon\n\n" + "'id:' The id describes the item material. A list of all items can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html\n" + "'amount:' The amount of the item (Should be 1!)\n" + "'data:' Used by potions\n" + "'ench: {}' A list of enchantings (ench: {ENCHANTMENT:LEVEL}). A list of enchantments can be found here:\n https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/enchantments/Enchantment.html\n");
+			conf.options().header("This is the config file used in ZvP to store a custom kit.\n\n'name:' The name of the kit\n'enabled:' State of the kit\n'permission:' The permission to use this kit. If kept on default permission nothing changes.\n'price:' The price of the kit if economy is used\n'icon:' An item used as an icon\n\n" + "'id:' The id describes the item material. A list of all items can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html\n" + "'amount:' The amount of the item (Should be 1!)\n" + "'data:' Used by potions\n" + "'ench: {}' A list of enchantings (ench: {ENCHANTMENT:LEVEL}). A list of enchantments can be found here:\n https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/enchantments/Enchantment.html\n");
 			conf.options().copyHeader(true);
 			conf.set("name", name);
 			conf.set("enabled", enabled);
-			conf.set("price", 0.0);
+			conf.set("permission", "zvp.play");
+			conf.set("price", price);
 			conf.set("icon", icon);
 			conf.set("items", itemList);
 			conf.set("version", this.currentVersion);
@@ -195,7 +214,7 @@ public class FileConverter {
 			conf.save(file);
 			ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Updated " + file.getName() + " to " + uptadeRequired + " successfully!", true, false);
 			return true;
-			
+		    }
 		    default:
 			return false;
 		}
