@@ -208,7 +208,7 @@ public class ZvPCommands implements CommandExecutor {
 		    
 		    for (int ir = 1; ir <= r; ir++) {
 			for (int iw = 1; iw <= w; iw++) {
-			    playerSender.sendMessage("D:" + d + " P:" + p + " R:" + ir + " W:" + iw + " @" + id + " --> " + a.getSpawningZombies(iw, ir, p, d));
+			    playerSender.sendMessage("D:" + d + " P:" + p + " R:" + ir + " W:" + iw + " @" + id + " --> " + a.getSpawningZombies(iw, ir, p, d) + " --> IT: " + (Math.floor(Math.floor(a.getSpawningZombies(iw, ir, p, d) / 20.0) * 0.8) * 10 + 20));
 			}
 		    }
 		    
