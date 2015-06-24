@@ -1,3 +1,27 @@
 ZVP is a plugin for the Minecraft Bukkit Server. It is a Zombie Survival-Game.
+You can play alone or with friends in a simple or complicated arena.
 
-Website: http://dev.bukkit.org/bukkit-plugins/ZombieVsPlayer
+Features:
+- Random or custom spawn locations
+- highly configurable
+- easy, normal and hard mode
+- optional spawn protection
+- optional pre lobby
+- inbuilt shop system
+- optional Vault economy integration
+- scoreboard statistics
+- no required dependencies
+- Open Source
+- under active development
+
+Visit the Website http://dev.bukkit.org/bukkit-plugins/ZombieVsPlayer
+
+
+Used Resources:
+- ExperienceManager by https://github.com/desht/
+- Metrics by https://github.com/Hidendra
+- TabText by https://github.com/atesin
+- Updater by https://github.com/gravitylow
+
+
+ZvP is free Software and is released under the GPLv2
