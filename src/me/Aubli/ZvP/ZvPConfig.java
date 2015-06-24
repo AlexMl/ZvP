@@ -37,7 +37,7 @@ public class ZvPConfig {
     
     private static int defaultZombieSpawnRate;
     
-    public ZvPConfig(FileConfiguration configuration) throws Exception {
+    public ZvPConfig(FileConfiguration configuration) {
 	config = configuration;
 	init();
 	load();
@@ -84,7 +84,7 @@ public class ZvPConfig {
 	CommentUtil.insertComment(configFile, "default_spawnRate", "Default zombie spawnrate for newly created arenas.#The spawnrate defines how many zombies will spawn.#The calculation uses arena size, amount of player, spawnrate and difficulty setting.");
     }
     
-    private static void load() throws Exception {
+    private static void load() {
 	useMetrics = getConfig().getBoolean("plugin.enableMetrics", true);
 	debugMode = getConfig().getBoolean("plugin.debugMode", false);
 	locale = new Locale(getConfig().getString("plugin.Locale", "en"));

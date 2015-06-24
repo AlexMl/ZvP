@@ -81,11 +81,7 @@ public class ZvP extends JavaPlugin {
     private void initialize() {
 	instance = this;
 	
-	try {
-	    new ZvPConfig(getConfig());
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
+	new ZvPConfig(getConfig());
 	
 	logger = new PluginOutput(this, ZvPConfig.getDebugMode(), ZvPConfig.getLogLevel());
 	
