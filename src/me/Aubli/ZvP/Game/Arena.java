@@ -816,7 +816,6 @@ public class Arena implements Comparable<Arena> {
     }
     
     public boolean hasNext() {
-	System.out.println(getWave() * getRound() + " < " + getMaxWaves() * getMaxRounds() + " hasNext: " + ((getWave() * getRound()) < (getMaxWaves() * getMaxRounds())));
 	return (getWave() * getRound()) < (getMaxWaves() * getMaxRounds());
     }
     
