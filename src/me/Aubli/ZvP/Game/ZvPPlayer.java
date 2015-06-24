@@ -54,7 +54,7 @@ public class ZvPPlayer {
     
     private IZvPKit kit;
     
-    public ZvPPlayer(Player player, Arena arena, Lobby lobby) throws Exception {
+    public ZvPPlayer(Player player, Arena arena, Lobby lobby) {
 	this.player = player;
 	this.playerUUID = player.getUniqueId();
 	

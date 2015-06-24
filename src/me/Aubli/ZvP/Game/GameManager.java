@@ -379,15 +379,10 @@ public class GameManager {
 	
 	if (!arena.isFull() && arena.isOnline()) {
 	    if (ZvPConfig.getAllowDuringGameJoin() || !arena.isRunning()) {
-		try {
-		    new ZvPPlayer(player, arena, lobby);
-		    SignManager.getManager().updateSigns(lobby);
-		    SignManager.getManager().updateSigns(arena);
-		    return true;
-		} catch (Exception e) {
-		    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while creating Player: " + e.getMessage(), true, false, e);
-		    return false;
-		}
+		new ZvPPlayer(player, arena, lobby);
+		SignManager.getManager().updateSigns(lobby);
+		SignManager.getManager().updateSigns(arena);
+		return true;
 	    } else {
 		return false;
 	    }
