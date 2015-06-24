@@ -42,7 +42,7 @@ public class KCustomKit implements IZvPKit, Comparable<IZvPKit> {
 	
 	if (!this.kitFile.exists()) {
 	    
-	    kitConfig.options().header("This is the config file used in ZvP to store a customm kit.\n\n'name:' The name of the kit\n'enabled:' State of the kit\n'permission:' The permission to use this kit. If kept on default permission nothing changes.\n'price:' The price of the kit if economy is used\n'icon:' An item used as an icon\n\n" + "'id:' The id describes the item material. A list of all items can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html\n" + "'amount:' The amount of the item (Should be 1!)\n" + "'data:' Used by potions\n" + "'ench: {}' A list of enchantings (ench: {ENCHANTMENT:LEVEL}). A list of enchantments can be found here:\n https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/enchantments/Enchantment.html\n");
+	    kitConfig.options().header("This is the config file used in ZvP to store a custom kit.\n\n'name:' The name of the kit\n'enabled:' State of the kit\n'permission:' The permission to use this kit. If kept on default permission nothing changes.\n'price:' The price of the kit if economy is used\n'icon:' An item used as an icon\n\n" + "'id:' The id describes the item material. A list of all items can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html\n" + "'amount:' The amount of the item (Should be 1!)\n" + "'data:' Used by potions\n" + "'ench: {}' A list of enchantings (ench: {ENCHANTMENT:LEVEL}). A list of enchantments can be found here:\n https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/enchantments/Enchantment.html\n");
 	    kitConfig.options().copyHeader(true);
 	    
 	    kitConfig.set("name", name);
