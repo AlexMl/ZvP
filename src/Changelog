@@ -1,5 +1,11 @@
 Changelog:
 
+2.8.0:
+*Start new waves automatically
+*Added configurable permissions for kits
+*Added command whitelist in config.yml.
+*New Permission (zvp.command) to allow commands during game
+
 2.7.0:
 *Added polygon sized arena support
 *Scoreboard adjusts itself in length
