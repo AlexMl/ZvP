@@ -8,7 +8,7 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Kits.KitManager;
-import me.Aubli.ZvP.Listeners.AsyncChatListener;
+import me.Aubli.ZvP.Listeners.ChatListener;
 import me.Aubli.ZvP.Listeners.BlockListener;
 import me.Aubli.ZvP.Listeners.EntityListener;
 import me.Aubli.ZvP.Listeners.GUIListener;
@@ -161,7 +161,7 @@ public class ZvP extends JavaPlugin {
 	pm.registerEvents(new SignChangelistener(), this);
 	pm.registerEvents(new GUIListener(), this);
 	pm.registerEvents(new EntityListener(), this);
-	pm.registerEvents(new AsyncChatListener(), this);
+	pm.registerEvents(new ChatListener(), this);
     }
     
     public static ZvP getInstance() {

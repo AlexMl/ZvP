@@ -20,7 +20,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
-public class AsyncChatListener implements Listener {
+public class ChatListener implements Listener {
     
     @EventHandler(priority = EventPriority.LOW)
     public void onChatEvent(AsyncPlayerChatEvent event) {
