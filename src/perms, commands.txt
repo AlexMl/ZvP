@@ -3,9 +3,10 @@ zvp.status						Use status and list command
 zvp.update						Update the plugin
 
 zvp.reload						Config reload
-zvp.save						Config save
 
 zvp.play						Allow the Player to play the game
+
+zvp.command						Allow players to use every command during games
 
 zvp.stop 						Stop one arena
 zvp.stop.all					Stop all arenas
