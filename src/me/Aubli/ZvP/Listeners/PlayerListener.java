@@ -74,7 +74,7 @@ public class PlayerListener implements Listener {
 	    
 	    event.setRespawnLocation(player.getArena().getArea().getNewRandomLocation(true));
 	    
-	    if (player.getArena().getSpawnProtection()) {
+	    if (player.getArena().useSpawnProtection()) {
 		player.setSpawnProtected(true);
 		player.sendMessage(MessageManager.getFormatedMessage("game:spawn_protection_enabled", player.getArena().getArenaProtectionDuration()));
 		

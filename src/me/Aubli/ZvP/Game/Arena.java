@@ -67,6 +67,8 @@ public class Arena implements Comparable<Arena> {
     private boolean keepInventory;
     private final boolean separatePlayerScores;
     
+    private final boolean enablePVP;
+    
     private final int maxPlayers;
     private final int minPlayers;
     private final int maxRounds;
@@ -108,6 +110,7 @@ public class Arena implements Comparable<Arena> {
 	this.keepXP = false;
 	this.keepInventory = false;
 	this.separatePlayerScores = false;
+	this.enablePVP = false;
 	
 	this.joinTime = 15;
 	this.breakTime = 90;
@@ -159,6 +162,7 @@ public class Arena implements Comparable<Arena> {
 	this.keepInventory = this.arenaConfig.getBoolean("arena.keepInventory", false);
 	this.useVoteSystem = this.arenaConfig.getBoolean("arena.useVoteSystem", true);
 	this.separatePlayerScores = this.arenaConfig.getBoolean("arena.separatePlayerScores", false);
+	this.enablePVP = this.arenaConfig.getBoolean("arena.enablePvP", false);
 	
 	if (keepInventory() && ZvPConfig.getEnableKits()) {
 	    this.keepInventory = false;
@@ -222,7 +226,7 @@ public class Arena implements Comparable<Arena> {
 	    this.arenaConfig.set("arena.timeBetweenWaves", this.breakTime);
 	    this.arenaConfig.set("arena.zombieFund", this.zombieFund);
 	    this.arenaConfig.set("arena.deathFee", this.deathFee);
-	    
+	    this.arenaConfig.set("arena.enablePvP", this.enablePVP);
 	    this.arenaConfig.set("arena.enableSpawnProtection", this.enableSpawnProtection);
 	    this.arenaConfig.set("arena.spawnProtectionDuration", this.protectionDuration);
 	    this.arenaConfig.set("arena.saveRadius", this.saveRadius);
@@ -337,6 +341,7 @@ public class Arena implements Comparable<Arena> {
 	CommentUtil.insertComment(this.arenaFile, "timeBetweenWaves", "Time in seconds the game will wait until a new wave starts.#Only applies if useVoteSystem is false!");
 	CommentUtil.insertComment(this.arenaFile, "zombieFund", "Amount of money you will get from killing a zombie.");
 	CommentUtil.insertComment(this.arenaFile, "deathFee", "Amount of money you have to pay when you die.");
+	CommentUtil.insertComment(this.arenaFile, "enablePvP", "Allow Player vs Player damage. Includes projectile damage!");
 	CommentUtil.insertComment(this.arenaFile, "enableSpawnProtection", "SpawnProtection will protect you when you respawn.#Note that you can not hit zombies during the protection!");
 	CommentUtil.insertComment(this.arenaFile, "spawnProtectionDuration", "The duration of the spawn protection in seconds.");
 	CommentUtil.insertComment(this.arenaFile, "saveRadius", "The save radius is the radius in blocks around you in which no zombies will spawn.");
@@ -442,10 +447,6 @@ public class Arena implements Comparable<Arena> {
     
     public ArenaLobby getPreLobby() {
 	return this.preLobby;
-    }
-    
-    public boolean getSpawnProtection() {
-	return this.enableSpawnProtection;
     }
     
     public ArenaArea getArea() {
@@ -572,6 +573,10 @@ public class Arena implements Comparable<Arena> {
 	return this.useVoteSystem;
     }
     
+    public boolean useSpawnProtection() {
+	return this.enableSpawnProtection;
+    }
+    
     public boolean keepExp() {
 	return this.keepXP;
     }
@@ -582,6 +587,10 @@ public class Arena implements Comparable<Arena> {
     
     public boolean separatePlayerScores() {
 	return this.separatePlayerScores;
+    }
+    
+    public boolean enablePvP() {
+	return this.enablePVP;
     }
     
     public boolean initArenaScore(boolean force) {

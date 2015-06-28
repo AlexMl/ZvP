@@ -22,6 +22,8 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class EntityListener implements Listener {
     
+    public static final double ZOMBIEINTERACTIONFACTOR = 0.25;
+    
     private GameManager game = GameManager.getManager();
     private BukkitTask task;
     
@@ -30,17 +32,84 @@ public class EntityListener implements Listener {
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
 	
-	if (event.getDamager() instanceof Player) {
-	    ZvPPlayer damager = this.game.getPlayer((Player) event.getDamager());
+	if (event.getEntity() instanceof Player) { // Player is victim
+	    ZvPPlayer victim = this.game.getPlayer((Player) event.getEntity());
 	    
-	    if (damager != null && this.game.isInGame(damager.getPlayer())) {
-		if (damager.hasProtection()) {
+	    if (victim != null) {
+		if (victim.hasProtection()) { // If player has protection. Cancel all damage
 		    event.setCancelled(true);
 		    return;
 		}
 		
-		if (event.getEntity() instanceof Zombie) {
-		    if (damager.getArena().getLivingZombieAmount() < (damager.getArena().getSpawningZombies() * 0.25)) {
+		if (event.getDamager() instanceof Player) { // Player vs Player actions
+		    ZvPPlayer damager = this.game.getPlayer((Player) event.getDamager());
+		    
+		    if (damager != null) {
+			if (damager.hasProtection()) {
+			    event.setCancelled(true);
+			    return;
+			}
+			
+			if (damager.getArena().equals(victim.getArena())) {
+			    Arena arena = victim.getArena();
+			    
+			    if (!arena.enablePvP()) {
+				event.setCancelled(true);
+				return;
+			    }
+			    
+			}
+		    }
+		}
+		
+		if (event.getDamager() instanceof Projectile) { // player got hit by a projectile
+		    if (((Projectile) event.getDamager()).getShooter() instanceof Player) { // projectile came from player
+			ZvPPlayer shooter = this.game.getPlayer((Player) ((Projectile) event.getDamager()).getShooter());
+			
+			if (shooter != null) {
+			    if (shooter.getArena().equals(victim.getArena())) {
+				Arena arena = victim.getArena();
+				
+				if (!arena.enablePvP()) {
+				    event.setCancelled(true);
+				    return;
+				} else {
+				    event.setCancelled(false);
+				    return;
+				}
+			    }
+			}
+			
+			// In case of shooting players outside of the arena
+			event.setCancelled(true);
+			return;
+		    } else {
+			event.setCancelled(true);
+			return;
+		    }
+		    
+		}
+		
+		if (event.getDamager() instanceof Zombie) {
+		    entityInteraction = true;
+		}
+	    }
+	}
+	
+	if (event.getEntity() instanceof Zombie) { // Zombie is victim
+	
+	    if (event.getDamager() instanceof Player) {
+		ZvPPlayer damager = this.game.getPlayer((Player) event.getDamager());
+		
+		if (damager != null) {
+		    if (damager.hasProtection()) { // Don't hurt zombies if player has Spawnprotection
+			entityInteraction = true;
+			event.setCancelled(true);
+			return;
+		    }
+		    
+		    // Zombie interaction timer
+		    if (damager.getArena().getLivingZombieAmount() < (damager.getArena().getSpawningZombies() * ZOMBIEINTERACTIONFACTOR)) {
 			if (this.task != null) {
 			    this.task.cancel();
 			    entityInteraction = true;
@@ -54,7 +123,7 @@ public class EntityListener implements Listener {
 			    @Override
 			    public void run() {
 				
-				if (arena.getLivingZombieAmount() < (arena.getSpawningZombies() * 0.25)) {
+				if (arena.getLivingZombieAmount() < (arena.getSpawningZombies() * ZOMBIEINTERACTIONFACTOR)) {
 				    entityInteraction = false;
 				    
 				    for (Zombie zombie : arena.getLivingZombies()) {
@@ -66,52 +135,20 @@ public class EntityListener implements Listener {
 				    ZvP.getPluginLogger().log(EntityListener.class, Level.FINE, "Zombie teleport caused by no interaction!", true, true);
 				}
 			    }
-			}, getArenaInteractionTime(arena) * 20L); // INFO: Time to wait until zombie respawn
+			}, getArenaInteractionTime(arena) * 20L); // Time to wait until zombie respawn
 		    }
 		}
 	    }
-	}
-	
-	if (event.getEntity() instanceof Player) {
 	    
-	    ZvPPlayer victim = this.game.getPlayer((Player) event.getEntity());
-	    
-	    if (victim != null && this.game.isInGame(victim.getPlayer())) {
-		if (victim.hasProtection()) {
+	    switch (event.getCause()) {
+		case FALL:
+		case FALLING_BLOCK:
+		case SUFFOCATION:
 		    event.setCancelled(true);
-		    return;
-		}
-	    }
-	    
-	    if (event.getDamager() instanceof Projectile) {
-		Projectile p = (Projectile) event.getDamager();
+		    break;
 		
-		if (p.getShooter() instanceof Player) {
-		    
-		    Player p1 = (Player) p.getShooter();
-		    
-		    if (p1 != null && victim != null) {
-			if (this.game.isInGame(p1) && this.game.isInGame(victim.getPlayer())) {
-			    if (this.game.getPlayer(p1).getArena().equals(victim.getArena())) {
-				event.setCancelled(true);
-				return;
-			    }
-			}
-		    }
-		}
-	    }
-	    
-	    if (event.getDamager() instanceof Player) {
-		Player p1 = (Player) event.getDamager();
-		
-		if (p1 != null && victim != null) {
-		    if (this.game.isInGame(p1) && this.game.isInGame(victim.getPlayer())) {
-			if (this.game.getPlayer(p1).getArena().equals(victim.getArena())) {
-			    event.setCancelled(true);
-			    return;
-			}
-		    }
-		}
+		default:
+		    break;
 	    }
 	}
     }
