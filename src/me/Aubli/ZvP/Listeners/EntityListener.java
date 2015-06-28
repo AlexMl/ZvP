@@ -123,21 +123,22 @@ public class EntityListener implements Listener {
 	    
 	    Player eventPlayer = event.getEntity().getKiller();
 	    if (this.game.isInGame(eventPlayer)) {
-		
-		final ZvPPlayer player = this.game.getPlayer(eventPlayer);
-		
-		if (player.getArena().keepExp()) {
-		    // entity.remove() does cancel xp spawn.
-		    // --> spawn xp
-		    
-		    int droppedExp = (int) Math.ceil((event.getDroppedExp() / 2.0) * player.getArena().getDifficultyTool().getExpFactor());
-		    
-		    for (int xp = 0; xp < droppedExp; xp++) {
-			event.getEntity().getWorld().spawn(event.getEntity().getLocation().clone(), ExperienceOrb.class).setExperience(1);
-		    }
-		}
-		
 		if (event.getEntity() instanceof Zombie) {
+		    
+		    final ZvPPlayer player = this.game.getPlayer(eventPlayer);
+		    
+		    if (player.getArena().keepExp()) {
+			// entity.remove() does cancel xp spawn.
+			// --> spawn xp
+			
+			int droppedExp = (int) Math.ceil((event.getDroppedExp() / 2.0) * player.getArena().getDifficultyTool().getExpFactor());
+			
+			for (int xp = 0; xp < droppedExp; xp++) {
+			    event.getEntity().getWorld().spawn(event.getEntity().getLocation().clone(), ExperienceOrb.class).setExperience(1);
+			}
+		    }
+		    
+		    // Remove entity is faster than waiting for Server to do it
 		    event.getEntity().remove();
 		    
 		    // Task is needed because entity.remove() is asyncron and takes longer
