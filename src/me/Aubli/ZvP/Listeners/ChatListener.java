@@ -96,11 +96,10 @@ public class ChatListener implements Listener {
 			    // TODO message
 			    return;
 			} else {
-			    // TODO log?
+			    ZvP.getPluginLogger().log(getClass(), Level.INFO, "Player " + eventPlayer.getName() + "(" + eventPlayer.getUniqueId().toString() + ") tried to execute " + event.getMessage() + "!", true, false);
+			    return;
 			}
 		    }
-		} else {
-		    // TODO log?
 		}
 	    }
 	}
