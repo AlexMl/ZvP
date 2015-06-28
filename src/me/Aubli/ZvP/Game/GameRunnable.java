@@ -122,17 +122,18 @@ public class GameRunnable extends BukkitRunnable {
 	    
 	    if (this.firstSpawn == false && this.spawnZombies == false) {
 		
-		// TODO option in arena
-		if (this.arena.hasNext() && EntityListener.hasInteractionTimeout()) {
-		    if (!this.arena.useVoteSystem()) {
-			if (this.arena.getLivingZombieAmount() < (this.arena.getSpawningZombies() * EntityListener.ZOMBIEINTERACTIONFACTOR)) {
-			    this.arena.next();
-			    this.arena.updatePlayerBoards();
-			    
-			    ZvP.getPluginLogger().log(getClass(), Level.INFO, "Arena " + this.arena.getID() + " moved into the next wave cause of no zombie interaction!", true, true);
-			    
-			    this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, this.arena.getArenaBreakTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
-			    this.cancel();
+		if (this.arena.useAutoWaves()) {
+		    if (this.arena.hasNext() && EntityListener.hasInteractionTimeout()) {
+			if (!this.arena.useVoteSystem()) {
+			    if (this.arena.getLivingZombieAmount() < (this.arena.getSpawningZombies() * EntityListener.ZOMBIEINTERACTIONFACTOR)) {
+				this.arena.next();
+				this.arena.updatePlayerBoards();
+				
+				ZvP.getPluginLogger().log(getClass(), Level.INFO, "Arena " + this.arena.getID() + " moved into the next wave cause of no zombie interaction!", true, true);
+				
+				this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, this.arena.getArenaBreakTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+				this.cancel();
+			    }
 			}
 		    }
 		}

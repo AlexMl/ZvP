@@ -37,6 +37,8 @@ import org.util.SortMap.SortMap;
 
 public class Arena implements Comparable<Arena> {
     
+    // TODO Arena config class
+    
     private File arenaFile;
     private FileConfiguration arenaConfig;
     
@@ -63,10 +65,10 @@ public class Arena implements Comparable<Arena> {
     /* ---- Config values ---- */
     private final boolean enableSpawnProtection;
     private final boolean useVoteSystem;
+    private final boolean autoWaves;
     private final boolean keepXP;
     private boolean keepInventory;
     private final boolean separatePlayerScores;
-    
     private final boolean enablePVP;
     
     private final int maxPlayers;
@@ -107,6 +109,7 @@ public class Arena implements Comparable<Arena> {
 	
 	/* ---- INFO: final standard config values ---- */
 	this.useVoteSystem = true;
+	this.autoWaves = true;
 	this.keepXP = false;
 	this.keepInventory = false;
 	this.separatePlayerScores = false;
@@ -161,6 +164,7 @@ public class Arena implements Comparable<Arena> {
 	this.keepXP = this.arenaConfig.getBoolean("arena.keepXP", false);
 	this.keepInventory = this.arenaConfig.getBoolean("arena.keepInventory", false);
 	this.useVoteSystem = this.arenaConfig.getBoolean("arena.useVoteSystem", true);
+	this.autoWaves = this.arenaConfig.getBoolean("arena.autoWaves", true);
 	this.separatePlayerScores = this.arenaConfig.getBoolean("arena.separatePlayerScores", false);
 	this.enablePVP = this.arenaConfig.getBoolean("arena.enablePvP", false);
 	
@@ -221,6 +225,7 @@ public class Arena implements Comparable<Arena> {
 	    this.arenaConfig.set("arena.keepXP", this.keepXP);
 	    this.arenaConfig.set("arena.keepInventory", this.keepInventory);
 	    this.arenaConfig.set("arena.useVoteSystem", this.useVoteSystem);
+	    this.arenaConfig.set("arena.autoWaves", true);
 	    this.arenaConfig.set("arena.separatePlayerScores", this.separatePlayerScores);
 	    this.arenaConfig.set("arena.joinTime", this.joinTime);
 	    this.arenaConfig.set("arena.timeBetweenWaves", this.breakTime);
@@ -336,6 +341,7 @@ public class Arena implements Comparable<Arena> {
 	CommentUtil.insertComment(this.arenaFile, "keepXP", "If set to false, the game will not reset/change your current XP level.#Note that the countdown system uses the xp level which overrides experience!#The plugin will not show countdowns if keepXP is enabled!");
 	CommentUtil.insertComment(this.arenaFile, "keepInventory", "If set to true, the inventory will not get cleared after the game.#Important: Does not work with kits enabled!#Look into the main config file to disable kits!");
 	CommentUtil.insertComment(this.arenaFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
+	CommentUtil.insertComment(this.arenaFile, "autoWaves", "If enabled the next round will start automatically even if not all zombies are defeated!");
 	CommentUtil.insertComment(this.arenaFile, "separatePlayerScores", "True: Each player will have his own score.#False: All players have the same score. They pay and earn together.");
 	CommentUtil.insertComment(this.arenaFile, "joinTime", "Time in seconds the game will wait before it starts.#Note that the arena specific minimum has to be reached.");
 	CommentUtil.insertComment(this.arenaFile, "timeBetweenWaves", "Time in seconds the game will wait until a new wave starts.#Only applies if useVoteSystem is false!");
@@ -571,6 +577,10 @@ public class Arena implements Comparable<Arena> {
     
     public boolean useVoteSystem() {
 	return this.useVoteSystem;
+    }
+    
+    public boolean useAutoWaves() {
+	return this.autoWaves;
     }
     
     public boolean useSpawnProtection() {
