@@ -668,7 +668,9 @@ public class Arena implements Comparable<Arena> {
 	if (!player.hasKit() && !player.hasCanceled()) {
 	    
 	    if (!containsPlayer(player.getPlayer())) {
-		sendMessage(MessageManager.getMessage("game:waiting"));
+		if (getStatus() == ArenaStatus.WAITING) {
+		    sendMessage(MessageManager.getMessage("game:waiting"));
+		}
 		this.players.add(player);
 	    }
 	    
