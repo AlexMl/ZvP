@@ -56,12 +56,8 @@ public class GameRunnable extends BukkitRunnable {
 	    }
 	    
 	    if (!this.arena.hasKit()) {
-		for (ZvPPlayer p : this.arena.getPlayers()) {
-		    if (p.hasKit()) {
-			p.sendMessage(MessageManager.getMessage("game:waiting"));
-		    }
-		}
 		this.seconds = 0;
+		this.arena.setPlayerLevel(this.startDelay);
 		return;
 	    }
 	    

@@ -658,6 +658,7 @@ public class Arena implements Comparable<Arena> {
 	if (!player.hasKit() && !player.hasCanceled()) {
 	    
 	    if (!containsPlayer(player.getPlayer())) {
+		sendMessage(MessageManager.getMessage("game:waiting"));
 		this.players.add(player);
 	    }
 	    
@@ -693,17 +694,6 @@ public class Arena implements Comparable<Arena> {
 	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Player " + player.getName() + " has joined Arena " + getID() + "! ASTATUS: " + getStatus().name(), true);
 	    
 	    if (this.players.size() >= this.minPlayers && !isRunning()) {
-		for (ZvPPlayer p : this.players) {
-		    if (!p.hasKit()) {
-			for (ZvPPlayer p2 : this.players) {
-			    if (p2.hasKit()) {
-				p2.sendMessage(MessageManager.getMessage("game:waiting"));
-			    }
-			}
-			return false;
-		    }
-		}
-		
 		if (getStatus() == ArenaStatus.STANDBY && !isWaiting()) {
 		    if (hasPreLobby()) {
 			start(0, 0, 5); // INFO: magic number.
