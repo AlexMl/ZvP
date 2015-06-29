@@ -23,6 +23,7 @@ public class DefaultTranslation extends ListResourceBundle {
 	    
 	    {"config:reloaded", ChatColor.GREEN + "Config successfully reloaded!"},
 	    {"commands:missing_Permission", ChatColor.DARK_RED + "You do not have enough permission for that!"},
+	    {"commands:no_commands_allowed", ChatColor.DARK_RED + "You can not execute commands during a ZvP game!"},
 	    {"commands:only_for_Players", "Only Players can use this command!"},
 	    
 	    {"game:waiting", ChatColor.DARK_GRAY + "Waiting for players ..."},

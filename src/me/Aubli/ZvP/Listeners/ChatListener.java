@@ -93,7 +93,7 @@ public class ChatListener implements Listener {
 		    if (!command.startsWith("zvp")) {
 			if (!ZvPConfig.getCommandWhitelist().contains(command)) {
 			    event.setCancelled(true);
-			    // TODO message
+			    eventPlayer.sendMessage(MessageManager.getMessage("commands:no_commands_allowed"));
 			    return;
 			} else {
 			    ZvP.getPluginLogger().log(getClass(), Level.INFO, "Player " + eventPlayer.getName() + "(" + eventPlayer.getUniqueId().toString() + ") tried to execute " + event.getMessage() + "!", true, false);
