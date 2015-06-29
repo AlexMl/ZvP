@@ -19,6 +19,12 @@ import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 import me.Aubli.ZvP.Sign.ISign;
 import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Translation.MessageKeys;
+import me.Aubli.ZvP.Translation.MessageKeys.arena;
+import me.Aubli.ZvP.Translation.MessageKeys.commands;
+import me.Aubli.ZvP.Translation.MessageKeys.config;
+import me.Aubli.ZvP.Translation.MessageKeys.error;
+import me.Aubli.ZvP.Translation.MessageKeys.manage;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
@@ -73,26 +79,24 @@ public class ZvPCommands implements CommandExecutor {
 		if (args.length == 1) {
 		    if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
 			GameManager.getManager().reloadConfig();
-			sender.sendMessage(MessageManager.getMessage("config:reloaded"));
+			sender.sendMessage(MessageManager.getMessage(config.reloaded));
 			return true;
 		    }
 		    if (args[0].equalsIgnoreCase("stop-all") || args[0].equalsIgnoreCase("stop")) {
 			GameManager.getManager().stopGames();
-			sender.sendMessage(MessageManager.getMessage("arena:stop_all"));
+			sender.sendMessage(MessageManager.getMessage(arena.stop_all));
 			return true;
 		    }
 		}
 		
 		String pluginName = ZvP.getInstance().getDescription().getName();
 		String pluginVersion = ZvP.getInstance().getDescription().getVersion();
-		String prefix = ZvP.getPrefix();
 		
-		sender.sendMessage("|--------------- " + pluginName + " v" + pluginVersion + " ( " + prefix + ") ---------------|");
+		sender.sendMessage("|--------------- " + pluginName + " v" + pluginVersion + " Console Commands ---------------|");
 		sender.sendMessage("| /zvp reload");
 		sender.sendMessage("| /zvp stop-all");
 		return true;
 	    }
-	    sender.sendMessage(MessageManager.getMessage("commands:only_for_Players"));
 	    return true;
 	}
 	
@@ -141,6 +145,27 @@ public class ZvPCommands implements CommandExecutor {
 	    }
 	    
 	    if (args.length == 2) {
+		
+		if (args[0].equalsIgnoreCase("uloc")) {
+		    double md = Double.parseDouble(args[1]);
+		    
+		    ZvPPlayer player = this.game.getPlayer(playerSender);
+		    
+		    long start = System.currentTimeMillis();
+		    int i = 0;
+		    for (i = 0; i < 10000; i++) {
+			try {
+			    player.getArena().getArea().getNewUnsaveLocation(md).clone().add(0, 10, 0).getBlock().setType(Material.WOOL);
+			} catch (StackOverflowError e) {
+			    e.printStackTrace();
+			}
+		    }
+		    
+		    long ende = System.currentTimeMillis();
+		    System.out.println("Für " + i + " durchläufe " + ((ende - start) / 1000.0) + " sekunden gebraucht!");
+		    return true;
+		}
+		
 		if (args[0].equalsIgnoreCase("kit")) {
 		    
 		    String kit = args[1];
@@ -295,7 +320,7 @@ public class ZvPCommands implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
 		    if (playerSender.hasPermission("zvp.reload")) {
 			GameManager.getManager().reloadConfig();
-			playerSender.sendMessage(MessageManager.getMessage("config:reloaded"));
+			playerSender.sendMessage(MessageManager.getMessage(config.reloaded));
 			return true;
 		    } else {
 			commandDenied(playerSender);
@@ -311,15 +336,15 @@ public class ZvPCommands implements CommandExecutor {
 			    boolean success = this.game.removePlayer(p);
 			    
 			    if (success) {
-				playerSender.sendMessage(MessageManager.getFormatedMessage("game:left", p.getArena().getID()));
-				a.sendMessage(MessageManager.getFormatedMessage("game:player_left", playerSender.getName()));
+				playerSender.sendMessage(MessageManager.getFormatedMessage(MessageKeys.game.left, p.getArena().getID()));
+				a.sendMessage(MessageManager.getFormatedMessage(MessageKeys.game.player_left, playerSender.getName()));
 				return true;
 			    } else {
-				playerSender.sendMessage(MessageManager.getMessage("game:player_not_found"));
+				playerSender.sendMessage(MessageManager.getMessage(MessageKeys.game.player_not_found));
 				return true;
 			    }
 			} else {
-			    playerSender.sendMessage(MessageManager.getMessage("game:not_in_game"));
+			    playerSender.sendMessage(MessageManager.getMessage(MessageKeys.game.not_in_game));
 			    return true;
 			}
 		    } else {
@@ -331,7 +356,7 @@ public class ZvPCommands implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("stop")) {
 		    if (playerSender.hasPermission("zvp.stop.all")) {
 			this.game.stopGames();
-			playerSender.sendMessage(MessageManager.getMessage("arena:stop_all"));
+			playerSender.sendMessage(MessageManager.getMessage(arena.stop_all));
 			return true;
 		    } else {
 			commandDenied(playerSender);
@@ -365,7 +390,7 @@ public class ZvPCommands implements CommandExecutor {
 			    KitManager.getManager().openAddKitGUI(playerSender, args[1]);
 			    return true;
 			} else {
-			    playerSender.sendMessage(MessageManager.getFormatedMessage("error:kit_already_exists", args[1]));
+			    playerSender.sendMessage(MessageManager.getFormatedMessage(error.kit_already_exists, args[1]));
 			    return true;
 			}
 		    } else {
@@ -378,10 +403,10 @@ public class ZvPCommands implements CommandExecutor {
 		    if (playerSender.hasPermission("zvp.manage.kit")) {
 			if (KitManager.getManager().getKit(args[1]) != null) {
 			    KitManager.getManager().removeKit(args[1]);
-			    playerSender.sendMessage(MessageManager.getFormatedMessage("manage:kit_removed", args[1]));
+			    playerSender.sendMessage(MessageManager.getFormatedMessage(manage.kit_removed, args[1]));
 			    return true;
 			} else {
-			    playerSender.sendMessage(MessageManager.getFormatedMessage("error:kit_does_not_exists", args[1]));
+			    playerSender.sendMessage(MessageManager.getFormatedMessage(error.kit_not_exist, args[1]));
 			    return true;
 			}
 		    } else {
@@ -393,7 +418,7 @@ public class ZvPCommands implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("add")) {
 		    if (args[1].equalsIgnoreCase("arena")) {
 			if (playerSender.hasPermission("zvp.manage.arena")) {
-			    playerSender.sendMessage(MessageManager.getMessage("manage:tool"));
+			    playerSender.sendMessage(MessageManager.getMessage(manage.tool));
 			    playerSender.getInventory().addItem(ZvP.getTool(ZvP.ADDARENA_SINGLE));
 			    return true;
 			} else {
@@ -405,7 +430,7 @@ public class ZvPCommands implements CommandExecutor {
 		    if (args[1].equalsIgnoreCase("lobby")) {
 			if (playerSender.hasPermission("zvp.manage.lobby")) {
 			    GameManager.getManager().addLobby(playerSender.getLocation().clone());
-			    playerSender.sendMessage(MessageManager.getMessage("manage:lobby_saved"));
+			    playerSender.sendMessage(MessageManager.getMessage(manage.lobby_saved));
 			    return true;
 			} else {
 			    commandDenied(playerSender);
@@ -431,10 +456,10 @@ public class ZvPCommands implements CommandExecutor {
 			Arena a = this.game.getArena(parseInt(args[1]));
 			if (a != null) {
 			    a.stop();
-			    playerSender.sendMessage(MessageManager.getFormatedMessage("arena:stop", a.getID()));
+			    playerSender.sendMessage(MessageManager.getFormatedMessage(arena.stop, a.getID()));
 			    return true;
 			} else {
-			    playerSender.sendMessage(MessageManager.getMessage("error:arena_not_available"));
+			    playerSender.sendMessage(MessageManager.getMessage(error.arena_not_available));
 			    return true;
 			}
 		    } else {
@@ -455,13 +480,13 @@ public class ZvPCommands implements CommandExecutor {
 			    if (args[2].equalsIgnoreCase("offline") || args[2].equalsIgnoreCase("off")) {
 				arena.setStatus(ArenaStatus.STOPED);
 				arena.save();
-				playerSender.sendMessage(MessageManager.getFormatedMessage("manage:arena_status_changed", "Offline"));
+				playerSender.sendMessage(MessageManager.getFormatedMessage(manage.arena_status_changed, "Offline"));
 				return true;
 			    } else if (args[2].equalsIgnoreCase("online") || args[2].equalsIgnoreCase("on")) {
 				if (!arena.isOnline()) {
 				    arena.setStatus(ArenaStatus.STANDBY);
 				    arena.save();
-				    playerSender.sendMessage(MessageManager.getFormatedMessage("manage:arena_status_changed", "Online"));
+				    playerSender.sendMessage(MessageManager.getFormatedMessage(manage.arena_status_changed, "Online"));
 				    return true;
 				}
 			    } else {
@@ -469,7 +494,7 @@ public class ZvPCommands implements CommandExecutor {
 				return true;
 			    }
 			} else {
-			    playerSender.sendMessage(MessageManager.getMessage("error:arena_not_available"));
+			    playerSender.sendMessage(MessageManager.getMessage(error.arena_not_available));
 			    return true;
 			}
 		    } else {
@@ -481,13 +506,13 @@ public class ZvPCommands implements CommandExecutor {
 		    if (playerSender.hasPermission("zvp.manage.arena")) {
 			if (args[1].equalsIgnoreCase("arena")) {
 			    if (args[2].equalsIgnoreCase("polygon")) {
-				playerSender.sendMessage(MessageManager.getMessage("manage:tool"));
+				playerSender.sendMessage(MessageManager.getMessage(manage.tool));
 				playerSender.getInventory().addItem(ZvP.getTool(ZvP.ADDARENA_POLYGON));
 				return true;
 			    }
 			    if (args[2].equalsIgnoreCase("clear")) {
 				InteractListener.clearPositionList();
-				playerSender.sendMessage(MessageManager.getMessage("manage:position_cleared"));
+				playerSender.sendMessage(MessageManager.getMessage(manage.position_cleared));
 				return true;
 			    }
 			    if (args[2].equalsIgnoreCase("finish")) {
@@ -495,9 +520,9 @@ public class ZvPCommands implements CommandExecutor {
 				InteractListener.clearPositionList();
 				
 				if (arena != null) {
-				    playerSender.sendMessage(MessageManager.getFormatedMessage("manage:arena_saved", arena.getID()));
+				    playerSender.sendMessage(MessageManager.getFormatedMessage(manage.arena_saved, arena.getID()));
 				} else {
-				    playerSender.sendMessage(MessageManager.getMessage("error:arena_place"));
+				    playerSender.sendMessage(MessageManager.getMessage(error.arena_place));
 				}
 				return true;
 			    }
@@ -511,19 +536,19 @@ public class ZvPCommands implements CommandExecutor {
 				boolean success = arena.addArenaLobby(playerSender.getLocation().clone());
 				
 				if (success) {
-				    playerSender.sendMessage(MessageManager.getFormatedMessage("manage:lobby_saved"));
+				    playerSender.sendMessage(MessageManager.getMessage(manage.lobby_saved));
 				} else {
-				    playerSender.sendMessage(MessageManager.getMessage("error:prelobby_add"));
+				    playerSender.sendMessage(MessageManager.getMessage(error.prelobby_add));
 				}
 				return true;
 			    }
 			    if (args[2].equalsIgnoreCase("prelobbyposition") || args[2].equalsIgnoreCase("lobbyposition")) {
 				if (arena.hasPreLobby()) {
 				    arena.getPreLobby().addSpawnLocation(playerSender.getLocation());
-				    playerSender.sendMessage(MessageManager.getFormatedMessage("manage:position_saved", "Position in PreLobby"));
+				    playerSender.sendMessage(MessageManager.getFormatedMessage(manage.position_saved, "Position in PreLobby"));
 				    return true;
 				} else {
-				    playerSender.sendMessage(MessageManager.getMessage("error:no_prelobby"));
+				    playerSender.sendMessage(MessageManager.getMessage(error.no_prelobby));
 				    return true;
 				}
 			    }
@@ -531,7 +556,7 @@ public class ZvPCommands implements CommandExecutor {
 			    printCommands(playerSender, 2);
 			    return true;
 			} else {
-			    playerSender.sendMessage(MessageManager.getMessage("error:arena_not_available"));
+			    playerSender.sendMessage(MessageManager.getMessage(error.arena_not_available));
 			    return true;
 			}
 		    } else {
@@ -545,10 +570,10 @@ public class ZvPCommands implements CommandExecutor {
 			    boolean success = GameManager.getManager().removeArena(GameManager.getManager().getArena(parseInt(args[2])));
 			    
 			    if (success) {
-				playerSender.sendMessage(MessageManager.getMessage("manage:arena_removed"));
+				playerSender.sendMessage(MessageManager.getMessage(manage.arena_removed));
 				return true;
 			    } else {
-				playerSender.sendMessage(MessageManager.getMessage("error:arena_not_available"));
+				playerSender.sendMessage(MessageManager.getMessage(error.arena_not_available));
 				return true;
 			    }
 			} else {
@@ -562,10 +587,10 @@ public class ZvPCommands implements CommandExecutor {
 			    boolean success = GameManager.getManager().removeLobby(GameManager.getManager().getLobby(parseInt(args[2])));
 			    
 			    if (success) {
-				playerSender.sendMessage(MessageManager.getMessage("manage:lobby_removed"));
+				playerSender.sendMessage(MessageManager.getMessage(manage.lobby_removed));
 				return true;
 			    } else {
-				playerSender.sendMessage(MessageManager.getMessage("error:lobby_not_available"));
+				playerSender.sendMessage(MessageManager.getMessage(error.lobby_not_available));
 				return true;
 			    }
 			} else {
@@ -580,10 +605,10 @@ public class ZvPCommands implements CommandExecutor {
 			    
 			    if (arena != null) {
 				arena.deleteArenaLobby();
-				playerSender.sendMessage(MessageManager.getMessage("manage:lobby_removed"));
+				playerSender.sendMessage(MessageManager.getMessage(manage.lobby_removed));
 				return true;
 			    } else {
-				playerSender.sendMessage(MessageManager.getMessage("error:arena_not_available"));
+				playerSender.sendMessage(MessageManager.getMessage(error.arena_not_available));
 				return true;
 			    }
 			} else {
@@ -739,6 +764,6 @@ public class ZvPCommands implements CommandExecutor {
     }
     
     public static void commandDenied(Player player) {
-	player.sendMessage(MessageManager.getMessage("commands:missing_Permission"));
+	player.sendMessage(MessageManager.getMessage(commands.missing_permission));
     }
 }
