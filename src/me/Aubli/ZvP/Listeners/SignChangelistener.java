@@ -9,6 +9,9 @@ import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 import me.Aubli.ZvP.Sign.ISign;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
+import me.Aubli.ZvP.Translation.MessageKeys.error;
+import me.Aubli.ZvP.Translation.MessageKeys.inventory;
+import me.Aubli.ZvP.Translation.MessageKeys.manage;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
@@ -69,7 +72,7 @@ public class SignChangelistener implements Listener {
 					    event.setLine(3, ChatColor.GREEN + "[JOIN]");
 					} else if (type == SignType.SHOP_SIGN) {
 					    
-					    Inventory catSelect = Bukkit.createInventory(eventPlayer, ((int) Math.ceil((ItemCategory.values().length / 9.0))) * 9, MessageManager.getMessage("inventory:select_category") + " (" + SignManager.getManager().getSign(event.getBlock().getLocation()).getID() + ")");
+					    Inventory catSelect = Bukkit.createInventory(eventPlayer, ((int) Math.ceil((ItemCategory.values().length / 9.0))) * 9, MessageManager.getMessage(inventory.select_category) + " (" + SignManager.getManager().getSign(event.getBlock().getLocation()).getID() + ")");
 					    
 					    for (ItemCategory cat : ItemCategory.values()) {
 						if (cat.getIcon() != null) {
@@ -84,34 +87,34 @@ public class SignChangelistener implements Listener {
 					    eventPlayer.closeInventory();
 					    eventPlayer.openInventory(catSelect);
 					}
-					eventPlayer.sendMessage(MessageManager.getMessage("manage:sign_saved"));
+					eventPlayer.sendMessage(MessageManager.getMessage(manage.sign_saved));
 					return;
 				    } else {
-					eventPlayer.sendMessage(MessageManager.getMessage("error:sign_place"));
+					eventPlayer.sendMessage(MessageManager.getMessage(error.sign_place));
 					return;
 				    }
 				} else {
-				    eventPlayer.sendMessage(MessageManager.getMessage("error:lobby_not_available"));
+				    eventPlayer.sendMessage(MessageManager.getMessage(error.lobby_not_available));
 				    event.setCancelled(true);
 				    return;
 				}
 			    } else {
-				eventPlayer.sendMessage(MessageManager.getMessage("error:arena_not_available"));
+				eventPlayer.sendMessage(MessageManager.getMessage(error.arena_not_available));
 				event.setCancelled(true);
 				return;
 			    }
 			} catch (NumberFormatException e) {
-			    eventPlayer.sendMessage(MessageManager.getMessage("error:sign_layout") + " " + e.getMessage());
+			    eventPlayer.sendMessage(MessageManager.getMessage(error.sign_layout) + " " + e.getMessage());
 			    event.setCancelled(true);
 			    return;
 			}
 		    } else {
-			eventPlayer.sendMessage(MessageManager.getMessage("error:sign_layout"));
+			eventPlayer.sendMessage(MessageManager.getMessage(error.sign_layout));
 			event.setCancelled(true);
 			return;
 		    }
 		} else {
-		    eventPlayer.sendMessage(MessageManager.getMessage("error:sign_layout"));
+		    eventPlayer.sendMessage(MessageManager.getMessage(error.sign_layout));
 		    event.setCancelled(true);
 		    return;
 		}

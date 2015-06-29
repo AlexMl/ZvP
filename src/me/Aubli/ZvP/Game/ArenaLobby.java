@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Translation.MessageKeys.game;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
@@ -163,9 +164,9 @@ public class ArenaLobby {
 	if (!this.playerList.contains(player) && !player.hasCanceled()) {
 	    player.getArena().removePreLobbyPlayer(player);
 	    
-	    player.sendMessage(MessageManager.getFormatedMessage("game:joined", this.arena.getID()));
-	    sendMessage(MessageManager.getFormatedMessage("game:player_joined", player.getName()));
-	    getArena().sendMessage(MessageManager.getFormatedMessage("game:player_joined", player.getName()));
+	    player.sendMessage(MessageManager.getFormatedMessage(game.joined, this.arena.getID()));
+	    sendMessage(MessageManager.getFormatedMessage(game.player_joined, player.getName()));
+	    getArena().sendMessage(MessageManager.getFormatedMessage(game.player_joined, player.getName()));
 	    
 	    this.joinProcessRunning = false;
 	    this.playerList.add(player);

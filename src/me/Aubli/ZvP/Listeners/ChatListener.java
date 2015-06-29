@@ -9,6 +9,8 @@ import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Game.GameRunnable;
 import me.Aubli.ZvP.Game.ZvPPlayer;
+import me.Aubli.ZvP.Translation.MessageKeys.commands;
+import me.Aubli.ZvP.Translation.MessageKeys.game;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.ChatColor;
@@ -37,7 +39,7 @@ public class ChatListener implements Listener {
 		    if (arena.getStatus() == ArenaStatus.VOTING) {
 			if (!player.hasVoted()) {
 			    player.setVoted(true);
-			    player.sendMessage(MessageManager.getMessage("game:voted_next_round"));
+			    player.sendMessage(MessageManager.getMessage(game.voted_next_wave));
 			    
 			    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Player " + player.getName() + " voted in arena " + player.getArena().getID(), true);
 			    
@@ -61,14 +63,14 @@ public class ChatListener implements Listener {
 			    }.runTaskTimer(ZvP.getInstance(), 20L, 4 * 20L);
 			    
 			} else {
-			    player.sendMessage(MessageManager.getMessage("game:already_voted"));
+			    player.sendMessage(MessageManager.getMessage(game.already_voted));
 			}
 		    } else {
-			player.sendMessage(MessageManager.getMessage("game:no_voting"));
+			player.sendMessage(MessageManager.getMessage(game.no_voting));
 			
 		    }
 		} else {
-		    player.sendMessage(MessageManager.getMessage("game:voting_disabled"));
+		    player.sendMessage(MessageManager.getMessage(game.voting_disabled));
 		}
 	    } else {
 		if (ZvPConfig.getModifyChat()) {
@@ -93,7 +95,7 @@ public class ChatListener implements Listener {
 		    if (!command.startsWith("zvp")) {
 			if (!ZvPConfig.getCommandWhitelist().contains(command)) {
 			    event.setCancelled(true);
-			    eventPlayer.sendMessage(MessageManager.getMessage("commands:no_commands_allowed"));
+			    eventPlayer.sendMessage(MessageManager.getMessage(commands.no_commands_allowed));
 			    return;
 			} else {
 			    ZvP.getPluginLogger().log(getClass(), Level.INFO, "Player " + eventPlayer.getName() + "(" + eventPlayer.getUniqueId().toString() + ") tried to execute " + event.getMessage() + "!", true, false);

@@ -14,6 +14,7 @@ import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Sign.ISign;
 import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Translation.MessageKeys.status;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
@@ -28,12 +29,12 @@ import org.util.File.Converter.FileConverter.FileType;
 public class GameManager {
     
     public enum ArenaStatus {
-	RUNNING(MessageManager.getMessage("status:running")),
-	VOTING(MessageManager.getMessage("status:running")),
-	BREAKWAITING(MessageManager.getMessage("status:running")),
-	WAITING(MessageManager.getMessage("status:waiting")),
-	STANDBY(MessageManager.getMessage("status:waiting")),
-	STOPED(MessageManager.getMessage("status:stoped"));
+	RUNNING(MessageManager.getMessage(status.running)),
+	VOTING(MessageManager.getMessage(status.running)),
+	BREAKWAITING(MessageManager.getMessage(status.running)),
+	WAITING(MessageManager.getMessage(status.waiting)),
+	STANDBY(MessageManager.getMessage(status.waiting)),
+	STOPED(MessageManager.getMessage(status.stoped));
 	
 	private String name;
 	

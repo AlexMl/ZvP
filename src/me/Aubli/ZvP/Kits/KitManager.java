@@ -10,6 +10,7 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.ZvPPlayer;
+import me.Aubli.ZvP.Translation.MessageKeys.inventory;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
@@ -147,7 +148,7 @@ public class KitManager {
     }
     
     public void openSelectKitGUI(ZvPPlayer player) {
-	Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int) Math.ceil((getKitAmount() / 9.0))) * 9, MessageManager.getMessage("inventory:kit_select"));
+	Inventory kitInventory = Bukkit.createInventory(player.getPlayer(), ((int) Math.ceil((getKitAmount() / 9.0))) * 9, MessageManager.getMessage(inventory.kit_select));
 	
 	for (IZvPKit kit : this.kits) {
 	    if (player.getPlayer().hasPermission(kit.getPermissionNode())) {
@@ -193,7 +194,7 @@ public class KitManager {
     }
     
     public void openAddKitIconGUI(Player player) {
-	Inventory inv = Bukkit.createInventory(player, 9, MessageManager.getMessage("inventory:place_icon"));
+	Inventory inv = Bukkit.createInventory(player, 9, MessageManager.getMessage(inventory.place_icon));
 	player.closeInventory();
 	player.openInventory(inv);
     }

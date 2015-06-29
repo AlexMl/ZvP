@@ -15,6 +15,7 @@ import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.GameManager.ArenaDifficultyLevel;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Translation.MessageKeys.game;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
@@ -669,7 +670,7 @@ public class Arena implements Comparable<Arena> {
 	    
 	    if (!containsPlayer(player.getPlayer())) {
 		if (getStatus() == ArenaStatus.WAITING) {
-		    sendMessage(MessageManager.getMessage("game:waiting"));
+		    sendMessage(MessageManager.getMessage(game.waiting_for_players));
 		}
 		this.players.add(player);
 	    }
@@ -698,8 +699,8 @@ public class Arena implements Comparable<Arena> {
 	    }
 	    
 	    if (!hasPreLobby()) {
-		sendMessage(MessageManager.getFormatedMessage("game:player_joined", player.getName()));
-		player.sendMessage(MessageManager.getFormatedMessage("game:joined", getID()));
+		sendMessage(MessageManager.getFormatedMessage(game.player_joined, player.getName()));
+		player.sendMessage(MessageManager.getFormatedMessage(game.joined, getID()));
 	    }
 	    this.players.add(player);
 	    

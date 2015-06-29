@@ -18,6 +18,10 @@ import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 import me.Aubli.ZvP.Sign.ShopSign;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
+import me.Aubli.ZvP.Translation.MessageKeys.error;
+import me.Aubli.ZvP.Translation.MessageKeys.game;
+import me.Aubli.ZvP.Translation.MessageKeys.inventory;
+import me.Aubli.ZvP.Translation.MessageKeys.manage;
 import me.Aubli.ZvP.Translation.MessageManager;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -53,19 +57,19 @@ public class GUIListener implements Listener {
 		
 		boolean onlyTopinventory = false;
 		
-		if (event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage("inventory:kit_select")) || event.getInventory().getTitle().contains(MessageManager.getMessage("inventory:select_category")) || event.getInventory().getTitle().contains("Items: ")) {
+		if (event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage(inventory.kit_select)) || event.getInventory().getTitle().contains(MessageManager.getMessage(inventory.select_category)) || event.getInventory().getTitle().contains("Items: ")) {
 		    onlyTopinventory = true;
 		}
 		
 		if (((event.getRawSlot() != event.getSlot()) || event.getSlot() >= event.getInventory().getSize()) && onlyTopinventory) {
-		    eventPlayer.sendMessage(MessageManager.getMessage("game:wrong_inventory"));
+		    eventPlayer.sendMessage(MessageManager.getMessage(error.wrong_inventory));
 		    event.setCancelled(true);
 		    return;
 		}
 		
 		// System.out.println(event.getRawSlot() + " " + event.getSlot() + ": " + event.getCurrentItem().getItemMeta().getDisplayName());
 		
-		if (event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage("inventory:kit_select"))) {
+		if (event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage(inventory.kit_select))) {
 		    event.setCancelled(true);
 		    eventPlayer.closeInventory();
 		    
@@ -81,15 +85,15 @@ public class GUIListener implements Listener {
 				if (ZvP.getEconProvider().has(eventPlayer, kit.getPrice())) {
 				    EconomyResponse response = ZvP.getEconProvider().withdrawPlayer(eventPlayer, kit.getPrice());
 				    if (response.transactionSuccess()) {
-					player.sendMessage(MessageManager.getFormatedMessage("game:player_bought_kit", kitName, new DecimalFormat("#0.00").format(response.amount) + " " + ZvP.getEconProvider().currencyNamePlural(), new DecimalFormat("#0.00").format(response.balance) + " " + ZvP.getEconProvider().currencyNamePlural()));
+					player.sendMessage(MessageManager.getFormatedMessage(game.player_bought_kit, kitName, new DecimalFormat("#0.00").format(response.amount) + " " + ZvP.getEconProvider().currencyNamePlural(), new DecimalFormat("#0.00").format(response.balance) + " " + ZvP.getEconProvider().currencyNamePlural()));
 					player.setKit(kit);
 				    } else {
 					player.setKit(kit);
-					player.sendMessage(MessageManager.getMessage("error:transaction_failed"));
+					player.sendMessage(MessageManager.getMessage(error.transaction_failed));
 					ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + " for Kit " + kit.getName(), false);
 				    }
 				} else {
-				    player.sendMessage(MessageManager.getMessage("game:no_money"));
+				    player.sendMessage(MessageManager.getMessage(error.no_money));
 				    return;
 				}
 			    } else {
@@ -103,7 +107,7 @@ public class GUIListener implements Listener {
 			return;
 		    }
 		}
-		if (event.getInventory().getTitle().contains(MessageManager.getMessage("inventory:select_category"))) {
+		if (event.getInventory().getTitle().contains(MessageManager.getMessage(inventory.select_category))) {
 		    event.setCancelled(true);
 		    eventPlayer.closeInventory();
 		    
@@ -148,9 +152,9 @@ public class GUIListener implements Listener {
 					
 					player.getArena().getScore().subtractScore(player, item.getPrice(), ScoreType.SHOP_SCORE);
 					player.getPlayer().getInventory().addItem(boughtItem);
-					player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_bought", player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
+					player.getArena().sendMessage(MessageManager.getFormatedMessage(game.player_bought, player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
 				    } else {
-					player.sendMessage(MessageManager.getMessage("game:no_money"));
+					player.sendMessage(MessageManager.getMessage(error.no_money));
 				    }
 				    break;
 				
@@ -165,9 +169,9 @@ public class GUIListener implements Listener {
 					
 					player.getArena().getScore().subtractScore(player, item.getPrice() * amount, ScoreType.SHOP_SCORE);
 					player.getPlayer().getInventory().addItem(boughtItem);
-					player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_bought_more", player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
+					player.getArena().sendMessage(MessageManager.getFormatedMessage(game.player_bought_more, player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
 				    } else {
-					player.sendMessage(MessageManager.getMessage("game:no_money"));
+					player.sendMessage(MessageManager.getMessage(error.no_money));
 				    }
 				    break;
 				
@@ -180,9 +184,9 @@ public class GUIListener implements Listener {
 				    if (player.getPlayer().getInventory().containsAtLeast(stack, 1)) {
 					player.getPlayer().getInventory().removeItem(stack);
 					player.getArena().getScore().addScore(player, item.getPrice(), ScoreType.SHOP_SCORE);
-					player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_sold", player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
+					player.getArena().sendMessage(MessageManager.getFormatedMessage(game.player_sold, player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
 				    } else {
-					player.sendMessage(MessageManager.getMessage("game:no_item_to_sell"));
+					player.sendMessage(MessageManager.getMessage(game.no_item_to_sell));
 				    }
 				    
 				    break;
@@ -208,9 +212,9 @@ public class GUIListener implements Listener {
 					}
 					
 					player.getArena().getScore().addScore(player, item.getPrice() * amount, ScoreType.SHOP_SCORE);
-					player.getArena().sendMessage(MessageManager.getFormatedMessage("game:player_sold_more", player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
+					player.getArena().sendMessage(MessageManager.getFormatedMessage(game.player_sold_more, player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), Math.round(item.getPrice() * amount)));
 				    } else {
-					player.sendMessage(MessageManager.getMessage("game:no_item_to_sell"));
+					player.sendMessage(MessageManager.getMessage(game.no_item_to_sell));
 				    }
 				    
 				    break;
@@ -253,7 +257,7 @@ public class GUIListener implements Listener {
 	    }
 	}
 	
-	if (event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage("inventory:kit_select"))) {
+	if (event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage(inventory.kit_select))) {
 	    final Player player = eventPlayer;
 	    
 	    Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
@@ -275,12 +279,12 @@ public class GUIListener implements Listener {
 	    }, 1L);
 	}
 	
-	if (event.getInventory().getTitle().equals(MessageManager.getMessage("inventory:place_icon"))) {
+	if (event.getInventory().getTitle().equals(MessageManager.getMessage(inventory.place_icon))) {
 	    
 	    for (ItemStack item : event.getInventory().getContents()) {
 		if (item != null && item.getType() != Material.AIR) {
 		    KitManager.getManager().addKit(this.name, item, this.content);
-		    eventPlayer.sendMessage(MessageManager.getFormatedMessage("manage:kit_saved", this.name));
+		    eventPlayer.sendMessage(MessageManager.getFormatedMessage(manage.kit_saved, this.name));
 		    break;
 		}
 	    }

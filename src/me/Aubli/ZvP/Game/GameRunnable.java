@@ -7,6 +7,7 @@ import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Listeners.EntityListener;
+import me.Aubli.ZvP.Translation.MessageKeys.game;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.ChatColor;
@@ -152,7 +153,7 @@ public class GameRunnable extends BukkitRunnable {
 				public void run() {
 				    
 				    if (GameRunnable.this.arena.getStatus() == ArenaStatus.VOTING) {
-					GameRunnable.this.arena.sendMessage(MessageManager.getMessage("game:vote_request"));
+					GameRunnable.this.arena.sendMessage(MessageManager.getMessage(game.vote_request));
 				    } else {
 					this.cancel();
 				    }
@@ -240,9 +241,9 @@ public class GameRunnable extends BukkitRunnable {
 			    deaths += p.getDeaths();
 			}
 			
-			String[] donP = MessageManager.getMessage("game:won_messages").split(";");
+			String[] donP = MessageManager.getMessage(game.won_messages).split(";");
 			int index = this.rand.nextInt(donP.length);
-			String endMessage = MessageManager.getFormatedMessage("game:won", kills, (this.arena.getMaxRounds() * this.arena.getMaxWaves()), deaths, Math.round(money), donP[index]);
+			String endMessage = MessageManager.getFormatedMessage(game.won, kills, (this.arena.getMaxRounds() * this.arena.getMaxWaves()), deaths, Math.round(money), donP[index]);
 			// TODO change message. Econ doesnt make much sense here
 			this.arena.sendMessage(endMessage);
 			this.cancel();
