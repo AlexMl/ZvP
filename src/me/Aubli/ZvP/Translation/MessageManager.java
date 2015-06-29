@@ -2,6 +2,7 @@ package me.Aubli.ZvP.Translation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -66,11 +67,11 @@ public class MessageManager {
 	SortedMap<String, String> sortedBundle = new TreeMap<String, String>();
 	
 	for (String key : bundle.keySet()) {
-	    sortedBundle.put(key, bundle.getString(key));
+	    sortedBundle.put(getEnumName(key) + ":" + key, bundle.getString(key));
 	}
 	
-	for (String key : sortedBundle.keySet()) {
-	    getConfig().addDefault("messages." + key, sortedBundle.get(key));
+	for (String sortedKey : sortedBundle.keySet()) {
+	    getConfig().addDefault("messages." + sortedKey, sortedBundle.get(sortedKey));
 	}
 	getConfig().options().copyDefaults(true);
 	save();
@@ -107,11 +108,11 @@ public class MessageManager {
 		    SortedMap<String, String> sortedBundle = new TreeMap<String, String>();
 		    
 		    for (String key : bundle.keySet()) {
-			sortedBundle.put(key, bundle.getString(key));
+			sortedBundle.put(getEnumName(key) + ":" + key, bundle.getString(key));
 		    }
 		    
-		    for (String key : sortedBundle.keySet()) {
-			getConfig().set("messages." + key, sortedBundle.get(key));
+		    for (String sortedKey : sortedBundle.keySet()) {
+			getConfig().set("messages." + sortedKey, sortedBundle.get(sortedKey));
 		    }
 		    save();
 		}
@@ -128,7 +129,8 @@ public class MessageManager {
 	Map<String, String> translation = new HashMap<String, String>();
 	ResourceBundle defaultBundle = ResourceBundle.getBundle("me.Aubli.ZvP.Translation.DefaultTranslation");
 	
-	for (String key : defaultBundle.keySet()) {
+	for (String enumKey : defaultBundle.keySet()) {
+	    String key = getEnumName(enumKey) + ":" + enumKey;
 	    translation.put(key, getConfig().getString("messages." + key));
 	}
 	
@@ -139,6 +141,22 @@ public class MessageManager {
 	return this.conf;
     }
     
+    @SuppressWarnings("rawtypes")
+    private static String getEnumName(Object key) throws IllegalArgumentException {
+	ArrayList<Class<?>> enums = MessageKeys.getEnums();
+	
+	for (Class enumClass : enums) {
+	    if (enumClass.isEnum()) {
+		for (Object enumKey : enumClass.getEnumConstants()) {
+		    if (key.toString().equals(enumKey.toString())) {
+			return enumClass.getSimpleName();
+		    }
+		}
+	    }
+	}
+	throw new IllegalArgumentException("There is no enum for key: " + key.toString());
+    }
+    
     private void save() {
 	try {
 	    getConfig().save(this.languageFile);
@@ -147,7 +165,7 @@ public class MessageManager {
 	}
     }
     
-    public static String getMessage(String messageKey) {
+    private static String getMessage(String messageKey) {
 	for (String Key : messages.keySet()) {
 	    
 	    if (Key.equals(messageKey)) {
@@ -157,8 +175,13 @@ public class MessageManager {
 	return "";
     }
     
-    public static String getFormatedMessage(String messageKey, Object... args) {
-	String message = getMessage(messageKey);
+    public static String getMessage(Object key) {
+	String messageKey = getEnumName(key) + ":" + key.toString();
+	return getMessage(messageKey);
+    }
+    
+    public static String getFormatedMessage(Object key, Object... args) {
+	String message = getMessage(key);
 	
 	if (!message.isEmpty()) {
 	    return String.format(message, args);
