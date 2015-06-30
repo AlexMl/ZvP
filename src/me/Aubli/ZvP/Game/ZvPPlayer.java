@@ -281,8 +281,8 @@ public class ZvPPlayer {
 	    
 	    obj.getScore(ChatColor.RESET + " ").setScore(15);
 	    obj.getScore(ChatColor.BLUE + "Players: " + ChatColor.RED + getArena().getPlayers().length).setScore(14);
-	    obj.getScore(ChatColor.GRAY + "R: " + ChatColor.AQUA + getArena().getRound() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getConfig().getMaxRounds()).setScore(13);
-	    obj.getScore(ChatColor.GRAY + "W: " + ChatColor.AQUA + getArena().getWave() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getConfig().getMaxWaves()).setScore(12);
+	    obj.getScore(ChatColor.GRAY + "R: " + ChatColor.AQUA + getArena().getCurrentRound() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getConfig().getMaxRounds()).setScore(13);
+	    obj.getScore(ChatColor.GRAY + "W: " + ChatColor.AQUA + getArena().getCurrentWave() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getConfig().getMaxWaves()).setScore(12);
 	    
 	    obj.getScore(ChatColor.WHITE + seperator).setScore(11);
 	    obj.getScore(ChatColor.GREEN + "Money: " + new DecimalFormat("#0.00").format(getArena().getScore().getScore(this)) + (ZvPConfig.getEnableEcon() ? " " + ZvP.getEconProvider().currencyNamePlural() : "")).setScore(10);

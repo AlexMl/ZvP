@@ -48,11 +48,11 @@ public class GameRunnable extends BukkitRunnable {
     public void run() {
 	
 	if (ZvP.getPluginLogger().isDebugMode() && (ZvP.getPluginLogger().getLogLevel() <= 100)) {
-	    this.arena.sendMessage("A:" + this.arena.getID() + " ;" + ChatColor.RED + this.arena.getStatus().toString() + ChatColor.RESET + "; " + this.arena.getRound() + ":" + this.arena.getWave() + " Z:" + this.arena.getLivingZombieAmount() + ":" + this.arena.getSpawningZombies() + " FS:" + this.firstSpawn + " SZ:" + this.spawnZombies + " T:" + this.seconds);
+	    this.arena.sendMessage("A:" + this.arena.getID() + " ;" + ChatColor.RED + this.arena.getStatus().toString() + ChatColor.RESET + "; " + this.arena.getCurrentRound() + ":" + this.arena.getCurrentWave() + " Z:" + this.arena.getLivingZombieAmount() + ":" + this.arena.getSpawningZombies() + " FS:" + this.firstSpawn + " SZ:" + this.spawnZombies + " T:" + this.seconds);
 	}
 	
 	if (this.seconds < this.startDelay) {	// Waiting for players
-	    if (this.arena.getRound() == 0 && this.arena.getWave() == 0) {
+	    if (this.arena.getCurrentRound() == 0 && this.arena.getCurrentWave() == 0) {
 		this.arena.setStatus(ArenaStatus.WAITING);
 	    }
 	    
@@ -69,7 +69,7 @@ public class GameRunnable extends BukkitRunnable {
 	}
 	
 	if (this.seconds == this.startDelay) {  // set game settings
-	    if (this.arena.getRound() == 0 && this.arena.getWave() == 0) {
+	    if (this.arena.getCurrentRound() == 0 && this.arena.getCurrentWave() == 0) {
 		this.arena.initArenaScore(false);
 		this.arena.setRound(1);
 		this.arena.setWave(1);

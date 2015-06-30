@@ -43,8 +43,8 @@ public class Arena implements Comparable<Arena> {
     private int arenaID;
     private int TaskId;
     
-    private int round;
-    private int wave;
+    private int currentRound;
+    private int currentWave;
     
     private ArenaStatus status;
     private ArenaScore score;
@@ -66,8 +66,8 @@ public class Arena implements Comparable<Arena> {
 	
 	this.status = ArenaStatus.STANDBY;
 	
-	this.round = 0;
-	this.wave = 0;
+	this.currentRound = 0;
+	this.currentWave = 0;
 	
 	this.players = new ArrayList<ZvPPlayer>();
 	this.difficultyTool = new ArenaDifficulty(this, difficulty);
@@ -80,8 +80,8 @@ public class Arena implements Comparable<Arena> {
 	
 	this.arenaID = getConfig().getArenaID();
 	
-	this.round = 0;
-	this.wave = 0;
+	this.currentRound = 0;
+	this.currentWave = 0;
 	
 	if ((Boolean) getConfig().getConfigValue("arena.Online")) {
 	    this.status = ArenaStatus.STANDBY;
@@ -167,13 +167,13 @@ public class Arena implements Comparable<Arena> {
     }
     
     public void setRound(int round) {
-	this.round = round;
+	this.currentRound = round;
 	SignManager.getManager().updateSigns(this);
 	updatePlayerBoards();
     }
     
     public void setWave(int wave) {
-	this.wave = wave;
+	this.currentWave = wave;
 	SignManager.getManager().updateSigns(this);
 	updatePlayerBoards();
     }
@@ -194,12 +194,12 @@ public class Arena implements Comparable<Arena> {
 	return getDifficultyTool().getDifficulty();
     }
     
-    public int getRound() {
-	return this.round;
+    public int getCurrentRound() {
+	return this.currentRound;
     }
     
-    public int getWave() {
-	return this.wave;
+    public int getCurrentWave() {
+	return this.currentWave;
     }
     
     public int getTaskId() {
@@ -272,7 +272,7 @@ public class Arena implements Comparable<Arena> {
     }
     
     public int getSpawningZombies() {
-	return getSpawningZombies(getWave(), getRound(), getPlayers().length, getDifficulty().getLevel());
+	return getSpawningZombies(getCurrentWave(), getCurrentRound(), getPlayers().length, getDifficulty().getLevel());
     }
     
     public int getSpawningZombies(int w, int r, int p, int d) {
@@ -527,8 +527,8 @@ public class Arena implements Comparable<Arena> {
     }
     
     public void start(int startRound, int startWave, int startDelay) {
-	this.round = startRound;
-	this.wave = startWave;
+	this.currentRound = startRound;
+	this.currentWave = startWave;
 	this.score = null;
 	
 	getWorld().setDifficulty(Difficulty.NORMAL);
@@ -554,8 +554,8 @@ public class Arena implements Comparable<Arena> {
 	    removePlayer(zp);
 	}
 	
-	this.round = 0;
-	this.wave = 0;
+	this.currentRound = 0;
+	this.currentWave = 0;
 	this.score = null;
 	
 	getWorld().setMonsterSpawnLimit(-1);
@@ -566,22 +566,22 @@ public class Arena implements Comparable<Arena> {
     }
     
     public boolean hasNext() {
-	return (getWave() * getRound()) < (getConfig().getMaxWaves() * getConfig().getMaxRounds());
+	return (getCurrentWave() * getCurrentRound()) < (getConfig().getMaxWaves() * getConfig().getMaxRounds());
     }
     
     public boolean next() {
 	
-	if (getWave() == getConfig().getMaxWaves()) {
-	    if (getRound() == getConfig().getMaxRounds()) {
+	if (getCurrentWave() == getConfig().getMaxWaves()) {
+	    if (getCurrentRound() == getConfig().getMaxRounds()) {
 		return true;
 	    }
-	    setRound(getRound() + 1);
+	    setRound(getCurrentRound() + 1);
 	    setWave(1);
-	    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Arena " + getID() + " from R:" + (getRound() - 1) + "W:" + getConfig().getMaxWaves() + " to R:" + getRound() + "W:1", true);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Arena " + getID() + " from R:" + (getCurrentRound() - 1) + "W:" + getConfig().getMaxWaves() + " to R:" + getCurrentRound() + "W:1", true);
 	    return false;
 	}
-	setWave(getWave() + 1);
-	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Arena " + getID() + " from R:" + getRound() + "W:" + (getWave() - 1) + " to R:" + getRound() + "W:" + getWave(), true);
+	setWave(getCurrentWave() + 1);
+	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Arena " + getID() + " from R:" + getCurrentRound() + "W:" + (getCurrentWave() - 1) + " to R:" + getCurrentRound() + "W:" + getCurrentWave(), true);
 	return false;
     }
     
