@@ -1,10 +1,12 @@
-package me.Aubli.ZvP.Game;
+package me.Aubli.ZvP.Game.ArenaParts;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Translation.MessageKeys.error;
 import me.Aubli.ZvP.Translation.MessageManager;
 import net.milkbowl.vault.economy.EconomyResponse;

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.Arena;
-import me.Aubli.ZvP.Game.ArenaArea;
-import me.Aubli.ZvP.Game.ArenaScore.ScoreType;
+import me.Aubli.ZvP.Game.ArenaParts.ArenaArea;
+import me.Aubli.ZvP.Game.ArenaParts.ArenaScore.ScoreType;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Game.Lobby;

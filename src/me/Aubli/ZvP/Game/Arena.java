@@ -14,6 +14,10 @@ import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.GameManager.ArenaDifficultyLevel;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
+import me.Aubli.ZvP.Game.ArenaParts.ArenaArea;
+import me.Aubli.ZvP.Game.ArenaParts.ArenaDifficulty;
+import me.Aubli.ZvP.Game.ArenaParts.ArenaLobby;
+import me.Aubli.ZvP.Game.ArenaParts.ArenaScore;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Translation.MessageKeys.game;
 import me.Aubli.ZvP.Translation.MessageManager;
@@ -264,7 +268,7 @@ public class Arena implements Comparable<Arena> {
 	}
     }
     
-    boolean saveArenaLobby(ArenaLobby preLobby) {
+    public boolean saveArenaLobby(ArenaLobby preLobby) {
 	
 	try {
 	    this.arenaConfig.set("arena.Location.PreLobby.X", preLobby.getCenterLoc().getBlockX());
@@ -730,12 +734,12 @@ public class Arena implements Comparable<Arena> {
     
     // INFO: I guess not the best way
     @Deprecated
-    void addPreLobbyPlayer(ZvPPlayer player) {
+    public void addPreLobbyPlayer(ZvPPlayer player) {
 	this.players.add(player);
     }
     
     @Deprecated
-    void removePreLobbyPlayer(ZvPPlayer player) {
+    public void removePreLobbyPlayer(ZvPPlayer player) {
 	this.players.remove(player);
     }
     

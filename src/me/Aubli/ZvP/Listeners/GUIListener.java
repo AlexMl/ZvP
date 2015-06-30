@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.Arena;
-import me.Aubli.ZvP.Game.ArenaScore.ScoreType;
+import me.Aubli.ZvP.Game.ArenaParts.ArenaScore.ScoreType;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Game.ZvPPlayer;

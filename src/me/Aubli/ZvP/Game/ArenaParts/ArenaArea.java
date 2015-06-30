@@ -1,4 +1,4 @@
-package me.Aubli.ZvP.Game;
+package me.Aubli.ZvP.Game.ArenaParts;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -7,6 +7,8 @@ import java.util.Random;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.ZvPPlayer;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
