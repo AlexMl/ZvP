@@ -293,8 +293,4 @@ public class ShopManager {
 	}
 	return null;
     }
-    
-    public double getPrice(ItemStack item) {
-	return 0;
-    }
 }
