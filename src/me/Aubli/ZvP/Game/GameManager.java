@@ -10,12 +10,13 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
+import me.Aubli.ZvP.Game.GameEnums.ArenaDifficultyLevel;
+import me.Aubli.ZvP.Game.GameEnums.ArenaStatus;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaArea;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Sign.ISign;
 import me.Aubli.ZvP.Sign.SignManager;
-import me.Aubli.ZvP.Translation.MessageKeys.status;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
@@ -28,42 +29,6 @@ import org.util.File.Converter.FileConverter.FileType;
 
 
 public class GameManager {
-    
-    // TODO Move enums in own class
-    public enum ArenaStatus {
-	RUNNING(MessageManager.getMessage(status.running)),
-	VOTING(MessageManager.getMessage(status.running)),
-	BREAKWAITING(MessageManager.getMessage(status.running)),
-	WAITING(MessageManager.getMessage(status.waiting)),
-	STANDBY(MessageManager.getMessage(status.waiting)),
-	STOPED(MessageManager.getMessage(status.stoped));
-	
-	private String name;
-	
-	private ArenaStatus(String name) {
-	    this.name = name;
-	}
-	
-	public String getName() {
-	    return this.name;
-	}
-    }
-    
-    public enum ArenaDifficultyLevel {
-	EASY(1),
-	NORMAL(2),
-	HARD(3);
-	
-	private int level;
-	
-	private ArenaDifficultyLevel(int level) {
-	    this.level = level;
-	}
-	
-	public int getLevel() {
-	    return this.level;
-	}
-    }
     
     private static GameManager manager;
     private ZvP plugin;

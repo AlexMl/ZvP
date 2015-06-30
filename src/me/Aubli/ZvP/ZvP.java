@@ -8,8 +8,8 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Kits.KitManager;
-import me.Aubli.ZvP.Listeners.ChatListener;
 import me.Aubli.ZvP.Listeners.BlockListener;
+import me.Aubli.ZvP.Listeners.ChatListener;
 import me.Aubli.ZvP.Listeners.EntityListener;
 import me.Aubli.ZvP.Listeners.GUIListener;
 import me.Aubli.ZvP.Listeners.InteractListener;

@@ -6,6 +6,7 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.GameEnums.ScoreType;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Translation.MessageKeys.error;
 import me.Aubli.ZvP.Translation.MessageManager;
@@ -13,13 +14,6 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 
 public class ArenaScore {
-    
-    // TODO Move enum in own class
-    public enum ScoreType {
-	DEATH_SCORE,
-	KILL_SCORE,
-	SHOP_SCORE;
-    }
     
     private Arena arena;
     

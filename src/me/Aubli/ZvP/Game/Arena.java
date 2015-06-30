@@ -12,8 +12,8 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
-import me.Aubli.ZvP.Game.GameManager.ArenaDifficultyLevel;
-import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
+import me.Aubli.ZvP.Game.GameEnums.ArenaDifficultyLevel;
+import me.Aubli.ZvP.Game.GameEnums.ArenaStatus;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaArea;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaConfig;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaDifficulty;
