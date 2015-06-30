@@ -15,6 +15,7 @@ import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.GameManager.ArenaDifficultyLevel;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaArea;
+import me.Aubli.ZvP.Game.ArenaParts.ArenaConfig;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaDifficulty;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaLobby;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaScore;
@@ -27,8 +28,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
@@ -36,256 +35,86 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
-import org.util.File.InsertComment.CommentUtil;
 import org.util.SortMap.SortMap;
 
 
 public class Arena implements Comparable<Arena> {
     
-    // TODO Arena config class
-    
-    private File arenaFile;
-    private FileConfiguration arenaConfig;
-    
     private int arenaID;
     private int TaskId;
     
-    private ArenaStatus status;
-    private ArenaDifficultyLevel difficulty;
+    private int round;
+    private int wave;
     
+    private ArenaStatus status;
     private ArenaScore score;
     private ArenaDifficulty difficultyTool;
-    
     private ArenaArea arenaArea;
-    
     private ArenaLobby preLobby;
+    private ArenaConfig config;
     
     private Random rand;
     
     private ArrayList<ZvPPlayer> players;
     
-    private int round;
-    private int wave;
-    
-    /* ---- Config values ---- */
-    private final boolean enableSpawnProtection;
-    private final boolean useVoteSystem;
-    private final boolean autoWaves;
-    private final boolean keepXP;
-    private boolean keepInventory;
-    private final boolean separatePlayerScores;
-    private final boolean enablePVP;
-    
-    private final int maxPlayers;
-    private final int minPlayers;
-    private final int maxRounds;
-    private final int maxWaves;
-    
-    private final int joinTime;
-    private final int breakTime;
-    
-    private final double zombieFund;
-    private final double deathFee;
-    
-    private final int spawnRate;
-    private final int protectionDuration;
-    private final double saveRadius;
-    
-    public Arena(int ID, String arenaPath, World world, List<Location> arenaCorners, int rounds, int waves, int spawnRate, ArenaDifficultyLevel difficulty, boolean spawnProtection) throws Exception {
+    public Arena(int ID, String arenaPath, World world, List<Location> arenaCorners, ArenaDifficultyLevel difficulty) throws Exception {
 	
 	this.arenaID = ID;
 	
 	this.rand = new Random();
 	this.arenaArea = new ArenaArea(world, this, arenaCorners, null, this.rand);
 	
-	int maxP = ((int) ((Math.ceil(getArea().getDiagonal() + 2)) / 4));
-	
-	this.maxPlayers = maxP < 3 ? 3 : (maxP > ZvPConfig.getMaxPlayers() ? ZvPConfig.getMaxPlayers() : maxP);
-	this.minPlayers = ((int) Math.ceil(this.maxPlayers / 4)) + 1;
-	
-	this.maxRounds = rounds;
-	this.maxWaves = waves;
-	
 	this.status = ArenaStatus.STANDBY;
-	this.difficulty = difficulty;
 	
 	this.round = 0;
 	this.wave = 0;
 	
-	/* ---- INFO: final standard config values ---- */
-	this.useVoteSystem = true;
-	this.autoWaves = true;
-	this.keepXP = false;
-	this.keepInventory = false;
-	this.separatePlayerScores = false;
-	this.enablePVP = false;
-	
-	this.joinTime = 15;
-	this.breakTime = 90;
-	this.zombieFund = 0.37;
-	this.deathFee = 3;
-	// END
-	
-	this.saveRadius = ((Math.ceil(getMaxPlayers() / 8))) + 2.5;
-	this.spawnRate = spawnRate;
-	
-	this.enableSpawnProtection = spawnProtection;
-	this.protectionDuration = 5;
-	
-	this.arenaFile = new File(arenaPath + "/" + ID + ".yml");
-	this.arenaConfig = YamlConfiguration.loadConfiguration(this.arenaFile);
-	
 	this.players = new ArrayList<ZvPPlayer>();
-	this.difficultyTool = new ArenaDifficulty(this, getDifficulty());
-	save();
+	this.difficultyTool = new ArenaDifficulty(this, difficulty);
+	this.config = new ArenaConfig(this, new File(arenaPath, getID() + ".yml"));
     }
     
-    public Arena(File arenaFile) {
-	this.arenaFile = arenaFile;
-	this.arenaConfig = YamlConfiguration.loadConfiguration(arenaFile);
-	
+    public Arena(File arenaFile) throws Exception {
+	this.config = new ArenaConfig(this, arenaFile);
 	this.rand = new Random();
 	
-	this.arenaID = this.arenaConfig.getInt("arena.ID");
-	this.maxPlayers = this.arenaConfig.getInt("arena.maxPlayers", ZvPConfig.getMaxPlayers());
-	this.minPlayers = this.arenaConfig.getInt("arena.minPlayers", 3);
+	this.arenaID = getConfig().getArenaID();
 	
-	this.maxRounds = this.arenaConfig.getInt("arena.rounds", ZvPConfig.getDefaultRounds());
-	this.maxWaves = this.arenaConfig.getInt("arena.waves", ZvPConfig.getDefaultWaves());
+	this.round = 0;
+	this.wave = 0;
 	
-	if (this.arenaConfig.getBoolean("arena.Online", true)) {
+	if ((Boolean) getConfig().getConfigValue("arena.Online")) {
 	    this.status = ArenaStatus.STANDBY;
 	} else {
 	    this.status = ArenaStatus.STOPED;
 	}
 	
-	this.enableSpawnProtection = this.arenaConfig.getBoolean("arena.enableSpawnProtection", true);
-	this.protectionDuration = this.arenaConfig.getInt("arena.spawnProtectionDuration");
-	this.difficulty = ArenaDifficultyLevel.valueOf(this.arenaConfig.getString("arena.Difficulty", "NORMAL"));
-	
-	this.round = 0;
-	this.wave = 0;
-	
-	this.keepXP = this.arenaConfig.getBoolean("arena.keepXP", false);
-	this.keepInventory = this.arenaConfig.getBoolean("arena.keepInventory", false);
-	this.useVoteSystem = this.arenaConfig.getBoolean("arena.useVoteSystem", true);
-	this.autoWaves = this.arenaConfig.getBoolean("arena.autoWaves", true);
-	this.separatePlayerScores = this.arenaConfig.getBoolean("arena.separatePlayerScores", false);
-	this.enablePVP = this.arenaConfig.getBoolean("arena.enablePvP", false);
-	
-	if (keepInventory() && ZvPConfig.getEnableKits()) {
-	    this.keepInventory = false;
-	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "keepInventory is set to true in Arena " + getID() + ", but Kits are enabled! Disable keepInventory ...", true, false);
-	}
-	
-	this.joinTime = this.arenaConfig.getInt("arena.joinTime", 15);
-	this.breakTime = this.arenaConfig.getInt("arena.timeBetweenWaves", 90);
-	this.zombieFund = this.arenaConfig.getDouble("arena.zombieFund", 0.37);
-	this.deathFee = this.arenaConfig.getDouble("arena.deathFee", 3.0);
-	
-	this.spawnRate = this.arenaConfig.getInt("arena.spawnRate", ZvPConfig.getDefaultZombieSpawnRate());
-	this.saveRadius = this.arenaConfig.getDouble("arena.saveRadius", 4.0);
-	
-	World arenaWorld = Bukkit.getWorld(UUID.fromString(this.arenaConfig.getString("arena.Location.world")));
+	World arenaWorld = Bukkit.getWorld(UUID.fromString(getConfig().getConfigValue("arena.Location.world").toString()));
 	
 	List<Location> cornerPoints = new ArrayList<Location>();
-	for (String locationString : this.arenaConfig.getStringList("arena.Location.cornerPoints")) {
+	for (String locationString : getConfig().getStringList("arena.Location.cornerPoints")) {
 	    String[] cords = locationString.split(",");
 	    Location loc = new Location(arenaWorld, Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
 	    cornerPoints.add(loc);
 	}
 	
 	List<Location> spawnPositions = new ArrayList<Location>();
-	for (String locationString : this.arenaConfig.getStringList("arena.Location.staticPositions")) {
+	for (String locationString : getConfig().getStringList("arena.Location.staticPositions")) {
 	    String[] cords = locationString.split(",");
 	    Location loc = new Location(arenaWorld, Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
 	    spawnPositions.add(loc);
 	}
 	
-	try {
-	    this.arenaArea = new ArenaArea(arenaWorld, this, cornerPoints, spawnPositions, this.rand);
-	} catch (Exception e) {
-	    ZvP.getPluginLogger().log(ArenaArea.class, Level.SEVERE, "Error while loading Arena: " + e.getMessage(), true, false, e);
-	}
+	this.arenaArea = new ArenaArea(arenaWorld, this, cornerPoints, spawnPositions, this.rand);
 	
-	this.difficultyTool = new ArenaDifficulty(this, getDifficulty());
+	this.difficultyTool = new ArenaDifficulty(this, ArenaDifficultyLevel.valueOf(getConfig().getConfigValue("arena.Difficulty").toString()));
 	this.players = new ArrayList<ZvPPlayer>();
 	this.preLobby = loadArenaLobby();
     }
     
-    public void save() {
-	try {
-	    this.arenaFile.createNewFile();
-	    
-	    this.arenaConfig.set("arena.ID", this.arenaID);
-	    this.arenaConfig.set("arena.Online", !(getStatus() == ArenaStatus.STOPED));
-	    this.arenaConfig.set("arena.Difficulty", getDifficulty().name());
-	    
-	    this.arenaConfig.set("arena.minPlayers", this.minPlayers);
-	    this.arenaConfig.set("arena.maxPlayers", this.maxPlayers);
-	    this.arenaConfig.set("arena.rounds", this.maxRounds);
-	    this.arenaConfig.set("arena.waves", this.maxWaves);
-	    this.arenaConfig.set("arena.spawnRate", this.spawnRate);
-	    
-	    this.arenaConfig.set("arena.keepXP", this.keepXP);
-	    this.arenaConfig.set("arena.keepInventory", this.keepInventory);
-	    this.arenaConfig.set("arena.useVoteSystem", this.useVoteSystem);
-	    this.arenaConfig.set("arena.autoWaves", true);
-	    this.arenaConfig.set("arena.separatePlayerScores", this.separatePlayerScores);
-	    this.arenaConfig.set("arena.joinTime", this.joinTime);
-	    this.arenaConfig.set("arena.timeBetweenWaves", this.breakTime);
-	    this.arenaConfig.set("arena.zombieFund", this.zombieFund);
-	    this.arenaConfig.set("arena.deathFee", this.deathFee);
-	    this.arenaConfig.set("arena.enablePvP", this.enablePVP);
-	    this.arenaConfig.set("arena.enableSpawnProtection", this.enableSpawnProtection);
-	    this.arenaConfig.set("arena.spawnProtectionDuration", this.protectionDuration);
-	    this.arenaConfig.set("arena.saveRadius", this.saveRadius);
-	    
-	    List<String> cornerPoints = new ArrayList<String>();
-	    for (Location loc : getArea().getCornerLocations()) {
-		cornerPoints.add(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
-	    }
-	    
-	    List<String> locationList = new ArrayList<String>();
-	    for (Location loc : getArea().getSpawnLocations()) {
-		locationList.add(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
-	    }
-	    
-	    this.arenaConfig.set("arena.Location.world", getWorld().getUID().toString());
-	    this.arenaConfig.set("arena.Location.cornerPoints", cornerPoints);
-	    this.arenaConfig.set("arena.Location.staticPositions", locationList);
-	    
-	    this.arenaConfig.addDefault("version", ZvP.getInstance().getDescription().getVersion());
-	    this.arenaConfig.options().header("\nThis is the config file for arena " + getID() + "!\n");
-	    this.arenaConfig.options().copyDefaults(true);
-	    this.arenaConfig.options().copyHeader(false);
-	    
-	    this.arenaConfig.save(this.arenaFile);
-	    
-	    insertComments();
-	} catch (IOException e) {
-	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while saving Arena " + getID() + ": " + e.getMessage(), true, false, e);
-	}
-    }
-    
     public boolean saveArenaLobby(ArenaLobby preLobby) {
-	
 	try {
-	    this.arenaConfig.set("arena.Location.PreLobby.X", preLobby.getCenterLoc().getBlockX());
-	    this.arenaConfig.set("arena.Location.PreLobby.Y", preLobby.getCenterLoc().getBlockY());
-	    this.arenaConfig.set("arena.Location.PreLobby.Z", preLobby.getCenterLoc().getBlockZ());
-	    
-	    List<String> locationList = new ArrayList<String>();
-	    
-	    for (Location loc : preLobby.getLocationList()) {
-		locationList.add(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
-	    }
-	    
-	    this.arenaConfig.set("arena.Location.PreLobby.extraPositions", locationList);
-	    
-	    this.arenaConfig.save(this.arenaFile);
-	    
-	    insertComments();
+	    getConfig().saveArenaLobby(preLobby);
 	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "PreLobby for Arena " + getID() + " was successfully saved!", true, true);
 	    return true;
 	} catch (IOException e) {
@@ -296,11 +125,11 @@ public class Arena implements Comparable<Arena> {
     
     private ArenaLobby loadArenaLobby() {
 	
-	if (this.arenaConfig.get("arena.Location.PreLobby.X") != null) {
-	    Location centerLoc = new Location(getWorld(), this.arenaConfig.getInt("arena.Location.PreLobby.X"), this.arenaConfig.getInt("arena.Location.PreLobby.Y"), this.arenaConfig.getInt("arena.Location.PreLobby.Z"));
+	if (getConfig().getConfigValue("arena.Location.PreLobby.X") != null) {
+	    Location centerLoc = new Location(getWorld(), Integer.parseInt(getConfig().getConfigValue("arena.Location.PreLobby.X").toString()), Integer.parseInt(getConfig().getConfigValue("arena.Location.PreLobby.Y").toString()), Integer.parseInt(getConfig().getConfigValue("arena.Location.PreLobby.Z").toString()));
 	    
 	    ArrayList<Location> locations = new ArrayList<Location>();
-	    for (String locationString : this.arenaConfig.getStringList("arena.Location.PreLobby.extraPositions")) {
+	    for (String locationString : getConfig().getStringList("arena.Location.PreLobby.extraPositions")) {
 		String[] cords = locationString.split(",");
 		Location loc = new Location(getWorld(), Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
 		locations.add(loc);
@@ -319,9 +148,7 @@ public class Arena implements Comparable<Arena> {
     public boolean deleteArenaLobby() {
 	try {
 	    this.preLobby = null;
-	    this.arenaConfig.set("arena.Location.PreLobby", null);
-	    this.arenaConfig.save(this.arenaFile);
-	    save();
+	    getConfig().removeArenaLobby();
 	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Deleted PreLobby from Arena " + getID() + " successfully!", true, true);
 	    return true;
 	} catch (IOException e) {
@@ -331,32 +158,7 @@ public class Arena implements Comparable<Arena> {
     }
     
     boolean delete() {
-	return this.arenaFile.delete();
-    }
-    
-    private void insertComments() {
-	CommentUtil.insertComment(this.arenaFile, "ID", "The internal identifier of the arena!");
-	CommentUtil.insertComment(this.arenaFile, "Online", "'true': The arena is online and can be used.#'false': The arena is offline and can not be used.");
-	CommentUtil.insertComment(this.arenaFile, "Difficulty", "The Difficulty of the arena. There are three modes: EASY, NORMAL, HARD#Each mode will increase amount and health of zombies.");
-	CommentUtil.insertComment(this.arenaFile, "minPlayers", "Minimum amount of players. Set at least to 1.");
-	CommentUtil.insertComment(this.arenaFile, "maxPlayers", "Maximal amount of players.");
-	CommentUtil.insertComment(this.arenaFile, "rounds", "The amount of rounds you will play.#Note that one round has several waves. To get the full number of waves multiple rounds and waves.");
-	CommentUtil.insertComment(this.arenaFile, "waves", "The amount of waves you will play. To get the full number of waves multiple rounds and waves.");
-	CommentUtil.insertComment(this.arenaFile, "spawnRate", "SpawnRate defines the amount of spawning zombies. Default is 8.");
-	CommentUtil.insertComment(this.arenaFile, "keepXP", "If set to false, the game will not reset/change your current XP level.#Note that the countdown system uses the xp level which overrides experience!#The plugin will not show countdowns if keepXP is enabled!");
-	CommentUtil.insertComment(this.arenaFile, "keepInventory", "If set to true, the inventory will not get cleared after the game.#Important: Does not work with kits enabled!#Look into the main config file to disable kits!");
-	CommentUtil.insertComment(this.arenaFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
-	CommentUtil.insertComment(this.arenaFile, "autoWaves", "If enabled the next round will start automatically even if not all zombies are defeated!");
-	CommentUtil.insertComment(this.arenaFile, "separatePlayerScores", "True: Each player will have his own score.#False: All players have the same score. They pay and earn together.");
-	CommentUtil.insertComment(this.arenaFile, "joinTime", "Time in seconds the game will wait before it starts.#Note that the arena specific minimum has to be reached.");
-	CommentUtil.insertComment(this.arenaFile, "timeBetweenWaves", "Time in seconds the game will wait until a new wave starts.#Only applies if useVoteSystem is false!");
-	CommentUtil.insertComment(this.arenaFile, "zombieFund", "Amount of money you will get from killing a zombie.");
-	CommentUtil.insertComment(this.arenaFile, "deathFee", "Amount of money you have to pay when you die.");
-	CommentUtil.insertComment(this.arenaFile, "enablePvP", "Allow Player vs Player damage. Includes projectile damage!");
-	CommentUtil.insertComment(this.arenaFile, "enableSpawnProtection", "SpawnProtection will protect you when you respawn.#Note that you can not hit zombies during the protection!");
-	CommentUtil.insertComment(this.arenaFile, "spawnProtectionDuration", "The duration of the spawn protection in seconds.");
-	CommentUtil.insertComment(this.arenaFile, "saveRadius", "The save radius is the radius in blocks around you in which no zombies will spawn.");
-	CommentUtil.insertComment(this.arenaFile, "Location", "This is the location section of the arena. It contains min, max and custom spawn location.#If you are not sure what you are doing do not touch this!");
+	return getConfig().deleteFile();
     }
     
     public void setStatus(ArenaStatus status) {
@@ -389,23 +191,7 @@ public class Arena implements Comparable<Arena> {
     }
     
     public ArenaDifficultyLevel getDifficulty() {
-	return this.difficulty;
-    }
-    
-    public int getMaxPlayers() {
-	return this.maxPlayers;
-    }
-    
-    public int getMinPlayers() {
-	return this.minPlayers;
-    }
-    
-    public int getMaxRounds() {
-	return this.maxRounds;
-    }
-    
-    public int getMaxWaves() {
-	return this.maxWaves;
+	return getDifficultyTool().getDifficulty();
     }
     
     public int getRound() {
@@ -416,36 +202,8 @@ public class Arena implements Comparable<Arena> {
 	return this.wave;
     }
     
-    public int getSpawnRate() {
-	return this.spawnRate;
-    }
-    
     public int getTaskId() {
 	return this.TaskId;
-    }
-    
-    public int getArenaProtectionDuration() {
-	return this.protectionDuration;
-    }
-    
-    public int getArenaJoinTime() {
-	return this.joinTime;
-    }
-    
-    public int getArenaBreakTime() {
-	return this.breakTime;
-    }
-    
-    public double getSaveRadius() {
-	return this.saveRadius;
-    }
-    
-    public double getArenaZombieFund() {
-	return this.zombieFund;
-    }
-    
-    public double getArenaDeathFee() {
-	return this.deathFee;
     }
     
     public ArenaScore getScore() {
@@ -462,6 +220,10 @@ public class Arena implements Comparable<Arena> {
     
     public ArenaArea getArea() {
 	return this.arenaArea;
+    }
+    
+    public ArenaConfig getConfig() {
+	return this.config;
     }
     
     public World getWorld() {
@@ -514,7 +276,7 @@ public class Arena implements Comparable<Arena> {
     }
     
     public int getSpawningZombies(int w, int r, int p, int d) {
-	return ((int) Math.sqrt(r * w * getSpawnRate() * getArea().getDiagonal() * p * ((d + 1.0) / 2.0)));
+	return ((int) Math.sqrt(r * w * getConfig().getSpawnRate() * getArea().getDiagonal() * p * ((d + 1.0) / 2.0)));
     }
     
     public ZvPPlayer getBestPlayer() {
@@ -542,7 +304,7 @@ public class Arena implements Comparable<Arena> {
     }
     
     public boolean isFull() {
-	return getPlayers().length == getMaxPlayers();
+	return getPlayers().length == getConfig().getMaxPlayers();
     }
     
     public boolean hasKit() {
@@ -580,41 +342,13 @@ public class Arena implements Comparable<Arena> {
 	return getArea().contains(location);
     }
     
-    public boolean useVoteSystem() {
-	return this.useVoteSystem;
-    }
-    
-    public boolean useAutoWaves() {
-	return this.autoWaves;
-    }
-    
-    public boolean useSpawnProtection() {
-	return this.enableSpawnProtection;
-    }
-    
-    public boolean keepExp() {
-	return this.keepXP;
-    }
-    
-    public boolean keepInventory() {
-	return this.keepInventory;
-    }
-    
-    public boolean separatePlayerScores() {
-	return this.separatePlayerScores;
-    }
-    
-    public boolean enablePvP() {
-	return this.enablePVP;
-    }
-    
     public boolean initArenaScore(boolean force) {
 	if (this.score == null) {
-	    this.score = new ArenaScore(this, separatePlayerScores(), ZvPConfig.getEnableEcon(), ZvPConfig.getIntegrateGame());
+	    this.score = new ArenaScore(this, getConfig().isSeparatedScores(), ZvPConfig.getEnableEcon(), ZvPConfig.getIntegrateGame());
 	    return true;
 	} else {
 	    if (force) {
-		this.score = new ArenaScore(this, separatePlayerScores(), ZvPConfig.getEnableEcon(), ZvPConfig.getIntegrateGame());
+		this.score = new ArenaScore(this, getConfig().isSeparatedScores(), ZvPConfig.getEnableEcon(), ZvPConfig.getIntegrateGame());
 	    }
 	}
 	return false;
@@ -710,7 +444,7 @@ public class Arena implements Comparable<Arena> {
 	    
 	    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Player " + player.getName() + " has joined Arena " + getID() + "! ASTATUS: " + getStatus().name(), true);
 	    
-	    if (this.players.size() >= this.minPlayers && !isRunning()) {
+	    if (this.players.size() >= getConfig().getMinPlayers() && !isRunning()) {
 		if (getStatus() == ArenaStatus.STANDBY && !isWaiting()) {
 		    if (hasPreLobby()) {
 			start(0, 0, 5); // INFO: magic number.
@@ -718,7 +452,7 @@ public class Arena implements Comparable<Arena> {
 			GameManager.getManager().startGame(this, player.getLobby());
 		    }
 		}
-	    } else if (this.players.size() >= this.minPlayers && isRunning()) {
+	    } else if (this.players.size() >= getConfig().getMinPlayers() && isRunning()) {
 		// Seems like a player who joined during game.
 		// Needs scoreboard updates and a new score entry
 		// INFO: maybe inform players on increased zombies
@@ -789,7 +523,7 @@ public class Arena implements Comparable<Arena> {
     }
     
     public void start() {
-	start(0, 0, getArenaJoinTime());
+	start(0, 0, getConfig().getJoinTime());
     }
     
     public void start(int startRound, int startWave, int startDelay) {
@@ -832,18 +566,18 @@ public class Arena implements Comparable<Arena> {
     }
     
     public boolean hasNext() {
-	return (getWave() * getRound()) < (getMaxWaves() * getMaxRounds());
+	return (getWave() * getRound()) < (getConfig().getMaxWaves() * getConfig().getMaxRounds());
     }
     
     public boolean next() {
 	
-	if (getWave() == getMaxWaves()) {
-	    if (getRound() == getMaxRounds()) {
+	if (getWave() == getConfig().getMaxWaves()) {
+	    if (getRound() == getConfig().getMaxRounds()) {
 		return true;
 	    }
 	    setRound(getRound() + 1);
 	    setWave(1);
-	    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Arena " + getID() + " from R:" + (getRound() - 1) + "W:" + getMaxWaves() + " to R:" + getRound() + "W:1", true);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Arena " + getID() + " from R:" + (getRound() - 1) + "W:" + getConfig().getMaxWaves() + " to R:" + getRound() + "W:1", true);
 	    return false;
 	}
 	setWave(getWave() + 1);
