@@ -150,8 +150,8 @@ public class InfoSign implements ISign, Comparable<ISign> {
 	
 	if (this.arena != null) {
 	    this.sign.setLine(1, "Arena: " + this.arena.getID());
-	    this.sign.setLine(2, colorMap.get("currentAmountOfPlayers") + "" + (this.arena.hasPreLobby() ? this.arena.getPlayers().length + this.arena.getPreLobby().getPlayers().length : this.arena.getPlayers().length) + ChatColor.RESET + " / " + colorMap.get("maxAmountOfPlayers") + this.arena.getMaxPlayers());
-	    this.sign.setLine(3, colorMap.get("currentWave") + "" + this.arena.getRound() + ":" + this.arena.getWave() + ChatColor.RESET + " / " + colorMap.get("maxWave") + this.arena.getMaxRounds() + ":" + this.arena.getMaxWaves());
+	    this.sign.setLine(2, colorMap.get("currentAmountOfPlayers") + "" + (this.arena.hasPreLobby() ? this.arena.getPlayers().length + this.arena.getPreLobby().getPlayers().length : this.arena.getPlayers().length) + ChatColor.RESET + " / " + colorMap.get("maxAmountOfPlayers") + this.arena.getConfig().getMaxPlayers());
+	    this.sign.setLine(3, colorMap.get("currentWave") + "" + this.arena.getRound() + ":" + this.arena.getWave() + ChatColor.RESET + " / " + colorMap.get("maxWave") + this.arena.getConfig().getMaxRounds() + ":" + this.arena.getConfig().getMaxWaves());
 	} else {
 	    this.sign.setLine(1, "");
 	    this.sign.setLine(2, ChatColor.DARK_RED + "Arena is not");

@@ -52,7 +52,7 @@ public class PlayerListener implements Listener {
 	if (this.game.isInGame(this.eventPlayer)) {
 	    ZvPPlayer player = this.game.getPlayer(this.eventPlayer);
 	    
-	    if (player.getArena().keepExp()) {
+	    if (player.getArena().getConfig().isKeepXP()) {
 		player.getXPManager().setExp(0);
 	    }
 	    
@@ -75,9 +75,9 @@ public class PlayerListener implements Listener {
 	    
 	    event.setRespawnLocation(player.getArena().getArea().getNewRandomLocation(true));
 	    
-	    if (player.getArena().useSpawnProtection()) {
+	    if (player.getArena().getConfig().isSpawnProtection()) {
 		player.setSpawnProtected(true);
-		player.sendMessage(MessageManager.getFormatedMessage(MessageKeys.game.spawn_protection_enabled, player.getArena().getArenaProtectionDuration()));
+		player.sendMessage(MessageManager.getFormatedMessage(MessageKeys.game.spawn_protection_enabled, player.getArena().getConfig().getProtectionDuration()));
 		
 		Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
 		    
@@ -86,7 +86,7 @@ public class PlayerListener implements Listener {
 			player.setSpawnProtected(false);
 			player.sendMessage(MessageManager.getMessage(MessageKeys.game.spawn_protection_over));
 		    }
-		}, player.getArena().getArenaProtectionDuration() * 20L);
+		}, player.getArena().getConfig().getProtectionDuration() * 20L);
 	    }
 	    return;
 	}

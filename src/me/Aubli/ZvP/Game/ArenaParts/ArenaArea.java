@@ -277,7 +277,7 @@ public class ArenaArea {
 	// Save means Location with no players nearby
 	// ---> Spawn zombies in a location save for players
 	
-	final double distance = getArena().getSaveRadius();
+	final double distance = getArena().getConfig().getSaveRadius();
 	
 	final Location spawnLoc = getNewRandomLocation(false);
 	
@@ -312,12 +312,12 @@ public class ArenaArea {
 	
 	Location saveLoc = getNewSaveLocation(); // Do not break the save radius rule
 	
-	if (maxDistance < getArena().getSaveRadius()) {
-	    maxDistance += getArena().getSaveRadius();
+	if (maxDistance < getArena().getConfig().getSaveRadius()) {
+	    maxDistance += getArena().getConfig().getSaveRadius();
 	}
 	
 	for (ZvPPlayer player : getArena().getPlayers()) {
-	    if (saveLoc.distanceSquared(player.getLocation()) <= Math.pow(getArena().getSaveRadius() + maxDistance, 2)) {
+	    if (saveLoc.distanceSquared(player.getLocation()) <= Math.pow(getArena().getConfig().getSaveRadius() + maxDistance, 2)) {
 		return saveLoc.clone();
 	    }
 	}
@@ -328,7 +328,7 @@ public class ArenaArea {
 	if (contains(location)) {
 	    if (!this.spawnPositions.contains(location)) {
 		this.spawnPositions.add(location);
-		getArena().save();
+		getArena().getConfig().saveConfig();
 		ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Added spawnpoint (X:" + location.getBlockX() + " Y:" + location.getBlockY() + " Z:" + location.getBlockZ() + ") to Arena " + getArena().getID(), true, true);
 		return true;
 	    }

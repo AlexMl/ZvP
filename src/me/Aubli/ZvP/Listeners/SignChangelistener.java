@@ -65,8 +65,8 @@ public class SignChangelistener implements Listener {
 					event.setLine(1, "Arena: " + arenaID);
 					
 					if (type == SignType.INFO_SIGN) {
-					    event.setLine(2, ChatColor.AQUA + "" + a.getPlayers().length + ChatColor.RESET + " / " + ChatColor.DARK_RED + a.getMaxPlayers());
-					    event.setLine(3, ChatColor.BLUE + "" + a.getRound() + ":" + a.getWave() + ChatColor.RESET + " / " + ChatColor.DARK_RED + a.getMaxRounds() + ":" + a.getMaxWaves());
+					    event.setLine(2, ChatColor.AQUA + "" + a.getPlayers().length + ChatColor.RESET + " / " + ChatColor.DARK_RED + a.getConfig().getMaxPlayers());
+					    event.setLine(3, ChatColor.BLUE + "" + a.getRound() + ":" + a.getWave() + ChatColor.RESET + " / " + ChatColor.DARK_RED + a.getConfig().getMaxRounds() + ":" + a.getConfig().getMaxWaves());
 					} else if (type == SignType.INTERACT_SIGN) {
 					    event.setLine(2, ChatColor.YELLOW + "Waiting");
 					    event.setLine(3, ChatColor.GREEN + "[JOIN]");

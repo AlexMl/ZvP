@@ -110,8 +110,8 @@ public class GameRunnable extends BukkitRunnable {
 			this.spawnGoal += this.arena.spawnZombies((int) (nextZombies * 0.06));
 		    } else if (missing >= ((int) (nextZombies * 0.08)) && ((int) (nextZombies * 0.02)) > 0) {
 			this.spawnGoal += this.arena.spawnZombies((int) (nextZombies * 0.02));
-		    } else if (missing > this.arena.getSpawnRate() && ((int) (this.arena.getSpawnRate() * 0.5)) > 0) {
-			this.spawnGoal += this.arena.spawnZombies(this.arena.getSpawnRate() / 2);
+		    } else if (missing > this.arena.getConfig().getSpawnRate() && ((int) (this.arena.getConfig().getSpawnRate() * 0.5)) > 0) {
+			this.spawnGoal += this.arena.spawnZombies(this.arena.getConfig().getSpawnRate() / 2);
 		    } else {
 			this.spawnGoal += this.arena.spawnZombies(1);
 		    }
@@ -123,16 +123,16 @@ public class GameRunnable extends BukkitRunnable {
 	    
 	    if (this.firstSpawn == false && this.spawnZombies == false) {
 		
-		if (this.arena.useAutoWaves()) {
+		if (this.arena.getConfig().isAutoWaves()) {
 		    if (this.arena.hasNext() && EntityListener.hasInteractionTimeout()) {
-			if (!this.arena.useVoteSystem()) {
+			if (!this.arena.getConfig().isVoteSystem()) {
 			    if (this.arena.getLivingZombieAmount() < (this.arena.getSpawningZombies() * EntityListener.ZOMBIEINTERACTIONFACTOR)) {
 				this.arena.next();
 				this.arena.updatePlayerBoards();
 				
 				ZvP.getPluginLogger().log(getClass(), Level.INFO, "Arena " + this.arena.getID() + " moved into the next wave cause of no zombie interaction!", true, true);
 				
-				this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, this.arena.getArenaBreakTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+				this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, this.arena.getConfig().getBreakTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
 				this.cancel();
 			    }
 			}
@@ -145,7 +145,7 @@ public class GameRunnable extends BukkitRunnable {
 		    boolean stop = this.arena.next(); // Stop checks if the last round is over
 		    
 		    if (!stop) {
-			if (this.arena.useVoteSystem()) {
+			if (this.arena.getConfig().isVoteSystem()) {
 			    this.arena.setStatus(ArenaStatus.VOTING);
 			    this.arena.setTaskID(new BukkitRunnable() {
 				
@@ -163,7 +163,7 @@ public class GameRunnable extends BukkitRunnable {
 			    this.cancel();
 			} else {
 			    this.arena.setStatus(ArenaStatus.BREAKWAITING);
-			    this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, this.arena.getArenaBreakTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+			    this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, this.arena.getConfig().getBreakTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
 			    this.cancel();
 			}
 		    } else { // End of Game
@@ -243,7 +243,7 @@ public class GameRunnable extends BukkitRunnable {
 			
 			String[] donP = MessageManager.getMessage(game.won_messages).split(";");
 			int index = this.rand.nextInt(donP.length);
-			String endMessage = MessageManager.getFormatedMessage(game.won, kills, (this.arena.getMaxRounds() * this.arena.getMaxWaves()), deaths, Math.round(money), donP[index]);
+			String endMessage = MessageManager.getFormatedMessage(game.won, kills, (this.arena.getConfig().getMaxRounds() * this.arena.getConfig().getMaxWaves()), deaths, Math.round(money), donP[index]);
 			// TODO change message. Econ doesnt make much sense here
 			this.arena.sendMessage(endMessage);
 			this.cancel();

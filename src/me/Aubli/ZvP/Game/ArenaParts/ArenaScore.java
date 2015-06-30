@@ -14,6 +14,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 public class ArenaScore {
     
+    // TODO Move enum in own class
     public enum ScoreType {
 	DEATH_SCORE,
 	KILL_SCORE,

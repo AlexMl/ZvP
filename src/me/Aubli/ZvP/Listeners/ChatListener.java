@@ -35,7 +35,7 @@ public class ChatListener implements Listener {
 	    final Arena arena = player.getArena();
 	    if (event.getMessage().equalsIgnoreCase("zvp vote")) {
 		event.setCancelled(true);
-		if (arena.useVoteSystem()) {
+		if (arena.getConfig().isVoteSystem()) {
 		    if (arena.getStatus() == ArenaStatus.VOTING) {
 			if (!player.hasVoted()) {
 			    player.setVoted(true);

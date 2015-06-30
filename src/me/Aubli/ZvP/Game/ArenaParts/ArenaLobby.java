@@ -125,7 +125,7 @@ public class ArenaLobby {
 		player.openKitSelectGUI();
 		addPlayer(player);
 	    }
-	}, (int) Math.ceil(this.arena.getArenaJoinTime() / 4) * 20L);
+	}, (int) Math.ceil(this.arena.getConfig().getJoinTime() / 4) * 20L);
 	
 	player.getPlayer().teleport(getRandomLocation(), TeleportCause.PLUGIN);
 	player.getPlayer().setGameMode(GameMode.SURVIVAL);
@@ -188,9 +188,9 @@ public class ArenaLobby {
 		@Override
 		public void run() {
 		    
-		    if (this.seconds < getArena().getArenaJoinTime() * 20) {
-			setPlayerLevel((ArenaLobby.this.arena.getArenaJoinTime() * 20 - this.seconds) / 20);
-		    } else if (this.seconds > getArena().getArenaJoinTime() && ArenaLobby.this.playerList.size() > 0) {
+		    if (this.seconds < getArena().getConfig().getJoinTime() * 20) {
+			setPlayerLevel((ArenaLobby.this.arena.getConfig().getJoinTime() * 20 - this.seconds) / 20);
+		    } else if (this.seconds > getArena().getConfig().getJoinTime() && ArenaLobby.this.playerList.size() > 0) {
 			ZvP.getPluginLogger().log(ArenaLobby.class, Level.FINE, "PreLobby Task is over! Adding players to Arena " + getArena().getID() + ".", true);
 			
 			for (int i = 0; i < ArenaLobby.this.playerList.size();) {
@@ -201,7 +201,7 @@ public class ArenaLobby {
 			    return;
 			}
 			
-		    } else if (this.seconds > getArena().getArenaJoinTime() && ArenaLobby.this.playerList.size() == 0) {
+		    } else if (this.seconds > getArena().getConfig().getJoinTime() && ArenaLobby.this.playerList.size() == 0) {
 			ArenaLobby.this.playerList.clear();
 			this.cancel();
 		    }
@@ -211,7 +211,7 @@ public class ArenaLobby {
 		}
 	    };
 	    this.task.runTaskTimer(ZvP.getInstance(), 0L, 1L);
-	} else if (getArena().getPlayers().length >= getArena().getMinPlayers() && getArena().isRunning()) {
+	} else if (getArena().getPlayers().length >= getArena().getConfig().getMinPlayers() && getArena().isRunning()) {
 	    boolean success = getArena().addPlayer(player);
 	    removePlayer(player);
 	    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Added player " + player.getName() + " to running game! Arena returned: " + (success ? "success" : "failure").toUpperCase() + "!", true);

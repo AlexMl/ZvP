@@ -10,6 +10,7 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
+import me.Aubli.ZvP.Game.ArenaParts.ArenaArea;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Sign.ISign;
@@ -28,6 +29,7 @@ import org.util.File.Converter.FileConverter.FileType;
 
 public class GameManager {
     
+    // TODO Move enums in own class
     public enum ArenaStatus {
 	RUNNING(MessageManager.getMessage(status.running)),
 	VOTING(MessageManager.getMessage(status.running)),
@@ -162,10 +164,14 @@ public class GameManager {
 	    // version 2.7.0 needs converted positions in arena file
 	    ZvP.getConverter().convert(FileType.ARENAFILE, arenaFile, 270.0);
 	    
-	    Arena arena = new Arena(arenaFile);
-	    if (arena.getWorld() != null) {
-		this.arenas.add(arena);
-		arena.save();
+	    try {
+		Arena arena = new Arena(arenaFile);
+		if (arena.getWorld() != null) {
+		    this.arenas.add(arena);
+		    arena.getConfig().saveConfig();
+		}
+	    } catch (Exception e) {
+		ZvP.getPluginLogger().log(ArenaArea.class, Level.SEVERE, "Error while loading Arena " + arenaFile.getName().split(".y")[0] + ": " + e.getMessage(), true, false, e);
 	    }
 	}
     }
@@ -325,10 +331,10 @@ public class GameManager {
 	    int arenaID = getNewID(this.arenaPath);
 	    
 	    try {
-		Arena arena = new Arena(arenaID, this.arenaPath, world, arenaCorners, ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ArenaDifficultyLevel.NORMAL, true);
+		Arena arena = new Arena(arenaID, this.arenaPath, world, arenaCorners, ArenaDifficultyLevel.NORMAL);
 		this.arenas.add(arena);
 		
-		ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + arena.getID() + " in World " + arena.getWorld().getUID().toString() + " added! MaxPlayer=" + arena.getMaxPlayers() + ", Size=" + arena.getArea().getDiagonal(), true);
+		ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + arena.getID() + " in World " + arena.getWorld().getUID().toString() + " added! MaxPlayer=" + arena.getConfig().getMaxPlayers() + ", Size=" + arena.getArea().getDiagonal(), true);
 		return arena;
 	    } catch (Exception e) {
 		ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Error while adding Arena " + arenaID + ": " + e.getMessage(), true, false, e);

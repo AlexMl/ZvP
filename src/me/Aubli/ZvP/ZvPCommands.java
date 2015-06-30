@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.Arena;
-import me.Aubli.ZvP.Game.ArenaParts.ArenaArea;
-import me.Aubli.ZvP.Game.ArenaParts.ArenaScore.ScoreType;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
 import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Game.ZvPPlayer;
+import me.Aubli.ZvP.Game.ArenaParts.ArenaArea;
+import me.Aubli.ZvP.Game.ArenaParts.ArenaScore.ScoreType;
 import me.Aubli.ZvP.Kits.IZvPKit;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Listeners.InteractListener;
@@ -289,9 +289,9 @@ public class ZvPCommands implements CommandExecutor {
 			
 			for (Arena a : this.game.getArenas()) {
 			    if (a.isRunning()) {
-				tableString += ChatColor.BLUE + "" + a.getID() + "`" + a.getStatus().toString() + "`" + a.getPlayers().length + ChatColor.RED + " / " + ChatColor.BLUE + a.getMaxPlayers() + "`" + (a.getScore().isSeparated() ? "separated" : "shared") + "`" + a.getLivingZombieAmount() + "`" + a.getSpawningZombies() + "`" + a.getKilledZombies() + "\n";
+				tableString += ChatColor.BLUE + "" + a.getID() + "`" + a.getStatus().toString() + "`" + a.getPlayers().length + ChatColor.RED + " / " + ChatColor.BLUE + a.getConfig().getMaxPlayers() + "`" + (a.getScore().isSeparated() ? "separated" : "shared") + "`" + a.getLivingZombieAmount() + "`" + a.getSpawningZombies() + "`" + a.getKilledZombies() + "\n";
 			    } else {
-				tableString += ChatColor.BLUE + "" + a.getID() + "`" + a.getStatus().toString() + "`" + "0" + ChatColor.RED + " / " + ChatColor.BLUE + a.getMaxPlayers() + "`-`-`-`-\n";
+				tableString += ChatColor.BLUE + "" + a.getID() + "`" + a.getStatus().toString() + "`" + "0" + ChatColor.RED + " / " + ChatColor.BLUE + a.getConfig().getMaxPlayers() + "`-`-`-`-\n";
 			    }
 			}
 			
@@ -479,13 +479,13 @@ public class ZvPCommands implements CommandExecutor {
 			if (arena != null) {
 			    if (args[2].equalsIgnoreCase("offline") || args[2].equalsIgnoreCase("off")) {
 				arena.setStatus(ArenaStatus.STOPED);
-				arena.save();
+				arena.getConfig().saveConfig();
 				playerSender.sendMessage(MessageManager.getFormatedMessage(manage.arena_status_changed, "Offline"));
 				return true;
 			    } else if (args[2].equalsIgnoreCase("online") || args[2].equalsIgnoreCase("on")) {
 				if (!arena.isOnline()) {
 				    arena.setStatus(ArenaStatus.STANDBY);
-				    arena.save();
+				    arena.getConfig().saveConfig();
 				    playerSender.sendMessage(MessageManager.getFormatedMessage(manage.arena_status_changed, "Online"));
 				    return true;
 				}
@@ -657,7 +657,7 @@ public class ZvPCommands implements CommandExecutor {
 		String tableString = "ID`Status`Min / Max`PreLobby`Mode`World\n";
 		
 		for (Arena a : this.game.getArenas()) {
-		    tableString += ChatColor.BLUE + "" + a.getID() + "`" + a.getStatus().toString() + "`" + a.getMinPlayers() + ChatColor.RED + " / " + ChatColor.BLUE + a.getMaxPlayers() + "`" + a.hasPreLobby() + "`" + a.getDifficulty().name() + "`" + a.getWorld().getName() + "\n";
+		    tableString += ChatColor.BLUE + "" + a.getID() + "`" + a.getStatus().toString() + "`" + a.getConfig().getMinPlayers() + ChatColor.RED + " / " + ChatColor.BLUE + a.getConfig().getMaxPlayers() + "`" + a.hasPreLobby() + "`" + a.getDifficulty().name() + "`" + a.getWorld().getName() + "\n";
 		}
 		TabText text = new TabText(tableString);
 		text.setTabs(3, 12, 22, 31, 40);

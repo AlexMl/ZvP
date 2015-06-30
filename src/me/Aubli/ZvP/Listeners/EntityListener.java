@@ -53,7 +53,7 @@ public class EntityListener implements Listener {
 			if (damager.getArena().equals(victim.getArena())) {
 			    Arena arena = victim.getArena();
 			    
-			    if (!arena.enablePvP()) {
+			    if (!arena.getConfig().isPlayerVsPlayer()) {
 				event.setCancelled(true);
 				return;
 			    }
@@ -70,7 +70,7 @@ public class EntityListener implements Listener {
 			    if (shooter.getArena().equals(victim.getArena())) {
 				Arena arena = victim.getArena();
 				
-				if (!arena.enablePvP()) {
+				if (!arena.getConfig().isPlayerVsPlayer()) {
 				    event.setCancelled(true);
 				    return;
 				} else {
@@ -127,7 +127,7 @@ public class EntityListener implements Listener {
 				    entityInteraction = false;
 				    
 				    for (Zombie zombie : arena.getLivingZombies()) {
-					zombie.teleport(arena.getArea().getNewUnsaveLocation(arena.getSaveRadius() * 1.5 + 2.0 * arena.getDifficulty().getLevel()), TeleportCause.PLUGIN);
+					zombie.teleport(arena.getArea().getNewUnsaveLocation(arena.getConfig().getSaveRadius() * 1.5 + 2.0 * arena.getDifficulty().getLevel()), TeleportCause.PLUGIN);
 					zombie.setTarget(arena.getRandomPlayer().getPlayer());
 				    }
 				    
@@ -164,7 +164,7 @@ public class EntityListener implements Listener {
 		    
 		    final ZvPPlayer player = this.game.getPlayer(eventPlayer);
 		    
-		    if (player.getArena().keepExp()) {
+		    if (player.getArena().getConfig().isKeepXP()) {
 			// entity.remove() does cancel xp spawn.
 			// --> spawn xp
 			

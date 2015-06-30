@@ -3,7 +3,6 @@ package me.Aubli.ZvP.Game.ArenaParts;
 import java.util.Random;
 
 import me.Aubli.ZvP.Game.Arena;
-import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.GameManager.ArenaDifficultyLevel;
 
 import org.bukkit.Material;

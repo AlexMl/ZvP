@@ -165,7 +165,7 @@ public class ZvPPlayer {
     }
     
     public void setXPLevel(int level) {
-	if (!getArena().keepExp()) {
+	if (!getArena().getConfig().isKeepXP()) {
 	    getPlayer().setLevel(level);
 	}
 	// TODO: Find a better way with keepXP enabled. Level countdown is needed -_-
@@ -234,12 +234,12 @@ public class ZvPPlayer {
     
     public void addKill() {
 	setKills(getKills() + 1);
-	getArena().getScore().addScore(this, getArena().getArenaZombieFund() * getArena().getDifficultyTool().getMoneyFactor(), ScoreType.KILL_SCORE);
+	getArena().getScore().addScore(this, getArena().getConfig().getZombieFund() * getArena().getDifficultyTool().getMoneyFactor(), ScoreType.KILL_SCORE);
     }
     
     public void die() {
 	setDeaths(getDeaths() + 1);
-	getArena().getScore().subtractScore(this, getArena().getArenaDeathFee() * getArena().getDifficultyTool().getMoneyFactor(), ScoreType.DEATH_SCORE);
+	getArena().getScore().subtractScore(this, getArena().getConfig().getDeathFee() * getArena().getDifficultyTool().getMoneyFactor(), ScoreType.DEATH_SCORE);
     }
     
     public void removeScoreboard() {
@@ -281,8 +281,8 @@ public class ZvPPlayer {
 	    
 	    obj.getScore(ChatColor.RESET + " ").setScore(15);
 	    obj.getScore(ChatColor.BLUE + "Players: " + ChatColor.RED + getArena().getPlayers().length).setScore(14);
-	    obj.getScore(ChatColor.GRAY + "R: " + ChatColor.AQUA + getArena().getRound() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getMaxRounds()).setScore(13);
-	    obj.getScore(ChatColor.GRAY + "W: " + ChatColor.AQUA + getArena().getWave() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getMaxWaves()).setScore(12);
+	    obj.getScore(ChatColor.GRAY + "R: " + ChatColor.AQUA + getArena().getRound() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getConfig().getMaxRounds()).setScore(13);
+	    obj.getScore(ChatColor.GRAY + "W: " + ChatColor.AQUA + getArena().getWave() + ChatColor.GRAY + "/" + ChatColor.DARK_AQUA + getArena().getConfig().getMaxWaves()).setScore(12);
 	    
 	    obj.getScore(ChatColor.WHITE + seperator).setScore(11);
 	    obj.getScore(ChatColor.GREEN + "Money: " + new DecimalFormat("#0.00").format(getArena().getScore().getScore(this)) + (ZvPConfig.getEnableEcon() ? " " + ZvP.getEconProvider().currencyNamePlural() : "")).setScore(10);
@@ -331,7 +331,7 @@ public class ZvPPlayer {
 	    this.player.updateInventory();
 	}
 	
-	if (!getArena().keepExp()) {
+	if (!getArena().getConfig().isKeepXP()) {
 	    this.xpManager.setExp(0);
 	}
 	
@@ -358,7 +358,7 @@ public class ZvPPlayer {
 	    removeScoreboard();
 	}
 	
-	if (!getArena().keepInventory()) {
+	if (!getArena().getConfig().isKeepInventory()) {
 	    this.player.getInventory().clear();
 	    this.player.getInventory().setArmorContents(this.armorContents);
 	    this.player.getInventory().setContents(this.contents);
@@ -374,7 +374,7 @@ public class ZvPPlayer {
 	
 	this.player.setGameMode(this.mode);
 	
-	if (!getArena().keepExp()) {
+	if (!getArena().getConfig().isKeepXP()) {
 	    getXPManager().setExp(this.prevTotalXP);
 	}
 	
