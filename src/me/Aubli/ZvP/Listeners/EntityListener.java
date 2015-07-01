@@ -4,6 +4,7 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.GameEnums.ArenaStatus;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 
@@ -123,16 +124,18 @@ public class EntityListener implements Listener {
 			    @Override
 			    public void run() {
 				
-				if (arena.getLivingZombieAmount() < (arena.getSpawningZombies() * ZOMBIEINTERACTIONFACTOR)) {
-				    entityInteraction = false;
-				    
-				    for (Zombie zombie : arena.getLivingZombies()) {
-					zombie.teleport(arena.getArea().getNewUnsaveLocation(arena.getConfig().getSaveRadius() * 1.5 + 2.0 * arena.getDifficulty().getLevel()), TeleportCause.PLUGIN);
-					zombie.setTarget(arena.getRandomPlayer().getPlayer());
+				if (arena.getStatus() == ArenaStatus.RUNNING) {
+				    if (arena.getLivingZombieAmount() < (arena.getSpawningZombies() * ZOMBIEINTERACTIONFACTOR)) {
+					entityInteraction = false;
+					
+					for (Zombie zombie : arena.getLivingZombies()) {
+					    zombie.teleport(arena.getArea().getNewUnsaveLocation(arena.getConfig().getSaveRadius() * 1.5 + 2.0 * arena.getDifficulty().getLevel()), TeleportCause.PLUGIN);
+					    zombie.setTarget(arena.getRandomPlayer().getPlayer());
+					}
+					
+					EntityListener.this.task = Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), this, 50 * 20L);
+					ZvP.getPluginLogger().log(EntityListener.class, Level.FINE, "Zombie teleport caused by no interaction!", true, true);
 				    }
-				    
-				    EntityListener.this.task = Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), this, 50 * 20L);
-				    ZvP.getPluginLogger().log(EntityListener.class, Level.FINE, "Zombie teleport caused by no interaction!", true, true);
 				}
 			    }
 			}, getArenaInteractionTime(arena) * 20L); // Time to wait until zombie respawn
