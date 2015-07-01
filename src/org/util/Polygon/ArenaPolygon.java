@@ -1,5 +1,6 @@
 package org.util.Polygon;
 
+import java.awt.Point;
 import java.awt.Polygon;
 import java.util.List;
 
@@ -88,6 +89,15 @@ public class ArenaPolygon extends Polygon {
     
     public Location getRectangularMaximum() {
 	return new Location(this.world, getBounds().getX() + getBounds().getWidth(), this.maxY, getBounds().getY() + getBounds().getHeight());
+    }
+    
+    public Point[] getPoints() {
+	Point[] points = new Point[this.npoints];
+	
+	for (int i = 0; i < this.npoints; i++) {
+	    points[i] = new Point(this.xpoints[i], this.ypoints[i]);
+	}
+	return points;
     }
     
 }
