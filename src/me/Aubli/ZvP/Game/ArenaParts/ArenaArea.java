@@ -109,6 +109,7 @@ public class ArenaArea {
 		zvpRegion.setFlag(DefaultFlag.ITEM_DROP, StateFlag.State.ALLOW);
 		zvpRegion.setFlag(DefaultFlag.ITEM_PICKUP, StateFlag.State.ALLOW);
 		zvpRegion.setFlag(DefaultFlag.DAMAGE_ANIMALS, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.POTION_SPLASH, StateFlag.State.ALLOW);
 		
 		ApplicableRegionSet regionSet = regionManager.getApplicableRegions(getNewRandomLocation(false));
 		if (regionSet.getRegions().size() == 1) {
