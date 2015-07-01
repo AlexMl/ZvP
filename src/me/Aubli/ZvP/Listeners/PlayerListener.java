@@ -83,8 +83,10 @@ public class PlayerListener implements Listener {
 		    
 		    @Override
 		    public void run() {
-			player.setSpawnProtected(false);
-			player.sendMessage(MessageManager.getMessage(MessageKeys.game.spawn_protection_over));
+			if (GameManager.getManager().isInGame(player.getPlayer())) {
+			    player.setSpawnProtected(false);
+			    player.sendMessage(MessageManager.getMessage(MessageKeys.game.spawn_protection_over));
+			}
 		    }
 		}, player.getArena().getConfig().getProtectionDuration() * 20L);
 	    }
