@@ -38,6 +38,9 @@ import org.util.Updater.Updater;
 import org.util.Updater.Updater.UpdateResult;
 import org.util.Updater.Updater.UpdateType;
 
+import com.sk89q.worldguard.bukkit.WGBukkit;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+
 
 public class ZvP extends JavaPlugin {
     
@@ -48,6 +51,7 @@ public class ZvP extends JavaPlugin {
     private static ZvP instance;
     
     private static Economy economy;
+    private static WorldGuardPlugin worldGuard;
     
     public static final String ADDARENA_SINGLE = "Use this tool to create arenas with two positions!";
     public static final String ADDARENA_POLYGON = "Use this tool to create polygon sized arenas";
@@ -115,6 +119,15 @@ public class ZvP extends JavaPlugin {
 	    }
 	}
 	
+	if (ZvPConfig.getHandleWorldGuard()) {
+	    if (getServer().getPluginManager().getPlugin("WorldGuard") != null) {
+		worldGuard = WGBukkit.getPlugin();
+	    } else {
+		getPluginLogger().log(this.getClass(), Level.WARNING, "WorldGuard should be used but is not installed! Disabling WorldGuard support ...", false);
+		ZvPConfig.setWorlGuardSupport(false);
+	    }
+	}
+	
 	if (ZvPConfig.getEnableUpdater()) {
 	    UpdateType updType = UpdateType.DEFAULT;
 	    
@@ -178,6 +191,10 @@ public class ZvP extends JavaPlugin {
     
     public static Economy getEconProvider() {
 	return economy;
+    }
+    
+    public static WorldGuardPlugin getWorldGuardPlugin() {
+	return worldGuard;
     }
     
     public static String getPrefix() {

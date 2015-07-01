@@ -1,5 +1,6 @@
 package me.Aubli.ZvP.Game.ArenaParts;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.Random;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 
@@ -16,6 +18,17 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.util.Polygon.ArenaPolygon;
+
+import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.BlockVector2D;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
+import com.sk89q.worldguard.protection.regions.ProtectedPolygonalRegion;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 
 public class ArenaArea {
@@ -62,7 +75,83 @@ public class ArenaArea {
 		}
 	    }
 	}
+	initialzeWorldGuardRegion();
 	// System.out.println("ArenaPositions:" + this.polygon.npoints + ", SpawnLocations:" + this.spawnPositions.size());
+    }
+    
+    public void initialzeWorldGuardRegion() {
+	if (ZvPConfig.getHandleWorldGuard() && ZvP.getWorldGuardPlugin() != null) {
+	    WorldGuardPlugin worldGuard = ZvP.getWorldGuardPlugin();
+	    
+	    RegionManager regionManager = worldGuard.getRegionManager(getWorld());
+	    ApplicableRegionSet regionSet = regionManager.getApplicableRegions(getNewRandomLocation(false));
+	    if (regionSet.getRegions().size() == 1) { // one region at place
+	    
+		ProtectedRegion parentRegion = (ProtectedRegion) regionSet.getRegions().toArray()[0];
+		if (!parentRegion.getId().equalsIgnoreCase("zvpregion" + getArena().getID())) {
+		    ProtectedRegion zvpRegion;
+		    
+		    if (this.polygon.isPolygonal()) {
+			List<BlockVector2D> points = new ArrayList<BlockVector2D>();
+			
+			for (Point polygonPoint : this.polygon.getPoints()) {
+			    points.add(new BlockVector2D(polygonPoint.getX(), polygonPoint.getY()));
+			}
+			zvpRegion = new ProtectedPolygonalRegion("zvpRegion" + getArena().getID(), points, 0, getWorld().getMaxHeight());
+		    } else {
+			BlockVector min = new BlockVector(this.polygon.getRectangularMinimum().getBlockX(), 0, this.polygon.getRectangularMinimum().getBlockZ());
+			BlockVector max = new BlockVector(this.polygon.getRectangularMaximum().getBlockX(), getWorld().getMaxHeight(), this.polygon.getRectangularMaximum().getBlockZ());
+			
+			zvpRegion = new ProtectedCuboidRegion("zvpRegion" + getArena().getID(), min, max);
+		    }
+		    regionManager.addRegion(zvpRegion);
+		    try {
+			zvpRegion.setParent(parentRegion);
+			zvpRegion.setFlag(DefaultFlag.INTERACT, StateFlag.State.ALLOW);
+			zvpRegion.setFlag(DefaultFlag.CHEST_ACCESS, StateFlag.State.ALLOW);
+			zvpRegion.setFlag(DefaultFlag.USE, StateFlag.State.ALLOW);
+			zvpRegion.setFlag(DefaultFlag.MOB_DAMAGE, StateFlag.State.ALLOW);
+			zvpRegion.setFlag(DefaultFlag.MOB_SPAWNING, StateFlag.State.ALLOW);
+			zvpRegion.setFlag(DefaultFlag.ITEM_DROP, StateFlag.State.ALLOW);
+			zvpRegion.setFlag(DefaultFlag.ITEM_PICKUP, StateFlag.State.ALLOW);
+			zvpRegion.setFlag(DefaultFlag.DAMAGE_ANIMALS, StateFlag.State.ALLOW);
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+		}
+	    } else if (regionSet.getRegions().size() == 0) { // no region
+		ProtectedRegion zvpRegion;
+		
+		if (this.polygon.isPolygonal()) {
+		    List<BlockVector2D> points = new ArrayList<BlockVector2D>();
+		    
+		    for (Point polygonPoint : this.polygon.getPoints()) {
+			points.add(new BlockVector2D(polygonPoint.getX(), polygonPoint.getY()));
+		    }
+		    zvpRegion = new ProtectedPolygonalRegion("zvpRegion" + getArena().getID(), points, 0, getWorld().getMaxHeight());
+		} else {
+		    BlockVector min = new BlockVector(this.polygon.getRectangularMinimum().getBlockX(), 0, this.polygon.getRectangularMinimum().getBlockZ());
+		    BlockVector max = new BlockVector(this.polygon.getRectangularMaximum().getBlockX(), getWorld().getMaxHeight(), this.polygon.getRectangularMaximum().getBlockZ());
+		    
+		    zvpRegion = new ProtectedCuboidRegion("zvpRegion" + getArena().getID(), min, max);
+		}
+		regionManager.addRegion(zvpRegion);
+		try {
+		    zvpRegion.setFlag(DefaultFlag.INTERACT, StateFlag.State.ALLOW);
+		    zvpRegion.setFlag(DefaultFlag.CHEST_ACCESS, StateFlag.State.ALLOW);
+		    zvpRegion.setFlag(DefaultFlag.USE, StateFlag.State.ALLOW);
+		    zvpRegion.setFlag(DefaultFlag.MOB_DAMAGE, StateFlag.State.ALLOW);
+		    zvpRegion.setFlag(DefaultFlag.MOB_SPAWNING, StateFlag.State.ALLOW);
+		    zvpRegion.setFlag(DefaultFlag.ITEM_DROP, StateFlag.State.ALLOW);
+		    zvpRegion.setFlag(DefaultFlag.ITEM_PICKUP, StateFlag.State.ALLOW);
+		    zvpRegion.setFlag(DefaultFlag.DAMAGE_ANIMALS, StateFlag.State.ALLOW);
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+	    } else {
+		System.out.println("wg fehler");
+	    }
+	}
     }
     
     public Arena getArena() {
