@@ -158,7 +158,7 @@ public class GameRunnable extends BukkitRunnable {
 					this.cancel();
 				    }
 				}
-			    }.runTaskTimer(ZvP.getInstance(), 10L, 13 * 20L).getTaskId());
+			    }.runTaskTimer(ZvP.getInstance(), 10L, 17 * 20L).getTaskId());
 			    
 			    this.cancel();
 			} else {
