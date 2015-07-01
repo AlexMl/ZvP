@@ -5,6 +5,10 @@ Changelog:
 *Added configurable permissions for kits
 *Added command whitelist in config.yml.
 *New Permission (zvp.command) to allow commands during game
+*Added experimental WorldGuard integration
+*Added option to enable pvp in arenas
+*Smaller bug fixes
+*Code improvements
 
 2.7.0:
 *Added polygon sized arena support
