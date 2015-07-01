@@ -49,8 +49,6 @@ public class ArenaConfig {
     private int protectionDuration;
     private double saveRadius;
     
-    // End config values
-    
     public ArenaConfig(Arena arena, File saveFile) throws Exception {
 	
 	this.arena = arena;
