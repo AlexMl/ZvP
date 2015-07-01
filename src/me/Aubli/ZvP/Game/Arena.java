@@ -83,7 +83,7 @@ public class Arena implements Comparable<Arena> {
 	this.currentRound = 0;
 	this.currentWave = 0;
 	
-	if ((Boolean) getConfig().getConfigValue("arena.Online")) {
+	if (Boolean.parseBoolean(getConfig().getConfigValue("arena.Online").toString())) {
 	    this.status = ArenaStatus.STANDBY;
 	} else {
 	    this.status = ArenaStatus.STOPED;
