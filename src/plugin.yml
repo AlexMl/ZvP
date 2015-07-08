@@ -4,7 +4,7 @@ description: Fight against zombies with a lot of extra features!
 website: http://dev.bukkit.org/bukkit-plugins/zombievsplayer/
 author: Aubli
 load: POSTWORLD
-softdepend: [Multiverse-Core, WorldGuard]
+softdepend: [Multiverse-Core, Vault, WorldGuard, WorldEdit]
 main: me.Aubli.ZvP.ZvP
 
 commands:     
