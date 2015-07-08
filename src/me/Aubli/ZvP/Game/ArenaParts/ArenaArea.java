@@ -74,57 +74,15 @@ public class ArenaArea {
 		}
 	    }
 	}
-	initialzeWorldGuardRegion();
-	// System.out.println("ArenaPositions:" + this.polygon.npoints + ", SpawnLocations:" + this.spawnPositions.size());
-    }
-    
-    public void initialzeWorldGuardRegion() {
+	
 	if (ZvPConfig.getHandleWorldGuard() && ZvP.getWorldGuardPlugin() != null) {
-	    
-	    RegionManager regionManager = ZvP.getWorldGuardPlugin().getRegionManager(getWorld());
-	    
-	    if (regionManager.getRegion("zvpregion" + getArena().getID()) == null) { // region does not exist, will create one
-	    
-		ProtectedRegion zvpRegion;
-		
-		if (this.polygon.isPolygonal()) {
-		    List<BlockVector2D> points = new ArrayList<BlockVector2D>();
-		    
-		    for (Point polygonPoint : this.polygon.getPoints()) {
-			points.add(new BlockVector2D(polygonPoint.getX(), polygonPoint.getY()));
-		    }
-		    zvpRegion = new ProtectedPolygonalRegion("zvpregion" + getArena().getID(), points, 0, getWorld().getMaxHeight());
-		} else {
-		    BlockVector min = new BlockVector(this.polygon.getRectangularMinimum().getBlockX(), 0, this.polygon.getRectangularMinimum().getBlockZ());
-		    BlockVector max = new BlockVector(this.polygon.getRectangularMaximum().getBlockX(), getWorld().getMaxHeight(), this.polygon.getRectangularMaximum().getBlockZ());
-		    
-		    zvpRegion = new ProtectedCuboidRegion("zvpregion" + getArena().getID(), min, max);
-		}
-		
-		zvpRegion.setFlag(DefaultFlag.INTERACT, StateFlag.State.ALLOW);
-		zvpRegion.setFlag(DefaultFlag.CHEST_ACCESS, StateFlag.State.ALLOW);
-		zvpRegion.setFlag(DefaultFlag.USE, StateFlag.State.ALLOW);
-		zvpRegion.setFlag(DefaultFlag.MOB_DAMAGE, StateFlag.State.ALLOW);
-		zvpRegion.setFlag(DefaultFlag.MOB_SPAWNING, StateFlag.State.ALLOW);
-		zvpRegion.setFlag(DefaultFlag.ITEM_DROP, StateFlag.State.ALLOW);
-		zvpRegion.setFlag(DefaultFlag.ITEM_PICKUP, StateFlag.State.ALLOW);
-		zvpRegion.setFlag(DefaultFlag.DAMAGE_ANIMALS, StateFlag.State.ALLOW);
-		zvpRegion.setFlag(DefaultFlag.POTION_SPLASH, StateFlag.State.ALLOW);
-		
-		ApplicableRegionSet regionSet = regionManager.getApplicableRegions(getNewRandomLocation(false));
-		if (regionSet.getRegions().size() == 1) {
-		    // There is already a region set at the arena. Try to set it as parent
-		    try {
-			ProtectedRegion parentRegion = (ProtectedRegion) regionSet.getRegions().toArray()[0];
-			zvpRegion.setParent(parentRegion);
-			zvpRegion.setPriority(50);
-		    } catch (Exception e) {
-			e.printStackTrace();
-		    }
-		}
-		regionManager.addRegion(zvpRegion);
+	    try {
+		new RegionHelper(this).initializeRegion();
+	    } catch (NoClassDefFoundError e) {
+		// only happens if softdependens is not available
 	    }
 	}
+	// System.out.println("ArenaPositions:" + this.polygon.npoints + ", SpawnLocations:" + this.spawnPositions.size());
     }
     
     public Arena getArena() {
@@ -405,5 +363,66 @@ public class ArenaArea {
 	    return (other.getDiagonalSquared() == getDiagonalSquared() && other.getWorld().equals(getWorld()));
 	}
 	return false;
+    }
+    
+    private class RegionHelper {
+	
+	private ArenaArea area;
+	
+	public RegionHelper(ArenaArea area) {
+	    this.area = area;
+	}
+	
+	public void initializeRegion() {
+	    
+	    RegionManager regionManager = ZvP.getWorldGuardPlugin().getRegionManager(getWorld());
+	    
+	    if (regionManager.getRegion("zvpregion" + getArena().getID()) == null) { // region does not exist, will create one
+	    
+		ProtectedRegion zvpRegion;
+		
+		if (getArea().polygon.isPolygonal()) {
+		    List<BlockVector2D> points = new ArrayList<BlockVector2D>();
+		    
+		    for (Point polygonPoint : getArea().polygon.getPoints()) {
+			points.add(new BlockVector2D(polygonPoint.getX(), polygonPoint.getY()));
+		    }
+		    zvpRegion = new ProtectedPolygonalRegion("zvpregion" + getArena().getID(), points, 0, getWorld().getMaxHeight());
+		} else {
+		    BlockVector min = new BlockVector(getArea().polygon.getRectangularMinimum().getBlockX(), 0, getArea().polygon.getRectangularMinimum().getBlockZ());
+		    BlockVector max = new BlockVector(getArea().polygon.getRectangularMaximum().getBlockX(), getWorld().getMaxHeight(), getArea().polygon.getRectangularMaximum().getBlockZ());
+		    
+		    zvpRegion = new ProtectedCuboidRegion("zvpregion" + getArena().getID(), min, max);
+		}
+		
+		zvpRegion.setFlag(DefaultFlag.INTERACT, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.CHEST_ACCESS, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.USE, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.MOB_DAMAGE, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.MOB_SPAWNING, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.ITEM_DROP, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.ITEM_PICKUP, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.DAMAGE_ANIMALS, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.POTION_SPLASH, StateFlag.State.ALLOW);
+		
+		ApplicableRegionSet regionSet = regionManager.getApplicableRegions(getNewRandomLocation(false));
+		if (regionSet.getRegions().size() == 1) {
+		    // There is already a region set at the arena. Try to set it as parent
+		    try {
+			ProtectedRegion parentRegion = (ProtectedRegion) regionSet.getRegions().toArray()[0];
+			zvpRegion.setParent(parentRegion);
+			zvpRegion.setPriority(50);
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+		}
+		regionManager.addRegion(zvpRegion);
+	    }
+	}
+	
+	public ArenaArea getArea() {
+	    return this.area;
+	}
+	
     }
 }
