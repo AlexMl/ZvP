@@ -94,14 +94,14 @@ public class Arena implements Comparable<Arena> {
 	List<Location> cornerPoints = new ArrayList<Location>();
 	for (String locationString : getConfig().getStringList("arena.Location.cornerPoints")) {
 	    String[] cords = locationString.split(",");
-	    Location loc = new Location(arenaWorld, Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
+	    Location loc = new Location(arenaWorld, Double.parseDouble(cords[0]), Double.parseDouble(cords[1]), Double.parseDouble(cords[2]));
 	    cornerPoints.add(loc);
 	}
 	
 	List<Location> spawnPositions = new ArrayList<Location>();
 	for (String locationString : getConfig().getStringList("arena.Location.staticPositions")) {
 	    String[] cords = locationString.split(",");
-	    Location loc = new Location(arenaWorld, Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
+	    Location loc = new Location(arenaWorld, Double.parseDouble(cords[0]), Double.parseDouble(cords[1]), Double.parseDouble(cords[2]));
 	    spawnPositions.add(loc);
 	}
 	
@@ -126,12 +126,12 @@ public class Arena implements Comparable<Arena> {
     private ArenaLobby loadArenaLobby() {
 	
 	if (getConfig().getConfigValue("arena.Location.PreLobby.X") != null) {
-	    Location centerLoc = new Location(getWorld(), Integer.parseInt(getConfig().getConfigValue("arena.Location.PreLobby.X").toString()), Integer.parseInt(getConfig().getConfigValue("arena.Location.PreLobby.Y").toString()), Integer.parseInt(getConfig().getConfigValue("arena.Location.PreLobby.Z").toString()));
+	    Location centerLoc = new Location(getWorld(), Double.parseDouble(getConfig().getConfigValue("arena.Location.PreLobby.X").toString()), Double.parseDouble(getConfig().getConfigValue("arena.Location.PreLobby.Y").toString()), Double.parseDouble(getConfig().getConfigValue("arena.Location.PreLobby.Z").toString()));
 	    
 	    ArrayList<Location> locations = new ArrayList<Location>();
 	    for (String locationString : getConfig().getStringList("arena.Location.PreLobby.extraPositions")) {
 		String[] cords = locationString.split(",");
-		Location loc = new Location(getWorld(), Integer.parseInt(cords[0]), Integer.parseInt(cords[1]), Integer.parseInt(cords[2]));
+		Location loc = new Location(getWorld(), Double.parseDouble(cords[0]), Double.parseDouble(cords[1]), Double.parseDouble(cords[2]));
 		locations.add(loc);
 	    }
 	    

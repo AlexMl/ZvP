@@ -125,12 +125,12 @@ public class ArenaConfig {
 	    
 	    List<String> cornerPoints = new ArrayList<String>();
 	    for (Location loc : getArena().getArea().getCornerLocations()) {
-		cornerPoints.add(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+		cornerPoints.add(loc.getX() + "," + loc.getY() + "," + loc.getZ());
 	    }
 	    
 	    List<String> locationList = new ArrayList<String>();
 	    for (Location loc : getArena().getArea().getSpawnLocations()) {
-		locationList.add(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+		locationList.add(loc.getX() + "," + loc.getY() + "," + loc.getZ());
 	    }
 	    
 	    this.arenaConfig.set("arena.Location.world", getArena().getWorld().getUID().toString());
@@ -300,14 +300,14 @@ public class ArenaConfig {
     }
     
     public void saveArenaLobby(ArenaLobby lobby) throws IOException {
-	this.arenaConfig.set("arena.Location.PreLobby.X", lobby.getCenterLoc().getBlockX());
-	this.arenaConfig.set("arena.Location.PreLobby.Y", lobby.getCenterLoc().getBlockY());
-	this.arenaConfig.set("arena.Location.PreLobby.Z", lobby.getCenterLoc().getBlockZ());
+	this.arenaConfig.set("arena.Location.PreLobby.X", lobby.getCenterLoc().getX());
+	this.arenaConfig.set("arena.Location.PreLobby.Y", lobby.getCenterLoc().getY());
+	this.arenaConfig.set("arena.Location.PreLobby.Z", lobby.getCenterLoc().getZ());
 	
 	List<String> locationList = new ArrayList<String>();
 	
 	for (Location loc : lobby.getLocationList()) {
-	    locationList.add(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+	    locationList.add(loc.getX() + "," + loc.getY() + "," + loc.getZ());
 	}
 	
 	this.arenaConfig.set("arena.Location.PreLobby.extraPositions", locationList);
