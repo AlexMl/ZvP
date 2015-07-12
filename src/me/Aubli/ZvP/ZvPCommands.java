@@ -13,6 +13,7 @@ import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaArea;
 import me.Aubli.ZvP.Kits.IZvPKit;
 import me.Aubli.ZvP.Kits.KitManager;
+import me.Aubli.ZvP.Listeners.EntityListener;
 import me.Aubli.ZvP.Listeners.InteractListener;
 import me.Aubli.ZvP.Shop.ShopItem;
 import me.Aubli.ZvP.Shop.ShopManager;
@@ -231,7 +232,8 @@ public class ZvPCommands implements CommandExecutor {
 		    
 		    for (int ir = 1; ir <= r; ir++) {
 			for (int iw = 1; iw <= w; iw++) {
-			    playerSender.sendMessage("D:" + d + " P:" + p + " R:" + ir + " W:" + iw + " @" + id + " --> " + a.getSpawningZombies(iw, ir, p, d) + " --> IT: " + (Math.floor(Math.floor(a.getSpawningZombies(iw, ir, p, d) / 20.0) * 0.8) * 10 + 20));
+			    int sz = a.getSpawningZombies(iw, ir, p, d);
+			    playerSender.sendMessage("D:" + d + " P:" + p + " R:" + ir + " W:" + iw + " @" + id + " --> " + sz + " --> IT: " + EntityListener.getArenaInteractionTime(sz));
 			}
 		    }
 		    

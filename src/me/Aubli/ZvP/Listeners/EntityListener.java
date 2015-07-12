@@ -202,6 +202,10 @@ public class EntityListener implements Listener {
     }
     
     private long getArenaInteractionTime(Arena arena) {
-	return (long) (Math.floor(Math.floor(arena.getSpawningZombies() / 20.0) * 0.8) * 10 + 20);
+	return getArenaInteractionTime(arena.getSpawningZombies());
+    }
+    
+    public static long getArenaInteractionTime(int spawningZombies) {
+	return (long) (Math.floor(Math.floor(spawningZombies / 30.0) * 0.6) * 10 + 20);
     }
 }
