@@ -1,5 +1,15 @@
 Changelog:
 
+2.8.0:
+*Start new waves automatically
+*Added configurable permissions for kits
+*Added command whitelist in config.yml.
+*New Permission (zvp.command) to allow commands during game
+*Added experimental WorldGuard integration
+*Added option to enable pvp in arenas
+*Smaller bug fixes
+*Code improvements
+
 2.7.1:
 *Fixed Vote bug.
 *Fixed exploit to get items in and out of the arena. (Thanks to AnomalyAlpha)

@@ -1,8 +1,9 @@
-package me.Aubli.ZvP.Game;
+package me.Aubli.ZvP.Game.ArenaParts;
 
 import java.util.Random;
 
-import me.Aubli.ZvP.Game.GameManager.ArenaDifficultyLevel;
+import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.GameEnums.ArenaDifficultyLevel;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;

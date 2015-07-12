@@ -8,8 +8,8 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Kits.KitManager;
-import me.Aubli.ZvP.Listeners.AsyncChatListener;
 import me.Aubli.ZvP.Listeners.BlockListener;
+import me.Aubli.ZvP.Listeners.ChatListener;
 import me.Aubli.ZvP.Listeners.EntityListener;
 import me.Aubli.ZvP.Listeners.GUIListener;
 import me.Aubli.ZvP.Listeners.InteractListener;
@@ -38,6 +38,9 @@ import org.util.Updater.Updater;
 import org.util.Updater.Updater.UpdateResult;
 import org.util.Updater.Updater.UpdateType;
 
+import com.sk89q.worldguard.bukkit.WGBukkit;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+
 
 public class ZvP extends JavaPlugin {
     
@@ -48,6 +51,7 @@ public class ZvP extends JavaPlugin {
     private static ZvP instance;
     
     private static Economy economy;
+    private static WorldGuardPlugin worldGuard;
     
     public static final String ADDARENA_SINGLE = "Use this tool to create arenas with two positions!";
     public static final String ADDARENA_POLYGON = "Use this tool to create polygon sized arenas";
@@ -81,11 +85,7 @@ public class ZvP extends JavaPlugin {
     private void initialize() {
 	instance = this;
 	
-	try {
-	    new ZvPConfig(getConfig());
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
+	new ZvPConfig(getConfig());
 	
 	logger = new PluginOutput(this, ZvPConfig.getDebugMode(), ZvPConfig.getLogLevel());
 	
@@ -116,6 +116,15 @@ public class ZvP extends JavaPlugin {
 	    } else {
 		getPluginLogger().log(this.getClass(), Level.WARNING, "Economy is enabled but Vault is not installed! Disabling economy ...", false);
 		ZvPConfig.setEconEnabled(false);
+	    }
+	}
+	
+	if (ZvPConfig.getHandleWorldGuard()) {
+	    if (getServer().getPluginManager().getPlugin("WorldGuard") != null) {
+		worldGuard = WGBukkit.getPlugin();
+	    } else {
+		getPluginLogger().log(this.getClass(), Level.WARNING, "WorldGuard should be used but is not installed! Disabling WorldGuard support ...", false);
+		ZvPConfig.setWorlGuardSupport(false);
 	    }
 	}
 	
@@ -165,7 +174,7 @@ public class ZvP extends JavaPlugin {
 	pm.registerEvents(new SignChangelistener(), this);
 	pm.registerEvents(new GUIListener(), this);
 	pm.registerEvents(new EntityListener(), this);
-	pm.registerEvents(new AsyncChatListener(), this);
+	pm.registerEvents(new ChatListener(), this);
     }
     
     public static ZvP getInstance() {
@@ -182,6 +191,10 @@ public class ZvP extends JavaPlugin {
     
     public static Economy getEconProvider() {
 	return economy;
+    }
+    
+    public static WorldGuardPlugin getWorldGuardPlugin() {
+	return worldGuard;
     }
     
     public static String getPrefix() {

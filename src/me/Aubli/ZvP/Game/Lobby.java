@@ -45,16 +45,16 @@ public class Lobby implements Comparable<Lobby> {
 	this.lobbyConfig = YamlConfiguration.loadConfiguration(lobbyFile);
 	
 	this.lobbyID = this.lobbyConfig.getInt("lobby.ID");
-	this.centerLoc = new Location(Bukkit.getWorld(UUID.fromString(this.lobbyConfig.getString("lobby.Location.world"))), this.lobbyConfig.getInt("lobby.Location.X"), this.lobbyConfig.getInt("lobby.Location.Y"), this.lobbyConfig.getInt("lobby.Location.Z"));
+	this.centerLoc = new Location(Bukkit.getWorld(UUID.fromString(this.lobbyConfig.getString("lobby.Location.world"))), this.lobbyConfig.getDouble("lobby.Location.X"), this.lobbyConfig.getDouble("lobby.Location.Y"), this.lobbyConfig.getDouble("lobby.Location.Z"));
     }
     
     private void save() throws IOException {
 	this.lobbyConfig.set("lobby.ID", this.lobbyID);
 	
 	this.lobbyConfig.set("lobby.Location.world", this.centerLoc.getWorld().getUID().toString());
-	this.lobbyConfig.set("lobby.Location.X", this.centerLoc.getBlockX());
-	this.lobbyConfig.set("lobby.Location.Y", this.centerLoc.getBlockY());
-	this.lobbyConfig.set("lobby.Location.Z", this.centerLoc.getBlockZ());
+	this.lobbyConfig.set("lobby.Location.X", this.centerLoc.getX());
+	this.lobbyConfig.set("lobby.Location.Y", this.centerLoc.getY());
+	this.lobbyConfig.set("lobby.Location.Z", this.centerLoc.getZ());
 	
 	this.lobbyConfig.save(this.lobbyFile);
     }

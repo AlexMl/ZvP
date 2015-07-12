@@ -10,6 +10,9 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
+import me.Aubli.ZvP.Game.GameEnums.ArenaDifficultyLevel;
+import me.Aubli.ZvP.Game.GameEnums.ArenaStatus;
+import me.Aubli.ZvP.Game.ArenaParts.ArenaArea;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Sign.ISign;
@@ -26,41 +29,6 @@ import org.util.File.Converter.FileConverter.FileType;
 
 
 public class GameManager {
-    
-    public enum ArenaStatus {
-	RUNNING(MessageManager.getMessage("status:running")),
-	VOTING(MessageManager.getMessage("status:running")),
-	BREAKWAITING(MessageManager.getMessage("status:running")),
-	WAITING(MessageManager.getMessage("status:waiting")),
-	STANDBY(MessageManager.getMessage("status:waiting")),
-	STOPED(MessageManager.getMessage("status:stoped"));
-	
-	private String name;
-	
-	private ArenaStatus(String name) {
-	    this.name = name;
-	}
-	
-	public String getName() {
-	    return this.name;
-	}
-    }
-    
-    public enum ArenaDifficultyLevel {
-	EASY(1),
-	NORMAL(2),
-	HARD(3);
-	
-	private int level;
-	
-	private ArenaDifficultyLevel(int level) {
-	    this.level = level;
-	}
-	
-	public int getLevel() {
-	    return this.level;
-	}
-    }
     
     private static GameManager manager;
     private ZvP plugin;
@@ -159,12 +127,17 @@ public class GameManager {
 	    // Version 2.4.0 needs converted arena files
 	    // Version 2.6.0 needs converted arena files too
 	    // version 2.7.0 needs converted positions in arena file
-	    ZvP.getConverter().convert(FileType.ARENAFILE, arenaFile, 270.0);
+	    // version 2.8.0 has new config values --> ordering
+	    ZvP.getConverter().convert(FileType.ARENAFILE, arenaFile, 280.0);
 	    
-	    Arena arena = new Arena(arenaFile);
-	    if (arena.getWorld() != null) {
-		this.arenas.add(arena);
-		arena.save();
+	    try {
+		Arena arena = new Arena(arenaFile);
+		if (arena.getWorld() != null) {
+		    this.arenas.add(arena);
+		    arena.getConfig().saveConfig();
+		}
+	    } catch (Exception e) {
+		ZvP.getPluginLogger().log(ArenaArea.class, Level.SEVERE, "Error while loading Arena " + arenaFile.getName().split(".y")[0] + ": " + e.getMessage(), true, false, e);
 	    }
 	}
     }
@@ -324,10 +297,10 @@ public class GameManager {
 	    int arenaID = getNewID(this.arenaPath);
 	    
 	    try {
-		Arena arena = new Arena(arenaID, this.arenaPath, world, arenaCorners, ZvPConfig.getDefaultRounds(), ZvPConfig.getDefaultWaves(), ZvPConfig.getDefaultZombieSpawnRate(), ArenaDifficultyLevel.NORMAL, true);
+		Arena arena = new Arena(arenaID, this.arenaPath, world, arenaCorners, ArenaDifficultyLevel.NORMAL);
 		this.arenas.add(arena);
 		
-		ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + arena.getID() + " in World " + arena.getWorld().getUID().toString() + " added! MaxPlayer=" + arena.getMaxPlayers() + ", Size=" + arena.getArea().getDiagonal(), true);
+		ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + arena.getID() + " in World " + arena.getWorld().getUID().toString() + " added! MaxPlayer=" + arena.getConfig().getMaxPlayers() + ", Size=" + arena.getArea().getDiagonal(), true);
 		return arena;
 	    } catch (Exception e) {
 		ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Error while adding Arena " + arenaID + ": " + e.getMessage(), true, false, e);
@@ -379,15 +352,10 @@ public class GameManager {
 	
 	if (!arena.isFull() && arena.isOnline()) {
 	    if (ZvPConfig.getAllowDuringGameJoin() || !arena.isRunning()) {
-		try {
-		    new ZvPPlayer(player, arena, lobby);
-		    SignManager.getManager().updateSigns(lobby);
-		    SignManager.getManager().updateSigns(arena);
-		    return true;
-		} catch (Exception e) {
-		    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while creating Player: " + e.getMessage(), true, false, e);
-		    return false;
-		}
+		new ZvPPlayer(player, arena, lobby);
+		SignManager.getManager().updateSigns(lobby);
+		SignManager.getManager().updateSigns(arena);
+		return true;
 	    } else {
 		return false;
 	    }

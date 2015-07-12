@@ -1,5 +1,6 @@
-package me.Aubli.ZvP.Game;
+package me.Aubli.ZvP.Game.ArenaParts;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +8,9 @@ import java.util.Random;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.ZvPConfig;
+import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.ZvPPlayer;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -14,6 +18,16 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.util.Polygon.ArenaPolygon;
+
+import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.BlockVector2D;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
+import com.sk89q.worldguard.protection.regions.ProtectedPolygonalRegion;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 
 public class ArenaArea {
@@ -58,6 +72,14 @@ public class ArenaArea {
 		} else {
 		    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Arena " + arena.getID() + " does not contain custom spawn location X:" + loc.getBlockX() + " Y:" + loc.getBlockY() + " Z:" + loc.getBlockZ() + " in world " + getWorld().getName() + "!", true, true);
 		}
+	    }
+	}
+	
+	if (ZvPConfig.getHandleWorldGuard() && ZvP.getWorldGuardPlugin() != null) {
+	    try {
+		new RegionHelper(this).initializeRegion();
+	    } catch (NoClassDefFoundError e) {
+		// only happens if softdependens is not available
 	    }
 	}
 	// System.out.println("Arena: " + arena.getID() + ", ArenaPositions:" + this.polygon.npoints + ", SpawnLocations:" + this.spawnPositions.size());
@@ -275,7 +297,7 @@ public class ArenaArea {
 	// Save means Location with no players nearby
 	// ---> Spawn zombies in a location save for players
 	
-	final double distance = getArena().getSaveRadius();
+	final double distance = getArena().getConfig().getSaveRadius();
 	
 	final Location spawnLoc = getNewRandomLocation(false);
 	
@@ -310,12 +332,12 @@ public class ArenaArea {
 	
 	Location saveLoc = getNewSaveLocation(); // Do not break the save radius rule
 	
-	if (maxDistance < getArena().getSaveRadius()) {
-	    maxDistance += getArena().getSaveRadius();
+	if (maxDistance < getArena().getConfig().getSaveRadius()) {
+	    maxDistance += getArena().getConfig().getSaveRadius();
 	}
 	
 	for (ZvPPlayer player : getArena().getPlayers()) {
-	    if (saveLoc.distanceSquared(player.getLocation()) <= Math.pow(getArena().getSaveRadius() + maxDistance, 2)) {
+	    if (saveLoc.distanceSquared(player.getLocation()) <= Math.pow(getArena().getConfig().getSaveRadius() + maxDistance, 2)) {
 		return saveLoc.clone();
 	    }
 	}
@@ -326,7 +348,7 @@ public class ArenaArea {
 	if (contains(location)) {
 	    if (!this.spawnPositions.contains(location)) {
 		this.spawnPositions.add(location);
-		getArena().save();
+		getArena().getConfig().saveConfig();
 		ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Added spawnpoint (X:" + location.getBlockX() + " Y:" + location.getBlockY() + " Z:" + location.getBlockZ() + ") to Arena " + getArena().getID(), true, true);
 		return true;
 	    }
@@ -341,5 +363,66 @@ public class ArenaArea {
 	    return (other.getDiagonalSquared() == getDiagonalSquared() && other.getWorld().equals(getWorld()));
 	}
 	return false;
+    }
+    
+    private class RegionHelper {
+	
+	private ArenaArea area;
+	
+	public RegionHelper(ArenaArea area) {
+	    this.area = area;
+	}
+	
+	public void initializeRegion() {
+	    
+	    RegionManager regionManager = ZvP.getWorldGuardPlugin().getRegionManager(getWorld());
+	    
+	    if (regionManager.getRegion("zvpregion" + getArena().getID()) == null) { // region does not exist, will create one
+	    
+		ProtectedRegion zvpRegion;
+		
+		if (getArea().polygon.isPolygonal()) {
+		    List<BlockVector2D> points = new ArrayList<BlockVector2D>();
+		    
+		    for (Point polygonPoint : getArea().polygon.getPoints()) {
+			points.add(new BlockVector2D(polygonPoint.getX(), polygonPoint.getY()));
+		    }
+		    zvpRegion = new ProtectedPolygonalRegion("zvpregion" + getArena().getID(), points, 0, getWorld().getMaxHeight());
+		} else {
+		    BlockVector min = new BlockVector(getArea().polygon.getRectangularMinimum().getBlockX(), 0, getArea().polygon.getRectangularMinimum().getBlockZ());
+		    BlockVector max = new BlockVector(getArea().polygon.getRectangularMaximum().getBlockX(), getWorld().getMaxHeight(), getArea().polygon.getRectangularMaximum().getBlockZ());
+		    
+		    zvpRegion = new ProtectedCuboidRegion("zvpregion" + getArena().getID(), min, max);
+		}
+		
+		zvpRegion.setFlag(DefaultFlag.INTERACT, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.CHEST_ACCESS, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.USE, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.MOB_DAMAGE, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.MOB_SPAWNING, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.ITEM_DROP, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.ITEM_PICKUP, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.DAMAGE_ANIMALS, StateFlag.State.ALLOW);
+		zvpRegion.setFlag(DefaultFlag.POTION_SPLASH, StateFlag.State.ALLOW);
+		
+		ApplicableRegionSet regionSet = regionManager.getApplicableRegions(getNewRandomLocation(false));
+		if (regionSet.getRegions().size() == 1) {
+		    // There is already a region set at the arena. Try to set it as parent
+		    try {
+			ProtectedRegion parentRegion = (ProtectedRegion) regionSet.getRegions().toArray()[0];
+			zvpRegion.setParent(parentRegion);
+			zvpRegion.setPriority(50);
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+		}
+		regionManager.addRegion(zvpRegion);
+	    }
+	}
+	
+	public ArenaArea getArea() {
+	    return this.area;
+	}
+	
     }
 }

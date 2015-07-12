@@ -5,7 +5,9 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
-import me.Aubli.ZvP.Game.GameManager.ArenaStatus;
+import me.Aubli.ZvP.Game.GameEnums.ArenaStatus;
+import me.Aubli.ZvP.Listeners.EntityListener;
+import me.Aubli.ZvP.Translation.MessageKeys.game;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.ChatColor;
@@ -46,21 +48,17 @@ public class GameRunnable extends BukkitRunnable {
     public void run() {
 	
 	if (ZvP.getPluginLogger().isDebugMode() && (ZvP.getPluginLogger().getLogLevel() <= 100)) {
-	    this.arena.sendMessage("A:" + this.arena.getID() + " ;" + ChatColor.RED + this.arena.getStatus().toString() + ChatColor.RESET + "; " + this.arena.getRound() + ":" + this.arena.getWave() + " Z:" + this.arena.getLivingZombieAmount() + ":" + this.arena.getSpawningZombies() + " FS:" + this.firstSpawn + " SZ:" + this.spawnZombies + " T:" + this.seconds);
+	    this.arena.sendMessage("A:" + this.arena.getID() + " ;" + ChatColor.RED + this.arena.getStatus().toString() + ChatColor.RESET + "; " + this.arena.getCurrentRound() + ":" + this.arena.getCurrentWave() + " Z:" + this.arena.getLivingZombieAmount() + ":" + this.arena.getSpawningZombies() + " FS:" + this.firstSpawn + " SZ:" + this.spawnZombies + " T:" + this.seconds);
 	}
 	
 	if (this.seconds < this.startDelay) {	// Waiting for players
-	    if (this.arena.getRound() == 0 && this.arena.getWave() == 0) {
+	    if (this.arena.getCurrentRound() == 0 && this.arena.getCurrentWave() == 0) {
 		this.arena.setStatus(ArenaStatus.WAITING);
 	    }
 	    
 	    if (!this.arena.hasKit()) {
-		for (ZvPPlayer p : this.arena.getPlayers()) {
-		    if (p.hasKit()) {
-			p.sendMessage(MessageManager.getMessage("game:waiting"));
-		    }
-		}
 		this.seconds = 0;
+		this.arena.setPlayerLevel(this.startDelay);
 		return;
 	    }
 	    
@@ -71,7 +69,7 @@ public class GameRunnable extends BukkitRunnable {
 	}
 	
 	if (this.seconds == this.startDelay) {  // set game settings
-	    if (this.arena.getRound() == 0 && this.arena.getWave() == 0) {
+	    if (this.arena.getCurrentRound() == 0 && this.arena.getCurrentWave() == 0) {
 		this.arena.initArenaScore(false);
 		this.arena.setRound(1);
 		this.arena.setWave(1);
@@ -112,8 +110,8 @@ public class GameRunnable extends BukkitRunnable {
 			this.spawnGoal += this.arena.spawnZombies((int) (nextZombies * 0.06));
 		    } else if (missing >= ((int) (nextZombies * 0.08)) && ((int) (nextZombies * 0.02)) > 0) {
 			this.spawnGoal += this.arena.spawnZombies((int) (nextZombies * 0.02));
-		    } else if (missing > this.arena.getSpawnRate() && ((int) (this.arena.getSpawnRate() * 0.5)) > 0) {
-			this.spawnGoal += this.arena.spawnZombies(this.arena.getSpawnRate() / 2);
+		    } else if (missing > this.arena.getConfig().getSpawnRate() && ((int) (this.arena.getConfig().getSpawnRate() * 0.5)) > 0) {
+			this.spawnGoal += this.arena.spawnZombies(this.arena.getConfig().getSpawnRate() / 2);
 		    } else {
 			this.spawnGoal += this.arena.spawnZombies(1);
 		    }
@@ -124,13 +122,30 @@ public class GameRunnable extends BukkitRunnable {
 	    }
 	    
 	    if (this.firstSpawn == false && this.spawnZombies == false) {
+		
+		if (this.arena.getConfig().isAutoWaves()) {
+		    if (this.arena.hasNext() && EntityListener.hasInteractionTimeout()) {
+			if (!this.arena.getConfig().isVoteSystem()) {
+			    if (this.arena.getLivingZombieAmount() < (this.arena.getSpawningZombies() * EntityListener.ZOMBIEINTERACTIONFACTOR)) {
+				this.arena.next();
+				this.arena.updatePlayerBoards();
+				
+				ZvP.getPluginLogger().log(getClass(), Level.INFO, "Arena " + this.arena.getID() + " moved into the next wave cause of no zombie interaction!", true, true);
+				
+				this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, this.arena.getConfig().getBreakTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+				this.cancel();
+			    }
+			}
+		    }
+		}
+		
 		if (this.arena.getLivingZombieAmount() == 0) {
 		    
 		    this.arena.updatePlayerBoards();
 		    boolean stop = this.arena.next(); // Stop checks if the last round is over
 		    
 		    if (!stop) {
-			if (this.arena.useVoteSystem()) {
+			if (this.arena.getConfig().isVoteSystem()) {
 			    this.arena.setStatus(ArenaStatus.VOTING);
 			    this.arena.setTaskID(new BukkitRunnable() {
 				
@@ -138,17 +153,17 @@ public class GameRunnable extends BukkitRunnable {
 				public void run() {
 				    
 				    if (GameRunnable.this.arena.getStatus() == ArenaStatus.VOTING) {
-					GameRunnable.this.arena.sendMessage(MessageManager.getMessage("game:vote_request"));
+					GameRunnable.this.arena.sendMessage(MessageManager.getMessage(game.vote_request));
 				    } else {
 					this.cancel();
 				    }
 				}
-			    }.runTaskTimer(ZvP.getInstance(), 10L, 13 * 20L).getTaskId());
+			    }.runTaskTimer(ZvP.getInstance(), 10L, 17 * 20L).getTaskId());
 			    
 			    this.cancel();
 			} else {
 			    this.arena.setStatus(ArenaStatus.BREAKWAITING);
-			    this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, this.arena.getArenaBreakTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+			    this.arena.setTaskID(new GameRunnable(GameRunnable.this.arena, this.arena.getConfig().getBreakTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
 			    this.cancel();
 			}
 		    } else { // End of Game
@@ -226,9 +241,9 @@ public class GameRunnable extends BukkitRunnable {
 			    deaths += p.getDeaths();
 			}
 			
-			String[] donP = MessageManager.getMessage("game:won_messages").split(";");
+			String[] donP = MessageManager.getMessage(game.won_messages).split(";");
 			int index = this.rand.nextInt(donP.length);
-			String endMessage = MessageManager.getFormatedMessage("game:won", kills, (this.arena.getMaxRounds() * this.arena.getMaxWaves()), deaths, Math.round(money), donP[index]);
+			String endMessage = MessageManager.getFormatedMessage(game.won, kills, (this.arena.getConfig().getMaxRounds() * this.arena.getConfig().getMaxWaves()), deaths, Math.round(money), donP[index]);
 			// TODO change message. Econ doesnt make much sense here
 			this.arena.sendMessage(endMessage);
 			this.cancel();

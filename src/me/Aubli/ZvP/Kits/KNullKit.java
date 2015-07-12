@@ -37,6 +37,11 @@ public class KNullKit implements IZvPKit {
     }
     
     @Override
+    public String getPermissionNode() {
+	return ""; // Return "" because class is not used
+    }
+    
+    @Override
     public double getPrice() {
 	return 0;
     }

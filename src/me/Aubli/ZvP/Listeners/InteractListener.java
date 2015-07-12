@@ -15,6 +15,10 @@ import me.Aubli.ZvP.Sign.InteractSign;
 import me.Aubli.ZvP.Sign.ShopSign;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
+import me.Aubli.ZvP.Translation.MessageKeys.arena;
+import me.Aubli.ZvP.Translation.MessageKeys.error;
+import me.Aubli.ZvP.Translation.MessageKeys.game;
+import me.Aubli.ZvP.Translation.MessageKeys.manage;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
@@ -50,20 +54,20 @@ public class InteractListener implements Listener {
 		    
 		    if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			this.clickLoc.put(event.getAction(), event.getClickedBlock().getLocation().clone());
-			eventPlayer.sendMessage(MessageManager.getMessage("manage:right_saved"));
+			eventPlayer.sendMessage(MessageManager.getMessage(manage.right_saved));
 		    }
 		    
 		    if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
 			this.clickLoc.put(event.getAction(), event.getClickedBlock().getLocation().clone());
-			eventPlayer.sendMessage(MessageManager.getMessage("manage:left_saved"));
+			eventPlayer.sendMessage(MessageManager.getMessage(manage.left_saved));
 		    }
 		    
 		    if (this.clickLoc.containsKey(Action.RIGHT_CLICK_BLOCK) && this.clickLoc.containsKey(Action.LEFT_CLICK_BLOCK)) {
 			Arena arena = GameManager.getManager().addArena(this.clickLoc.get(Action.LEFT_CLICK_BLOCK), this.clickLoc.get(Action.RIGHT_CLICK_BLOCK));
 			if (arena != null) {
-			    eventPlayer.sendMessage(MessageManager.getFormatedMessage("manage:arena_saved", arena.getID()));
+			    eventPlayer.sendMessage(MessageManager.getFormatedMessage(manage.arena_saved, arena.getID()));
 			} else {
-			    eventPlayer.sendMessage(MessageManager.getMessage("error:arena_place"));
+			    eventPlayer.sendMessage(MessageManager.getMessage(error.arena_place));
 			}
 			
 			this.clickLoc.clear();
@@ -79,7 +83,7 @@ public class InteractListener implements Listener {
 		    event.setCancelled(true);
 		    
 		    locationList.add(event.getClickedBlock().getLocation().clone());
-		    eventPlayer.sendMessage(MessageManager.getFormatedMessage("manage:position_saved_poly", locationList.size()));
+		    eventPlayer.sendMessage(MessageManager.getFormatedMessage(manage.position_saved_poly, locationList.size()));
 		    return;
 		} else {
 		    ZvP.removeTool(eventPlayer);
@@ -94,14 +98,14 @@ public class InteractListener implements Listener {
 			if (arena.containsLocation(eventPlayer.getLocation())) {
 			    boolean success = arena.getArea().addSpawnPosition(event.getClickedBlock().getLocation().clone().add(0, 1, 0));
 			    if (success) {
-				eventPlayer.sendMessage(MessageManager.getFormatedMessage("manage:position_saved", "Position in arena " + arena.getID()));
+				eventPlayer.sendMessage(MessageManager.getFormatedMessage(manage.position_saved, "Position in arena " + arena.getID()));
 			    } else {
-				eventPlayer.sendMessage(MessageManager.getMessage("manage:position_not_saved"));
+				eventPlayer.sendMessage(MessageManager.getMessage(manage.position_not_saved));
 			    }
 			    return;
 			}
 		    }
-		    eventPlayer.sendMessage(MessageManager.getMessage("manage:position_not_in_arena"));
+		    eventPlayer.sendMessage(MessageManager.getMessage(manage.position_not_in_arena));
 		    return;
 		} else {
 		    ZvP.removeTool(eventPlayer);
@@ -123,17 +127,17 @@ public class InteractListener implements Listener {
 				    
 				    if (!success) {
 					event.setCancelled(true);
-					eventPlayer.sendMessage(MessageManager.getMessage("arena:not_ready"));
+					eventPlayer.sendMessage(MessageManager.getMessage(arena.not_ready));
 					return;
 				    }
 				} else {
 				    event.setCancelled(true);
-				    eventPlayer.sendMessage(MessageManager.getMessage("arena:offline"));
+				    eventPlayer.sendMessage(MessageManager.getMessage(arena.offline));
 				    return;
 				}
 			    } else {
 				event.setCancelled(true);
-				eventPlayer.sendMessage(MessageManager.getMessage("error:arena_not_available"));
+				eventPlayer.sendMessage(MessageManager.getMessage(error.arena_not_available));
 				return;
 			    }
 			} else {
@@ -143,7 +147,7 @@ public class InteractListener implements Listener {
 			}
 		    } else {
 			event.setCancelled(true);
-			eventPlayer.sendMessage(MessageManager.getMessage("game:already_in_game"));
+			eventPlayer.sendMessage(MessageManager.getMessage(game.already_in_game));
 			return;
 		    }
 		} else if (this.sm.getType(event.getClickedBlock().getLocation()) == SignType.SHOP_SIGN) {
@@ -179,7 +183,7 @@ public class InteractListener implements Listener {
 			}
 		    } else {
 			event.setCancelled(true);
-			eventPlayer.sendMessage(MessageManager.getMessage("game:not_in_game"));
+			eventPlayer.sendMessage(MessageManager.getMessage(game.not_in_game));
 			return;
 		    }
 		}

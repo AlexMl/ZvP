@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Translation.MessageKeys.category;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Material;
@@ -24,11 +25,11 @@ import com.google.common.io.Files;
 public class ShopManager {
     
     public enum ItemCategory {
-	FOOD(new ItemStack(Material.APPLE), MessageManager.getMessage("category:food")),
-	ARMOR(new ItemStack(Material.IRON_HELMET), MessageManager.getMessage("category:armor")),
-	WEAPON(new ItemStack(Material.STONE_SWORD), MessageManager.getMessage("category:weapon")),
-	POTION(new Potion(PotionType.INSTANT_HEAL, 2).toItemStack(1), MessageManager.getMessage("category:potion")),
-	MISC(new ItemStack(Material.BUCKET), MessageManager.getMessage("category:misc")),
+	FOOD(new ItemStack(Material.APPLE), MessageManager.getMessage(category.food)),
+	ARMOR(new ItemStack(Material.IRON_HELMET), MessageManager.getMessage(category.armor)),
+	WEAPON(new ItemStack(Material.STONE_SWORD), MessageManager.getMessage(category.weapon)),
+	POTION(new Potion(PotionType.INSTANT_HEAL, 2).toItemStack(1), MessageManager.getMessage(category.potion)),
+	MISC(new ItemStack(Material.BUCKET), MessageManager.getMessage(category.misc)),
 	NULL(null, ""), ;
 	
 	private ItemStack icon;
@@ -291,9 +292,5 @@ public class ShopManager {
 	    }
 	}
 	return null;
-    }
-    
-    public double getPrice(ItemStack item) {
-	return 0;
     }
 }

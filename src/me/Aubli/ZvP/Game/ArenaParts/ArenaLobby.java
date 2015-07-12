@@ -1,4 +1,4 @@
-package me.Aubli.ZvP.Game;
+package me.Aubli.ZvP.Game.ArenaParts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,10 @@ import java.util.Random;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.GameManager;
+import me.Aubli.ZvP.Game.ZvPPlayer;
+import me.Aubli.ZvP.Translation.MessageKeys.game;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
@@ -121,7 +125,7 @@ public class ArenaLobby {
 		player.openKitSelectGUI();
 		addPlayer(player);
 	    }
-	}, (int) Math.ceil(this.arena.getArenaJoinTime() / 4) * 20L);
+	}, (int) Math.ceil(this.arena.getConfig().getJoinTime() / 4) * 20L);
 	
 	player.getPlayer().teleport(getRandomLocation(), TeleportCause.PLUGIN);
 	player.getPlayer().setGameMode(GameMode.SURVIVAL);
@@ -163,9 +167,9 @@ public class ArenaLobby {
 	if (!this.playerList.contains(player) && !player.hasCanceled()) {
 	    player.getArena().removePreLobbyPlayer(player);
 	    
-	    player.sendMessage(MessageManager.getFormatedMessage("game:joined", this.arena.getID()));
-	    sendMessage(MessageManager.getFormatedMessage("game:player_joined", player.getName()));
-	    getArena().sendMessage(MessageManager.getFormatedMessage("game:player_joined", player.getName()));
+	    player.sendMessage(MessageManager.getFormatedMessage(game.joined, this.arena.getID()));
+	    sendMessage(MessageManager.getFormatedMessage(game.player_joined, player.getName()));
+	    getArena().sendMessage(MessageManager.getFormatedMessage(game.player_joined, player.getName()));
 	    
 	    this.joinProcessRunning = false;
 	    this.playerList.add(player);
@@ -184,10 +188,10 @@ public class ArenaLobby {
 		@Override
 		public void run() {
 		    
-		    if (getPlayers().length >= getArena().getMinPlayers()) { // Dont count down if the minimum is not reached
-			if (this.seconds < getArena().getArenaJoinTime() * 20) {
-			    setPlayerLevel((ArenaLobby.this.arena.getArenaJoinTime() * 20 - this.seconds) / 20);
-			} else if (this.seconds > getArena().getArenaJoinTime() && ArenaLobby.this.playerList.size() > 0) {
+		    if (getPlayers().length >= getArena().getConfig().getMinPlayers()) { // Dont count down if the minimum is not reached
+			if (this.seconds < getArena().getConfig().getJoinTime() * 20) {
+			    setPlayerLevel((ArenaLobby.this.arena.getConfig().getJoinTime() * 20 - this.seconds) / 20);
+			} else if (this.seconds > getArena().getConfig().getJoinTime() && ArenaLobby.this.playerList.size() > 0) {
 			    ZvP.getPluginLogger().log(ArenaLobby.class, Level.FINE, "PreLobby Task is over! Adding players to Arena " + getArena().getID() + ".", true);
 			    
 			    for (int i = 0; i < ArenaLobby.this.playerList.size();) {
@@ -198,7 +202,7 @@ public class ArenaLobby {
 				return;
 			    }
 			    
-			} else if (this.seconds > getArena().getArenaJoinTime() && ArenaLobby.this.playerList.size() == 0) {
+			} else if (this.seconds > getArena().getConfig().getJoinTime() && ArenaLobby.this.playerList.size() == 0) {
 			    ArenaLobby.this.playerList.clear();
 			    this.cancel();
 			}
@@ -209,7 +213,8 @@ public class ArenaLobby {
 		}
 	    };
 	    this.task.runTaskTimer(ZvP.getInstance(), 0L, 1L);
-	} else if (getArena().getPlayers().length >= getArena().getMinPlayers() && getArena().isRunning()) { // Player joined PreLobby and Arena is already running
+	} else if (getArena().getPlayers().length >= getArena().getConfig().getMinPlayers() && getArena().isRunning()) { // Player joined PreLobby and Arena is already running
+	
 	    boolean success = getArena().addPlayer(player);
 	    removePlayer(player);
 	    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Added player " + player.getName() + " to running game! Arena returned: " + (success ? "success" : "failure").toUpperCase() + "!", true);

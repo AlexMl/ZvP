@@ -1,21 +1,19 @@
-package me.Aubli.ZvP.Game;
+package me.Aubli.ZvP.Game.ArenaParts;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.Game.Arena;
+import me.Aubli.ZvP.Game.GameEnums.ScoreType;
+import me.Aubli.ZvP.Game.ZvPPlayer;
+import me.Aubli.ZvP.Translation.MessageKeys.error;
 import me.Aubli.ZvP.Translation.MessageManager;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 
 public class ArenaScore {
-    
-    public enum ScoreType {
-	DEATH_SCORE,
-	KILL_SCORE,
-	SHOP_SCORE;
-    }
     
     private Arena arena;
     
@@ -106,7 +104,7 @@ public class ArenaScore {
 	    printResponse(response);
 	    
 	    if (!response.transactionSuccess()) {
-		player.sendMessage(MessageManager.getMessage("error:transaction_failed"));
+		player.sendMessage(MessageManager.getMessage(error.transaction_failed));
 		ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + "; Task:" + type.name(), false);
 	    }
 	}
@@ -137,7 +135,7 @@ public class ArenaScore {
 		printResponse(response);
 		
 		if (!response.transactionSuccess()) {
-		    player.sendMessage(MessageManager.getMessage("error:transaction_failed"));
+		    player.sendMessage(MessageManager.getMessage(error.transaction_failed));
 		    ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + "; Task:" + type.name(), false);
 		}
 	    } else if (type == ScoreType.DEATH_SCORE) {
