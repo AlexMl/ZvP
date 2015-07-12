@@ -41,6 +41,7 @@ public class CommentUtil {
 	    }
 	    writer.flush();
 	    writer.close();
+	    scan.close();
 	    return true;
 	    
 	} catch (FileNotFoundException e) {
