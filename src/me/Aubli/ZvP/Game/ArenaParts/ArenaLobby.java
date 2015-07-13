@@ -184,18 +184,20 @@ public class ArenaLobby {
 	    this.task = new BukkitRunnable() {
 		
 		private int seconds = 0;
+		private boolean countDownOver = false;
 		
 		@Override
 		public void run() {
 		    
-		    if (getPlayers().length >= getArena().getConfig().getMinPlayers()) { // Dont count down if the minimum is not reached
+		    if (getPlayers().length >= getArena().getConfig().getMinPlayers() || this.countDownOver) { // Dont count down if the minimum is not reached
 			if (this.seconds < getArena().getConfig().getJoinTime() * 20) {
 			    setPlayerLevel((ArenaLobby.this.arena.getConfig().getJoinTime() * 20 - this.seconds) / 20);
-			} else if (this.seconds > getArena().getConfig().getJoinTime() && ArenaLobby.this.playerList.size() > 0) {
+			} else if (this.seconds > getArena().getConfig().getJoinTime() && getPlayers().length > 0) {
 			    ZvP.getPluginLogger().log(ArenaLobby.class, Level.FINE, "PreLobby Task is over! Adding players to Arena " + getArena().getID() + ".", true);
+			    this.countDownOver = true;
 			    
-			    for (int i = 0; i < ArenaLobby.this.playerList.size();) {
-				ZvPPlayer player = ArenaLobby.this.playerList.get(i);
+			    for (int i = 0; i < getPlayers().length;) {
+				ZvPPlayer player = getPlayers()[i];
 				boolean success = getArena().addPlayer(player);
 				removePlayer(player);
 				ZvP.getPluginLogger().log(ArenaLobby.class, Level.FINE, "Added player " + player.getName() + "! Arena returned: " + (success ? "success" : "failure").toUpperCase() + "!", true);
