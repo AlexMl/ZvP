@@ -1,5 +1,9 @@
 Changelog:
 
+2.8.1:
+*Fixed pvp in PreLobby
+*Fixed PreLobby countdown bug if minimumplayers is set to low
+
 2.8.0:
 *Start new waves automatically
 *Added configurable permissions for kits
