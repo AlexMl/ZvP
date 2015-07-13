@@ -130,6 +130,7 @@ public class ArenaLobby {
 	player.getPlayer().teleport(getRandomLocation(), TeleportCause.PLUGIN);
 	player.getPlayer().setGameMode(GameMode.SURVIVAL);
 	player.getArena().addPreLobbyPlayer(player);
+	player.setSpawnProtected(true); // INFO Messy workaround need cleaner solution
 	this.joinProcessRunning = true;
 	
 	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Player " + player.getName() + " joined PreLobby " + this.arena.getID(), true, true);

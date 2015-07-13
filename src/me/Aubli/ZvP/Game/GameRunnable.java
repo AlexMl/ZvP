@@ -79,6 +79,10 @@ public class GameRunnable extends BukkitRunnable {
 	    this.arena.removePlayerBoards();
 	    this.arena.updatePlayerBoards();
 	    
+	    for (ZvPPlayer player : this.arena.getPlayers()) {
+		player.setSpawnProtected(false);
+	    }
+	    
 	    this.arena.setStatus(ArenaStatus.RUNNING);
 	    
 	    this.firstSpawn = true;
