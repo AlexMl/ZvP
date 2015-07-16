@@ -392,6 +392,32 @@ public class ZvPCommands implements CommandExecutor {
 		    }
 		}
 		
+		if (args[0].equalsIgnoreCase("join")) {
+		    if (playerSender.hasPermission("zvp.play")) {
+			if (!GameManager.getManager().isInGame(playerSender)) {
+			    Arena arena = GameManager.getManager().getArena(parseInt(args[1]));
+			    
+			    if (arena != null) {
+				boolean success = GameManager.getManager().createPlayer(playerSender, arena, SignManager.getManager().getSigns(arena)[0].getLobby());
+				
+				if (!success) {
+				    playerSender.sendMessage(MessageManager.getMessage(MessageKeys.arena.not_ready));
+				}
+				return true;
+			    } else {
+				playerSender.sendMessage(MessageManager.getMessage(error.arena_not_available));
+				return true;
+			    }
+			} else {
+			    playerSender.sendMessage(MessageManager.getMessage(MessageKeys.game.already_in_game));
+			    return true;
+			}
+		    } else {
+			commandDenied(playerSender);
+			return true;
+		    }
+		}
+		
 		if (args[0].equalsIgnoreCase("addkit")) {
 		    if (playerSender.hasPermission("zvp.manage.kit")) {
 			if (KitManager.getManager().getKit(args[1]) == null) {
@@ -733,6 +759,7 @@ public class ZvPCommands implements CommandExecutor {
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp status");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp leave");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp join [Arena-ID]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop [Arena-ID]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp addkit [Name]");
