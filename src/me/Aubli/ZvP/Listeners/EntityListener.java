@@ -93,6 +93,9 @@ public class EntityListener implements Listener {
 		
 		if (event.getDamager() instanceof Zombie) {
 		    entityInteraction = true;
+		    if (victim.getArena().getConfig().isIncreaseDifficulty()) {
+			event.setDamage(event.getDamage() * victim.getArena().getDifficultyTool().getZombieStrengthFactor());
+		    }
 		}
 	    }
 	}

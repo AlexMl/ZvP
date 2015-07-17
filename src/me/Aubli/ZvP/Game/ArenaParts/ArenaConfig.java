@@ -33,6 +33,7 @@ public class ArenaConfig {
     private boolean keepInventory;
     private boolean separatedScores;
     private boolean playerVsPlayer;
+    private boolean increaseDifficulty;
     
     private int maxPlayers;
     private int minPlayers;
@@ -76,6 +77,7 @@ public class ArenaConfig {
 	this.keepInventory = false;
 	this.separatedScores = false;
 	this.playerVsPlayer = false;
+	this.increaseDifficulty = true;
 	
 	int maxP = ((int) ((Math.ceil(getArena().getArea().getDiagonal() + 2)) / 4));
 	this.maxPlayers = maxP < 3 ? 3 : (maxP > ZvPConfig.getMaxPlayers() ? ZvPConfig.getMaxPlayers() : maxP);
@@ -102,6 +104,7 @@ public class ArenaConfig {
 	    this.arenaConfig.set("arena.ID", getArena().getID());
 	    this.arenaConfig.set("arena.Online", !(getArena().getStatus() == ArenaStatus.STOPED));
 	    this.arenaConfig.set("arena.Difficulty", getArena().getDifficulty().name());
+	    this.arenaConfig.set("arena.increaseDifficulty", isIncreaseDifficulty());
 	    
 	    this.arenaConfig.set("arena.minPlayers", getMinPlayers());
 	    this.arenaConfig.set("arena.maxPlayers", getMaxPlayers());
@@ -154,6 +157,7 @@ public class ArenaConfig {
 	CommentUtil.insertComment(this.arenaFile, "ID", "The internal identifier of the arena!");
 	CommentUtil.insertComment(this.arenaFile, "Online", "'true': The arena is online and can be used.#'false': The arena is offline and can not be used.");
 	CommentUtil.insertComment(this.arenaFile, "Difficulty", "The Difficulty of the arena. There are three modes: EASY, NORMAL, HARD#Each mode will increase amount and health of zombies.");
+	CommentUtil.insertComment(this.arenaFile, "increaseDifficulty", "If enabled, the health and strength of zombies increase as the game progresses.");
 	CommentUtil.insertComment(this.arenaFile, "minPlayers", "Minimum amount of players. Set at least to 1.");
 	CommentUtil.insertComment(this.arenaFile, "maxPlayers", "Maximal amount of players.");
 	CommentUtil.insertComment(this.arenaFile, "rounds", "The amount of rounds you will play.#Note that one round has several waves. To get the full number of waves multiple rounds and waves.");
@@ -192,6 +196,7 @@ public class ArenaConfig {
 	this.autoWaves = this.arenaConfig.getBoolean("arena.autoWaves", true);
 	this.separatedScores = this.arenaConfig.getBoolean("arena.separatePlayerScores", false);
 	this.playerVsPlayer = this.arenaConfig.getBoolean("arena.enablePvP", false);
+	this.increaseDifficulty = this.arenaConfig.getBoolean("arena.increaseDifficulty", true);
 	
 	if (isKeepInventory() && ZvPConfig.getEnableKits()) {
 	    this.keepInventory = false;
@@ -237,6 +242,10 @@ public class ArenaConfig {
     
     public boolean isPlayerVsPlayer() {
 	return this.playerVsPlayer;
+    }
+    
+    public boolean isIncreaseDifficulty() {
+	return this.increaseDifficulty;
     }
     
     public Arena getArena() {

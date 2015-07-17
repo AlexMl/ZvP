@@ -44,6 +44,14 @@ public class ArenaDifficulty {
 	return (getDifficulty().getLevel() + 1.0) / 2.0;
     }
     
+    public double getZombieStrengthFactor() {
+	return ((((getArena().getCurrentRound() * 5.0 + getArena().getCurrentWave()) - 6.0) + 5.0) / 100.0 + 1.0) * ((getDifficulty().getLevel() + 1.0) / 2.0);
+    }
+    
+    public double getZombieHealthFactor() {
+	return ((((getArena().getCurrentRound() * 5.0 + getArena().getCurrentWave()) - 6.0) + 0.0) / 100.0 + 1.0) * ((getDifficulty().getLevel() + 1.0) / 2.0);
+    }
+    
     public void customizeEntity(Entity zombie) {
 	Zombie z = (Zombie) zombie;
 	z.setRemoveWhenFarAway(false);
@@ -144,7 +152,11 @@ public class ArenaDifficulty {
 		break;
 	}
 	
-	z.setMaxHealth(maxHealth);
+	if (getArena().getConfig().isIncreaseDifficulty()) {
+	    maxHealth *= getZombieHealthFactor();
+	}
+	
+	z.setMaxHealth(Math.ceil(maxHealth));
 	z.setHealth(maxHealth);
 	z.getEquipment().setArmorContents(armorContent);
 	z.getEquipment().setBootsDropChance(dropchance);
