@@ -2,6 +2,8 @@ Changelog:
 
 2.8.3:
 *Increase zombie health and strength during game
+*Logger improvements
+*Fixed kit select poping up after arena stop/player left
 
 2.8.2:
 *Added join command
