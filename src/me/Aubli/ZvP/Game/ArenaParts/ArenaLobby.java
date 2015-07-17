@@ -1,7 +1,9 @@
 package me.Aubli.ZvP.Game.ArenaParts;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 
@@ -19,6 +21,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 
 public class ArenaLobby {
@@ -32,6 +35,7 @@ public class ArenaLobby {
     private Random rand;
     
     private BukkitRunnable task;
+    private Map<ZvPPlayer, BukkitTask> openKitSelectTasks;
     
     private boolean joinProcessRunning;
     
@@ -52,6 +56,8 @@ public class ArenaLobby {
 	this.arena = arena;
 	this.centerLoc = center.clone();
 	this.locations = locations != null ? locations : new ArrayList<Location>();
+	
+	this.openKitSelectTasks = new HashMap<ZvPPlayer, BukkitTask>();
 	
 	this.playerList = new ArrayList<ZvPPlayer>();
 	this.rand = arenaRandom;
@@ -114,11 +120,18 @@ public class ArenaLobby {
     
     public void removePlayer(ZvPPlayer player) {
 	this.playerList.remove(player);
+	
+	if (this.openKitSelectTasks.containsKey(player)) {
+	    if (this.openKitSelectTasks.get(player) != null) {
+		this.openKitSelectTasks.get(player).cancel();
+		this.openKitSelectTasks.remove(player);
+	    }
+	}
     }
     
     public void addPlayerToLobby(final ZvPPlayer player) {
 	
-	Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
+	BukkitTask kitSelectTask = Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
 	    
 	    @Override
 	    public void run() {
@@ -127,6 +140,7 @@ public class ArenaLobby {
 	    }
 	}, (int) Math.ceil(this.arena.getConfig().getJoinTime() / 4) * 20L);
 	
+	this.openKitSelectTasks.put(player, kitSelectTask);
 	player.getPlayer().teleport(getRandomLocation(), TeleportCause.PLUGIN);
 	player.getPlayer().setGameMode(GameMode.SURVIVAL);
 	player.getArena().addPreLobbyPlayer(player);
@@ -231,13 +245,22 @@ public class ArenaLobby {
 	    this.task = null;
 	}
 	
+	if (this.openKitSelectTasks != null) {
+	    for (ZvPPlayer player : this.openKitSelectTasks.keySet()) {
+		if (this.openKitSelectTasks.get(player) != null) {
+		    this.openKitSelectTasks.get(player).cancel();
+		}
+	    }
+	}
+	
 	if (!this.playerList.isEmpty()) {
-	    for (ZvPPlayer player : getPlayers()) {
-		player.reset();
+	    for (int i = 0; i < getPlayers().length; i++) {
+		removePlayer(getPlayers()[i]);
 	    }
 	}
 	
 	this.playerList.clear();
+	this.openKitSelectTasks.clear();
 	this.joinProcessRunning = false;
 	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "PreLobby (Arena:" + getArena().getID() + ") stopt tasks", false, true);
     }
