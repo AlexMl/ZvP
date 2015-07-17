@@ -45,6 +45,8 @@ public class FileConverter {
 			int arenaID = conf.getInt("arena.ID");
 			boolean online = conf.getBoolean("arena.Online");
 			
+			String difficulty = conf.getString("arena.Difficulty", "NORMAL");
+			
 			int minPlayers = conf.getInt("arena.minPlayers");
 			int maxPlayers = conf.getInt("arena.maxPlayers");
 			int rounds = conf.getInt("arena.rounds");
@@ -59,52 +61,34 @@ public class FileConverter {
 			boolean useVoteSystem = conf.getBoolean("arena.useVoteSystem", true);
 			boolean separateScores = conf.getBoolean("arena.separatePlayerScores", false);
 			boolean increaseDifficulty = conf.getBoolean("arena.increaseDifficulty", true);
+			boolean autoWaves = conf.getBoolean("arena.autoWaves", true);
+			boolean enablePvP = conf.getBoolean("arena.enablePvP", false);
 			
 			int joinTime = conf.getInt("arena.joinTime", 15);
 			int breakTime = conf.getInt("arena.timeBetweenWaves", 90);
 			double zombieFund = conf.getDouble("arena.zombieFund", 0.37);
 			double deathFee = conf.getDouble("arena.deathFee", 3);
 			
-			// Saveradius, spawnProtection, difficulty, autoWaves, pvp
+			// Saveradius, spawnProtection
 			double saveRadius;
-			boolean spawnProtection, autoWaves, enablePvP;
+			boolean spawnProtection;
 			int duration;
-			String difficulty;
 			if (fileVersion == null || parseVersion(fileVersion) < 240.0) {
 			    saveRadius = conf.getDouble("arena.saveRadius", 4.0);
 			    spawnProtection = true;
 			    duration = 5;
-			    difficulty = "NORMAL";
-			    autoWaves = true;
-			    enablePvP = false;
 			} else if (parseVersion(fileVersion) >= 240.0 && parseVersion(fileVersion) < 260.0) {
 			    saveRadius = conf.getDouble("arena.safety.saveRadius", 4.0);
 			    spawnProtection = conf.getBoolean("arena.safety.SpawnProtection.enabled", true);
 			    duration = conf.getInt("arena.safety.SpawnProtection.duration", 5);
-			    difficulty = conf.getString("arena.Difficulty");
-			    autoWaves = true;
-			    enablePvP = false;
-			} else if (parseVersion(fileVersion) >= 260.0 && parseVersion(fileVersion) < 280.0) {
+			} else if (parseVersion(fileVersion) >= 260.0) {
 			    saveRadius = conf.getDouble("arena.saveRadius", 4.0);
 			    spawnProtection = conf.getBoolean("arena.enableSpawnProtection", true);
 			    duration = conf.getInt("arena.spawnProtectionDuration", 5);
-			    difficulty = conf.getString("arena.Difficulty");
-			    autoWaves = true;
-			    enablePvP = false;
-			} else if (parseVersion(fileVersion) >= 280.0) {
-			    saveRadius = conf.getDouble("arena.saveRadius", 4.0);
-			    spawnProtection = conf.getBoolean("arena.enableSpawnProtection", true);
-			    duration = conf.getInt("arena.spawnProtectionDuration", 5);
-			    difficulty = conf.getString("arena.Difficulty");
-			    autoWaves = conf.getBoolean("arena.autoWaves");
-			    enablePvP = conf.getBoolean("arena.enablePvP");
 			} else {
 			    saveRadius = 4.0;
 			    spawnProtection = true;
 			    duration = 5;
-			    difficulty = "NORMAL";
-			    autoWaves = true;
-			    enablePvP = false;
 			}
 			
 			// PreLobby
@@ -185,15 +169,7 @@ public class FileConverter {
 			boolean enabled = conf.getBoolean("enabled", true);
 			String icon = conf.getString("icon");
 			List<String> itemList = conf.getStringList("items");
-			double price;
-			
-			if (fileVersion == null || parseVersion(fileVersion) < 250) {
-			    price = 0.0;
-			} else if (parseVersion(fileVersion) >= 250) {
-			    price = conf.getDouble("price");
-			} else {
-			    price = 0.0;
-			}
+			double price = conf.getDouble("price", 0.0);
 			
 			backupFile(file);
 			file.delete();
