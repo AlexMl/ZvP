@@ -128,7 +128,8 @@ public class GameManager {
 	    // Version 2.6.0 needs converted arena files too
 	    // version 2.7.0 needs converted positions in arena file
 	    // version 2.8.0 has new config values --> ordering
-	    ZvP.getConverter().convert(FileType.ARENAFILE, arenaFile, 280.0);
+	    // version 2.8.3 has new config value --> new order
+	    ZvP.getConverter().convert(FileType.ARENAFILE, arenaFile, 283.0);
 	    
 	    try {
 		Arena arena = new Arena(arenaFile);

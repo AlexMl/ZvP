@@ -58,6 +58,7 @@ public class FileConverter {
 			boolean keepInventory = conf.getBoolean("arena.keepInventory", false);
 			boolean useVoteSystem = conf.getBoolean("arena.useVoteSystem", true);
 			boolean separateScores = conf.getBoolean("arena.separatePlayerScores", false);
+			boolean increaseDifficulty = conf.getBoolean("arena.increaseDifficulty", true);
 			
 			int joinTime = conf.getInt("arena.joinTime", 15);
 			int breakTime = conf.getInt("arena.timeBetweenWaves", 90);
@@ -139,6 +140,7 @@ public class FileConverter {
 			conf.set("arena.ID", arenaID);
 			conf.set("arena.Online", online);
 			conf.set("arena.Difficulty", difficulty);
+			conf.set("arena.increaseDifficulty", increaseDifficulty);
 			
 			conf.set("arena.minPlayers", minPlayers);
 			conf.set("arena.maxPlayers", maxPlayers);
