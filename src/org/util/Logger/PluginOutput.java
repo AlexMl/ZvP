@@ -99,7 +99,7 @@ public class PluginOutput {
     }
     
     private void logData(Class<?> senderClass, Level level, String message, Exception exception) {
-	SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+	SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss ('UTC' Z)");
 	Date currentTime = new Date();
 	
 	try {
