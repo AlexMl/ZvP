@@ -1,5 +1,9 @@
 Changelog:
 
+2.8.4:
+*Added lapis lazuli to the shop.
+*Added time information to the logger.
+
 2.8.3:
 *Increase zombie health and strength during game
 *Logger improvements
