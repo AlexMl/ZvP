@@ -58,7 +58,7 @@ public class ItemStorage {
      * @param content
      *        The Array of Shopitems
      */
-    public static void saveItemsToFile(File saveFile, String configSection, ShopItem[] content) {
+    public static void saveItemsToFile(File saveFile, String configSection, List<ShopItem> content) {
 	// - { id: IRON_SWORD, amount: 1, data: 0, ench: {DAMAGE_ALL:1}, Price: 5.0}
 	
 	List<String> itemList = new ArrayList<String>();
@@ -149,7 +149,8 @@ public class ItemStorage {
     private static void save(File saveFile, String configSection, List<String> content) throws IOException {
 	FileConfiguration conf = YamlConfiguration.loadConfiguration(saveFile);
 	
-	conf.addDefault(configSection, content);
+	// INFO: Replace complete list and override custom settings. addDefault not applicable for listsections!
+	conf.set(configSection, content);
 	
 	conf.options().copyDefaults(true);
 	conf.save(saveFile);
