@@ -42,6 +42,8 @@ public class TabText {
     private int[] tabs;
     private int numPages;
     private String[] lines;
+    
+    @SuppressWarnings("serial")
     private Map<Integer, String> charList = new HashMap<Integer, String>() {
 	
 	{
