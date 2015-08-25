@@ -19,6 +19,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.Potion;
@@ -176,6 +177,7 @@ public class KitManager {
 		    }
 		}
 		
+		kitMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_UNBREAKABLE);
 		kitMeta.setDisplayName(ChatColor.DARK_GRAY + kit.getName());
 		kitMeta.setLore(lore);
 		kitItem.setItemMeta(kitMeta);

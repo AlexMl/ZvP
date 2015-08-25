@@ -22,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -79,6 +80,7 @@ public class SignChangelistener implements Listener {
 						    ItemStack icon = cat.getIcon().clone();
 						    ItemMeta meta = icon.getItemMeta();
 						    meta.setDisplayName(cat.toString());
+						    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_UNBREAKABLE);
 						    icon.setItemMeta(meta);
 						    catSelect.addItem(icon);
 						}
