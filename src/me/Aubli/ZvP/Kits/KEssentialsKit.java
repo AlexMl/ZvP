@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+
+import me.Aubli.ZvP.ZvP;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -239,7 +242,7 @@ public class KEssentialsKit implements IZvPKit, Comparable<IZvPKit> {
 	    }
 	    
 	} catch (Exception e) {
-	    e.printStackTrace();
+	    ZvP.getPluginLogger().log(getClass(), Level.WARNING, "Error while loading Essentials kit " + getName() + ": " + e.getMessage(), true, false, e);
 	}
 	
 	this.items = new ItemStack[itemStackList.size()];
