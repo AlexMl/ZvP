@@ -95,10 +95,9 @@ public class KitManager {
 	    FileConfiguration essConfig = YamlConfiguration.loadConfiguration(essFile);
 	    
 	    for (String kitName : essConfig.getConfigurationSection("kits").getValues(false).keySet()) {
-		System.out.println("eKit " + kitName);
 		IZvPKit kit = new KEssentialsKit(kitName, essConfig.getConfigurationSection("kits." + kitName));
 		this.kits.add(kit);
-		// TODO log
+		ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Essentials kit " + kitName + " successfully loaded from Essentials!", true, true);
 	    }
 	    
 	}
