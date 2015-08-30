@@ -27,6 +27,8 @@ public class ZvPConfig {
     private static boolean integrateGame = true;
     private static boolean integrateKits = true;
     
+    private static boolean useEssentialsKits = false;
+    
     private static boolean handleWorldGuard = false;
     
     private static boolean allowDuringGameJoin = true;
@@ -61,6 +63,7 @@ public class ZvPConfig {
 	getConfig().addDefault("plugin.update.autoUpdate", true);
 	getConfig().addDefault("plugin.update.showUpdateInConsole", true);
 	
+	getConfig().addDefault("plugin.useEssentialsKits", false);
 	getConfig().addDefault("plugin.manageWorldGuard", false);
 	
 	getConfig().addDefault("economy.enableEcon", false);
@@ -85,6 +88,7 @@ public class ZvPConfig {
 	CommentUtil.insertComment(configFile, "debugMode", "This option enables debugMode.#Only for development or testing purposes. This option can harm your game!");
 	CommentUtil.insertComment(configFile, "loglevel", "The loglevel is only used if debugMode is true.#It defines the amount of log messages on the console.");
 	
+	CommentUtil.insertComment(configFile, "useEssentialsKits", "ZvP can use essentials kits from the essentials config file.#This method is read-only and will only read from the configuration file.#Some features from essentials kits may not be supported!#Using essentials kits disables features provided by zvp kits!");
 	CommentUtil.insertComment(configFile, "manageWorldGuard", "If enabled ZvP handles WorldGuard region flags by itself. It will create an arena region and set if necessary his parent region. Some Flags are applied too.#Note that this feature is experimental and you should rather do the region settings on your own!");
 	CommentUtil.insertComment(configFile, "enableEcon", "Enable or disable economy support.#If enabled your bank account will be used for the game!#Note that you need Vault for working economics on your server!");
 	CommentUtil.insertComment(configFile, "integrateKits", "If enabled kits costs money too.#Note that the price of the kit is set in their kit-file.");
@@ -111,11 +115,12 @@ public class ZvPConfig {
 	autoUpdate = getConfig().getBoolean("plugin.update.autoUpdate", true);
 	logUpdate = getConfig().getBoolean("plugin.update.showUpdateInConsole", false);
 	
+	useEssentialsKits = getConfig().getBoolean("plugin.useEssentialsKits", false);
+	handleWorldGuard = getConfig().getBoolean("plugin.manageWorldGuard", false);
+	
 	enableEcon = getConfig().getBoolean("economy.enableEcon", false);
 	integrateKits = getConfig().getBoolean("economy.integrateKits", true);
 	integrateGame = getConfig().getBoolean("economy.integrateGame", true);
-	
-	handleWorldGuard = getConfig().getBoolean("plugin.manageWorldGuard", false);
 	
 	allowDuringGameJoin = getConfig().getBoolean("game.allowDuringGameJoin", true);
 	
@@ -179,6 +184,10 @@ public class ZvPConfig {
 	return integrateGame;
     }
     
+    public static boolean getUseEssentialsKits() {
+	return useEssentialsKits;
+    }
+    
     public static boolean getHandleWorldGuard() {
 	return handleWorldGuard;
     }
@@ -223,11 +232,15 @@ public class ZvPConfig {
 	setValue("economy.enableEcon", enabled);
     }
     
+    public static void setEssentialsSupport(boolean enabled) {
+	setValue("plugin.useEssentialsKits", enabled);
+    }
+    
     public static void setWorlGuardSupport(boolean enabled) {
 	setValue("plugin.manageWorldGuard", enabled);
     }
     
-    public static void setValue(String path, Object value) {
+    private static void setValue(String path, Object value) {
 	getConfig().set(path, value);
 	saveConfig();
 	reloadConfig();

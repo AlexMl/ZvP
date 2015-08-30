@@ -103,7 +103,6 @@ public class ZvP extends JavaPlugin {
 	getCommand("zvptest").setExecutor(new ZvPCommands());
 	
 	if (ZvPConfig.getEnableEcon()) {
-	    
 	    if (getServer().getPluginManager().getPlugin("Vault") != null) {
 		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
 		
@@ -126,6 +125,15 @@ public class ZvP extends JavaPlugin {
 	    } else {
 		getPluginLogger().log(this.getClass(), Level.WARNING, "WorldGuard should be used but is not installed! Disabling WorldGuard support ...", false);
 		ZvPConfig.setWorlGuardSupport(false);
+	    }
+	}
+	
+	// TODO Check essentials
+	
+	if (ZvPConfig.getUseEssentialsKits()) {
+	    if (getServer().getPluginManager().getPlugin("Essentials") == null) {
+		getPluginLogger().log(this.getClass(), Level.WARNING, "Essentials kits are enabled but Essentials is not installed! Disabling Essentials support ...", false);
+		ZvPConfig.setEssentialsSupport(false);
 	    }
 	}
 	

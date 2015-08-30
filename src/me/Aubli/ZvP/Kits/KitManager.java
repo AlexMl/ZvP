@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Translation.MessageKeys.inventory;
 import me.Aubli.ZvP.Translation.MessageManager;
@@ -16,6 +17,8 @@ import me.Aubli.ZvP.Translation.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -83,6 +86,21 @@ public class KitManager {
 	    } else {
 		ZvP.getPluginLogger().log(this.getClass(), Level.FINEST, "Kit " + kit.getName() + " is disabled through config " + f.getPath(), true);
 	    }
+	}
+	
+	if (ZvPConfig.getUseEssentialsKits()) {
+	    ZvP.getPluginLogger().log(getClass(), Level.FINE, "Attempting Essentials Kit load!", true, true);
+	    
+	    File essFile = new File(Bukkit.getPluginManager().getPlugin("Essentials").getDataFolder(), "config.yml");
+	    FileConfiguration essConfig = YamlConfiguration.loadConfiguration(essFile);
+	    
+	    for (String kitName : essConfig.getConfigurationSection("kits").getValues(false).keySet()) {
+		System.out.println("eKit " + kitName);
+		IZvPKit kit = new KEssentialsKit(kitName, essConfig.getConfigurationSection("kits." + kitName));
+		this.kits.add(kit);
+		// TODO log
+	    }
+	    
 	}
     }
     
