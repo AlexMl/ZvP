@@ -9,6 +9,7 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -210,12 +211,12 @@ public class KEssentialsKit implements IZvPKit, Comparable<IZvPKit> {
 			}
 			
 			if (metaArgKey.equalsIgnoreCase("name")) {
-			    name = metaArg.split(":")[1];
+			    name = ChatColor.translateAlternateColorCodes('&', metaArg.split(":")[1]);
 			}
 			if (metaArgKey.equalsIgnoreCase("lore")) {
 			    lore.clear();
 			    for (String loreString : metaArg.split(":")[1].replace("_", " ").replace("|", "linebreak").split("linebreak")) {
-				lore.add(loreString);
+				lore.add(ChatColor.translateAlternateColorCodes('&', loreString));
 			    }
 			}
 			
