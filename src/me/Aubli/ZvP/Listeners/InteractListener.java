@@ -8,6 +8,7 @@ import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPCommands;
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
+import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Shop.ShopItem;
 import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
@@ -115,9 +116,9 @@ public class InteractListener implements Listener {
 	    }
 	}
 	
-	if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {	// Player join per Sign
+	if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 	    if (this.sm.isZVPSign(event.getClickedBlock().getLocation())) {
-		if (this.sm.getType(event.getClickedBlock().getLocation()) == SignType.INTERACT_SIGN) {
+		if (this.sm.getType(event.getClickedBlock().getLocation()) == SignType.INTERACT_SIGN) { // Player join per Sign
 		    if (!GameManager.getManager().isInGame(eventPlayer)) {
 			if (eventPlayer.hasPermission("zvp.play")) {
 			    InteractSign sign = (InteractSign) this.sm.getSign(event.getClickedBlock().getLocation());
@@ -150,14 +151,15 @@ public class InteractListener implements Listener {
 			eventPlayer.sendMessage(MessageManager.getMessage(game.already_in_game));
 			return;
 		    }
-		} else if (this.sm.getType(event.getClickedBlock().getLocation()) == SignType.SHOP_SIGN) {
+		} else if (this.sm.getType(event.getClickedBlock().getLocation()) == SignType.SHOP_SIGN) { // player clicked shop sign
 		    if (GameManager.getManager().isInGame(eventPlayer)) {
 			if (eventPlayer.hasPermission("zvp.play")) {
 			    event.setCancelled(true);
 			    
 			    ShopSign shopSign = (ShopSign) this.sm.getSign(event.getClickedBlock().getLocation());
-			    
 			    ItemCategory cat = shopSign.getCategory();
+			    ZvPPlayer player = GameManager.getManager().getPlayer(eventPlayer);
+			    
 			    Inventory shopInv = Bukkit.createInventory(eventPlayer, ((int) Math.ceil(ShopManager.getManager().getItems(cat).size() / 9.0)) * 9, "Items: " + cat.toString());
 			    
 			    for (ShopItem shopItem : ShopManager.getManager().getItems(cat)) {
@@ -167,7 +169,7 @@ public class InteractListener implements Listener {
 				List<String> lore = new ArrayList<String>();
 				
 				lore.add("Category: " + shopItem.getCategory().toString());
-				lore.add(ChatColor.RED + "Price: " + shopItem.getPrice());
+				lore.add(player.getArena().getScore().getScore(player) >= shopItem.getPrice() ? (ChatColor.GREEN + "Price: " + shopItem.getPrice()) : (ChatColor.RED + "Price: " + shopItem.getPrice()));
 				
 				meta.setLore(lore);
 				item.setItemMeta(meta);
