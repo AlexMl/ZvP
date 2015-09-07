@@ -154,29 +154,31 @@ public class ArenaConfig {
     }
     
     private void insertComments() {
-	CommentUtil.insertComment(this.arenaFile, "ID", "The internal identifier of the arena!");
-	CommentUtil.insertComment(this.arenaFile, "Online", "'true': The arena is online and can be used.#'false': The arena is offline and can not be used.");
-	CommentUtil.insertComment(this.arenaFile, "Difficulty", "The Difficulty of the arena. There are three modes: EASY, NORMAL, HARD#Each mode will increase amount and health of zombies.");
-	CommentUtil.insertComment(this.arenaFile, "increaseDifficulty", "If enabled, the health and strength of zombies increase as the game progresses.");
-	CommentUtil.insertComment(this.arenaFile, "minPlayers", "Minimum amount of players. Set at least to 1.");
-	CommentUtil.insertComment(this.arenaFile, "maxPlayers", "Maximal amount of players.");
-	CommentUtil.insertComment(this.arenaFile, "rounds", "The amount of rounds you will play.#Note that one round has several waves. To get the full number of waves multiple rounds and waves.");
-	CommentUtil.insertComment(this.arenaFile, "waves", "The amount of waves you will play. To get the full number of waves multiple rounds and waves.");
-	CommentUtil.insertComment(this.arenaFile, "spawnRate", "SpawnRate defines the amount of spawning zombies. Default is 8.");
-	CommentUtil.insertComment(this.arenaFile, "keepXP", "If set to false, the game will not reset/change your current XP level.#Note that the countdown system uses the xp level which overrides experience!#The plugin will not show countdowns if keepXP is enabled!");
-	CommentUtil.insertComment(this.arenaFile, "keepInventory", "If set to true, the inventory will not get cleared after the game.#Important: Does not work with kits enabled!#Look into the main config file to disable kits!");
-	CommentUtil.insertComment(this.arenaFile, "useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
-	CommentUtil.insertComment(this.arenaFile, "autoWaves", "If enabled the next round will start automatically even if not all zombies are defeated!");
-	CommentUtil.insertComment(this.arenaFile, "separatePlayerScores", "True: Each player will have his own score.#False: All players have the same score. They pay and earn together.");
-	CommentUtil.insertComment(this.arenaFile, "joinTime", "Time in seconds the game will wait before it starts.#Note that the arena specific minimum has to be reached.");
-	CommentUtil.insertComment(this.arenaFile, "timeBetweenWaves", "Time in seconds the game will wait until a new wave starts.#Only applies if useVoteSystem is false!");
-	CommentUtil.insertComment(this.arenaFile, "zombieFund", "Amount of money you will get from killing a zombie.");
-	CommentUtil.insertComment(this.arenaFile, "deathFee", "Amount of money you have to pay when you die.");
-	CommentUtil.insertComment(this.arenaFile, "enablePvP", "Allow Player vs Player damage. Includes projectile damage!");
-	CommentUtil.insertComment(this.arenaFile, "enableSpawnProtection", "SpawnProtection will protect you when you respawn.#Note that you can not hit zombies during the protection!");
-	CommentUtil.insertComment(this.arenaFile, "spawnProtectionDuration", "The duration of the spawn protection in seconds.");
-	CommentUtil.insertComment(this.arenaFile, "saveRadius", "The save radius is the radius in blocks around you in which no zombies will spawn.");
-	CommentUtil.insertComment(this.arenaFile, "Location", "This is the location section of the arena. It contains min, max and custom spawn location.#If you are not sure what you are doing do not touch this!");
+	CommentUtil insertComment = new CommentUtil(this.arenaFile);
+	insertComment.addComment("ID", "The internal identifier of the arena!");
+	insertComment.addComment("Online", "'true': The arena is online and can be used.#'false': The arena is offline and can not be used.");
+	insertComment.addComment("Difficulty", "The Difficulty of the arena. There are three modes: EASY, NORMAL, HARD#Each mode will increase amount and health of zombies.");
+	insertComment.addComment("increaseDifficulty", "If enabled, the health and strength of zombies increase as the game progresses.");
+	insertComment.addComment("minPlayers", "Minimum amount of players. Set at least to 1.");
+	insertComment.addComment("maxPlayers", "Maximal amount of players.");
+	insertComment.addComment("rounds", "The amount of rounds you will play.#Note that one round has several waves. To get the full number of waves multiple rounds and waves.");
+	insertComment.addComment("waves", "The amount of waves you will play. To get the full number of waves multiple rounds and waves.");
+	insertComment.addComment("spawnRate", "SpawnRate defines the amount of spawning zombies. Default is 8.");
+	insertComment.addComment("keepXP", "If set to false, the game will not reset/change your current XP level.#Note that the countdown system uses the xp level which overrides experience!#The plugin will not show countdowns if keepXP is enabled!");
+	insertComment.addComment("keepInventory", "If set to true, the inventory will not get cleared after the game.#Important: Does not work with kits enabled!#Look into the main config file to disable kits!");
+	insertComment.addComment("useVoteSystem", "Use votes to get to the next round.#If false the game will wait timeBetweenWaves in seconds.");
+	insertComment.addComment("autoWaves", "If enabled the next round will start automatically even if not all zombies are defeated!");
+	insertComment.addComment("separatePlayerScores", "True: Each player will have his own score.#False: All players have the same score. They pay and earn together.");
+	insertComment.addComment("joinTime", "Time in seconds the game will wait before it starts.#Note that the arena specific minimum has to be reached.");
+	insertComment.addComment("timeBetweenWaves", "Time in seconds the game will wait until a new wave starts.#Only applies if useVoteSystem is false!");
+	insertComment.addComment("zombieFund", "Amount of money you will get from killing a zombie.");
+	insertComment.addComment("deathFee", "Amount of money you have to pay when you die.");
+	insertComment.addComment("enablePvP", "Allow Player vs Player damage. Includes projectile damage!");
+	insertComment.addComment("enableSpawnProtection", "SpawnProtection will protect you when you respawn.#Note that you can not hit zombies during the protection!");
+	insertComment.addComment("spawnProtectionDuration", "The duration of the spawn protection in seconds.");
+	insertComment.addComment("saveRadius", "The save radius is the radius in blocks around you in which no zombies will spawn.");
+	insertComment.addComment("Location", "This is the location section of the arena. It contains min, max and custom spawn location.#If you are not sure what you are doing do not touch this!");
+	insertComment.writeComments();
     }
     
     public void loadConfig() {

@@ -84,25 +84,26 @@ public class ZvPConfig {
 	
 	saveConfig();
 	
-	CommentUtil.insertComment(configFile, "Locale", "Language setting for the plugin. Currently supported are: en - English, de - German, hu - Hungarian#For language configuration look into the messages folder.");
-	CommentUtil.insertComment(configFile, "debugMode", "This option enables debugMode.#Only for development or testing purposes. This option can harm your game!");
-	CommentUtil.insertComment(configFile, "loglevel", "The loglevel is only used if debugMode is true.#It defines the amount of log messages on the console.");
+	CommentUtil insertComments = new CommentUtil(configFile);
+	insertComments.addComment("Locale", "Language setting for the plugin. Currently supported are: en - English, de - German, hu - Hungarian#For language configuration look into the messages folder.");
+	insertComments.addComment("debugMode", "This option enables debugMode.#Only for development or testing purposes. This option can harm your game!");
+	insertComments.addComment("loglevel", "The loglevel is only used if debugMode is true.#It defines the amount of log messages on the console.");
 	
-	CommentUtil.insertComment(configFile, "useEssentialsKits", "ZvP can use essentials kits from the essentials config file.#This method is read-only and will only read from the configuration file.#Some features from essentials kits may not be supported!#Using essentials kits disables features provided by zvp kits!");
-	CommentUtil.insertComment(configFile, "manageWorldGuard", "If enabled ZvP handles WorldGuard region flags by itself. It will create an arena region and set if necessary his parent region. Some Flags are applied too.#Note that this feature is experimental and you should rather do the region settings on your own!");
-	CommentUtil.insertComment(configFile, "enableEcon", "Enable or disable economy support.#If enabled your bank account will be used for the game!#Note that you need Vault for working economics on your server!");
-	CommentUtil.insertComment(configFile, "integrateKits", "If enabled kits costs money too.#Note that the price of the kit is set in their kit-file.");
-	CommentUtil.insertComment(configFile, "integrateGame", "If enabled your bank account will be used for purchasing/selling and Kill/death bonuses.#Note that this game could ruin your bank balance!");
-	CommentUtil.insertComment(configFile, "enableKits", "Enable kits for the game.#If disabled the player will start and end the game with their current items.#The inventory will be restored after the game.#Note that this has to be false if you use keepInventory!");
-	CommentUtil.insertComment(configFile, "enableFirework", "Fireworks will shoot when the game ends.#Note that Fireworks take extra time!");
-	CommentUtil.insertComment(configFile, "allowDuringGameJoin", "If set to true the game will allow players to join a running game.#Note that a change of players will affect the number of Zombies!");
-	CommentUtil.insertComment(configFile, "maximal_Players", "Maximal amount of players in an arena.");
-	CommentUtil.insertComment(configFile, "default_rounds", "Amount of rounds a newly created arena will have by default.");
-	CommentUtil.insertComment(configFile, "default_waves", "Amount of waves a newly created arena will have by default.");
-	CommentUtil.insertComment(configFile, "default_spawnRate", "Default zombie spawnrate for newly created arenas.#The spawnrate defines how many zombies will spawn.#The calculation uses arena size, amount of player, spawnrate and difficulty setting.");
-	CommentUtil.insertComment(configFile, "modifyChat", "If enabled the chat will be modified to match ZvP colors and commands will be disabled.#If disabled the chat will not be changed at all!");
-	CommentUtil.insertComment(configFile, "commandWhitelist", "A list of commands that can be executed during a ZvP game.#Note that zvp commands are automatically included!");
-	
+	insertComments.addComment("useEssentialsKits", "ZvP can use essentials kits from the essentials config file.#This method is read-only and will only read from the configuration file.#Some features from essentials kits may not be supported!#Using essentials kits disables features provided by zvp kits!");
+	insertComments.addComment("manageWorldGuard", "If enabled ZvP handles WorldGuard region flags by itself. It will create an arena region and set if necessary his parent region. Some Flags are applied too.#Note that this feature is experimental and you should rather do the region settings on your own!");
+	insertComments.addComment("enableEcon", "Enable or disable economy support.#If enabled your bank account will be used for the game!#Note that you need Vault for working economics on your server!");
+	insertComments.addComment("integrateKits", "If enabled kits costs money too.#Note that the price of the kit is set in their kit-file.");
+	insertComments.addComment("integrateGame", "If enabled your bank account will be used for purchasing/selling and Kill/death bonuses.#Note that this game could ruin your bank balance!");
+	insertComments.addComment("enableKits", "Enable kits for the game.#If disabled the player will start and end the game with their current items.#The inventory will be restored after the game.#Note that this has to be false if you use keepInventory!");
+	insertComments.addComment("enableFirework", "Fireworks will shoot when the game ends.#Note that Fireworks take extra time!");
+	insertComments.addComment("allowDuringGameJoin", "If set to true the game will allow players to join a running game.#Note that a change of players will affect the number of Zombies!");
+	insertComments.addComment("maximal_Players", "Maximal amount of players in an arena.");
+	insertComments.addComment("default_rounds", "Amount of rounds a newly created arena will have by default.");
+	insertComments.addComment("default_waves", "Amount of waves a newly created arena will have by default.");
+	insertComments.addComment("default_spawnRate", "Default zombie spawnrate for newly created arenas.#The spawnrate defines how many zombies will spawn.#The calculation uses arena size, amount of player, spawnrate and difficulty setting.");
+	insertComments.addComment("modifyChat", "If enabled the chat will be modified to match ZvP colors and commands will be disabled.#If disabled the chat will not be changed at all!");
+	insertComments.addComment("commandWhitelist", "A list of commands that can be executed during a ZvP game.#Note that zvp commands are automatically included!");
+	insertComments.writeComments();
     }
     
     private static void load() {
