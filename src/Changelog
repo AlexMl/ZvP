@@ -2,6 +2,8 @@ Changelog:
 
 2.8.6:
 *Added basic support to use Essentials kits
+*Added money indicator color in shop
+*Inserting comments in config files is much faster now
 
 2.8.5:
 *Hide Item information on icons
