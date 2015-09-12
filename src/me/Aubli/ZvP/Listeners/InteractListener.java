@@ -3,6 +3,7 @@ package me.Aubli.ZvP.Listeners;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPCommands;
@@ -49,6 +50,28 @@ public class InteractListener implements Listener {
 	Player eventPlayer = event.getPlayer();
 	
 	if (event.getItem() != null) {
+	    
+	    //@formatter:off
+	    ItemStack s1 = event.getItem();
+	    ItemStack s2 = ZvP.getTool(ZvP.ADDARENA_SINGLE);
+	    ZvP.getPluginLogger().log(getClass(), Level.ALL, "\nType:" + s1.getType()+ ";" + s2.getType()+ "\n"
+		    					    +"Dura:" + s1.getDurability() + ";" + s2.getDurability()+"\n"
+		    					    +"hasMeta:" + s1.hasItemMeta() + ";" + s2.hasItemMeta() + "\n"
+		    					    +"isSimilar:" + s1.isSimilar(s2), true, true);
+	    
+	    if(s1.hasItemMeta()) {
+		ItemMeta m1 = s1.getItemMeta();
+		ItemMeta m2 = s2.getItemMeta();
+		ZvP.getPluginLogger().log(getClass(), Level.ALL, "\nClass:" + m1.getClass().getName() + ";" +m2.getClass().getName()+";" + m1.getClass().equals(m2.getClass())+"\n"
+								+"dpn:" +m1.getDisplayName() + ";" + m2.getDisplayName() +";" + m1.getDisplayName().equals(m2.getDisplayName())+"\n"
+								+"lore:" +m1.getLore() +";"+m2.getLore()+";"+m1.getLore().equals(m2.getLore())+"\n"
+								+"flags:" + m1.getItemFlags() + ";" + m2.getItemFlags()+";"+m1.getItemFlags().equals(m2.getItemFlags())+"\n"
+								+"ench:" + m1.getEnchants() + ";" +m2.getEnchants()+";" + m1.getEnchants().equals(m2.getEnchants())+"\n"
+								+"equals:" + ZvP.getInstance().getServer().getItemFactory().equals(m1, m2), true, true);
+		
+	    }
+	    //@formatter:on
+	    
 	    if (event.getItem().isSimilar(ZvP.getTool(ZvP.ADDARENA_SINGLE))) {
 		if (eventPlayer.hasPermission("zvp.manage.arena")) {
 		    event.setCancelled(true);
