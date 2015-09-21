@@ -71,71 +71,58 @@ public class InteractListener implements Listener {
 		
 	    }
 	    //@formatter:on
-	    
-	    if (event.getItem().isSimilar(ZvP.getTool(ZvP.ADDARENA_SINGLE))) {
+	    if (ZvP.equalsTool(event.getItem())) {
 		if (eventPlayer.hasPermission("zvp.manage.arena")) {
+		    
+		    String toolString = ChatColor.stripColor(event.getItem().getItemMeta().getLore().get(0));
 		    event.setCancelled(true);
 		    
-		    if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			this.clickLoc.put(event.getAction(), event.getClickedBlock().getLocation().clone());
-			eventPlayer.sendMessage(MessageManager.getMessage(manage.right_saved));
-		    }
-		    
-		    if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-			this.clickLoc.put(event.getAction(), event.getClickedBlock().getLocation().clone());
-			eventPlayer.sendMessage(MessageManager.getMessage(manage.left_saved));
-		    }
-		    
-		    if (this.clickLoc.containsKey(Action.RIGHT_CLICK_BLOCK) && this.clickLoc.containsKey(Action.LEFT_CLICK_BLOCK)) {
-			Arena arena = GameManager.getManager().addArena(this.clickLoc.get(Action.LEFT_CLICK_BLOCK), this.clickLoc.get(Action.RIGHT_CLICK_BLOCK));
-			if (arena != null) {
-			    eventPlayer.sendMessage(MessageManager.getFormatedMessage(manage.arena_saved, arena.getID()));
-			} else {
-			    eventPlayer.sendMessage(MessageManager.getMessage(error.arena_place));
+		    if (toolString.equals(ZvP.ADDARENA_SINGLE)) {
+			if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			    this.clickLoc.put(event.getAction(), event.getClickedBlock().getLocation().clone());
+			    eventPlayer.sendMessage(MessageManager.getMessage(manage.right_saved));
 			}
 			
-			this.clickLoc.clear();
-			return;
-		    }
-		} else {
-		    ZvP.removeTool(eventPlayer);
-		    ZvPCommands.commandDenied(eventPlayer);
-		    return;
-		}
-	    } else if (event.getItem().isSimilar(ZvP.getTool(ZvP.ADDARENA_POLYGON))) {
-		if (eventPlayer.hasPermission("zvp.manage.arena")) {
-		    event.setCancelled(true);
-		    
-		    locationList.add(event.getClickedBlock().getLocation().clone());
-		    eventPlayer.sendMessage(MessageManager.getFormatedMessage(manage.position_saved_poly, locationList.size()));
-		    return;
-		} else {
-		    ZvP.removeTool(eventPlayer);
-		    ZvPCommands.commandDenied(eventPlayer);
-		    return;
-		}
-	    } else if (event.getItem().isSimilar(ZvP.getTool(ZvP.ADDPOSITION))) {
-		if (eventPlayer.hasPermission("zvp.manage.arena")) {
-		    event.setCancelled(true);
-		    
-		    for (Arena arena : GameManager.getManager().getArenas()) {
-			if (arena.containsLocation(eventPlayer.getLocation())) {
-			    boolean success = arena.getArea().addSpawnPosition(event.getClickedBlock().getLocation().clone().add(0, 1, 0));
-			    if (success) {
-				eventPlayer.sendMessage(MessageManager.getFormatedMessage(manage.position_saved, "Position in arena " + arena.getID()));
-			    } else {
-				eventPlayer.sendMessage(MessageManager.getMessage(manage.position_not_saved));
-			    }
-			    return;
+			if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+			    this.clickLoc.put(event.getAction(), event.getClickedBlock().getLocation().clone());
+			    eventPlayer.sendMessage(MessageManager.getMessage(manage.left_saved));
 			}
+			
+			if (this.clickLoc.containsKey(Action.RIGHT_CLICK_BLOCK) && this.clickLoc.containsKey(Action.LEFT_CLICK_BLOCK)) {
+			    Arena arena = GameManager.getManager().addArena(this.clickLoc.get(Action.LEFT_CLICK_BLOCK), this.clickLoc.get(Action.RIGHT_CLICK_BLOCK));
+			    if (arena != null) {
+				eventPlayer.sendMessage(MessageManager.getFormatedMessage(manage.arena_saved, arena.getID()));
+			    } else {
+				eventPlayer.sendMessage(MessageManager.getMessage(error.arena_place));
+			    }
+			    
+			    this.clickLoc.clear();
+			}
+			
+		    } else if (toolString.equals(ZvP.ADDARENA_POLYGON)) {
+			locationList.add(event.getClickedBlock().getLocation().clone());
+			eventPlayer.sendMessage(MessageManager.getFormatedMessage(manage.position_saved_poly, locationList.size()));
+			
+		    } else if (toolString.equals(ZvP.ADDPOSITION)) {
+			for (Arena arena : GameManager.getManager().getArenas()) {
+			    if (arena.containsLocation(eventPlayer.getLocation())) {
+				boolean success = arena.getArea().addSpawnPosition(event.getClickedBlock().getLocation().clone().add(0, 1, 0));
+				if (success) {
+				    eventPlayer.sendMessage(MessageManager.getFormatedMessage(manage.position_saved, "Position in arena " + arena.getID()));
+				} else {
+				    eventPlayer.sendMessage(MessageManager.getMessage(manage.position_not_saved));
+				}
+				return;
+			    }
+			}
+			eventPlayer.sendMessage(MessageManager.getMessage(manage.position_not_in_arena));
 		    }
-		    eventPlayer.sendMessage(MessageManager.getMessage(manage.position_not_in_arena));
-		    return;
+		    
 		} else {
 		    ZvP.removeTool(eventPlayer);
 		    ZvPCommands.commandDenied(eventPlayer);
-		    return;
 		}
+		return;
 	    }
 	}
 	

@@ -232,6 +232,17 @@ public class ZvP extends JavaPlugin {
 	return tool;
     }
     
+    public static boolean equalsTool(ItemStack item) {
+	if (item.getType() == getTool("").getType()) {
+	    if (item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+		if (item.getItemMeta().getDisplayName().equals(getTool("").getItemMeta().getDisplayName())) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
+    
     public static void removeTool(Player player) {
 	player.getInventory().removeItem(getTool(ADDARENA_POLYGON));
 	player.getInventory().removeItem(getTool(ADDARENA_SINGLE));
