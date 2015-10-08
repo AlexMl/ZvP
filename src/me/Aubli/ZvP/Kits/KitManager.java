@@ -173,8 +173,21 @@ public class KitManager {
 		ItemStack kitItem = kit.getIcon();
 		ItemMeta kitMeta = kitItem.getItemMeta();
 		
+		String priceLore = ChatColor.GOLD + "Price: " + kit.getPrice();
+		
+		// if economy and sellKits is true indicate price
+		if (ZvPConfig.getEnableEcon()) {
+		    if (ZvPConfig.getIntegrateKits()) {
+			if (ZvP.getEconProvider().has(player.getPlayer(), kit.getPrice())) {
+			    priceLore = ChatColor.GREEN + "Price: " + kit.getPrice();
+			} else {
+			    priceLore = ChatColor.RED + "Price: " + kit.getPrice();
+			}
+		    }
+		}
+		
 		ArrayList<String> lore = new ArrayList<String>();
-		lore.add(ChatColor.GOLD + "Price: " + kit.getPrice());
+		lore.add(priceLore);
 		lore.add(ChatColor.GOLD + "Content:");
 		
 		for (ItemStack stack : kit.getContents()) {
