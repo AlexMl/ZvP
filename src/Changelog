@@ -1,5 +1,10 @@
 Changelog:
 
+2.8.7:
+*Fixed bug with not working tool
+*Fixed cost format
+*Added price indicator in kit select inventory
+
 2.8.6:
 *Added basic support to use Essentials kits
 *Added money indicator color in shop
