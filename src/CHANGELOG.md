@@ -1,222 +1,310 @@
 Changelog:
 
-2.8.7:
-*Fixed bug with not working tool
-*Fixed cost format
-*Added price indicator in kit select inventory
+---------------------------------------
+ZvP Version 2.8.7 - 09.10.2015
+- [Added] price indicator in kit select inventory
+- [Fixed] bug with not working tool
+- [Fixed] cost format in messages
 
-2.8.6:
-*Added basic support to use Essentials kits
-*Added money indicator color in shop
-*Inserting comments in config files is much faster now
+---------------------------------------
+ZvP Version 2.8.6 - 08.09.2015
+- [Added] basic support for Essentials kits
+- [Added] money indicator color in shop
+- [Edit] Inserting comments in config files is much faster now
 
-2.8.5:
-*Hide Item information on icons
+---------------------------------------
+ZvP Version 2.8.5 - 25.08.2015
+- [Added] Use ItemFlags to hide Item information on icons
 
-2.8.4:
-*Added lapis lazuli to the shop.
-*Added time information to the logger.
+---------------------------------------
+ZvP Version 2.8.4 - 24.08.2015
+- [Added] lapis lazuli for the shop.
+- [Added] timezone information for the logger.
 
-2.8.3:
-*Increase zombie health and strength during game
-*Logger improvements
-*Fixed kit select poping up after arena stop/player left
+---------------------------------------
+ZvP Version 2.8.3 - 18.07.2015
+- [Added] Increase zombie health and strength during game
+- [Edit] Logger improvements
+- [Fixed] kit select poping up after arena stop/player left
 
-2.8.2:
-*Added join command
-*Fixed shop messages
+---------------------------------------
+ZvP Version 2.8.2 - 16.07.2015
+- [Added] join command
+- [Fixed] shop messages
 
-2.8.1:
-*Fixed pvp in PreLobby
-*Fixed PreLobby countdown bug if minimumplayers is set to low
+---------------------------------------
+ZvP Version 2.8.1 - 13.07.2015
+- [Fixed] pvp in PreLobby
+- [Fixed] PreLobby countdown bug if minimumplayers is set to low
 
-2.8.0:
-*Start new waves automatically
-*Added configurable permissions for kits
-*Added command whitelist in config.yml.
-*New Permission (zvp.command) to allow commands during game
-*Added experimental WorldGuard integration
-*Added option to enable pvp in arenas
-*Smaller bug fixes
-*Code improvements
+---------------------------------------
+ZvP Version 2.8.0 - 13.07.2015
+- [Added] Start new waves automatically
+- [Added] configurable permissions for kits
+- [Added] command whitelist in config.yml.
+- [Added] New Permission (zvp.command) to allow commands during game
+- [Added] experimental WorldGuard integration
+- [Added] option to enable pvp in arenas
+- [Fixed] Smaller bugs
 
-2.7.1:
-*Fixed Vote bug.
-*Fixed exploit to get items in and out of the arena. (Thanks to AnomalyAlpha)
-*Fixed PreLobby starting with less players than arena minimum
-*Lowered chat priority to grab chat messages before other plugins do.
-*Added minPlayers to info sign
+---------------------------------------
+ZvP Version 2.7.1 - 22.06.2015
+- [Added] minPlayers on info sign
+- [Edit] Lowered chat priority to grab chat messages before other plugins do
+- [Fixed] Vote bug
+- [Fixed] Fixed exploit to get items in and out of the arena. (Thanks to AnomalyAlpha)
+- [Fixed] PreLobby starting with less players than arena minimum
 
-2.7.0:
-*Added polygon sized arena support
-*Scoreboard adjusts itself in length
-*Updated list and status command
-*Do not send a transaction failed message if you do not have enough money to pay the death fee
-*Logger updates
+---------------------------------------
+ZvP Version 2.7.0 - 16.06.2015
+- [Added] polygon sized arena support
+- [Edit] Scoreboard adjusts itself in length
+- [Edit] Updated list and status command
+- [Edit] Do not send a transaction failed message if you do not have enough money to pay the death fee
+- [Edit] Logger updates
 
-2.6.2:
-*Added command to add PreLobby Positions
-*Adjusted help pages
+---------------------------------------
+ZvP Version 2.6.2 - 29.05.2015
+- [Added] command to add PreLobby Positions
+- [Edit] Adjusted help pages
 
-2.6.1:
-*Fixed several messages
-*Fixed countdown bug
-*Signs will be removed on arena or lobby removal
-*Fixed bug which prevents replay without reload
-*Fixed y coordinates in arenas with more floors
-*Logger will save version dependend log files
-*Removed pos1/pos2 command. Use the tool
-*Countdown in prelobby is in seconds now
+---------------------------------------
+ZvP Version 2.6.1 - 24.05.2015
+- [Added] Signs will be removed on arena or lobby removal
+- [Edit] Logger will save version dependend log files
+- [Edit] Countdown in prelobby is in seconds now
+- [Removed] pos1/pos2 command. Use the tool
+- [Fixed] several messages
+- [Fixed] countdown bug
+- [Fixed] bug which prevents replay without reload
+- [Fixed] y coordinates in arenas with more floors
 
-2.6.0:
-*Sign colors are now adjustable
-*ZvP now supports joins during games
-*A lot of options moved into arena configuration
-*Added optional PreLobby to Arena
-*Improved log data
-*Fixed bugs with joining
+---------------------------------------
+ZvP Version 2.6.0 - 21.05.2015
+- [Added] Adjustable Sign colors
+- [Added] joins during games
+- [Added] PreLobby
+- [Edit] improved log data
+- [Edit] options moved into arena configuration
+- [Fixed] bugs with joining
 
-2.5.2:
-*Added option to keep xp
-*Money gained by zombies depends on the difficulty
+---------------------------------------
+ZvP Version 2.5.2 - 11.05.2015
+- [Added] option to keep xp
+- [Edit] Money gained by zombies depends on the arena difficulty
 
-2.5.1:
-*Added option to keep the inventory
-*Added option to disable chat modifications
-*Fixed bug with disabled kits
+---------------------------------------
+ZvP Version 2.5.1 - 10.05.2015
+- [Added] option to keep inventory
+- [Added] option to disable chat modifications
+- [Fixed] bug with disabled kits
 
-2.5.0:
-*Better zombie respawn
-*Full Vault integration
-*Comments in config and arena files
-*Added command to toggle arenas
-*Added custom mcstats graph
-*Display help messages in pages
-*Default save radius is now arena dependent
-*Added translations to plugin
+---------------------------------------
+ZvP Version 2.5.0 - 01.05.2015
+- [Added] Economy support thru Vault
+- [Added] comments in arena and config files
+- [Added] arena toggle command
+- [Added] custom mcstats graph
+- [Added/Translation] Translations are now inside the plugin
+- [Edit] improved zombie respawn
+- [Edit] Help is displayed in pages
+- [Edit] save radius moved in arena config
 
-2.4.3:
-*Fixed canceling other plugins tasks
+---------------------------------------
+ZvP Version 2.4.3 - 23.04.2015
+- [Fixed] don't canceling other plugins tasks
 
-2.4.2:
-*Some Sign improvements
-*Additions in list command
+---------------------------------------
+ZvP Version 2.4.2 - 22.04.2015
+- [Added] More info in list command
+- [Edit] Sign improvements
 
-2.4.1:
-*Added comments to config file
-*Fixed critical add arena bug
-*Other bug fixes
+---------------------------------------
+ZvP Version 2.4.1 - 19.04.2015
+- [Added] Config comments
+- [Fixed] Critical add arena bug and other bug fixes
 
-2.4.0:
-*Amount of zombies depent now on amount of players, arena size, spawnrate, waves, rounds
-*Added Difficulty to arena settings
-*Added spawnprotection
-*Added config file converter
-*Added custom spawn locations
-*Internal message changes
-*Sign message changed
-*Several Bug fixes
+---------------------------------------
+ZvP Version 2.4.0 - 15.04.2015  "The Difficulty Update"
+- [Added] Difficulty system
+- [Added] Spawnprotection
+- [Added] config file converter
+- [Added] Custom spawn locations
+- [Edit] zombie amount calculated by difficulty, players, arena size, spawnrate, waves, rounds
+- [Edit] Message changes
+- [Fixed] Some bug fixes
 
-2.3.7-3:
-*Fixed documentation links
-*Itemconfiguration will be updated. Not replaced
+---------------------------------------
+ZvP Version 2.3.7-3 - 02.04.2015
+- [Fixed] updated documentation links
+- [Fixed] Itemconfiguration will be updated. Not replaced
 
-2.3.7-2:
-*Fixed issue with essentials back command
+---------------------------------------
+ZvP Version 2.3.7-2 - 02.04.2015
+- [Fixed] issue with essentials back command and respawn task
 
-2.3.7-1:
-*Fixed message mistakes
-*Update excludes specific builds
+---------------------------------------
+ZvP Version 2.3.7-1 - 01.04.2015
+- [Added] Updater can decide if update or not
+- [Fixed] message mistakes
 
-2.3.7:
-*Fixed performance issues on Spigot
-*Fixed missing kit error
-*Status display changed
+---------------------------------------
+ZvP Version 2.3.7 - 01.04.2015
+- [Edit] Changed status page
+- [Fixed] Spigot performance issue
+- [Fixed] kit missing error
 
-2.3.6:
-*Fixed scoreboard updating to late issue
-*Added option to disable firework
+---------------------------------------
+ZvP Version 2.3.6 - 30.03.2015
+- [Added] Random Fireworks at the end of a game
+- [Edit] Arena/Lobby config will not be overridden on reload
+- [Fixed] scoreboard latency
+- [Fixed] wrong arenastate
+- [Fixed] arena stop fixed
 
-2.3.5:
-*Added Fireworks to the game
+---------------------------------------
+ZvP Version 2.3.4-1 - 26.03.2015
+- [Added] Added separated player scores
 
-2.3.4-1:
-*Fixed wrong arenastate issue
-*Arena and Lobby config file will not be replaced by the plugin on reload
-*Arena stop works correctly now
+---------------------------------------
+ZvP Version 2.3.3 - 26.03.2015
+- [Added] Standard kits have a disable option
+- [Fixed] jointime bug
 
-2.3.4:
-*Separated Player scores
+---------------------------------------
+ZvP Version 2.3.1-1 - 17.03.2015
+- [Added] option to use either the votesystem or wait time setting between waves
+- [Fixed] errors with tasks
+- [Fixed] wrong messages
 
-2.3.3:
-*Standard kits can now be disabled in their kit-setting file.
+---------------------------------------
+ZvP Version 2.2.0 - 12.03.2015
+- [Added] kits can be disabled
+- [Fixed] teleportation into blocks
 
-2.3.2:
-*Fixed Bug with jointime if the votesystem is disabled
+---------------------------------------
+ZvP Version 2.1.1 - 09.02.2015
+- [Fixed] Fixed wrong spawnlocations in buildings
 
-2.3.1:
-*Fixed errors with tasks
-*Fixed wrong messages
+---------------------------------------
+ZvP Version 2.1.0 - 28.01.2015
+- [Added/Dependency] Added automatic plugin updater
 
-2.3.0:
-*Added option to use either the votesystem or wait time setting between waves
+---------------------------------------
+ZvP Version 2.0.6 - 27.01.2015
+- [Fixed] Logger issues
+- [Added] Logger handles exceptions
 
-2.2.0:
-*Added option to disable Kits
-*Fix teleportation into blocks
+---------------------------------------
+ZvP Version 2.0.5 - 18.01.2015
+- [Fixed] multi world bug where the world is loaded after the plugin
 
-2.1.1:
-*Fixed wrong spawnlocations in buildings
+---------------------------------------
+ZvP Version 2.0.4 - 17.01.2015
+- [Dependency] Updated PluginLogger
+- Leaving Beta
 
-2.1.0:
-*Added automatic plugin updater
+---------------------------------------
+ZvP Version 2.0.3 Beta - 16.12.2014
+- [Dependency] Updated to Bukkit 1.8
 
-2.0.6:
-*Fixed Logger issues.
-*Logger handles exceptions.
+---------------------------------------
+ZvP Version 2.0.2 Beta - 10.11.2014
+- [Fixed] NPE in addKit Command
 
-2.0.5:
-*Fixed bug in multi world support where the world is loaded after the plugin.
+---------------------------------------
+ZvP Version 2.0.1 Beta - 01.11.2014
+- [Fixed] Joining bug
 
-2.0.4:
-*Updated PluginLogger
+---------------------------------------
+ZvP Version 2.0.0 Beta - 28.10.2014
+- [Rewrite] Complete rewrite
+- [Tweaks] Optimized Kit system, Shopsystem, scoreboard, spawnsystem
+- [Added] Lobby and Arena support
+- [Added] Information signs
 
-2.0.3:
-*Updated for 1.8
 
-2.0.2:
-*Fixed NPE on addkit Command
+---------------------------------------
+ZvP Version 1.2.1
+- [Tweaks] updated plugin structure
+- [Dependency] Bukkit update
 
-2.0.1:
-*Fixed Joining Bug
+---------------------------------------
+ZvP Version 1.2.0 - 12.01.2014
+- [Added/Dependency] McStats statistic service
+- [Dependency] Bukkit update
 
-2.0:
-*Complete rewrite
-*Optimized Kit system, Shopsystem, scoreboard, spawnsystem
-*Added Lobby and Arena support
-*Added Information sign
+---------------------------------------
+ZvP Version 1.1.0 - 08.11.2013
+- [Added] zvpleave command to leave games
+- [Translation] Updated languagefiles
+- [Dependency] Updated to Bukkit 1.7.2
 
-1.2.1:
-*updated plugin structure
-*updated bukkit version
-*code improvements
+---------------------------------------
+ZvP Version 1.0.2 - 19.10.2013
+- [Added] Friendly fire in player teams
+- [Edit] changed code package name
+- [Fixed] Bug in zvpstop command
 
-1.2.0:
-*added mcstats
+---------------------------------------
+ZvP Version 1.0.1 - 15.10.2013
+- [Added] Scoreboard support
+- [Added] Restore health after waves
+- [Edit] changed commands and permissions
 
-1.1.0:
-*add zvpleave command to leave the game
-*updated language files
-*updated to 1.7.2
+---------------------------------------
+ZvP Version 1.0.0 - 28.09.2013
+- [Added] Added starter-kit menu
+- [Edit] Use item names instead of ids
+- [Fixed] Bug fixes
+- official release version
 
-1.0.2:
-*add scoreboard team to disable pvp
-*Change package name
-*Fixed bug in zvpstop command
+---------------------------------------
+ZvP Version 1.8pre - 08.08.2013
+- [Added] Add your starter-kits from ingame
+- [Dependency] Bukkit update 1.6.4
+- [Fixed] bugfixes
 
-1.0.1:
-*Change commands and permissions
-*Add Scoreboard support
+---------------------------------------
+ZvP Version 1.7.2pre - 01.07.2013
+- [Added] configurable Starter-kits
+- [Added] 4 Potions for the shop
+- [Added] Teleport back after game
+- [Fixed] Block break/place
+- [Fixed] Bugs in Spectator mode fixed
+- [Fixed] Inventory bugs fixed
 
-1.0.0:
-*Release Candidate
+---------------------------------------
+ZvP Version 1.7.1pre - 29.06.2013
+- [Added] Spectator mode for dead players
+- [Edit] changed commands
+- [Fixed] inventory and game fixes
+- [Tweaks] improve the shop and generall code
+
+---------------------------------------
+ZvP Version 1.7.0pre - 26.06.2013
+- [Translation] Translated the shop system
+- [Edit] Some color changes
+
+---------------------------------------
+ZvP Version 1.6.7pre - 24.06.2013
+- [Added] start game per sign click
+
+---------------------------------------
+ZvP Version 1.6.6pre - 22.06.2013
+- [Fixed] chest bug
+- [Added] Points in config
+
+---------------------------------------
+ZvP Version 1.6.5.2pre - 17.06.2013
+- [Added] Create chest with your stuff when you join the game
+- [Added] reset level during the game
+
+---------------------------------------
+ZvP Version 1.6.5.1pre - 15.06.2013
+- [Edit] changed permissions
+- [Edit] changed config header
+
+---------------------------------------
+ZvP Version 1.6.5pre - 13.06.2013
+- First beta release
