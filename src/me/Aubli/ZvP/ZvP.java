@@ -92,16 +92,6 @@ public class ZvP extends JavaPlugin {
 	
 	converter = new FileConverter(this);
 	
-	new MessageManager(ZvPConfig.getLocale());
-	new GameManager();
-	new SignManager();
-	new ShopManager();
-	new KitManager(ZvPConfig.getEnableKits());
-	
-	registerListeners();
-	getCommand("zvp").setExecutor(new ZvPCommands());
-	getCommand("zvptest").setExecutor(new ZvPCommands());
-	
 	if (ZvPConfig.getEnableEcon()) {
 	    if (getServer().getPluginManager().getPlugin("Vault") != null) {
 		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
@@ -128,8 +118,6 @@ public class ZvP extends JavaPlugin {
 	    }
 	}
 	
-	// TODO Check essentials
-	
 	if (ZvPConfig.getUseEssentialsKits()) {
 	    if (getServer().getPluginManager().getPlugin("Essentials") == null) {
 		getPluginLogger().log(this.getClass(), Level.WARNING, "Essentials kits are enabled but Essentials is not installed! Disabling Essentials support ...", false);
@@ -137,20 +125,15 @@ public class ZvP extends JavaPlugin {
 	    }
 	}
 	
-	if (ZvPConfig.getEnableUpdater()) {
-	    UpdateType updType = UpdateType.DEFAULT;
-	    
-	    if (ZvPConfig.getAutoUpdate() == false) {
-		updType = UpdateType.NO_DOWNLOAD;
-	    }
-	    
-	    Updater upd = new Updater(this, this.pluginID, this.getFile(), updType, ZvPConfig.getlogUpdate());
-	    
-	    if (ZvPConfig.getAutoUpdate() == false) {
-		updateAvailable = (upd.getResult() == UpdateResult.UPDATE_AVAILABLE);
-		newVersion = upd.getLatestName();
-	    }
-	}
+	new MessageManager(ZvPConfig.getLocale());
+	new GameManager();
+	new SignManager();
+	new ShopManager();
+	new KitManager(ZvPConfig.getEnableKits());
+	
+	registerListeners();
+	getCommand("zvp").setExecutor(new ZvPCommands());
+	getCommand("zvptest").setExecutor(new ZvPCommands());
 	
 	if (ZvPConfig.getUseMetrics() == true) {
 	    try {
@@ -170,6 +153,21 @@ public class ZvP extends JavaPlugin {
 		metrics.start();
 	    } catch (IOException e) {
 		logger.log(this.getClass(), Level.WARNING, "Can't start Metrics! Skip!", true, false, e);
+	    }
+	}
+	
+	if (ZvPConfig.getEnableUpdater()) {
+	    UpdateType updType = UpdateType.DEFAULT;
+	    
+	    if (ZvPConfig.getAutoUpdate() == false) {
+		updType = UpdateType.NO_DOWNLOAD;
+	    }
+	    
+	    Updater upd = new Updater(this, this.pluginID, this.getFile(), updType, ZvPConfig.getlogUpdate());
+	    
+	    if (ZvPConfig.getAutoUpdate() == false) {
+		updateAvailable = (upd.getResult() == UpdateResult.UPDATE_AVAILABLE);
+		newVersion = upd.getLatestName();
 	    }
 	}
     }
