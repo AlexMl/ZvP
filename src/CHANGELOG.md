@@ -1,6 +1,10 @@
 Changelog:
 
 ---------------------------------------
+ZvP Version 2.9.0 - 
+
+
+---------------------------------------
 ZvP Version 2.8.7 - 09.10.2015
 - [Added] price indicator in kit select inventory
 - [Fixed] bug with not working tool
