@@ -1,6 +1,10 @@
 Changelog:
 
 ---------------------------------------
+ZvP Version 2.8.8 - 15.10.2015
+- [Fixed] Order of loading dependencies caused some errors
+
+---------------------------------------
 ZvP Version 2.8.7 - 09.10.2015
 - [Added] price indicator in kit select inventory
 - [Fixed] bug with not working tool
