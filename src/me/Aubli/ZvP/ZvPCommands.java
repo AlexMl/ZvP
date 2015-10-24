@@ -20,6 +20,8 @@ import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 import me.Aubli.ZvP.Sign.ISign;
 import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Statistic.DataRecord;
+import me.Aubli.ZvP.Statistic.DatabaseManager;
 import me.Aubli.ZvP.Translation.MessageKeys;
 import me.Aubli.ZvP.Translation.MessageKeys.arena;
 import me.Aubli.ZvP.Translation.MessageKeys.commands;
@@ -227,6 +229,16 @@ public class ZvPCommands implements CommandExecutor {
 		int wave = Integer.parseInt(args[1].split(":")[1]);
 		a.setRound(round);
 		a.setWave(wave);
+	    }
+	    
+	    if (args.length == 4) {
+		if (args[0].equalsIgnoreCase("insert")) {
+		    int kills = Integer.parseInt(args[1]);
+		    int deaths = Integer.parseInt(args[2]);
+		    double money = Double.parseDouble(args[3]);
+		    
+		    DatabaseManager.getManager().handleRecord(new DataRecord(playerSender.getUniqueId(), kills, deaths, money));
+		}
 	    }
 	    
 	    if (args.length == 6) {
