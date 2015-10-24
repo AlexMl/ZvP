@@ -43,4 +43,19 @@ public class DataRecord {
     public Timestamp getTimestamp() {
 	return this.timestamp;
     }
+    
+    public static DataRecord merge(DataRecord oldRecord, DataRecord newRecord) throws Exception {
+	
+	if (!oldRecord.getPlayerUUID().equals(newRecord.getPlayerUUID())) {
+	    throw new Exception("Datarecords can not be merged! Different playerUUIDs!");
+	}
+	
+	if (oldRecord.getTimestamp().after(newRecord.getTimestamp())) {
+	    DataRecord temp = oldRecord;
+	    oldRecord = newRecord;
+	    newRecord = temp;
+	}
+	
+	return new DataRecord(oldRecord.getPlayerUUID(), oldRecord.getKills() + newRecord.getKills(), oldRecord.getDeaths() + newRecord.getDeaths(), newRecord.getLeftMoney(), newRecord.getTimestamp().getTime());
+    }
 }
