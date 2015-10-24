@@ -3,8 +3,6 @@ package me.Aubli.ZvP.Statistic;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import org.bukkit.entity.Player;
-
 
 public class DataRecord {
     
@@ -14,12 +12,12 @@ public class DataRecord {
     private double leftMoney;
     private Timestamp timestamp;
     
-    public DataRecord(Player player, int kills, int deaths, double leftMoney) {
-	this(player, kills, deaths, leftMoney, System.currentTimeMillis());
+    public DataRecord(UUID playerUUID, int kills, int deaths, double leftMoney) {
+	this(playerUUID, kills, deaths, leftMoney, System.currentTimeMillis());
     }
     
-    public DataRecord(Player player, int kills, int deaths, double leftMoney, long timestamp) {
-	this.playerUUID = player.getUniqueId();
+    public DataRecord(UUID playerUUID, int kills, int deaths, double leftMoney, long timestamp) {
+	this.playerUUID = playerUUID;
 	this.kills = kills;
 	this.deaths = deaths;
 	this.leftMoney = leftMoney;
