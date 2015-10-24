@@ -5,8 +5,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -67,27 +68,43 @@ public class DatabaseManager implements DatabaseCallback {
 	return this.dbFolder;
     }
     
-    public void handleRecord(DataRecord record) {
+    public void handleRecord(DataRecord... records) {
+	List<DataRecord> insertRecords = new LinkedList<DataRecord>();
 	
-	DataRecord playerRecord = getRecord(record.getPlayerUUID());
-	
-	if (playerRecord == null) {
-	    insertRecord(record);
-	} else {
-	    try {
-		DataRecord mergedRecord = DataRecord.merge(playerRecord, record);
-		updateRecord(mergedRecord);
-		updateMap();
-	    } catch (Exception e) {
-		e.printStackTrace();
+	try {
+	    for (DataRecord record : records) {
+		DataRecord playerRecord = getRecord(record.getPlayerUUID());
+		
+		if (playerRecord == null) {
+		    insertRecords.add(record);
+		} else {
+		    DataRecord mergedRecord = DataRecord.merge(playerRecord, record);
+		    updateRecord(mergedRecord);
+		}
 	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
 	}
 	
+	if (insertRecords.size() > 0) {
+	    insertRecord(insertRecords.toArray(new DataRecord[0]));
+	}
+	updateMap();
     }
     
-    private void insertRecord(DataRecord record) {
-	String stm = "INSERT INTO " + tableName + "(puuid,pkills,pdeaths,plmoney,added) VALUES('" + record.getPlayerUUID().toString() + "', " + record.getKills() + ", " + record.getDeaths() + ", " + record.getLeftMoney() + ", '" + record.getTimestamp() + "');";
-	Bukkit.getScheduler().runTaskAsynchronously(ZvP.getInstance(), new DatabaseWriter(this, this.conn, stm));
+    private void insertRecord(DataRecord... records) {
+	
+	StringBuilder stmBuilder = new StringBuilder();
+	stmBuilder.append("INSERT INTO " + tableName + "(puuid,pkills,pdeaths,plmoney,added) VALUES ");
+	
+	for (DataRecord record : records) {
+	    stmBuilder.append("('" + record.getPlayerUUID().toString() + "', " + record.getKills() + ", " + record.getDeaths() + ", " + record.getLeftMoney() + ", '" + record.getTimestamp() + "'), ");
+	}
+	
+	stmBuilder.delete(stmBuilder.length() - 2, stmBuilder.length());
+	stmBuilder.append(";");
+	
+	Bukkit.getScheduler().runTaskAsynchronously(ZvP.getInstance(), new DatabaseWriter(this, this.conn, stmBuilder.toString()));// stmBuilder.toString()));
     }
     
     private void updateRecord(DataRecord record) {
@@ -97,13 +114,9 @@ public class DatabaseManager implements DatabaseCallback {
     
     private DataRecord getRecord(UUID playerUUID) {
 	
-	for (Entry<UUID, DataRecord> entry : this.dataMap.entrySet()) {
-	    if (entry.getKey().equals(playerUUID)) {
-		return entry.getValue();
-	    }
+	if (this.dataMap.containsKey(playerUUID)) {
+	    return this.dataMap.get(playerUUID);
 	}
-	
-	updateMap();
 	return null;
     }
     
@@ -157,7 +170,7 @@ public class DatabaseManager implements DatabaseCallback {
 	public void run() {
 	    try {
 		ResultSet result = this.conn.createStatement().executeQuery("SELECT * FROM " + tableName + ";");
-		System.out.println("Abfrage");
+		
 		while (result.next()) {
 		    UUID playerUUID = UUID.fromString(result.getString(1));
 		    int kills = result.getInt(2);
@@ -165,8 +178,7 @@ public class DatabaseManager implements DatabaseCallback {
 		    double leftMoney = result.getDouble(4);
 		    long timestamp = result.getTimestamp(6).getTime();
 		    
-		    DataRecord record = new DataRecord(playerUUID, kills, deaths, leftMoney, timestamp);
-		    this.callback.onRecordTransmission(record);
+		    this.callback.onRecordTransmission(new DataRecord(playerUUID, kills, deaths, leftMoney, timestamp));
 		}
 		
 	    } catch (SQLException e) {
