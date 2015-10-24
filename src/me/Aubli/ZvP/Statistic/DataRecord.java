@@ -15,11 +15,15 @@ public class DataRecord {
     private Timestamp timestamp;
     
     public DataRecord(Player player, int kills, int deaths, double leftMoney) {
+	this(player, kills, deaths, leftMoney, System.currentTimeMillis());
+    }
+    
+    public DataRecord(Player player, int kills, int deaths, double leftMoney, long timestamp) {
 	this.playerUUID = player.getUniqueId();
 	this.kills = kills;
 	this.deaths = deaths;
 	this.leftMoney = leftMoney;
-	this.timestamp = new Timestamp(System.currentTimeMillis());
+	this.timestamp = new Timestamp(timestamp);
     }
     
     public UUID getPlayerUUID() {
