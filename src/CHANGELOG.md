@@ -1,6 +1,10 @@
 Changelog:
 
 ---------------------------------------
+ZvP Version 2.8.8 - 27.10.2015
+- [Fixed] Error in shop sign
+
+---------------------------------------
 ZvP Version 2.8.8 - 15.10.2015
 - [Fixed] Order of loading dependencies caused some errors
 
