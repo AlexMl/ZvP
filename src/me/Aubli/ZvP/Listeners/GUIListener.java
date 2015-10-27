@@ -111,7 +111,7 @@ public class GUIListener implements Listener {
 		    event.setCancelled(true);
 		    eventPlayer.closeInventory();
 		    
-		    int signID = Integer.parseInt(event.getInventory().getTitle().split("Category ")[1].replace("(", "").replace(")", ""));
+		    int signID = Integer.parseInt(event.getInventory().getTitle().split(MessageManager.getMessage(inventory.select_category) + " ")[1].replace("(", "").replace(")", ""));
 		    ItemCategory cat = ItemCategory.getEnum(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()));
 		    
 		    if (cat != null && SignManager.getManager().getSign(signID) != null) {
