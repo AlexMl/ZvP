@@ -91,7 +91,6 @@ public class InfoSign implements ISign, Comparable<ISign> {
 		
 		this.arena = GameManager.getManager().getArena(this.signConfig.getInt("sign.Arena"));
 		this.lobby = GameManager.getManager().getLobby(this.signConfig.getInt("sign.Lobby"));
-		update(SignManager.getManager().getColorMap(getType()));
 	    } else {
 		throw new Exception("Location " + this.signLoc.getBlockX() + ":" + this.signLoc.getBlockY() + ":" + this.signLoc.getBlockZ() + " in World " + this.signLoc.getWorld().getName() + " is not a Sign! (File:" + signFile.getAbsolutePath());
 	    }
