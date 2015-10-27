@@ -13,11 +13,8 @@ import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.GameEnums.ArenaDifficultyLevel;
 import me.Aubli.ZvP.Game.GameEnums.ArenaStatus;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaArea;
-import me.Aubli.ZvP.Kits.KitManager;
-import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Sign.ISign;
 import me.Aubli.ZvP.Sign.SignManager;
-import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -30,9 +27,7 @@ import org.util.File.Converter.FileConverter.FileType;
 
 public class GameManager {
     
-    private static GameManager manager;
-    private ZvP plugin;
-    
+    private static GameManager instance;
     private String arenaPath;
     private String lobbyPath;
     
@@ -43,12 +38,9 @@ public class GameManager {
     
     private ScoreboardManager boardman;
     
-    public GameManager() {
-	manager = this;
-	this.plugin = ZvP.getInstance();
-	
-	this.arenaPath = this.plugin.getDataFolder().getPath() + "/Arenas";
-	this.lobbyPath = this.plugin.getDataFolder().getPath() + "/Lobbys";
+    private GameManager() {
+	this.arenaPath = ZvP.getInstance().getDataFolder().getPath() + "/Arenas";
+	this.lobbyPath = ZvP.getInstance().getDataFolder().getPath() + "/Lobbys";
 	
 	this.boardman = Bukkit.getScoreboardManager();
 	
@@ -63,34 +55,31 @@ public class GameManager {
 	    }
 	};
 	
-	loadConfig(true);
+	loadConfig();
+    }
+    
+    public static synchronized GameManager init() {
+	if (instance == null) {
+	    instance = new GameManager();
+	}
+	return instance;
     }
     
     public static GameManager getManager() {
-	return manager;
+	return init();
     }
     
     public void shutdown() {
 	stopGames();
     }
     
-    public void reloadConfig() {
+    public void reloadGameManager() {
 	stopGames();
-	loadConfig(false);
+	loadConfig();
     }
     
     // Config
-    private void loadConfig(boolean delay) {
-	
-	if (delay) {
-	    Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
-		
-		@Override
-		public void run() {
-		    reloadConfig();
-		}
-	    }, 3 * 20L);
-	}
+    private void loadConfig() {
 	
 	if (!new File(this.arenaPath).exists() || !new File(this.lobbyPath).exists()) {
 	    new File(this.arenaPath).mkdirs();
@@ -100,25 +89,8 @@ public class GameManager {
 	this.lobbys = new ArrayList<Lobby>();
 	this.arenas = new ArrayList<Arena>();
 	
-	ZvPConfig.reloadConfig();
-	
-	for (Player player : Bukkit.getOnlinePlayers()) {
-	    ZvP.removeTool(player);
-	}
-	
 	loadArenas();
 	loadLobbys();
-	
-	if (SignManager.getManager() != null) {
-	    SignManager.getManager().reloadConfig();
-	}
-	
-	new MessageManager(ZvPConfig.getLocale());
-	new ShopManager();
-	
-	if (KitManager.getManager() != null) {
-	    KitManager.getManager().loadKits();
-	}
     }
     
     // Load and save
@@ -243,7 +215,7 @@ public class GameManager {
 	return getPlayer(Bukkit.getPlayer(uuid));
     }
     
-    // Scoreboard manager
+    // Scoreboard instance
     public ScoreboardManager getBoardManager() {
 	return this.boardman;
     }

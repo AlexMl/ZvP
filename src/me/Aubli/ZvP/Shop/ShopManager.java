@@ -73,9 +73,7 @@ public class ShopManager {
     
     private ShopItem[] items;
     
-    public ShopManager() {
-	instance = this;
-	
+    private ShopManager() {
 	this.itemFile = new File(ZvP.getInstance().getDataFolder().getPath() + "/Shop/items.yml");
 	this.itemConfig = YamlConfiguration.loadConfiguration(this.itemFile);
 	
@@ -102,6 +100,21 @@ public class ShopManager {
 	}
 	
 	this.items = loadItems();
+    }
+    
+    public static synchronized ShopManager init() {
+	if (instance == null) {
+	    instance = new ShopManager();
+	}
+	return instance;
+    }
+    
+    public static ShopManager getManager() {
+	return init();
+    }
+    
+    public static void reload() {
+	instance = new ShopManager();
     }
     
     private boolean isOutdated() {
@@ -273,10 +286,6 @@ public class ShopManager {
 	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while loading Item from shop configuration!\nError: " + e.getMessage() + " in File " + this.itemFile.getPath(), true, false, e);
 	}
 	return null;
-    }
-    
-    public static ShopManager getManager() {
-	return instance;
     }
     
     public ShopItem[] getItems() {

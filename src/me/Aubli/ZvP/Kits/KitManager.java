@@ -40,7 +40,7 @@ public class KitManager {
     
     private ArrayList<IZvPKit> kits;
     
-    public KitManager(boolean enableKits) {
+    private KitManager(boolean enableKits) {
 	
 	instance = this;
 	
@@ -62,8 +62,15 @@ public class KitManager {
 	loadKits();
     }
     
-    public static KitManager getManager() {
+    public static synchronized KitManager init() {
+	if (instance == null) {
+	    instance = new KitManager(ZvPConfig.getEnableKits());
+	}
 	return instance;
+    }
+    
+    public static KitManager getManager() {
+	return init();
     }
     
     public void loadKits() {

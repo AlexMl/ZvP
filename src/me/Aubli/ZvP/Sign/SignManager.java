@@ -36,9 +36,7 @@ public class SignManager {
     
     private ArrayList<ISign> signs;
     
-    public SignManager() {
-	instance = this;
-	
+    private SignManager() {
 	this.signFolder = new File(ZvP.getInstance().getDataFolder().getPath() + "/Signs");
 	
 	this.colorMap = new HashMap<SignManager.SignType, Map<String, ChatColor>>();
@@ -47,6 +45,17 @@ public class SignManager {
 	}
 	
 	reloadConfig();
+    }
+    
+    public static synchronized SignManager init() {
+	if (instance == null) {
+	    instance = new SignManager();
+	}
+	return instance;
+    }
+    
+    public static SignManager getManager() {
+	return init();
     }
     
     public void reloadConfig() {
@@ -143,10 +152,6 @@ public class SignManager {
 	} catch (Exception e) {
 	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while saving color map: " + e.getMessage(), true, false, e);
 	}
-    }
-    
-    public static SignManager getManager() {
-	return instance;
     }
     
     public SignType getType(Location signLoc) {

@@ -79,8 +79,6 @@ public class ZvP extends JavaPlugin {
     @Override
     public void onEnable() {
 	initialize();
-	
-	logger.log(this.getClass(), "Plugin is enabled!", false);
     }
     
     private void initialize() {
@@ -125,15 +123,23 @@ public class ZvP extends JavaPlugin {
 	    }
 	}
 	
-	new MessageManager(ZvPConfig.getLocale());
-	new GameManager();
-	new SignManager();
-	new ShopManager();
-	new KitManager(ZvPConfig.getEnableKits());
-	
-	registerListeners();
-	getCommand("zvp").setExecutor(new ZvPCommands());
-	getCommand("zvptest").setExecutor(new ZvPCommands());
+	Bukkit.getScheduler().runTaskLater(getInstance(), new Runnable() {
+	    
+	    @Override
+	    public void run() {
+		new MessageManager(ZvPConfig.getLocale());
+		
+		GameManager.init();
+		ShopManager.init();
+		SignManager.init();
+		KitManager.init();
+		
+		registerListeners();
+		getCommand("zvp").setExecutor(new ZvPCommands());
+		getCommand("zvptest").setExecutor(new ZvPCommands());
+		logger.log(this.getClass(), "Plugin is enabled!", false);
+	    }
+	}, isServerReload() ? 0L : 4 * 20L);
 	
 	if (ZvPConfig.getUseMetrics() == true) {
 	    try {
@@ -182,6 +188,33 @@ public class ZvP extends JavaPlugin {
 	pm.registerEvents(new GUIListener(), this);
 	pm.registerEvents(new EntityListener(), this);
 	pm.registerEvents(new ChatListener(), this);
+    }
+    
+    public void reloadPlugin() {
+	
+	ZvPConfig.reloadConfig();
+	
+	for (Player player : Bukkit.getOnlinePlayers()) {
+	    ZvP.removeTool(player);
+	}
+	
+	new MessageManager(ZvPConfig.getLocale());
+	GameManager.getManager().reloadGameManager();
+	SignManager.getManager().reloadConfig();
+	ShopManager.reload();
+	KitManager.getManager().loadKits();
+    }
+    
+    private boolean isServerReload() {
+	StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+	
+	for (StackTraceElement ste : stackTrace) {
+	    if (ste.toString().contains("Bukkit.reload")) { // INFO: Magic String
+		return true;
+	    }
+	}
+	
+	return false;
     }
     
     public static ZvP getInstance() {
