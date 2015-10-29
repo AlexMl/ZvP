@@ -49,6 +49,8 @@ public class DatabaseManager implements DatabaseCallback {
 	updateMap();
 	// String url = "jdbc:" + sqlType + "://" + sqlUrl + ":" + port + "/" + database;
 	// mysql://localhost:3306/mc
+	
+	// TODO remove debug, replace with logger
 	System.out.println(this.conn.getMetaData().getDatabaseProductName());
 	System.out.println(this.conn.getMetaData().getDatabaseProductVersion());
 	System.out.println(this.conn.getMetaData().getDriverVersion());
@@ -91,7 +93,7 @@ public class DatabaseManager implements DatabaseCallback {
 		}
 	    }
 	} catch (Exception e) {
-	    e.printStackTrace();
+	    ZvP.getPluginLogger().log(getClass(), Level.WARNING, "Error while queuing data record: " + e.getMessage(), true, false, e);
 	}
 	
 	if (insertRecords.size() > 0) {
@@ -198,7 +200,6 @@ public class DatabaseManager implements DatabaseCallback {
 	    } catch (SQLException e) {
 		this.callback.handleException(e);
 	    }
-	    
 	}
     }
 }
