@@ -231,23 +231,25 @@ public class ZvPCommands implements CommandExecutor {
 		    
 		    long start = System.currentTimeMillis();
 		    Random rand = new Random();
-		    DataRecord[] ra = new DataRecord[max];
-		    for (int i = 0; i < max; i++) {
-			ra[i] = new DataRecord(UUID.randomUUID(), rand.nextInt(50), rand.nextInt(50), rand.nextInt(50), rand.nextDouble() * 100.0);
+		    
+		    for (int l = 0; l < 5; l++) {
+			
+			DataRecord[] ra = new DataRecord[max];
+			for (int i = 0; i < max; i++) {
+			    ra[i] = new DataRecord(UUID.randomUUID(), rand.nextInt(50), rand.nextInt(50), rand.nextInt(50), rand.nextDouble() * 100.0);
+			}
+			DatabaseManager.getManager().handleRecord(ra);
+			
 		    }
-		    
-		    long middle = System.currentTimeMillis();
-		    
-		    DatabaseManager.getManager().handleRecord(ra);
 		    long end = System.currentTimeMillis();
 		    
-		    double diff1 = (middle - start) / 1000.0;
-		    double diff2 = (end - middle) / 1000.0;
+		    // double diff1 = (middle - start) / 1000.0;
+		    // double diff2 = (end - middle) / 1000.0;
 		    double diff3 = (end - start) / 1000.0;
 		    
 		    System.out.println("Für " + max + ":");
-		    System.out.println("Randomize: " + diff1);
-		    System.out.println("Insert: " + diff2);
+		    // System.out.println("Randomize: " + diff1);
+		    // System.out.println("Insert: " + diff2);
 		    System.out.println("Together: " + diff3);
 		    return true;
 		}
