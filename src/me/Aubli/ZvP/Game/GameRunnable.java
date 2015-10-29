@@ -247,7 +247,7 @@ public class GameRunnable extends BukkitRunnable {
 			for (int i = 0; i < this.arena.getPlayers().length; i++) {
 			    ZvPPlayer p = this.arena.getPlayers()[i];
 			    deaths += p.getDeaths();
-			    records[i] = new DataRecord(p.getUuid(), p.getKills(), p.getDeaths(), this.arena.getScore().getScore(p));
+			    records[i] = new DataRecord(p.getUuid(), p.getKills(), p.getKills(), p.getDeaths(), this.arena.getScore().getScore(p));
 			}
 			DatabaseManager.getManager().handleRecord(records);
 			

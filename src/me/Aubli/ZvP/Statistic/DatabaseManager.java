@@ -56,7 +56,7 @@ public class DatabaseManager implements DatabaseCallback {
     }
     
     private void createTable() throws SQLException {
-	String createTableSTM = "CREATE TABLE IF NOT EXISTS " + tableName + "(puuid VARCHAR(36) NOT NULL, pkills INTEGER, pdeaths INTEGER, plmoney DECIMAL(8,3), changed TIMESTAMP, added TIMESTAMP, PRIMARY KEY(puuid));";
+	String createTableSTM = "CREATE TABLE IF NOT EXISTS " + tableName + "(puuid VARCHAR(36) NOT NULL, pkills INTEGER, phkills INTEGER, pdeaths INTEGER, plmoney DECIMAL(8,3), changed TIMESTAMP, added TIMESTAMP, PRIMARY KEY(puuid));";
 	this.conn.createStatement().executeUpdate(createTableSTM);
     }
     
@@ -95,10 +95,10 @@ public class DatabaseManager implements DatabaseCallback {
     private void insertRecord(DataRecord... records) {
 	
 	StringBuilder stmBuilder = new StringBuilder();
-	stmBuilder.append("INSERT INTO " + tableName + "(puuid,pkills,pdeaths,plmoney,added) VALUES ");
+	stmBuilder.append("INSERT INTO " + tableName + "(puuid,pkills,phkills,pdeaths,plmoney,added) VALUES ");
 	
 	for (DataRecord record : records) {
-	    stmBuilder.append("('" + record.getPlayerUUID().toString() + "', " + record.getKills() + ", " + record.getDeaths() + ", " + record.getLeftMoney() + ", '" + record.getTimestamp() + "'), ");
+	    stmBuilder.append("('" + record.getPlayerUUID().toString() + "', " + record.getKills() + ", " + record.getKills() + ", " + record.getDeaths() + ", " + record.getLeftMoney() + ", '" + record.getTimestamp() + "'), ");
 	}
 	
 	stmBuilder.delete(stmBuilder.length() - 2, stmBuilder.length());
@@ -108,7 +108,7 @@ public class DatabaseManager implements DatabaseCallback {
     }
     
     private void updateRecord(DataRecord record) {
-	String stm = "UPDATE " + tableName + " SET pkills=" + record.getKills() + ",pdeaths=" + record.getDeaths() + ",plmoney=" + record.getLeftMoney() + " WHERE puuid='" + record.getPlayerUUID().toString() + "';";
+	String stm = "UPDATE " + tableName + " SET pkills=" + record.getKills() + ",phkills=" + record.getMaxKills() + ",pdeaths=" + record.getDeaths() + ",plmoney=" + record.getLeftMoney() + " WHERE puuid='" + record.getPlayerUUID().toString() + "';";
 	Bukkit.getScheduler().runTaskAsynchronously(ZvP.getInstance(), new DatabaseWriter(this, this.conn, stm));
     }
     
@@ -174,11 +174,12 @@ public class DatabaseManager implements DatabaseCallback {
 		while (result.next()) {
 		    UUID playerUUID = UUID.fromString(result.getString(1));
 		    int kills = result.getInt(2);
-		    int deaths = result.getInt(3);
-		    double leftMoney = result.getDouble(4);
-		    long timestamp = result.getTimestamp(6).getTime();
+		    int maxKills = result.getInt(3);
+		    int deaths = result.getInt(4);
+		    double leftMoney = result.getDouble(5);
+		    long timestamp = result.getTimestamp(7).getTime();
 		    
-		    this.callback.onRecordTransmission(new DataRecord(playerUUID, kills, deaths, leftMoney, timestamp));
+		    this.callback.onRecordTransmission(new DataRecord(playerUUID, kills, maxKills, deaths, leftMoney, timestamp));
 		}
 		
 	    } catch (SQLException e) {
