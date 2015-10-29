@@ -2,6 +2,8 @@ package me.Aubli.ZvP;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.Arena;
@@ -20,6 +22,8 @@ import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 import me.Aubli.ZvP.Sign.ISign;
 import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Statistic.DataRecord;
+import me.Aubli.ZvP.Statistic.DatabaseManager;
 import me.Aubli.ZvP.Translation.MessageKeys;
 import me.Aubli.ZvP.Translation.MessageKeys.arena;
 import me.Aubli.ZvP.Translation.MessageKeys.commands;
@@ -222,11 +226,50 @@ public class ZvPCommands implements CommandExecutor {
 		    return true;
 		}
 		
+		if (args[0].equalsIgnoreCase("insert")) {
+		    int max = Integer.parseInt(args[1]);
+		    
+		    long start = System.currentTimeMillis();
+		    Random rand = new Random();
+		    
+		    for (int l = 0; l < 5; l++) {
+			
+			DataRecord[] ra = new DataRecord[max];
+			for (int i = 0; i < max; i++) {
+			    ra[i] = new DataRecord(UUID.randomUUID(), rand.nextInt(50), rand.nextInt(50), rand.nextInt(50), rand.nextDouble() * 100.0);
+			}
+			DatabaseManager.getManager().handleRecord(ra);
+			
+		    }
+		    long end = System.currentTimeMillis();
+		    
+		    // double diff1 = (middle - start) / 1000.0;
+		    // double diff2 = (end - middle) / 1000.0;
+		    double diff3 = (end - start) / 1000.0;
+		    
+		    System.out.println("Für " + max + ":");
+		    // System.out.println("Randomize: " + diff1);
+		    // System.out.println("Insert: " + diff2);
+		    System.out.println("Together: " + diff3);
+		    return true;
+		}
+		
 		Arena a = this.game.getArena(Integer.parseInt(args[0]));
 		int round = Integer.parseInt(args[1].split(":")[0]);
 		int wave = Integer.parseInt(args[1].split(":")[1]);
 		a.setRound(round);
 		a.setWave(wave);
+	    }
+	    
+	    if (args.length == 4) {
+		if (args[0].equalsIgnoreCase("insert")) {
+		    int kills = Integer.parseInt(args[1]);
+		    int deaths = Integer.parseInt(args[2]);
+		    double money = Double.parseDouble(args[3]);
+		    
+		    DatabaseManager.getManager().handleRecord(new DataRecord(playerSender.getUniqueId(), kills, kills, deaths, money));
+		    return true;
+		}
 	    }
 	    
 	    if (args.length == 6) {
@@ -244,7 +287,7 @@ public class ZvPCommands implements CommandExecutor {
 			    playerSender.sendMessage("D:" + d + " P:" + p + " R:" + ir + " W:" + iw + " @" + id + " --> " + sz + " --> IT: " + EntityListener.getArenaInteractionTime(sz));
 			}
 		    }
-		    
+		    return true;
 		}
 	    }
 	}

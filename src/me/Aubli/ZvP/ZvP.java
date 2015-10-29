@@ -1,6 +1,7 @@
 package me.Aubli.ZvP;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -17,6 +18,7 @@ import me.Aubli.ZvP.Listeners.PlayerListener;
 import me.Aubli.ZvP.Listeners.SignChangelistener;
 import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Statistic.DatabaseManager;
 import me.Aubli.ZvP.Translation.MessageManager;
 import net.milkbowl.vault.economy.Economy;
 
@@ -92,6 +94,20 @@ public class ZvP extends JavaPlugin {
 	
 	converter = new FileConverter(this);
 	
+	if (ZvPConfig.getEnabledStatistics()) {
+	    try {
+		new DatabaseManager(ZvPConfig.getDBInfo());
+	    } catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    } catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    } catch (Exception e) {
+		e.printStackTrace();
+	    }
+	}
+	
 	new MessageManager(ZvPConfig.getLocale());
 	new GameManager();
 	new SignManager();
@@ -127,8 +143,6 @@ public class ZvP extends JavaPlugin {
 		ZvPConfig.setWorlGuardSupport(false);
 	    }
 	}
-	
-	// TODO Check essentials
 	
 	if (ZvPConfig.getUseEssentialsKits()) {
 	    if (getServer().getPluginManager().getPlugin("Essentials") == null) {

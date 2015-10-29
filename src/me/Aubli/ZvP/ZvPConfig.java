@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 
+import me.Aubli.ZvP.Statistic.DatabaseInfo;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.util.File.InsertComment.CommentUtil;
 
@@ -40,6 +42,15 @@ public class ZvPConfig {
     private static int defaultWaves;
     
     private static int defaultZombieSpawnRate;
+    
+    private static boolean enableStatistics;
+    private static boolean useDatabase;
+    private static String db_host;
+    private static int db_port;
+    private static String db_protocol;
+    private static String db_name;
+    private static String db_user;
+    private static String db_pass;
     
     private static boolean modifyChat = true;
     private static List<String> commandWhiteList;
@@ -79,6 +90,15 @@ public class ZvPConfig {
 	
 	getConfig().addDefault("zombies.default_spawnRate", 8);
 	
+	getConfig().addDefault("stats.enable_game_statistics", false);
+	getConfig().addDefault("stats.useDatabase", true);
+	getConfig().addDefault("stats.db_host", "localhost");
+	getConfig().addDefault("stats.db_port", 3306);
+	getConfig().addDefault("stats.db_protocol", "mysql");
+	getConfig().addDefault("stats.db_name", "minecraft");
+	getConfig().addDefault("stats.db_user", "user");
+	getConfig().addDefault("stats.db_pass", "password");
+	
 	getConfig().addDefault("chat.modifyChat", true);
 	getConfig().addDefault("chat.commandWhitelist", commandWhiteList);
 	
@@ -101,6 +121,10 @@ public class ZvPConfig {
 	insertComments.addComment("default_rounds", "Amount of rounds a newly created arena will have by default.");
 	insertComments.addComment("default_waves", "Amount of waves a newly created arena will have by default.");
 	insertComments.addComment("default_spawnRate", "Default zombie spawnrate for newly created arenas.#The spawnrate defines how many zombies will spawn.#The calculation uses arena size, amount of player, spawnrate and difficulty setting.");
+	
+	insertComments.addComment("enable_game_statistics", "Enables general game statistics such as kills, deaths, etc..#Statistics should be written in a database. If no database is available, a file will be used!");
+	insertComments.addComment("useDatabase", "If true, the following information will be used to connect to the database.#Otherwise ZvP uses a file for statistics!");
+	
 	insertComments.addComment("modifyChat", "If enabled the chat will be modified to match ZvP colors and commands will be disabled.#If disabled the chat will not be changed at all!");
 	insertComments.addComment("commandWhitelist", "A list of commands that can be executed during a ZvP game.#Note that zvp commands are automatically included!");
 	insertComments.writeComments();
@@ -130,6 +154,15 @@ public class ZvPConfig {
 	maxPlayers = getConfig().getInt("game.maximal_Players");
 	defaultRounds = getConfig().getInt("game.default_rounds");
 	defaultWaves = getConfig().getInt("game.default_waves");
+	
+	enableStatistics = getConfig().getBoolean("stats.enable_game_statistics");
+	useDatabase = getConfig().getBoolean("stats.useDatabase");
+	db_host = getConfig().getString("stats.db_host");
+	db_port = getConfig().getInt("stats.db_port");
+	db_protocol = getConfig().getString("stats.db_protocol");
+	db_name = getConfig().getString("stats.db_name");
+	db_user = getConfig().getString("stats.db_user");
+	db_pass = getConfig().getString("stats.db_pass");
 	
 	defaultZombieSpawnRate = getConfig().getInt("zombies.default_spawnRate");
 	
@@ -197,12 +230,24 @@ public class ZvPConfig {
 	return allowDuringGameJoin;
     }
     
+    public static boolean getEnabledStatistics() {
+	return enableStatistics;
+    }
+    
+    public static boolean getUseDatabase() {
+	return useDatabase;
+    }
+    
     public static boolean getModifyChat() {
 	return modifyChat;
     }
     
     public static Locale getLocale() {
 	return locale;
+    }
+    
+    public static DatabaseInfo getDBInfo() {
+	return new DatabaseInfo(db_host, db_port, db_protocol, db_name, db_user, db_pass, getUseDatabase());
     }
     
     public static int getLogLevel() {

@@ -67,13 +67,17 @@ public class PluginOutput {
     
     public void log(Class<?> senderClass, Level level, String message, boolean logMessage, boolean debugMessage, Exception e) {
 	
-	if (logMessage || e != null || level.intValue() >= Level.WARNING.intValue()) {
+	if (logMessage || e != null || level.intValue() > Level.INFO.intValue()) {
 	    logData(senderClass, level, message, e);
 	}
 	
 	if (e != null) {
-	    this.log.log(Level.WARNING, message);
-	    this.log.log(Level.WARNING, e.toString());
+	    this.log.log(level, message);
+	    this.log.log(level, e.toString());
+	    
+	    if (isDebugMode()) {
+		this.log.log(level, getStackTrace(e));
+	    }
 	    return;
 	}
 	
@@ -106,11 +110,7 @@ public class PluginOutput {
 	    FileWriter writer = new FileWriter(this.logFile, true);
 	    
 	    if (exception != null) {
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		exception.printStackTrace(pw);
-		
-		message += "\n" + sw.toString();
+		message += "\n" + getStackTrace(exception);
 	    }
 	    
 	    writer.write("[" + formatter.format(currentTime) + "] [" + senderClass.getSimpleName() + "] [" + level.getName() + "] " + message);
@@ -123,4 +123,10 @@ public class PluginOutput {
 	}
     }
     
+    private String getStackTrace(Exception e) {
+	StringWriter sw = new StringWriter();
+	PrintWriter pw = new PrintWriter(sw);
+	e.printStackTrace(pw);
+	return sw.toString();
+    }
 }

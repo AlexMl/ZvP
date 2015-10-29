@@ -17,6 +17,7 @@ import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Shop.ShopManager;
 import me.Aubli.ZvP.Sign.ISign;
 import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Statistic.DatabaseManager;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.Bukkit;
@@ -119,6 +120,15 @@ public class GameManager {
 	if (KitManager.getManager() != null) {
 	    KitManager.getManager().loadKits();
 	}
+	
+	try {
+	    if (ZvPConfig.getEnabledStatistics()) {
+		DatabaseManager.getManager().reload();
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	
     }
     
     // Load and save

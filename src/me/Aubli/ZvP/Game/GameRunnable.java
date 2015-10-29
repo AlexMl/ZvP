@@ -7,6 +7,8 @@ import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.GameEnums.ArenaStatus;
 import me.Aubli.ZvP.Listeners.EntityListener;
+import me.Aubli.ZvP.Statistic.DataRecord;
+import me.Aubli.ZvP.Statistic.DatabaseManager;
 import me.Aubli.ZvP.Translation.MessageKeys.game;
 import me.Aubli.ZvP.Translation.MessageManager;
 
@@ -241,9 +243,13 @@ public class GameRunnable extends BukkitRunnable {
 			double money = this.arena.getScore().getScore(null);
 			int deaths = 0;
 			
-			for (ZvPPlayer p : this.arena.getPlayers()) {
+			DataRecord[] records = new DataRecord[this.arena.getPlayers().length];
+			for (int i = 0; i < this.arena.getPlayers().length; i++) {
+			    ZvPPlayer p = this.arena.getPlayers()[i];
 			    deaths += p.getDeaths();
+			    records[i] = new DataRecord(p.getUuid(), p.getKills(), p.getKills(), p.getDeaths(), this.arena.getScore().getScore(p));
 			}
+			DatabaseManager.getManager().handleRecord(records);
 			
 			String[] donP = MessageManager.getMessage(game.won_messages).split(";");
 			int index = this.rand.nextInt(donP.length);
