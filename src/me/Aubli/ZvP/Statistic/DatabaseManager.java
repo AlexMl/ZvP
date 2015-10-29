@@ -103,13 +103,14 @@ public class DatabaseManager implements DatabaseCallback {
     private void insertRecord(DataRecord... records) {
 	
 	StringBuilder stmBuilder = new StringBuilder();
-	stmBuilder.append("INSERT INTO " + tableName + "(puuid,pkills,phkills,pdeaths,plmoney,added) VALUES ");
+	stmBuilder.append("INSERT INTO " + tableName + "(puuid,pkills,phkills,pdeaths,plmoney,added)");
 	
 	for (DataRecord record : records) {
-	    stmBuilder.append("('" + record.getPlayerUUID().toString() + "', '" + record.getKills() + "', '" + record.getKills() + "', '" + record.getDeaths() + "', '" + record.getLeftMoney() + "', '" + record.getTimestamp() + "'), ");
+	    stmBuilder.append(" SELECT '" + record.getPlayerUUID() + "', '" + record.getKills() + "', '" + record.getKills() + "', '" + record.getDeaths() + "', '" + record.getLeftMoney() + "', '" + record.getTimestamp() + "'");
+	    stmBuilder.append(" UNION ALL");
 	}
 	
-	stmBuilder.delete(stmBuilder.length() - 2, stmBuilder.length());
+	stmBuilder.delete(stmBuilder.length() - 10, stmBuilder.length());
 	stmBuilder.append(";");
 	
 	Bukkit.getScheduler().runTaskAsynchronously(ZvP.getInstance(), new DatabaseWriter(this, this.conn, stmBuilder.toString()));// stmBuilder.toString()));
@@ -180,7 +181,6 @@ public class DatabaseManager implements DatabaseCallback {
 	    try {
 		Statement statement = this.conn.createStatement();
 		ResultSet result = statement.executeQuery("SELECT * FROM " + tableName + ";");
-		statement.close();
 		
 		while (result.next()) {
 		    UUID playerUUID = UUID.fromString(result.getString(1));
@@ -192,6 +192,8 @@ public class DatabaseManager implements DatabaseCallback {
 		    
 		    this.callback.onRecordTransmission(new DataRecord(playerUUID, kills, maxKills, deaths, leftMoney, timestamp));
 		}
+		
+		statement.close();
 		result.close();
 	    } catch (SQLException e) {
 		this.callback.handleException(e);
