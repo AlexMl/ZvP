@@ -178,7 +178,9 @@ public class DatabaseManager implements DatabaseCallback {
 	@Override
 	public void run() {
 	    try {
-		ResultSet result = this.conn.createStatement().executeQuery("SELECT * FROM " + tableName + ";");
+		Statement statement = this.conn.createStatement();
+		ResultSet result = statement.executeQuery("SELECT * FROM " + tableName + ";");
+		statement.close();
 		
 		while (result.next()) {
 		    UUID playerUUID = UUID.fromString(result.getString(1));
