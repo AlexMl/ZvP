@@ -8,17 +8,19 @@ public class DataRecord {
     
     private UUID playerUUID;
     private int kills;
+    private int maxKills;
     private int deaths;
     private double leftMoney;
     private Timestamp timestamp;
     
-    public DataRecord(UUID playerUUID, int kills, int deaths, double leftMoney) {
-	this(playerUUID, kills, deaths, leftMoney, System.currentTimeMillis());
+    public DataRecord(UUID playerUUID, int kills, int maxKills, int deaths, double leftMoney) {
+	this(playerUUID, kills, maxKills, deaths, leftMoney, System.currentTimeMillis());
     }
     
-    public DataRecord(UUID playerUUID, int kills, int deaths, double leftMoney, long timestamp) {
+    public DataRecord(UUID playerUUID, int kills, int maxKills, int deaths, double leftMoney, long timestamp) {
 	this.playerUUID = playerUUID;
 	this.kills = kills;
+	this.maxKills = maxKills;
 	this.deaths = deaths;
 	this.leftMoney = leftMoney;
 	this.timestamp = new Timestamp(timestamp);
@@ -30,6 +32,10 @@ public class DataRecord {
     
     public int getKills() {
 	return this.kills;
+    }
+    
+    public int getMaxKills() {
+	return this.maxKills;
     }
     
     public int getDeaths() {
@@ -44,6 +50,11 @@ public class DataRecord {
 	return this.timestamp;
     }
     
+    @Override
+    public String toString() {
+	return getClass().getSimpleName() + "[P:" + getPlayerUUID() + ", K:" + getKills() + ", hK:" + getMaxKills() + ", D:" + getDeaths() + ", lM:" + getLeftMoney() + ", " + getTimestamp().toString() + "]";
+    }
+    
     public static DataRecord merge(DataRecord oldRecord, DataRecord newRecord) throws Exception {
 	
 	if (!oldRecord.getPlayerUUID().equals(newRecord.getPlayerUUID())) {
@@ -55,7 +66,6 @@ public class DataRecord {
 	    oldRecord = newRecord;
 	    newRecord = temp;
 	}
-	
-	return new DataRecord(oldRecord.getPlayerUUID(), oldRecord.getKills() + newRecord.getKills(), oldRecord.getDeaths() + newRecord.getDeaths(), newRecord.getLeftMoney(), newRecord.getTimestamp().getTime());
+	return new DataRecord(oldRecord.getPlayerUUID(), oldRecord.getKills() + newRecord.getKills(), (newRecord.getMaxKills() > oldRecord.getMaxKills() ? newRecord.getMaxKills() : oldRecord.getMaxKills()), oldRecord.getDeaths() + newRecord.getDeaths(), newRecord.getLeftMoney(), newRecord.getTimestamp().getTime());
     }
 }

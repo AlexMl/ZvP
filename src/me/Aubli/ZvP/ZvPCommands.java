@@ -233,7 +233,7 @@ public class ZvPCommands implements CommandExecutor {
 		    Random rand = new Random();
 		    DataRecord[] ra = new DataRecord[max];
 		    for (int i = 0; i < max; i++) {
-			ra[i] = new DataRecord(UUID.randomUUID(), rand.nextInt(50), rand.nextInt(50), rand.nextDouble() * 100.0);
+			ra[i] = new DataRecord(UUID.randomUUID(), rand.nextInt(50), rand.nextInt(50), rand.nextInt(50), rand.nextDouble() * 100.0);
 		    }
 		    
 		    long middle = System.currentTimeMillis();
@@ -265,7 +265,7 @@ public class ZvPCommands implements CommandExecutor {
 		    int deaths = Integer.parseInt(args[2]);
 		    double money = Double.parseDouble(args[3]);
 		    
-		    DatabaseManager.getManager().handleRecord(new DataRecord(playerSender.getUniqueId(), kills, deaths, money));
+		    DatabaseManager.getManager().handleRecord(new DataRecord(playerSender.getUniqueId(), kills, kills, deaths, money));
 		    return true;
 		}
 	    }
