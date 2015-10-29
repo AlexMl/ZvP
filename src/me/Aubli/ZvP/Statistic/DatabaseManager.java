@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
+import me.Aubli.ZvP.ZvPConfig;
 
 import org.bukkit.Bukkit;
 
@@ -48,6 +50,8 @@ public class DatabaseManager implements DatabaseCallback {
 	// String url = "jdbc:" + sqlType + "://" + sqlUrl + ":" + port + "/" + database;
 	// mysql://localhost:3306/mc
 	System.out.println(this.conn.getMetaData().getDatabaseProductName());
+	System.out.println(this.conn.getMetaData().getDatabaseProductVersion());
+	System.out.println(this.conn.getMetaData().getDriverVersion());
     }
     
     private Connection initializeConnection() throws SQLException, ClassNotFoundException {
@@ -58,6 +62,10 @@ public class DatabaseManager implements DatabaseCallback {
     private void createTable() throws SQLException {
 	String createTableSTM = "CREATE TABLE IF NOT EXISTS " + tableName + "(puuid VARCHAR(36) NOT NULL, pkills INTEGER, phkills INTEGER, pdeaths INTEGER, plmoney DECIMAL(8,3), changed TIMESTAMP, added TIMESTAMP, PRIMARY KEY(puuid));";
 	this.conn.createStatement().executeUpdate(createTableSTM);
+    }
+    
+    public void reload() throws ClassNotFoundException, SQLException {
+	instance = new DatabaseManager(ZvPConfig.getDBInfo());
     }
     
     public static DatabaseManager getManager() {
@@ -98,7 +106,7 @@ public class DatabaseManager implements DatabaseCallback {
 	stmBuilder.append("INSERT INTO " + tableName + "(puuid,pkills,phkills,pdeaths,plmoney,added) VALUES ");
 	
 	for (DataRecord record : records) {
-	    stmBuilder.append("('" + record.getPlayerUUID().toString() + "', " + record.getKills() + ", " + record.getKills() + ", " + record.getDeaths() + ", " + record.getLeftMoney() + ", '" + record.getTimestamp() + "'), ");
+	    stmBuilder.append("('" + record.getPlayerUUID().toString() + "', '" + record.getKills() + "', '" + record.getKills() + "', '" + record.getDeaths() + "', '" + record.getLeftMoney() + "', '" + record.getTimestamp() + "'), ");
 	}
 	
 	stmBuilder.delete(stmBuilder.length() - 2, stmBuilder.length());
@@ -113,7 +121,6 @@ public class DatabaseManager implements DatabaseCallback {
     }
     
     private DataRecord getRecord(UUID playerUUID) {
-	
 	if (this.dataMap.containsKey(playerUUID)) {
 	    return this.dataMap.get(playerUUID);
 	}
@@ -149,7 +156,9 @@ public class DatabaseManager implements DatabaseCallback {
 	@Override
 	public void run() {
 	    try {
-		this.conn.createStatement().executeUpdate(this.sqlStatement);
+		Statement s = this.conn.createStatement();
+		s.executeUpdate(this.sqlStatement);
+		s.close();
 	    } catch (SQLException e) {
 		this.callback.handleException(e);
 	    }
@@ -181,7 +190,7 @@ public class DatabaseManager implements DatabaseCallback {
 		    
 		    this.callback.onRecordTransmission(new DataRecord(playerUUID, kills, maxKills, deaths, leftMoney, timestamp));
 		}
-		
+		result.close();
 	    } catch (SQLException e) {
 		this.callback.handleException(e);
 	    }
