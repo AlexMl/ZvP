@@ -11,11 +11,11 @@ public class DatabaseInfo {
     
     private boolean flatFile;
     
-    public DatabaseInfo(String host, int port, String protocol, String name, String user, String pass, boolean useDatabase) {
+    public DatabaseInfo(String host, int port, String protocol, String databaseName, String user, String pass, boolean useDatabase) {
 	this.host = host;
 	this.port = port;
 	this.protocol = protocol;
-	this.name = name;
+	this.name = databaseName;
 	this.user = user;
 	this.pass = pass;
 	
@@ -34,7 +34,7 @@ public class DatabaseInfo {
 	return this.protocol;
     }
     
-    public String getName() {
+    public String getDatabaseName() {
 	return this.name;
     }
     
@@ -58,7 +58,7 @@ public class DatabaseInfo {
 	this.protocol = protocol;
     }
     
-    public void setName(String name) {
+    public void setDatabaseName(String name) {
 	this.name = name;
     }
     
@@ -78,9 +78,9 @@ public class DatabaseInfo {
 	
 	if (usingFlatFile()) {
 	    Class.forName("org.sqlite.JDBC");
-	    return "jdbc:sqlite:" + DatabaseManager.getManager().getFlatFileFolder().getAbsolutePath() + "/" + getName() + ".db";
+	    return "jdbc:sqlite:" + DatabaseManager.getFlatFileFolder().getAbsolutePath() + "/" + getDatabaseName() + ".db";
 	} else {
-	    return "jdbc:" + getProtocol() + "://" + getHost() + ":" + getPort() + "/" + getName();
+	    return "jdbc:" + getProtocol() + "://" + getHost() + ":" + getPort() + "/" + getDatabaseName();
 	}
     }
 }
