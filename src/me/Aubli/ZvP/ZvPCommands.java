@@ -1,5 +1,6 @@
 package me.Aubli.ZvP;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -232,7 +233,7 @@ public class ZvPCommands implements CommandExecutor {
 		    long start = System.currentTimeMillis();
 		    Random rand = new Random();
 		    
-		    for (int l = 0; l < 5; l++) {
+		    for (int l = 0; l < 2; l++) {
 			
 			DataRecord[] ra = new DataRecord[max];
 			for (int i = 0; i < max; i++) {
@@ -492,6 +493,22 @@ public class ZvPCommands implements CommandExecutor {
 		    }
 		}
 		
+		if (args[0].equalsIgnoreCase("record")) {
+		    if (playerSender.hasPermission("zvp.manage")) {
+			long duration = Integer.parseInt(args[1]) * 3600 * 1000L;
+			try {
+			    DatabaseManager.getManager().startTimedStatistics(duration);
+			} catch (SQLException e) {
+			    // TODO Auto-generated catch block
+			    e.printStackTrace();
+			}
+			return true;
+		    } else {
+			commandDenied(playerSender);
+			return true;
+		    }
+		}
+		
 		if (args[0].equalsIgnoreCase("add")) {
 		    if (args[1].equalsIgnoreCase("arena")) {
 			if (playerSender.hasPermission("zvp.manage.arena")) {
@@ -528,6 +545,7 @@ public class ZvPCommands implements CommandExecutor {
 		    printCommands(playerSender, 2);
 		    return true;
 		}
+		
 		if (args[0].equalsIgnoreCase("stop")) {
 		    if (playerSender.hasPermission("zvp.stop")) {
 			Arena a = this.game.getArena(parseInt(args[1]));
@@ -807,6 +825,7 @@ public class ZvPCommands implements CommandExecutor {
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp stop [Arena-ID]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp addkit [Name]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp removekit [Name]");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp record [duration (in hours)]");
 		    break;
 		
 		case 2:
