@@ -495,7 +495,7 @@ public class ZvPCommands implements CommandExecutor {
 		
 		if (args[0].equalsIgnoreCase("record")) {
 		    if (playerSender.hasPermission("zvp.manage")) {
-			long duration = Integer.parseInt(args[1]) * 3600 * 1000L;
+			long duration = (long) (Double.parseDouble(args[1]) * 3600 * 1000);
 			try {
 			    DatabaseManager.getManager().startTimedStatistics(duration);
 			} catch (SQLException e) {
