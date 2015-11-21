@@ -96,7 +96,7 @@ public class ZvP extends JavaPlugin {
 	
 	if (ZvPConfig.getEnabledStatistics()) {
 	    try {
-		new DatabaseManager(ZvPConfig.getDBInfo());
+		DatabaseManager.init(ZvPConfig.getDBInfo());
 	    } catch (ClassNotFoundException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
