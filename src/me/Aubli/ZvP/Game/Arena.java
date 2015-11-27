@@ -288,7 +288,7 @@ public class Arena implements Comparable<Arena> {
 	}
 	
 	scoreMap = SortMap.sortByValue(scoreMap);
-	return GameManager.getManager().getPlayer(UUID.fromString(scoreMap.entrySet().toArray()[scoreMap.size() - 1].toString().split("=")[0]));
+	return GameManager.getManager().getPlayer(scoreMap.keySet().toArray(new UUID[0])[0]);
     }
     
     public boolean isOnline() {
