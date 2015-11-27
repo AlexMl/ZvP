@@ -2,7 +2,9 @@ package me.Aubli.ZvP.Sign;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -11,6 +13,9 @@ import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
+import me.Aubli.ZvP.Statistic.DataRecord;
+import me.Aubli.ZvP.Statistic.DataRecord.DataType;
+import me.Aubli.ZvP.Statistic.DatabaseManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,6 +24,7 @@ import org.bukkit.World;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.util.SortMap.SortMap;
 
 
 public class StatisticSign implements ISign, Comparable<ISign> {
@@ -36,12 +42,15 @@ public class StatisticSign implements ISign, Comparable<ISign> {
     private Arena arena;
     private Lobby lobby;
     
-    public StatisticSign(String path, int ID) throws Exception {
+    public StatisticSign(Location signLoc, int ID, String path, Arena arena, Lobby lobby) throws Exception {
 	this.ID = ID;
-	this.signLoc = this.signLoc.clone();
+	this.signLoc = signLoc.clone();
 	
 	this.signFile = new File(path + "/" + ID + ".yml");
 	this.signConfig = YamlConfiguration.loadConfiguration(this.signFile);
+	
+	this.arena = arena;
+	this.lobby = lobby;
 	
 	this.type = SignType.STATISTIC_SIGN;
 	
@@ -49,6 +58,8 @@ public class StatisticSign implements ISign, Comparable<ISign> {
 	    this.signFile.createNewFile();
 	    this.signConfig.set("sign.ID", ID);
 	    this.signConfig.set("sign.Type", getType().toString());
+	    this.signConfig.set("sign.Arena", arena.getID());
+	    this.signConfig.set("sign.Lobby", lobby.getID());
 	    
 	    this.signConfig.set("sign.Location.world", this.signLoc.getWorld().getUID().toString());
 	    this.signConfig.set("sign.Location.X", this.signLoc.getBlockX());
@@ -134,15 +145,50 @@ public class StatisticSign implements ISign, Comparable<ISign> {
     @Override
     public void update(Map<String, ChatColor> colorMap) {
 	this.sign.setLine(0, ZvP.getPrefix().trim());
+	DataRecord[] records = DatabaseManager.getManager().getDataRecords();
 	
 	if (this.arena != null) {
+	    Map<UUID, Integer> kills = getValueMap(records, DataType.KILLS);
+	    this.sign.setLine(1, colorMap.get("header") + "Most Kills:");
+	    this.sign.setLine(2, "");
+	    this.sign.setLine(3, "");
 	    
+	    if (kills != null && !kills.isEmpty()) {
+		
+		int line = 2;
+		for (Entry<UUID, Integer> entry : kills.entrySet()) {
+		    this.sign.setLine(line, colorMap.get("rankNumber") + "" + (line - 1) + ". " + colorMap.get("playerName") + Bukkit.getOfflinePlayer(entry.getKey()).getName() + ChatColor.RESET + " : " + colorMap.get("value") + entry.getValue());
+		    line++;
+		    
+		    if (line > 3) {
+			break;
+		    }
+		}
+	    } else {
+		this.sign.setLine(2, ChatColor.DARK_RED + "No data");
+		this.sign.setLine(3, ChatColor.DARK_RED + "available!");
+	    }
 	} else {
 	    this.sign.setLine(1, "");
 	    this.sign.setLine(2, ChatColor.DARK_RED + "Arena is not");
 	    this.sign.setLine(3, ChatColor.DARK_RED + "available!");
 	}
 	this.sign.update(true);
+    }
+    
+    @SuppressWarnings("unchecked")
+    private static <T extends Comparable<T>> Map<UUID, T> getValueMap(DataRecord[] records, DataType type) {
+	Map<UUID, T> recordMap = new HashMap<UUID, T>();
+	
+	for (DataRecord record : records) {
+	    recordMap.put(record.getPlayerUUID(), (T) record.getValue(type));
+	}
+	
+	recordMap = SortMap.sortByValue(recordMap);
+	
+	// System.out.println(type);
+	// System.out.println(recordMap);
+	return recordMap;
     }
     
     @Override
