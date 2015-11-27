@@ -206,7 +206,7 @@ public class ZvPCommands implements CommandExecutor {
 			    List<String> lore = new ArrayList<String>();
 			    
 			    lore.add("Category: " + shopItem.getCategory().toString());
-			    lore.add(ChatColor.RED + "Price: " + shopItem.getPrice());
+			    lore.add(ChatColor.RED + "Price: " + shopItem.getBuyPrice());
 			    
 			    meta.setLore(lore);
 			    item.setItemMeta(meta);
