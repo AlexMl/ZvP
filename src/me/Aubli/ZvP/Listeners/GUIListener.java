@@ -144,18 +144,18 @@ public class GUIListener implements Listener {
 			    switch (event.getClick()) {
 			    
 				case LEFT: // Buy
-				    if (player.getArena().getScore().getScore(player) >= item.getPrice()) {
+				    if (player.getArena().getScore().getScore(player) >= item.getBuyPrice()) {
 					
 					ItemStack boughtItem = new ItemStack(item.getItem().getType(), item.getItem().getAmount());
 					boughtItem.addUnsafeEnchantments(item.getItem().getEnchantments());
 					boughtItem.setDurability(item.getItem().getDurability());
 					
-					player.getArena().getScore().subtractScore(player, item.getPrice(), ScoreType.SHOP_SCORE);
+					player.getArena().getScore().subtractScore(player, item.getBuyPrice(), ScoreType.SHOP_SCORE);
 					player.getPlayer().getInventory().addItem(boughtItem);
 					if (boughtItem.getAmount() == 1) {
-					    player.getArena().sendMessage(MessageManager.getFormatedMessage(game.player_bought, player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
+					    player.getArena().sendMessage(MessageManager.getFormatedMessage(game.player_bought, player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getBuyPrice()));
 					} else {
-					    player.getArena().sendMessage(MessageManager.getFormatedMessage(game.player_bought_more, player.getName(), boughtItem.getAmount(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
+					    player.getArena().sendMessage(MessageManager.getFormatedMessage(game.player_bought_more, player.getName(), boughtItem.getAmount(), item.getType().toString().toLowerCase().replace("_", " "), item.getBuyPrice()));
 					}
 				    } else {
 					player.sendMessage(MessageManager.getMessage(error.no_money));
@@ -163,17 +163,17 @@ public class GUIListener implements Listener {
 				    break;
 				
 				case SHIFT_LEFT: // Buy all
-				    if (player.getArena().getScore().getScore(player) >= item.getPrice()) {
+				    if (player.getArena().getScore().getScore(player) >= item.getBuyPrice()) {
 					
-					int amount = (int) (player.getArena().getScore().getScore(player) / item.getPrice()) < 64 ? (int) (player.getArena().getScore().getScore(player) / item.getPrice()) : 64;
+					int amount = (int) (player.getArena().getScore().getScore(player) / item.getBuyPrice()) < 64 ? (int) (player.getArena().getScore().getScore(player) / item.getBuyPrice()) : 64;
 					
 					ItemStack boughtItem = new ItemStack(item.getItem().getType(), amount);
 					boughtItem.addUnsafeEnchantments(item.getItem().getEnchantments());
 					boughtItem.setDurability(item.getItem().getDurability());
 					
-					player.getArena().getScore().subtractScore(player, item.getPrice() * amount, ScoreType.SHOP_SCORE);
+					player.getArena().getScore().subtractScore(player, item.getBuyPrice() * amount, ScoreType.SHOP_SCORE);
 					player.getPlayer().getInventory().addItem(boughtItem);
-					player.getArena().sendMessage(MessageManager.getFormatedMessage(game.player_bought_more, player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), new DecimalFormat("#0.00").format(item.getPrice() * amount)));
+					player.getArena().sendMessage(MessageManager.getFormatedMessage(game.player_bought_more, player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), new DecimalFormat("#0.00").format(item.getBuyPrice() * amount)));
 				    } else {
 					player.sendMessage(MessageManager.getMessage(error.no_money));
 				    }
@@ -187,8 +187,8 @@ public class GUIListener implements Listener {
 				    
 				    if (player.getPlayer().getInventory().containsAtLeast(stack, 1)) {
 					player.getPlayer().getInventory().removeItem(stack);
-					player.getArena().getScore().addScore(player, item.getPrice(), ScoreType.SHOP_SCORE);
-					player.getArena().sendMessage(MessageManager.getFormatedMessage(game.player_sold, player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getPrice()));
+					player.getArena().getScore().addScore(player, item.getSellPrice(), ScoreType.SHOP_SCORE);
+					player.getArena().sendMessage(MessageManager.getFormatedMessage(game.player_sold, player.getName(), item.getType().toString().toLowerCase().replace("_", " "), item.getSellPrice()));
 				    } else {
 					player.sendMessage(MessageManager.getMessage(game.no_item_to_sell));
 				    }
@@ -215,8 +215,8 @@ public class GUIListener implements Listener {
 					    }
 					}
 					
-					player.getArena().getScore().addScore(player, item.getPrice() * amount, ScoreType.SHOP_SCORE);
-					player.getArena().sendMessage(MessageManager.getFormatedMessage(game.player_sold_more, player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), new DecimalFormat("#0.00").format(item.getPrice() * amount)));
+					player.getArena().getScore().addScore(player, item.getSellPrice() * amount, ScoreType.SHOP_SCORE);
+					player.getArena().sendMessage(MessageManager.getFormatedMessage(game.player_sold_more, player.getName(), amount, item.getType().toString().toLowerCase().replace("_", " "), new DecimalFormat("#0.00").format(item.getSellPrice() * amount)));
 				    } else {
 					player.sendMessage(MessageManager.getMessage(game.no_item_to_sell));
 				    }

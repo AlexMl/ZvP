@@ -128,119 +128,119 @@ public class ShopManager {
 	// Food
 	cat = ItemCategory.FOOD;
 	item = new ItemStack(Material.APPLE);
-	defaultItems.add(new ShopItem(item, cat, 2.0));
+	defaultItems.add(new ShopItem(item, cat, 2.0, 1.0));
 	item = new ItemStack(Material.BAKED_POTATO);
-	defaultItems.add(new ShopItem(item, cat, 4.0));
+	defaultItems.add(new ShopItem(item, cat, 4.0, 2.0));
 	item = new ItemStack(Material.BREAD);
-	defaultItems.add(new ShopItem(item, cat, 3.5));
+	defaultItems.add(new ShopItem(item, cat, 3.5, 1.5));
 	item = new ItemStack(Material.CARROT_ITEM);
-	defaultItems.add(new ShopItem(item, cat, 2.0));
+	defaultItems.add(new ShopItem(item, cat, 2.0, 1.0));
 	item = new ItemStack(Material.COOKED_BEEF);
-	defaultItems.add(new ShopItem(item, cat, 5.0));
+	defaultItems.add(new ShopItem(item, cat, 5.0, 3.5));
 	item = new ItemStack(Material.COOKED_CHICKEN);
-	defaultItems.add(new ShopItem(item, cat, 5.0));
+	defaultItems.add(new ShopItem(item, cat, 5.0, 3.5));
 	item = new ItemStack(Material.COOKED_FISH);
-	defaultItems.add(new ShopItem(item, cat, 6.0));
+	defaultItems.add(new ShopItem(item, cat, 6.0, 4.0));
 	item = new ItemStack(Material.COOKIE);
-	defaultItems.add(new ShopItem(item, cat, 1.5));
+	defaultItems.add(new ShopItem(item, cat, 1.5, 0.5));
 	item = new ItemStack(Material.GRILLED_PORK);
-	defaultItems.add(new ShopItem(item, cat, 5.0));
+	defaultItems.add(new ShopItem(item, cat, 5.0, 3.5));
 	
 	// Misc
 	cat = ItemCategory.MISC;
 	item = new ItemStack(Material.STICK);
-	defaultItems.add(new ShopItem(item, cat, 1.0));
+	defaultItems.add(new ShopItem(item, cat, 1.0, 0.25));
 	item = new ItemStack(Material.EXP_BOTTLE);
-	defaultItems.add(new ShopItem(item, cat, 7.5));
+	defaultItems.add(new ShopItem(item, cat, 7.5, 7.0));
 	
 	Dye lapis = new Dye();
 	lapis.setColor(DyeColor.BLUE);
 	item = lapis.toItemStack(1);
-	defaultItems.add(new ShopItem(item, cat, 2.0));
+	defaultItems.add(new ShopItem(item, cat, 2.0, 1.0));
 	
 	item = new ItemStack(Material.LEATHER);
-	defaultItems.add(new ShopItem(item, cat, 2.0));
+	defaultItems.add(new ShopItem(item, cat, 2.0, 1.0));
 	item = new ItemStack(Material.FEATHER);
-	defaultItems.add(new ShopItem(item, cat, 1.5));
+	defaultItems.add(new ShopItem(item, cat, 1.5, 0.5));
 	item = new ItemStack(Material.ROTTEN_FLESH);
-	defaultItems.add(new ShopItem(item, cat, 0.15));
+	defaultItems.add(new ShopItem(item, cat, 0.15, 0.15));
 	item = new ItemStack(Material.POTATO_ITEM);
-	defaultItems.add(new ShopItem(item, cat, 4.5));
+	defaultItems.add(new ShopItem(item, cat, 4.5, 3.0));
 	item = new ItemStack(Material.GOLD_INGOT);
-	defaultItems.add(new ShopItem(item, cat, 3.0));
+	defaultItems.add(new ShopItem(item, cat, 5.0, 4.5));
 	item = new ItemStack(Material.IRON_INGOT);
-	defaultItems.add(new ShopItem(item, cat, 3.5));
+	defaultItems.add(new ShopItem(item, cat, 3.5, 3.25));
 	
 	// Armor
 	cat = ItemCategory.ARMOR;
 	item = new ItemStack(Material.LEATHER_HELMET);
-	defaultItems.add(new ShopItem(item, cat, 3.0));
+	defaultItems.add(new ShopItem(item, cat, 3.0, 2.0));
 	item = new ItemStack(Material.LEATHER_CHESTPLATE);
-	defaultItems.add(new ShopItem(item, cat, 4.0));
+	defaultItems.add(new ShopItem(item, cat, 4.0, 2.0));
 	item = new ItemStack(Material.LEATHER_LEGGINGS);
-	defaultItems.add(new ShopItem(item, cat, 4.0));
+	defaultItems.add(new ShopItem(item, cat, 4.0, 2.0));
 	item = new ItemStack(Material.LEATHER_BOOTS);
-	defaultItems.add(new ShopItem(item, cat, 3.0));
+	defaultItems.add(new ShopItem(item, cat, 3.0, 1.5));
 	
 	item = new ItemStack(Material.CHAINMAIL_HELMET);
-	defaultItems.add(new ShopItem(item, cat, 4.0));
+	defaultItems.add(new ShopItem(item, cat, 4.0, 3.0));
 	item = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
-	defaultItems.add(new ShopItem(item, cat, 4.5));
+	defaultItems.add(new ShopItem(item, cat, 4.5, 4.0));
 	item = new ItemStack(Material.CHAINMAIL_LEGGINGS);
-	defaultItems.add(new ShopItem(item, cat, 4.5));
+	defaultItems.add(new ShopItem(item, cat, 4.5, 3.5));
 	item = new ItemStack(Material.CHAINMAIL_BOOTS);
-	defaultItems.add(new ShopItem(item, cat, 3.5));
+	defaultItems.add(new ShopItem(item, cat, 3.5, 2.5));
 	
 	item = new ItemStack(Material.IRON_HELMET);
-	defaultItems.add(new ShopItem(item, cat, 4.0));
+	defaultItems.add(new ShopItem(item, cat, 4.0, 3.0));
 	item = new ItemStack(Material.IRON_CHESTPLATE);
-	defaultItems.add(new ShopItem(item, cat, 5.5));
+	defaultItems.add(new ShopItem(item, cat, 5.5, 4.5));
 	item = new ItemStack(Material.IRON_LEGGINGS);
-	defaultItems.add(new ShopItem(item, cat, 5.0));
+	defaultItems.add(new ShopItem(item, cat, 5.0, 4.5));
 	item = new ItemStack(Material.IRON_BOOTS);
-	defaultItems.add(new ShopItem(item, cat, 3.0));
+	defaultItems.add(new ShopItem(item, cat, 3.0, 2.0));
 	
 	item = new ItemStack(Material.GOLD_HELMET);
-	defaultItems.add(new ShopItem(item, cat, 3.5));
+	defaultItems.add(new ShopItem(item, cat, 3.5, 2.75));
 	item = new ItemStack(Material.GOLD_CHESTPLATE);
-	defaultItems.add(new ShopItem(item, cat, 5.0));
+	defaultItems.add(new ShopItem(item, cat, 5.0, 4.0));
 	item = new ItemStack(Material.GOLD_LEGGINGS);
-	defaultItems.add(new ShopItem(item, cat, 4.5));
+	defaultItems.add(new ShopItem(item, cat, 4.5, 4.0));
 	item = new ItemStack(Material.GOLD_BOOTS);
-	defaultItems.add(new ShopItem(item, cat, 3.0));
+	defaultItems.add(new ShopItem(item, cat, 3.0, 2.25));
 	
 	item = new ItemStack(Material.DIAMOND_HELMET);
-	defaultItems.add(new ShopItem(item, cat, 7.0));
+	defaultItems.add(new ShopItem(item, cat, 7.0, 6.0));
 	item = new ItemStack(Material.DIAMOND_CHESTPLATE);
-	defaultItems.add(new ShopItem(item, cat, 10.0));
+	defaultItems.add(new ShopItem(item, cat, 10.0, 8.5));
 	item = new ItemStack(Material.DIAMOND_LEGGINGS);
-	defaultItems.add(new ShopItem(item, cat, 9.0));
+	defaultItems.add(new ShopItem(item, cat, 9.0, 8.0));
 	item = new ItemStack(Material.DIAMOND_BOOTS);
-	defaultItems.add(new ShopItem(item, cat, 6.0));
+	defaultItems.add(new ShopItem(item, cat, 6.0, 5.0));
 	
 	// weapons
 	cat = ItemCategory.WEAPON;
 	item = new ItemStack(Material.DIAMOND_AXE);
-	defaultItems.add(new ShopItem(item, cat, 9.0));
+	defaultItems.add(new ShopItem(item, cat, 9.0, 7.0));
 	item = new ItemStack(Material.DIAMOND_SWORD);
-	defaultItems.add(new ShopItem(item, cat, 10.0));
+	defaultItems.add(new ShopItem(item, cat, 10.0, 8.0));
 	item = new ItemStack(Material.IRON_AXE);
-	defaultItems.add(new ShopItem(item, cat, 5.0));
+	defaultItems.add(new ShopItem(item, cat, 5.0, 3.0));
 	item = new ItemStack(Material.IRON_SWORD);
-	defaultItems.add(new ShopItem(item, cat, 6.0));
+	defaultItems.add(new ShopItem(item, cat, 6.0, 4.0));
 	item = new ItemStack(Material.GOLD_SWORD);
-	defaultItems.add(new ShopItem(item, cat, 4.0));
+	defaultItems.add(new ShopItem(item, cat, 4.0, 3.0));
 	item = new ItemStack(Material.STONE_SWORD);
-	defaultItems.add(new ShopItem(item, cat, 4.0));
+	defaultItems.add(new ShopItem(item, cat, 4.0, 2.0));
 	item = new ItemStack(Material.STONE_AXE);
-	defaultItems.add(new ShopItem(item, cat, 4.0));
+	defaultItems.add(new ShopItem(item, cat, 4.0, 2.0));
 	item = new ItemStack(Material.WOOD_SWORD);
-	defaultItems.add(new ShopItem(item, cat, 2.0));
+	defaultItems.add(new ShopItem(item, cat, 2.0, 0.5));
 	
 	item = new ItemStack(Material.BOW);
-	defaultItems.add(new ShopItem(item, cat, 6.0));
+	defaultItems.add(new ShopItem(item, cat, 6.0, 4.0));
 	item = new ItemStack(Material.ARROW);
-	defaultItems.add(new ShopItem(item, cat, 0.08));
+	defaultItems.add(new ShopItem(item, cat, 0.08, 0.01));
 	
 	// Enchanted
 	item = new ItemStack(Material.DIAMOND_SWORD);
@@ -248,20 +248,20 @@ public class ShopManager {
 	item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 10);
 	item.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 3);
 	item.addUnsafeEnchantment(Enchantment.DURABILITY, 5);
-	defaultItems.add(new ShopItem(item, cat, 35.0));
+	defaultItems.add(new ShopItem(item, cat, 35.0, 30.0));
 	
 	// Potions
 	cat = ItemCategory.POTION;
 	item = new Potion(PotionType.FIRE_RESISTANCE, 2).splash().toItemStack(1);
-	defaultItems.add(new ShopItem(item, cat, 3.5));
+	defaultItems.add(new ShopItem(item, cat, 3.5, 3.0));
 	item = new Potion(PotionType.REGEN, 2).splash().toItemStack(1);
-	defaultItems.add(new ShopItem(item, cat, 5.0));
+	defaultItems.add(new ShopItem(item, cat, 5.0, 4.5));
 	item = new Potion(PotionType.INSTANT_HEAL, 2).splash().toItemStack(1);
-	defaultItems.add(new ShopItem(item, cat, 3.5));
+	defaultItems.add(new ShopItem(item, cat, 3.5, 3.0));
 	item = new Potion(PotionType.SPEED, 2).splash().toItemStack(1);
-	defaultItems.add(new ShopItem(item, cat, 4.0));
+	defaultItems.add(new ShopItem(item, cat, 4.0, 3.5));
 	item = new Potion(PotionType.STRENGTH, 2).splash().toItemStack(1);
-	defaultItems.add(new ShopItem(item, cat, 5.0));
+	defaultItems.add(new ShopItem(item, cat, 5.0, 4.5));
 	
 	ItemStorage.saveItemsToFile(this.itemFile, "items", defaultItems);
     }

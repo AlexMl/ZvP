@@ -132,13 +132,14 @@ public class ItemStorage {
 		Material m = parseMaterial(itemString);
 		int amount = parseAmount(itemString);
 		short data = parseData(itemString);
-		double price = parsePrice(itemString);
+		double buyPrice = parseBuyPrice(itemString);
+		double sellPrice = parseSellPrice(itemString);
 		ItemCategory cat = parseCategory(itemString);
 		
 		ItemStack item = new ItemStack(m, amount, data);
 		applyEnchantment(item, itemString);
 		
-		items.add(toShopItem(item, cat, price));
+		items.add(toShopItem(item, cat, buyPrice, sellPrice));
 	    } catch (Exception e) {
 		throw new Exception(e.getMessage() + " in Object:\n" + (String) listObject);
 	    }
@@ -161,7 +162,7 @@ public class ItemStorage {
     }
     
     private static String generateShopItemString(String enchString, ShopItem item) {
-	return "id: " + item.getType().toString() + ", amount: " + item.getItem().getAmount() + ", data: " + item.getItem().getDurability() + ", category: " + item.getCategory().getEnumName() + ", price: " + item.getPrice() + ", " + enchString;
+	return "id: " + item.getType().toString() + ", amount: " + item.getItem().getAmount() + ", data: " + item.getItem().getDurability() + ", category: " + item.getCategory().getEnumName() + ", buyPrice: " + item.getBuyPrice() + ", sellPrice: " + item.getSellPrice() + ", " + enchString;
     }
     
     private static String translateEnchantment(ItemStack item) {
@@ -200,8 +201,12 @@ public class ItemStorage {
 	return ItemCategory.valueOf(itemString.split(", ")[3].split("category: ")[1]);
     }
     
-    private static double parsePrice(String itemString) throws NumberFormatException {
-	return Double.parseDouble(itemString.split(", ")[4].split("price: ")[1]);
+    private static double parseBuyPrice(String itemString) throws NumberFormatException {
+	return Double.parseDouble(itemString.split(", ")[4].split("Price: ")[1]);
+    }
+    
+    private static double parseSellPrice(String itemString) throws NumberFormatException {
+	return Double.parseDouble(itemString.split(", ")[5].split("Price: ")[1]);
     }
     
     private static ItemStack applyEnchantment(ItemStack item, String itemString) throws Exception {
@@ -232,8 +237,8 @@ public class ItemStorage {
 	return returnStack;
     }
     
-    private static ShopItem toShopItem(ItemStack item, ItemCategory cat, double price) {
-	return new ShopItem(item, cat, price);
+    private static ShopItem toShopItem(ItemStack item, ItemCategory cat, double buyPrice, double sellPrice) {
+	return new ShopItem(item, cat, buyPrice, sellPrice);
     }
     
     private static ShopItem[] toShopArray(ArrayList<ShopItem> items) {
