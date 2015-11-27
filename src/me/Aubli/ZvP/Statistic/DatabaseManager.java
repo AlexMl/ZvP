@@ -13,12 +13,15 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
+import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Sign.SignManager.SignType;
 
 import org.bukkit.Bukkit;
 
@@ -29,6 +32,7 @@ interface DatabaseCallback {
     
     void onRecordTransmission(DataRecord record, String tableName);
     
+    void onTransmissionEnd();
 }
 
 
@@ -60,9 +64,9 @@ public class DatabaseManager implements DatabaseCallback {
 	// mysql://localhost:3306/mc
 	
 	// TODO remove debug, replace with logger
-	System.out.println(this.conn.getMetaData().getDatabaseProductName());
-	System.out.println(this.conn.getMetaData().getDatabaseProductVersion());
-	System.out.println(this.conn.getMetaData().getDriverVersion());
+	// System.out.println(this.conn.getMetaData().getDatabaseProductName());
+	// System.out.println(this.conn.getMetaData().getDatabaseProductVersion());
+	// System.out.println(this.conn.getMetaData().getDriverVersion());
     }
     
     public static DatabaseManager init(DatabaseInfo info) throws ClassNotFoundException, SQLException {
@@ -95,7 +99,7 @@ public class DatabaseManager implements DatabaseCallback {
 	return dbFolder;
     }
     
-    private boolean isTimedStatistics() {
+    public boolean isTimedStatistics() {
 	return this.timedTableName != null && !this.tableName.equals(this.timedTableName) && this.statisticEnd != null && this.statisticEnd.after(new Date());
     }
     
@@ -137,7 +141,7 @@ public class DatabaseManager implements DatabaseCallback {
     public void handleRecord(DataRecord... records) {
 	List<DataRecord> insertRecords = new LinkedList<DataRecord>();
 	
-	System.out.println(isTimedStatistics());
+	System.out.println("isTimed? " + isTimedStatistics());
 	System.out.println(this.dataMap);
 	
 	try {
@@ -210,6 +214,30 @@ public class DatabaseManager implements DatabaseCallback {
 	}
     }
     
+    public DataRecord[] getDataRecords() {
+	DataRecord[] recordArray;
+	
+	if (isTimedStatistics()) {
+	    recordArray = new DataRecord[this.timedDataMap.size()];
+	    int i = 0;
+	    
+	    for (Entry<UUID, DataRecord> entry : this.timedDataMap.entrySet()) {
+		recordArray[i] = entry.getValue();
+		i++;
+	    }
+	    return recordArray;
+	} else {
+	    recordArray = new DataRecord[this.dataMap.size()];
+	    int i = 0;
+	    
+	    for (Entry<UUID, DataRecord> entry : this.dataMap.entrySet()) {
+		recordArray[i] = entry.getValue();
+		i++;
+	    }
+	    return recordArray;
+	}
+    }
+    
     private void updateMap(String tableName) {
 	Bukkit.getScheduler().runTaskAsynchronously(ZvP.getInstance(), new DatabaseReader(this, this.conn, tableName));
     }
@@ -234,6 +262,11 @@ public class DatabaseManager implements DatabaseCallback {
 	}
     }
     
+    @Override
+    synchronized public void onTransmissionEnd() {
+	SignManager.getManager().updateSigns(SignType.STATISTIC_SIGN);
+    }
+    
     private class DatabaseWriter implements Runnable {
 	
 	private DatabaseCallback callback;
@@ -249,12 +282,13 @@ public class DatabaseManager implements DatabaseCallback {
 	@Override
 	public void run() {
 	    try {
-		System.out.println("exe write");
+		System.out.println("write exe");
 		Statement s = this.conn.createStatement();
 		for (String stmt : this.sqlStatement) {
 		    s.executeUpdate(stmt);
 		}
 		s.close();
+		System.out.println("write finish");
 	    } catch (SQLException e) {
 		this.callback.handleException(e, Arrays.toString(this.sqlStatement));
 	    }
@@ -278,7 +312,7 @@ public class DatabaseManager implements DatabaseCallback {
 	    try {
 		Statement statement = this.conn.createStatement();
 		ResultSet result = statement.executeQuery("SELECT * FROM " + this.table + ";");
-		System.out.println("exe read");
+		System.out.println("read exe");
 		while (result.next()) {
 		    UUID playerUUID = UUID.fromString(result.getString(1));
 		    int kills = result.getInt(2);
@@ -289,9 +323,10 @@ public class DatabaseManager implements DatabaseCallback {
 		    
 		    this.callback.onRecordTransmission(new DataRecord(playerUUID, kills, maxKills, deaths, leftMoney, timestamp), this.table);
 		}
-		
+		System.out.println("read finish");
 		statement.close();
 		result.close();
+		onTransmissionEnd();
 	    } catch (SQLException e) {
 		this.callback.handleException(e, "SELECT * FROM " + this.table + ";");
 	    }
