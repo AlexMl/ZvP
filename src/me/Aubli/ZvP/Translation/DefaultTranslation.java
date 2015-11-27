@@ -86,7 +86,7 @@ public class DefaultTranslation extends ListResourceBundle {
 	    
 	    {error.sign_remove.name(), ChatColor.RED + "An error occured while removing this Sign!"},
 	    {error.sign_place.name(), ChatColor.RED + "An error occured while placing this Sign!"},
-	    {error.sign_layout.name(), ChatColor.RED + "The sign layout is wrong!"},
+	    {error.sign_layout.name(), ChatColor.RED + "The layout of this sign is wrong!"},
 	    {error.arena_place.name(), ChatColor.RED + "Your positions are not in the same world!"},
 	    {error.prelobby_add.name(), ChatColor.RED + "An error occured while saving PreLobby!"},
 	    {error.no_prelobby.name(), ChatColor.RED + "This arena does not have a PreLobby!"},
