@@ -106,7 +106,7 @@ public class DatabaseManager implements DatabaseCallback {
     public void startTimedStatistics(long duration) throws SQLException {
 	Date now = new Date();
 	
-	this.timedTableName = this.tableName + "_" + new SimpleDateFormat("ddMy_Hm").format(now);
+	this.timedTableName = this.tableName + "_" + new SimpleDateFormat("ddMMyyyy_HHmm").format(now);
 	createTables(this.timedTableName);
 	this.dataMap.clear();
 	
@@ -115,6 +115,8 @@ public class DatabaseManager implements DatabaseCallback {
 	
 	String stmt = "INSERT INTO " + this.infoTableName + "(start, finish) VALUES('" + new Timestamp(now.getTime()) + "', '" + new Timestamp(until.getTime()) + "');";
 	Bukkit.getScheduler().runTaskAsynchronously(ZvP.getInstance(), new DatabaseWriter(this, this.conn, stmt));
+	
+	updateMap(this.tableName);
 	updateMap(this.timedTableName);
     }
     
@@ -128,7 +130,7 @@ public class DatabaseManager implements DatabaseCallback {
 	    Timestamp finish = result.getTimestamp("finish");
 	    
 	    if (finish.after(new Date())) {
-		this.timedTableName = this.tableName + "_" + new SimpleDateFormat("ddMy_Hm").format(start);
+		this.timedTableName = this.tableName + "_" + new SimpleDateFormat("ddMMyyyy_HHmm").format(start);
 		this.statisticEnd = finish;
 		updateMap(this.timedTableName);
 		break;
@@ -142,7 +144,7 @@ public class DatabaseManager implements DatabaseCallback {
 	List<DataRecord> insertRecords = new LinkedList<DataRecord>();
 	
 	System.out.println("isTimed? " + isTimedStatistics());
-	System.out.println(this.dataMap);
+	System.out.println("dataMapSize: " + this.dataMap.size());
 	
 	try {
 	    if (isTimedStatistics()) {
@@ -166,6 +168,8 @@ public class DatabaseManager implements DatabaseCallback {
 	    
 	    for (DataRecord record : records) {
 		DataRecord playerRecord = getRecord(false, record.getPlayerUUID());
+		
+		System.out.println(record.getPlayerUUID() + " has old Record? " + (playerRecord != null));
 		
 		if (playerRecord == null) {
 		    insertRecords.add(record);
@@ -239,6 +243,7 @@ public class DatabaseManager implements DatabaseCallback {
     }
     
     private void updateMap(String tableName) {
+	System.out.println("updating from " + tableName);
 	Bukkit.getScheduler().runTaskAsynchronously(ZvP.getInstance(), new DatabaseReader(this, this.conn, tableName));
     }
     
@@ -312,7 +317,7 @@ public class DatabaseManager implements DatabaseCallback {
 	    try {
 		Statement statement = this.conn.createStatement();
 		ResultSet result = statement.executeQuery("SELECT * FROM " + this.table + ";");
-		System.out.println("read exe");
+		System.out.println("read exe from " + this.table);
 		while (result.next()) {
 		    UUID playerUUID = UUID.fromString(result.getString(1));
 		    int kills = result.getInt(2);
@@ -323,7 +328,7 @@ public class DatabaseManager implements DatabaseCallback {
 		    
 		    this.callback.onRecordTransmission(new DataRecord(playerUUID, kills, maxKills, deaths, leftMoney, timestamp), this.table);
 		}
-		System.out.println("read finish");
+		System.out.println("read finished from " + this.table);
 		statement.close();
 		result.close();
 		onTransmissionEnd();
