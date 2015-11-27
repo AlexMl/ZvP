@@ -95,8 +95,6 @@ public class ShopSign implements ISign, Comparable<ISign> {
 	    if (this.signLoc.getBlock().getState() instanceof Sign) {
 		this.sign = (Sign) this.signLoc.getBlock().getState();
 		
-		this.sign = (Sign) this.signLoc.getBlock().getState();
-		
 		this.arena = GameManager.getManager().getArena(this.signConfig.getInt("sign.Arena"));
 		this.lobby = GameManager.getManager().getLobby(this.signConfig.getInt("sign.Lobby"));
 		update(SignManager.getManager().getColorMap(getType()));
@@ -129,11 +127,6 @@ public class ShopSign implements ISign, Comparable<ISign> {
     @Override
     public Location getLocation() {
 	return this.signLoc.clone();
-    }
-    
-    @Override
-    public Sign getSign() {
-	return (Sign) getLocation().getBlock().getState();
     }
     
     @Override
