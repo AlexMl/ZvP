@@ -6,6 +6,13 @@ import java.util.UUID;
 
 public class DataRecord {
     
+    public enum DataType {
+	KILLS,
+	KILLRECORD,
+	DEATHS,
+	LEFTMONEY, ;
+    }
+    
     private UUID playerUUID;
     private int kills;
     private int maxKills;
@@ -48,6 +55,25 @@ public class DataRecord {
     
     public Timestamp getTimestamp() {
 	return this.timestamp;
+    }
+    
+    public Object getValue(DataType type) {
+	switch (type) {
+	    case KILLS:
+		return getKills();
+		
+	    case KILLRECORD:
+		return getMaxKills();
+		
+	    case DEATHS:
+		return getDeaths();
+		
+	    case LEFTMONEY:
+		return getLeftMoney();
+		
+	    default:
+		throw new IllegalArgumentException(type.name() + " is not a supported Type!");
+	}
     }
     
     @Override
