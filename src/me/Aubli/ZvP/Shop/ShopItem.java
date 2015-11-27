@@ -10,22 +10,32 @@ public class ShopItem {
     
     private final ItemStack item;
     
-    private double price;
+    private double buyPrice;
+    private double sellPrice;
     
     private final ItemCategory category;
     
-    public ShopItem(ItemStack item, ItemCategory cat, double price) {
+    public ShopItem(ItemStack item, ItemCategory cat, double buyPrice, double sellPrice) {
 	this.item = item.clone();
 	this.category = cat;
-	this.price = price;
+	this.buyPrice = buyPrice;
+	this.sellPrice = sellPrice;
     }
     
-    public void setPrice(double price) {
-	this.price = price;
+    public void setBuyPrice(double price) {
+	this.buyPrice = price;
     }
     
-    public double getPrice() {
-	return this.price;
+    public double getBuyPrice() {
+	return this.buyPrice;
+    }
+    
+    public void setSellPrice(double price) {
+	this.sellPrice = price;
+    }
+    
+    public double getSellPrice() {
+	return this.sellPrice;
     }
     
     public ItemStack getItem() {
@@ -42,6 +52,6 @@ public class ShopItem {
     
     @Override
     public String toString() {
-	return "[ShopItem=(" + getItem().toString() + " ," + getCategory().toString() + " ," + getPrice() + ")]";
+	return getClass().getSimpleName() + "[" + getItem().getType().toString() + " ," + getCategory().toString() + " ,sell:" + getSellPrice() + " ,buy:" + getBuyPrice() + "]";
     }
 }
