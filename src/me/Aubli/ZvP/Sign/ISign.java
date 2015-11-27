@@ -9,7 +9,6 @@ import me.Aubli.ZvP.Sign.SignManager.SignType;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Sign;
 
 
 public interface ISign {
@@ -22,8 +21,6 @@ public interface ISign {
     
     public Location getLocation();
     
-    public Sign getSign();
-    
     public SignType getType();
     
     public Arena getArena();
@@ -31,4 +28,6 @@ public interface ISign {
     public Lobby getLobby();
     
     public void update(Map<String, ChatColor> colorMap);
+    
+    public int compareTo(ISign o);
 }
