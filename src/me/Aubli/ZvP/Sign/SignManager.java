@@ -23,9 +23,30 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class SignManager {
     
     public enum SignType {
-	INFO_SIGN,
-	INTERACT_SIGN,
-	SHOP_SIGN, ;
+	INFO_SIGN("info"),
+	INTERACT_SIGN("interact"),
+	SHOP_SIGN("shop"),
+	STATISTIC_SIGN("statistics"), ;
+	
+	private String name;
+	
+	private SignType(String name) {
+	    this.name = name;
+	}
+	
+	private String getName() {
+	    return this.name;
+	}
+	
+	public static SignType fromString(String name) {
+	    for (SignType signType : values()) {
+		if (signType.getName().equalsIgnoreCase(name)) {
+		    return signType;
+		}
+	    }
+	    return null;
+	}
+	
     }
     
     private static SignManager instance;
@@ -83,24 +104,34 @@ public class SignManager {
 		switch (t) {
 		    case INFO_SIGN:
 			ISign info = new InfoSign(f);
-			if (info.getWorld() != null) {// && info.getArena() != null && info.getLobby() != null) {
+			if (info.getWorld() != null) {
 			    this.signs.add(info);
 			}
 			break;
 		    
 		    case INTERACT_SIGN:
 			ISign inter = new InteractSign(f);
-			if (inter.getWorld() != null) {// && inter.getArena() != null && inter.getLobby() != null) {
+			if (inter.getWorld() != null) {
 			    this.signs.add(inter);
 			}
 			break;
 		    
 		    case SHOP_SIGN:
 			ISign shop = new ShopSign(f);
-			if (shop.getWorld() != null) {// && shop.getArena() != null && shop.getLobby() != null) {
+			if (shop.getWorld() != null) {
 			    this.signs.add(shop);
 			}
 			break;
+		    
+		    case STATISTIC_SIGN:
+			ISign stat = new StatisticSign(f);
+			if (stat.getWorld() != null) {
+			    this.signs.add(stat);
+			}
+			break;
+		    
+		    default:
+			throw new IllegalArgumentException(t.name() + " is not supported!");
 		}
 	    } catch (Exception e) {
 		ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, e.getMessage(), true, false, e);
@@ -135,6 +166,11 @@ public class SignManager {
 	    mapConf.addDefault(SignType.INFO_SIGN.name() + ".maxAmountOfPlayers", 4);
 	    mapConf.addDefault(SignType.INFO_SIGN.name() + ".currentWave", 1);
 	    mapConf.addDefault(SignType.INFO_SIGN.name() + ".maxWave", 4);
+	    
+	    mapConf.addDefault(SignType.STATISTIC_SIGN.name() + ".header", 1);
+	    mapConf.addDefault(SignType.STATISTIC_SIGN.name() + ".rankNumber", 'a');
+	    mapConf.addDefault(SignType.STATISTIC_SIGN.name() + ".playerName", 'e');
+	    mapConf.addDefault(SignType.STATISTIC_SIGN.name() + ".value", 'f');
 	    
 	    mapConf.options().copyDefaults(true);
 	    mapConf.options().copyHeader(false);
@@ -268,6 +304,14 @@ public class SignManager {
 			ISign shop = new ShopSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby, category);
 			this.signs.add(shop);
 			return shop;
+			
+		    case STATISTIC_SIGN:
+			ISign stat = new StatisticSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby);
+			this.signs.add(stat);
+			return stat;
+			
+		    default:
+			throw new IllegalArgumentException(type.name() + " is not supported!");
 		}
 		
 	    } catch (Exception e) {
@@ -299,6 +343,14 @@ public class SignManager {
     public void updateSigns() {
 	for (ISign s : this.signs) {
 	    s.update(getColorMap(s.getType()));
+	}
+    }
+    
+    public void updateSigns(SignType type) {
+	for (ISign s : this.signs) {
+	    if (s.getType() == type) {
+		s.update(getColorMap(type));
+	    }
 	}
     }
     
