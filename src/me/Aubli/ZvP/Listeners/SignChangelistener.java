@@ -37,41 +37,27 @@ public class SignChangelistener implements Listener {
 	if (event.getLine(0).replace(" ", "").equalsIgnoreCase("[zvp]")) {
 	    if (eventPlayer.hasPermission("zvp.manage.sign")) {
 		if (!event.getLine(1).isEmpty() && !event.getLine(2).isEmpty()) {
-		    if (event.getLine(3).equalsIgnoreCase("interact") || event.getLine(3).equalsIgnoreCase("info") || event.getLine(3).equalsIgnoreCase("shop")) {
-			try {
-			    int arenaID = Integer.parseInt(event.getLine(1));
-			    int lobbyID = Integer.parseInt(event.getLine(2));
-			    
-			    Arena a = GameManager.getManager().getArena(arenaID);
-			    Lobby l = GameManager.getManager().getLobby(lobbyID);
-			    
-			    SignType type;
-			    
-			    if (event.getLine(3).equalsIgnoreCase("interact")) {
-				type = SignType.INTERACT_SIGN;
-			    } else if (event.getLine(3).equalsIgnoreCase("info")) {
-				type = SignType.INFO_SIGN;
-			    } else if (event.getLine(3).equalsIgnoreCase("shop")) {
-				type = SignType.SHOP_SIGN;
-			    } else {
-				return;
-			    }
-			    
-			    if (a != null) {
-				if (l != null) {
+		    try {
+			int arenaID = Integer.parseInt(event.getLine(1));
+			int lobbyID = Integer.parseInt(event.getLine(2));
+			
+			Arena a = GameManager.getManager().getArena(arenaID);
+			Lobby l = GameManager.getManager().getLobby(lobbyID);
+			
+			SignType type = SignType.fromString(event.getLine(3));
+			
+			if (a != null) {
+			    if (l != null) {
+				if (type != null) {
 				    ISign sign = SignManager.getManager().createSign(type, event.getBlock().getLocation().clone(), a, l, null);
 				    
 				    if (sign != null) {
 					event.setLine(0, ZvP.getPrefix().trim());
 					event.setLine(1, "Arena: " + arenaID);
+					event.setLine(2, ChatColor.DARK_RED + "'/zvp reload'");
+					event.setLine(3, ChatColor.DARK_RED + "required!");
 					
-					if (type == SignType.INFO_SIGN) {
-					    event.setLine(2, ChatColor.AQUA + "" + a.getPlayers().length + ChatColor.RESET + " / " + ChatColor.DARK_RED + a.getConfig().getMaxPlayers());
-					    event.setLine(3, ChatColor.BLUE + "" + a.getCurrentRound() + ":" + a.getCurrentWave() + ChatColor.RESET + " / " + ChatColor.DARK_RED + a.getConfig().getMaxRounds() + ":" + a.getConfig().getMaxWaves());
-					} else if (type == SignType.INTERACT_SIGN) {
-					    event.setLine(2, ChatColor.YELLOW + "Waiting");
-					    event.setLine(3, ChatColor.GREEN + "[JOIN]");
-					} else if (type == SignType.SHOP_SIGN) {
+					if (type == SignType.SHOP_SIGN) {
 					    
 					    Inventory catSelect = Bukkit.createInventory(eventPlayer, ((int) Math.ceil((ItemCategory.values().length / 9.0))) * 9, MessageManager.getMessage(inventory.select_category) + " (" + SignManager.getManager().getSign(event.getBlock().getLocation()).getID() + ")");
 					    
@@ -96,22 +82,22 @@ public class SignChangelistener implements Listener {
 					return;
 				    }
 				} else {
-				    eventPlayer.sendMessage(MessageManager.getMessage(error.lobby_not_available));
+				    eventPlayer.sendMessage(MessageManager.getMessage(error.sign_layout));
 				    event.setCancelled(true);
 				    return;
 				}
 			    } else {
-				eventPlayer.sendMessage(MessageManager.getMessage(error.arena_not_available));
+				eventPlayer.sendMessage(MessageManager.getMessage(error.lobby_not_available));
 				event.setCancelled(true);
 				return;
 			    }
-			} catch (NumberFormatException e) {
-			    eventPlayer.sendMessage(MessageManager.getMessage(error.sign_layout) + " " + e.getMessage());
+			} else {
+			    eventPlayer.sendMessage(MessageManager.getMessage(error.arena_not_available));
 			    event.setCancelled(true);
 			    return;
 			}
-		    } else {
-			eventPlayer.sendMessage(MessageManager.getMessage(error.sign_layout));
+		    } catch (NumberFormatException e) {
+			eventPlayer.sendMessage(MessageManager.getMessage(error.sign_layout) + " " + e.getMessage());
 			event.setCancelled(true);
 			return;
 		    }
