@@ -157,7 +157,8 @@ public class InteractListener implements Listener {
 				List<String> lore = new ArrayList<String>();
 				
 				lore.add("Category: " + shopItem.getCategory().toString());
-				lore.add(player.getArena().getScore().getScore(player) >= shopItem.getPrice() ? (ChatColor.GREEN + "Price: " + shopItem.getPrice()) : (ChatColor.RED + "Price: " + shopItem.getPrice()));
+				lore.add(player.getArena().getScore().getScore(player) >= shopItem.getBuyPrice() ? (ChatColor.GREEN + "Cost: " + shopItem.getBuyPrice()) : (ChatColor.RED + "Cost: " + shopItem.getBuyPrice()));
+				lore.add(ChatColor.GREEN + "Refund: " + shopItem.getSellPrice());
 				
 				meta.setLore(lore);
 				item.setItemMeta(meta);
