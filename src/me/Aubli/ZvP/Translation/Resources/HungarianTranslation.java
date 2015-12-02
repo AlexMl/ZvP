@@ -7,6 +7,7 @@ import me.Aubli.ZvP.Translation.MessageKeys.arena;
 import me.Aubli.ZvP.Translation.MessageKeys.category;
 import me.Aubli.ZvP.Translation.MessageKeys.commands;
 import me.Aubli.ZvP.Translation.MessageKeys.config;
+import me.Aubli.ZvP.Translation.MessageKeys.dataType;
 import me.Aubli.ZvP.Translation.MessageKeys.error;
 import me.Aubli.ZvP.Translation.MessageKeys.game;
 import me.Aubli.ZvP.Translation.MessageKeys.inventory;
@@ -108,8 +109,14 @@ public class HungarianTranslation extends ListResourceBundle {
 	    {status.waiting.name(), "Várakozás"},
 	    {status.stoped.name(), "Leállitva"},
 	    
+	    {dataType.kills.name(), "Kills"},
+	    {dataType.kill_record.name(), "Kill Record"},
+	    {dataType.deaths.name(), "Deaths"},
+	    {dataType.left_money.name(), "Left Money"},
+	    
 	    {inventory.kit_select.name(), "Kit kiválasztva!"},
 	    {inventory.place_icon.name(), "Place Kit icon here!"},
 	    {inventory.select_category.name(), "Select Category"},
+	    {inventory.select_recordType.name(), "Select Statistic Type"},
     };    
 }

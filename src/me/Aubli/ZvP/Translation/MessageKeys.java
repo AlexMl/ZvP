@@ -93,6 +93,13 @@ public class MessageKeys {
 	misc;
     }
     
+    public enum dataType {
+	kills,
+	kill_record,
+	deaths,
+	left_money;
+    }
+    
     public enum status {
 	running,
 	waiting,
@@ -102,7 +109,8 @@ public class MessageKeys {
     public enum inventory {
 	kit_select,
 	place_icon,
-	select_category;
+	select_category,
+	select_recordType;
     }
     
     public static ArrayList<Class<?>> getEnums() {
@@ -114,6 +122,7 @@ public class MessageKeys {
 	enums.add(manage.class);
 	enums.add(error.class);
 	enums.add(category.class);
+	enums.add(dataType.class);
 	enums.add(status.class);
 	enums.add(inventory.class);
 	return enums;
