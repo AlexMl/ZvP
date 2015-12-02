@@ -12,6 +12,7 @@ import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
+import me.Aubli.ZvP.Statistic.DataRecordType;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -279,14 +280,25 @@ public class SignManager {
 	return false;
     }
     
+    public ISign createSign(SignType type, Location signLoc, Arena arena, Lobby lobby) {
+	return createSign(type, signLoc, arena, lobby, null, null);
+    }
+    
+    public ISign createSign(SignType type, Location signLoc, Arena arena, Lobby lobby, DataRecordType recordType) {
+	return createSign(type, signLoc, arena, lobby, null, recordType);
+    }
+    
     public ISign createSign(SignType type, Location signLoc, Arena arena, Lobby lobby, ItemCategory category) {
+	return createSign(type, signLoc, arena, lobby, category, null);
+    }
+    
+    private ISign createSign(SignType type, Location signLoc, Arena arena, Lobby lobby, ItemCategory category, DataRecordType recordType) {
 	if (signLoc.getBlock().getState() instanceof Sign) {
 	    
 	    String path = this.signFolder.getPath();
 	    
 	    try {
 		switch (type) {
-		
 		    case INFO_SIGN:
 			ISign info = new InfoSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby);
 			this.signs.add(info);
@@ -306,7 +318,10 @@ public class SignManager {
 			return shop;
 			
 		    case STATISTIC_SIGN:
-			ISign stat = new StatisticSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby);
+			if (recordType == null) {
+			    recordType = DataRecordType.NULL;
+			}
+			ISign stat = new StatisticSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby, recordType);
 			this.signs.add(stat);
 			return stat;
 			

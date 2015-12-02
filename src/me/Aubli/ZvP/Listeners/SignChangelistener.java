@@ -9,6 +9,7 @@ import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 import me.Aubli.ZvP.Sign.ISign;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
+import me.Aubli.ZvP.Statistic.DataRecordType;
 import me.Aubli.ZvP.Translation.MessageKeys.error;
 import me.Aubli.ZvP.Translation.MessageKeys.inventory;
 import me.Aubli.ZvP.Translation.MessageKeys.manage;
@@ -49,7 +50,7 @@ public class SignChangelistener implements Listener {
 			if (a != null) {
 			    if (l != null) {
 				if (type != null) {
-				    ISign sign = SignManager.getManager().createSign(type, event.getBlock().getLocation().clone(), a, l, null);
+				    ISign sign = SignManager.getManager().createSign(type, event.getBlock().getLocation().clone(), a, l);
 				    
 				    if (sign != null) {
 					event.setLine(0, ZvP.getPrefix().trim());
@@ -59,14 +60,13 @@ public class SignChangelistener implements Listener {
 					
 					if (type == SignType.SHOP_SIGN) {
 					    
-					    Inventory catSelect = Bukkit.createInventory(eventPlayer, ((int) Math.ceil((ItemCategory.values().length / 9.0))) * 9, MessageManager.getMessage(inventory.select_category) + " (" + SignManager.getManager().getSign(event.getBlock().getLocation()).getID() + ")");
-					    
+					    Inventory catSelect = Bukkit.createInventory(eventPlayer, ((int) Math.ceil((ItemCategory.values().length / 9.0))) * 9, MessageManager.getMessage(inventory.select_category) + " (" + sign.getID() + ")");
 					    for (ItemCategory cat : ItemCategory.values()) {
 						if (cat.getIcon() != null) {
 						    ItemStack icon = cat.getIcon().clone();
 						    ItemMeta meta = icon.getItemMeta();
 						    meta.setDisplayName(cat.toString());
-						    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_UNBREAKABLE);
+						    meta.addItemFlags(ItemFlag.values());
 						    icon.setItemMeta(meta);
 						    catSelect.addItem(icon);
 						}
@@ -75,6 +75,24 @@ public class SignChangelistener implements Listener {
 					    eventPlayer.closeInventory();
 					    eventPlayer.openInventory(catSelect);
 					}
+					if (type == SignType.STATISTIC_SIGN) {
+					    
+					    Inventory statSelect = Bukkit.createInventory(eventPlayer, ((int) Math.ceil((DataRecordType.values().length / 9.0))) * 9, MessageManager.getMessage(inventory.select_recordType) + " (" + sign.getID() + ")");
+					    for (DataRecordType dataType : DataRecordType.values()) {
+						if (dataType.getIcon() != null) {
+						    ItemStack icon = dataType.getIcon().clone();
+						    ItemMeta meta = icon.getItemMeta();
+						    meta.setDisplayName(dataType.getDisplayName());
+						    meta.addItemFlags(ItemFlag.values());
+						    icon.setItemMeta(meta);
+						    statSelect.addItem(icon);
+						}
+					    }
+					    
+					    eventPlayer.closeInventory();
+					    eventPlayer.openInventory(statSelect);
+					}
+					
 					eventPlayer.sendMessage(MessageManager.getMessage(manage.sign_saved));
 					return;
 				    } else {

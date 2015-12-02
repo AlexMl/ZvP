@@ -18,6 +18,8 @@ import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 import me.Aubli.ZvP.Sign.ShopSign;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
+import me.Aubli.ZvP.Sign.StatisticSign;
+import me.Aubli.ZvP.Statistic.DataRecordType;
 import me.Aubli.ZvP.Translation.MessageKeys.error;
 import me.Aubli.ZvP.Translation.MessageKeys.game;
 import me.Aubli.ZvP.Translation.MessageKeys.inventory;
@@ -69,6 +71,7 @@ public class GUIListener implements Listener {
 		
 		// System.out.println(event.getRawSlot() + " " + event.getSlot() + ": " + event.getCurrentItem().getItemMeta().getDisplayName());
 		
+		// Select kit on game start
 		if (event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage(inventory.kit_select))) {
 		    event.setCancelled(true);
 		    eventPlayer.closeInventory();
@@ -107,6 +110,8 @@ public class GUIListener implements Listener {
 			return;
 		    }
 		}
+		
+		// Select category for shop sign
 		if (event.getInventory().getTitle().contains(MessageManager.getMessage(inventory.select_category))) {
 		    event.setCancelled(true);
 		    eventPlayer.closeInventory();
@@ -123,8 +128,34 @@ public class GUIListener implements Listener {
 			
 			SignManager.getManager().removeSign(signID);
 			SignManager.getManager().createSign(SignType.SHOP_SIGN, lo, a, l, cat);
+			SignManager.getManager().updateSigns(SignType.SHOP_SIGN);
 		    }
+		    return;
 		}
+		
+		// Select recordType for stats sign
+		if (event.getInventory().getTitle().contains(MessageManager.getMessage(inventory.select_recordType))) {
+		    event.setCancelled(true);
+		    eventPlayer.closeInventory();
+		    
+		    int signID = Integer.parseInt(event.getInventory().getTitle().split(MessageManager.getMessage(inventory.select_recordType) + " ")[1].replace("(", "").replace(")", ""));
+		    DataRecordType recordType = DataRecordType.fromIcon(event.getCurrentItem());
+		    
+		    if (recordType != null && SignManager.getManager().getSign(signID) != null) {
+			StatisticSign sign = (StatisticSign) SignManager.getManager().getSign(signID);
+			
+			Arena a = sign.getArena();
+			Lobby l = sign.getLobby();
+			Location lo = sign.getLocation();
+			
+			SignManager.getManager().removeSign(signID);
+			SignManager.getManager().createSign(SignType.STATISTIC_SIGN, lo, a, l, recordType);
+			SignManager.getManager().updateSigns(SignType.STATISTIC_SIGN);
+		    }
+		    return;
+		}
+		
+		// Item sell/buy
 		if (event.getInventory().getTitle().contains("Items: ")) {
 		    event.setCancelled(true);
 		    ZvP.getPluginLogger().log(this.getClass(), Level.FINEST, "ShopClick: Slot: " + event.getSlot() + " RawSlot: " + event.getRawSlot() + " Result: " + event.getResult().toString(), true);
