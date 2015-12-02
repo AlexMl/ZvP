@@ -6,13 +6,6 @@ import java.util.UUID;
 
 public class DataRecord {
     
-    public enum DataType {
-	KILLS,
-	KILLRECORD,
-	DEATHS,
-	LEFTMONEY, ;
-    }
-    
     private UUID playerUUID;
     private int kills;
     private int maxKills;
@@ -57,7 +50,7 @@ public class DataRecord {
 	return this.timestamp;
     }
     
-    public Object getValue(DataType type) {
+    public Object getValue(DataRecordType type) {
 	switch (type) {
 	    case KILLS:
 		return getKills();
