@@ -2,7 +2,6 @@ package me.Aubli.ZvP.Sign;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -13,9 +12,7 @@ import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Sign.SignManager.SignType;
-import me.Aubli.ZvP.Statistic.DataRecord;
-import me.Aubli.ZvP.Statistic.DataRecord.DataType;
-import me.Aubli.ZvP.Statistic.DatabaseManager;
+import me.Aubli.ZvP.Statistic.DataRecordType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,7 +21,6 @@ import org.bukkit.World;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.util.SortMap.SortMap;
 
 
 public class StatisticSign implements ISign, Comparable<ISign> {
@@ -38,11 +34,12 @@ public class StatisticSign implements ISign, Comparable<ISign> {
     private Sign sign;
     
     private SignType type;
+    private DataRecordType recordType;
     
     private Arena arena;
     private Lobby lobby;
     
-    public StatisticSign(Location signLoc, int ID, String path, Arena arena, Lobby lobby) throws Exception {
+    public StatisticSign(Location signLoc, int ID, String path, Arena arena, Lobby lobby, DataRecordType recordType) throws Exception {
 	this.ID = ID;
 	this.signLoc = signLoc.clone();
 	
@@ -53,6 +50,7 @@ public class StatisticSign implements ISign, Comparable<ISign> {
 	this.lobby = lobby;
 	
 	this.type = SignType.STATISTIC_SIGN;
+	this.recordType = recordType;
 	
 	try {
 	    this.signFile.createNewFile();
@@ -60,6 +58,7 @@ public class StatisticSign implements ISign, Comparable<ISign> {
 	    this.signConfig.set("sign.Type", getType().toString());
 	    this.signConfig.set("sign.Arena", arena.getID());
 	    this.signConfig.set("sign.Lobby", lobby.getID());
+	    this.signConfig.set("sign.RecordType", recordType.name());
 	    
 	    this.signConfig.set("sign.Location.world", this.signLoc.getWorld().getUID().toString());
 	    this.signConfig.set("sign.Location.X", this.signLoc.getBlockX());
@@ -87,6 +86,7 @@ public class StatisticSign implements ISign, Comparable<ISign> {
 	this.type = SignType.STATISTIC_SIGN;
 	
 	this.ID = this.signConfig.getInt("sign.ID");
+	this.recordType = DataRecordType.valueOf(this.signConfig.getString("sign.RecordType"));
 	this.signLoc = new Location(Bukkit.getWorld(UUID.fromString(this.signConfig.getString("sign.Location.world"))), this.signConfig.getDouble("sign.Location.X"), this.signConfig.getDouble("sign.Location.Y"), this.signConfig.getDouble("sign.Location.Z"));
 	
 	if (this.signLoc.getWorld() != null) {
@@ -132,6 +132,10 @@ public class StatisticSign implements ISign, Comparable<ISign> {
 	return this.type;
     }
     
+    public DataRecordType getRecordType() {
+	return this.recordType;
+    }
+    
     @Override
     public Arena getArena() {
 	return this.arena;
@@ -145,18 +149,18 @@ public class StatisticSign implements ISign, Comparable<ISign> {
     @Override
     public void update(Map<String, ChatColor> colorMap) {
 	this.sign.setLine(0, ZvP.getPrefix().trim());
-	DataRecord[] records = DatabaseManager.getManager().getDataRecords();
 	
-	if (this.arena != null) {
-	    Map<UUID, Integer> kills = getValueMap(records, DataType.KILLS);
-	    this.sign.setLine(1, colorMap.get("header") + "Most Kills:");
+	if (this.arena != null && getRecordType() != null && getRecordType() != DataRecordType.NULL) {
+	    Map<UUID, Integer> valueMap = getRecordType().getValueMap();
+	    
+	    this.sign.setLine(1, colorMap.get("header") + getRecordType().getDisplayName());
 	    this.sign.setLine(2, "");
 	    this.sign.setLine(3, "");
 	    
-	    if (kills != null && !kills.isEmpty()) {
+	    if (valueMap != null && !valueMap.isEmpty()) {
 		
 		int line = 2;
-		for (Entry<UUID, Integer> entry : kills.entrySet()) {
+		for (Entry<UUID, Integer> entry : valueMap.entrySet()) {
 		    this.sign.setLine(line, colorMap.get("rankNumber") + "" + (line - 1) + ". " + colorMap.get("playerName") + Bukkit.getOfflinePlayer(entry.getKey()).getName() + ChatColor.RESET + " : " + colorMap.get("value") + entry.getValue());
 		    line++;
 		    
@@ -168,27 +172,16 @@ public class StatisticSign implements ISign, Comparable<ISign> {
 		this.sign.setLine(2, ChatColor.DARK_RED + "No data");
 		this.sign.setLine(3, ChatColor.DARK_RED + "available!");
 	    }
-	} else {
+	} else if (getRecordType() == null || getRecordType() == DataRecordType.NULL) {
+	    this.sign.setLine(1, "");
+	    this.sign.setLine(2, ChatColor.DARK_RED + "No data type");
+	    this.sign.setLine(3, ChatColor.DARK_RED + "set!");
+	} else if (this.arena == null) {
 	    this.sign.setLine(1, "");
 	    this.sign.setLine(2, ChatColor.DARK_RED + "Arena is not");
 	    this.sign.setLine(3, ChatColor.DARK_RED + "available!");
 	}
 	this.sign.update(true);
-    }
-    
-    @SuppressWarnings("unchecked")
-    private static <T extends Comparable<T>> Map<UUID, T> getValueMap(DataRecord[] records, DataType type) {
-	Map<UUID, T> recordMap = new HashMap<UUID, T>();
-	
-	for (DataRecord record : records) {
-	    recordMap.put(record.getPlayerUUID(), (T) record.getValue(type));
-	}
-	
-	recordMap = SortMap.sortByValue(recordMap);
-	
-	// System.out.println(type);
-	// System.out.println(recordMap);
-	return recordMap;
     }
     
     @Override
