@@ -7,6 +7,7 @@ import me.Aubli.ZvP.Translation.MessageKeys.arena;
 import me.Aubli.ZvP.Translation.MessageKeys.category;
 import me.Aubli.ZvP.Translation.MessageKeys.commands;
 import me.Aubli.ZvP.Translation.MessageKeys.config;
+import me.Aubli.ZvP.Translation.MessageKeys.dataType;
 import me.Aubli.ZvP.Translation.MessageKeys.error;
 import me.Aubli.ZvP.Translation.MessageKeys.game;
 import me.Aubli.ZvP.Translation.MessageKeys.inventory;
@@ -104,6 +105,11 @@ public class GermanTranslation extends ListResourceBundle {
 	    {category.potion.name(), "Tränke"},
 	    {category.misc.name(), "Sonstiges"},
 	    
+	    {dataType.kills.name(), "Kills"},
+	    {dataType.kill_record.name(), "Kill Rekord"},
+	    {dataType.deaths.name(), "Tode"},
+	    {dataType.left_money.name(), "Übriges Geld"},
+	    
 	    {status.running.name(), "Im Spiel"},
 	    {status.waiting.name(), "Wartet"},
 	    {status.stoped.name(), "Angehalten"},
@@ -111,5 +117,6 @@ public class GermanTranslation extends ListResourceBundle {
 	    {inventory.kit_select.name(), "Wähle dein Kit!"},
 	    {inventory.place_icon.name(), "Platziere ein Icon hier!"},
 	    {inventory.select_category.name(), "Wähle eine Kategorie!"},
+	    {inventory.select_recordType.name(), "Wähle einen Statistik Typen"},
     };    
 }
