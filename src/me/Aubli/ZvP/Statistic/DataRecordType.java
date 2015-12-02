@@ -14,7 +14,7 @@ import org.util.SortMap.SortMap;
 
 public enum DataRecordType {
     
-    NULL("NULL", new ItemStack(Material.ITEM_FRAME)),
+    NULL("NULL", null),
     KILLS(MessageManager.getMessage(dataType.kills), new ItemStack(Material.IRON_SWORD)),
     KILLRECORD(MessageManager.getMessage(dataType.kill_record), new ItemStack(Material.DIAMOND_SWORD)),
     DEATHS(MessageManager.getMessage(dataType.deaths), new ItemStack(Material.SKULL_ITEM)),
@@ -54,8 +54,10 @@ public enum DataRecordType {
     
     public static DataRecordType fromIcon(ItemStack icon) {
 	for (DataRecordType type : DataRecordType.values()) {
-	    if (type.getIcon().getType() == icon.getType()) {
-		return type;
+	    if (type.getIcon() != null) {
+		if (type.getIcon().getType() == icon.getType()) {
+		    return type;
+		}
 	    }
 	}
 	return null;
