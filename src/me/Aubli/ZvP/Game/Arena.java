@@ -287,7 +287,7 @@ public class Arena implements Comparable<Arena> {
 	    scoreMap.put(player.getUuid(), score);
 	}
 	
-	scoreMap = SortMap.sortByValue(scoreMap);
+	scoreMap = SortMap.sortByValueDescending(scoreMap);
 	return GameManager.getManager().getPlayer(scoreMap.keySet().toArray(new UUID[0])[0]);
     }
     
