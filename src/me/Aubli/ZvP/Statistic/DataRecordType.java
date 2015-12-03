@@ -45,7 +45,11 @@ public enum DataRecordType {
 	    recordMap.put(record.getPlayerUUID(), (T) record.getValue(this));
 	}
 	
-	recordMap = SortMap.sortByValue(recordMap);
+	if (this == DEATHS) {
+	    recordMap = SortMap.sortByValueAscending(recordMap);
+	} else {
+	    recordMap = SortMap.sortByValueDescending(recordMap);
+	}
 	
 	// System.out.println(type);
 	// System.out.println(recordMap);
