@@ -77,6 +77,17 @@ public class SignChangelistener implements Listener {
 					}
 					if (type == SignType.STATISTIC_SIGN) {
 					    
+					    if (SignManager.getManager().getSign(event.getBlock().getLocation().clone().add(0, 1, 0)) != null) {
+						ISign mainSign = SignManager.getManager().getSign(event.getBlock().getLocation().clone().add(0, 1, 0));
+						
+						if (mainSign.getType() == SignType.STATISTIC_SIGN) {
+						    sign.delete();
+						    SignManager.getManager().createSign(SignType.STATISTIC_LIST_SIGN, event.getBlock().getLocation().clone(), a, l, mainSign);
+						    eventPlayer.sendMessage(MessageManager.getMessage(manage.sign_saved));
+						    return;
+						}
+					    }
+					    
 					    Inventory statSelect = Bukkit.createInventory(eventPlayer, ((int) Math.ceil((DataRecordType.values().length / 9.0))) * 9, MessageManager.getMessage(inventory.select_recordType) + " (" + sign.getID() + ")");
 					    for (DataRecordType dataType : DataRecordType.values()) {
 						if (dataType.getIcon() != null) {
