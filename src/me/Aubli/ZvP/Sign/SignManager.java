@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -27,7 +28,8 @@ public class SignManager {
 	INFO_SIGN("info"),
 	INTERACT_SIGN("interact"),
 	SHOP_SIGN("shop"),
-	STATISTIC_SIGN("statistics"), ;
+	STATISTIC_SIGN("statistics"),
+	STATISTIC_LIST_SIGN("STATISTICLIST"), ;
 	
 	private String name;
 	
@@ -87,11 +89,12 @@ public class SignManager {
 	
 	FileConfiguration conf;
 	
-	for (File f : this.signFolder.listFiles()) {
-	    conf = YamlConfiguration.loadConfiguration(f);
-	    SignType t = SignType.valueOf(conf.getString("sign.Type"));
+	List<File> listStatFiles = new ArrayList<File>();
+	try {
 	    
-	    try {
+	    for (File f : this.signFolder.listFiles()) {
+		conf = YamlConfiguration.loadConfiguration(f);
+		SignType t = SignType.valueOf(conf.getString("sign.Type"));
 		
 		switch (t) {
 		    case INFO_SIGN:
@@ -122,13 +125,27 @@ public class SignManager {
 			}
 			break;
 		    
+		    case STATISTIC_LIST_SIGN:
+			listStatFiles.add(f);
+			break;
+		    
 		    default:
 			throw new IllegalArgumentException(t.name() + " is not supported!");
 		}
-	    } catch (Exception e) {
-		ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, e.getMessage(), true, false, e);
+		
 	    }
+	    
+	    for (File f : listStatFiles) {
+		ISign listStat = new StatisticListSign(f);
+		if (listStat.getWorld() != null) {
+		    this.signs.add(listStat);
+		}
+	    }
+	    
+	} catch (Exception e) {
+	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, e.getMessage(), true, false, e);
 	}
+	
     }
     
     private void loadColorMap() {
@@ -163,6 +180,10 @@ public class SignManager {
 	    mapConf.addDefault(SignType.STATISTIC_SIGN.name() + ".rankNumber", 'a');
 	    mapConf.addDefault(SignType.STATISTIC_SIGN.name() + ".playerName", 'e');
 	    mapConf.addDefault(SignType.STATISTIC_SIGN.name() + ".value", 'f');
+	    
+	    mapConf.addDefault(SignType.STATISTIC_LIST_SIGN.name() + ".rankNumber", 'a');
+	    mapConf.addDefault(SignType.STATISTIC_LIST_SIGN.name() + ".playerName", 'e');
+	    mapConf.addDefault(SignType.STATISTIC_LIST_SIGN.name() + ".value", 'f');
 	    
 	    mapConf.options().copyDefaults(true);
 	    mapConf.options().copyHeader(false);
@@ -276,18 +297,22 @@ public class SignManager {
     }
     
     public ISign createSign(SignType type, Location signLoc, Arena arena, Lobby lobby) {
-	return createSign(type, signLoc, arena, lobby, null, null);
+	return createSign(type, signLoc, arena, lobby, null, null, null);
+    }
+    
+    public ISign createSign(SignType type, Location signLoc, Arena arena, Lobby lobby, ISign mainSign) {
+	return createSign(type, signLoc, arena, lobby, null, null, mainSign);
     }
     
     public ISign createSign(SignType type, Location signLoc, Arena arena, Lobby lobby, DataRecordType recordType) {
-	return createSign(type, signLoc, arena, lobby, null, recordType);
+	return createSign(type, signLoc, arena, lobby, null, recordType, null);
     }
     
     public ISign createSign(SignType type, Location signLoc, Arena arena, Lobby lobby, ItemCategory category) {
-	return createSign(type, signLoc, arena, lobby, category, null);
+	return createSign(type, signLoc, arena, lobby, category, null, null);
     }
     
-    private ISign createSign(SignType type, Location signLoc, Arena arena, Lobby lobby, ItemCategory category, DataRecordType recordType) {
+    private ISign createSign(SignType type, Location signLoc, Arena arena, Lobby lobby, ItemCategory category, DataRecordType recordType, ISign mainSign) {
 	if (signLoc.getBlock().getState() instanceof Sign) {
 	    
 	    String path = this.signFolder.getPath();
@@ -316,9 +341,18 @@ public class SignManager {
 			if (recordType == null) {
 			    recordType = DataRecordType.NULL;
 			}
+			
 			ISign stat = new StatisticSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby, recordType);
 			this.signs.add(stat);
 			return stat;
+			
+		    case STATISTIC_LIST_SIGN:
+			if (mainSign != null) {
+			    ISign listStat = new StatisticListSign(signLoc.clone(), GameManager.getManager().getNewID(path), path, arena, lobby, mainSign);
+			    this.signs.add(listStat);
+			    return listStat;
+			}
+			return null;
 			
 		    default:
 			throw new IllegalArgumentException(type.name() + " is not supported!");
