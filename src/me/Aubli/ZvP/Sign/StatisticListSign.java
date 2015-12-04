@@ -169,12 +169,25 @@ public class StatisticListSign implements ISign, Comparable<ISign> {
 		
 		int line = 1;
 		for (Entry<UUID, Integer> entry : valueMap.entrySet()) {
-		    // System.out.println("l:" + line + " wl:" + (line - 2));
 		    if (line < 3) {
 			line++;
 			continue;
 		    }
-		    this.sign.setLine(line - 2, colorMap.get("rankNumber") + "" + line + ". " + colorMap.get("playerName") + Bukkit.getOfflinePlayer(entry.getKey()).getName() + ChatColor.RESET + " : " + colorMap.get("value") + entry.getValue());
+		    
+		    String playerName = Bukkit.getOfflinePlayer(entry.getKey()).getName();
+		    String entryString = format(entry.getValue());
+		    String signLine = "";
+		    
+		    int charsLeft = SIGN_SPACE - (line + ".: " + entryString).length();
+		    // System.out.println("charsLeft: " + charsLeft);
+		    
+		    if (charsLeft >= playerName.length()) {
+			signLine = colorMap.get("rankNumber") + "" + line + "." + colorMap.get("playerName") + playerName + ChatColor.RESET + ": " + colorMap.get("value") + entryString;
+		    } else {
+			signLine = colorMap.get("rankNumber") + "" + line + "." + colorMap.get("playerName") + playerName.substring(0, charsLeft) + ChatColor.RESET + ".: " + colorMap.get("value") + entryString;
+		    }
+		    
+		    this.sign.setLine(line - 2, signLine);
 		    line++;
 		    
 		    if (line > 5) {
@@ -199,6 +212,14 @@ public class StatisticListSign implements ISign, Comparable<ISign> {
 	    this.sign.setLine(3, ChatColor.DARK_RED + "available!");
 	}
 	this.sign.update(true);
+    }
+    
+    private String format(Object o) {
+	if (o instanceof Double) {
+	    return "" + Math.round((double) o);
+	} else {
+	    return o.toString();
+	}
     }
     
     @Override

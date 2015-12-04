@@ -13,6 +13,8 @@ import org.bukkit.World;
 
 public interface ISign {
     
+    public static final int SIGN_SPACE = 16;
+    
     void delete();
     
     public int getID();
