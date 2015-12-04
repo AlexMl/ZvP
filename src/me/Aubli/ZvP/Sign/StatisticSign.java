@@ -161,7 +161,21 @@ public class StatisticSign implements ISign, Comparable<ISign> {
 		
 		int line = 2;
 		for (Entry<UUID, Integer> entry : valueMap.entrySet()) {
-		    this.sign.setLine(line, colorMap.get("rankNumber") + "" + (line - 1) + ". " + colorMap.get("playerName") + Bukkit.getOfflinePlayer(entry.getKey()).getName() + ChatColor.RESET + " : " + colorMap.get("value") + entry.getValue());
+		    
+		    String playerName = Bukkit.getOfflinePlayer(entry.getKey()).getName();
+		    String entryString = format(entry.getValue());
+		    String signLine = "";
+		    
+		    int charsLeft = SIGN_SPACE - (line + ".: " + entryString).length();
+		    // System.out.println("charsLeft: " + charsLeft);
+		    
+		    if (charsLeft >= playerName.length()) {
+			signLine = colorMap.get("rankNumber") + "" + (line - 1) + "." + colorMap.get("playerName") + playerName + ChatColor.RESET + ": " + colorMap.get("value") + entryString;
+		    } else {
+			signLine = colorMap.get("rankNumber") + "" + (line - 1) + "." + colorMap.get("playerName") + playerName.substring(0, charsLeft) + ChatColor.RESET + ".: " + colorMap.get("value") + entryString;
+		    }
+		    
+		    this.sign.setLine(line, signLine);
 		    line++;
 		    
 		    if (line > 3) {
@@ -182,6 +196,14 @@ public class StatisticSign implements ISign, Comparable<ISign> {
 	    this.sign.setLine(3, ChatColor.DARK_RED + "available!");
 	}
 	this.sign.update(true);
+    }
+    
+    private String format(Object o) {
+	if (o instanceof Double) {
+	    return "" + Math.round((double) o);
+	} else {
+	    return o.toString();
+	}
     }
     
     @Override
