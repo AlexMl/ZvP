@@ -270,6 +270,7 @@ public class DatabaseManager implements DatabaseCallback {
     @Override
     synchronized public void onTransmissionEnd() {
 	SignManager.getManager().updateSigns(SignType.STATISTIC_SIGN);
+	SignManager.getManager().updateSigns(SignType.STATISTIC_LIST_SIGN);
     }
     
     private class DatabaseWriter implements Runnable {
