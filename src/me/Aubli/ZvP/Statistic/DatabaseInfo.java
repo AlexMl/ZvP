@@ -80,6 +80,7 @@ public class DatabaseInfo {
 	    Class.forName("org.sqlite.JDBC");
 	    return "jdbc:sqlite:" + DatabaseManager.getFlatFileFolder().getAbsolutePath() + "/" + getDatabaseName() + ".db";
 	} else {
+	    // INFO jdbc:mysql://localhost:3306/mc
 	    return "jdbc:" + getProtocol() + "://" + getHost() + ":" + getPort() + "/" + getDatabaseName();
 	}
     }
