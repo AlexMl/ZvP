@@ -58,8 +58,21 @@ public class DatabaseManager implements DatabaseCallback {
 	this.conn = initializeConnection();
 	
 	createTables(this.tableName);
-	updateMap(this.tableName);
-	loadTimedStatistics();
+	
+	Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
+	    
+	    @Override
+	    public void run() {
+		try {
+		    updateMap(DatabaseManager.this.tableName);
+		    loadTimedStatistics();
+		} catch (SQLException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+	    }
+	}, 15L);
+	
 	// String url = "jdbc:" + sqlType + "://" + sqlUrl + ":" + port + "/" + database;
 	// mysql://localhost:3306/mc
 	
