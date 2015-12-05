@@ -67,19 +67,12 @@ public class DatabaseManager implements DatabaseCallback {
 		    updateMap(DatabaseManager.this.tableName);
 		    loadTimedStatistics();
 		} catch (SQLException e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
+		    ZvP.getPluginLogger().log(getClass(), Level.SEVERE, "Error executing SQL statement 'SELECT * FROM " + DatabaseManager.this.infoTableName + ";': " + e.getMessage(), true, false, e);
 		}
 	    }
 	}, 15L);
 	
-	// String url = "jdbc:" + sqlType + "://" + sqlUrl + ":" + port + "/" + database;
-	// mysql://localhost:3306/mc
-	
-	// TODO remove debug, replace with logger
-	// System.out.println(this.conn.getMetaData().getDatabaseProductName());
-	// System.out.println(this.conn.getMetaData().getDatabaseProductVersion());
-	// System.out.println(this.conn.getMetaData().getDriverVersion());
+	ZvP.getPluginLogger().log(getClass(), Level.FINER, "Initialized connection to " + this.conn.getMetaData().getDatabaseProductName() + " " + this.conn.getMetaData().getDatabaseProductVersion() + " using " + this.conn.getMetaData().getDriverName() + " " + this.conn.getMetaData().getDriverVersion() + "!", true, true);
     }
     
     public static DatabaseManager init(DatabaseInfo info) throws ClassNotFoundException, SQLException {
@@ -262,7 +255,7 @@ public class DatabaseManager implements DatabaseCallback {
     
     @Override
     public void handleException(Exception e, String stmt) {
-	ZvP.getPluginLogger().log(getClass(), Level.SEVERE, "Error executing SQL statement: " + e.getMessage() + " for Statement:\n" + stmt, true, false, e);
+	ZvP.getPluginLogger().log(getClass(), Level.SEVERE, "Error executing SQL statement '" + stmt + "': " + e.getMessage(), true, false, e);
     }
     
     @Override
