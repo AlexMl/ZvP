@@ -87,7 +87,7 @@ public class DatabaseManager implements DatabaseCallback {
     
     private void createTables(String tableName) throws SQLException {
 	String createTableSTM = "CREATE TABLE IF NOT EXISTS " + tableName + "(puuid VARCHAR(36) NOT NULL, pkills INTEGER, phkills INTEGER, pdeaths INTEGER, plmoney DECIMAL(8,3), changed TIMESTAMP, added TIMESTAMP, PRIMARY KEY(puuid));";
-	String createInfoTableSTM = "CREATE TABLE IF NOT EXISTS " + this.infoTableName + "(id INTEGER NOT NULL AUTO_INCREMENT, start TIMESTAMP NULL DEFAULT NULL, finish TIMESTAMP NULL DEFAULT NULL, PRIMARY KEY(id));";
+	String createInfoTableSTM = "CREATE TABLE IF NOT EXISTS " + this.infoTableName + "(id INTEGER NOT NULL" + (!this.db_info.usingFlatFile() ? " AUTO_INCREMENT" : "") + ", start TIMESTAMP NULL DEFAULT NULL, finish TIMESTAMP NULL DEFAULT NULL, PRIMARY KEY(id));";
 	Bukkit.getScheduler().runTaskAsynchronously(ZvP.getInstance(), new DatabaseWriter(this, this.conn, createTableSTM, createInfoTableSTM));
     }
     
@@ -192,10 +192,10 @@ public class DatabaseManager implements DatabaseCallback {
     private void insertRecord(String tableName, DataRecord... records) {
 	
 	StringBuilder stmBuilder = new StringBuilder();
-	stmBuilder.append("INSERT INTO " + tableName + "(puuid,pkills,phkills,pdeaths,plmoney,added)");
+	stmBuilder.append("INSERT INTO " + tableName + "(puuid,pkills,phkills,pdeaths,plmoney,changed,added)");
 	
 	for (DataRecord record : records) {
-	    stmBuilder.append(" SELECT '" + record.getPlayerUUID() + "', '" + record.getKills() + "', '" + record.getKills() + "', '" + record.getDeaths() + "', '" + record.getLeftMoney() + "', '" + record.getTimestamp() + "'");
+	    stmBuilder.append(" SELECT '" + record.getPlayerUUID() + "', '" + record.getKills() + "', '" + record.getKills() + "', '" + record.getDeaths() + "', '" + record.getLeftMoney() + "', CURRENT_TIMESTAMP, '" + record.getTimestamp() + "'");
 	    stmBuilder.append(" UNION ALL");
 	}
 	
@@ -206,7 +206,7 @@ public class DatabaseManager implements DatabaseCallback {
     }
     
     private void updateRecord(String tableName, DataRecord record) {
-	String stm = "UPDATE " + tableName + " SET pkills=" + record.getKills() + ",phkills=" + record.getMaxKills() + ",pdeaths=" + record.getDeaths() + ",plmoney=" + record.getLeftMoney() + " WHERE puuid='" + record.getPlayerUUID().toString() + "';";
+	String stm = "UPDATE " + tableName + " SET pkills=" + record.getKills() + ",phkills=" + record.getMaxKills() + ",pdeaths=" + record.getDeaths() + ",plmoney=" + record.getLeftMoney() + ",changed=CURRENT_TIMESTAMP WHERE puuid='" + record.getPlayerUUID().toString() + "';";
 	Bukkit.getScheduler().runTaskAsynchronously(ZvP.getInstance(), new DatabaseWriter(this, this.conn, stm));
     }
     
