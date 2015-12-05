@@ -178,7 +178,14 @@ public class ZvP extends JavaPlugin {
 		    public int getValue() {
 			return 1;
 		    }
+		});
+		
+		localeUsed.addPlotter(new Metrics.Plotter(getDescription().getVersion()) {
 		    
+		    @Override
+		    public int getValue() {
+			return 1;
+		    }
 		});
 		
 		metrics.start();
