@@ -162,9 +162,9 @@ public class ArenaLobby {
 	
 	if (!player.hasKit() && !player.hasCanceled()) {
 	    
-	    if (!this.playerList.contains(player)) {
-		this.playerList.add(player);
-	    }
+	    // if (!this.playerList.contains(player) && !this.arena.containsPlayer(player.getPlayer())) {
+	    // this.playerList.add(player);
+	    // }
 	    
 	    Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
 		
@@ -175,11 +175,11 @@ public class ArenaLobby {
 	    }, 20L);
 	    return;
 	    
-	} else if (player.hasKit() && this.playerList.contains(player)) {
-	    removePlayer(player);
+	    // } else if (player.hasKit() && this.playerList.contains(player)) {
+	    // removePlayer(player);
 	}
 	
-	if (!this.playerList.contains(player) && !player.hasCanceled()) {
+	if (!this.playerList.contains(player) && !player.hasCanceled() && player.hasKit()) {
 	    player.getArena().removePreLobbyPlayer(player);
 	    
 	    player.sendMessage(MessageManager.getFormatedMessage(game.joined, this.arena.getID()));
