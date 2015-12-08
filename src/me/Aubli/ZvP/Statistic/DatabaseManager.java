@@ -160,7 +160,7 @@ public class DatabaseManager implements DatabaseCallback {
 		    if (playerRecord == null) {
 			insertRecords.add(record);
 		    } else {
-			DataRecord mergedRecord = DataRecord.merge(playerRecord, record);
+			DataRecord mergedRecord = DataRecord.merge(playerRecord, record, false);
 			updateRecord(this.timedTableName, mergedRecord);
 		    }
 		}
@@ -180,7 +180,7 @@ public class DatabaseManager implements DatabaseCallback {
 		if (playerRecord == null) {
 		    insertRecords.add(record);
 		} else {
-		    DataRecord mergedRecord = DataRecord.merge(playerRecord, record);
+		    DataRecord mergedRecord = DataRecord.merge(playerRecord, record, false);
 		    updateRecord(this.tableName, mergedRecord);
 		}
 	    }

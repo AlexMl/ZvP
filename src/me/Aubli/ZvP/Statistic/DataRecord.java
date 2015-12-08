@@ -74,7 +74,7 @@ public class DataRecord {
 	return getClass().getSimpleName() + "[P:" + getPlayerUUID() + ", K:" + getKills() + ", hK:" + getMaxKills() + ", D:" + getDeaths() + ", lM:" + getLeftMoney() + ", " + getTimestamp().toString() + "]";
     }
     
-    public static DataRecord merge(DataRecord oldRecord, DataRecord newRecord) throws Exception {
+    public static DataRecord merge(DataRecord oldRecord, DataRecord newRecord, boolean mergeAll) throws Exception {
 	
 	if (!oldRecord.getPlayerUUID().equals(newRecord.getPlayerUUID())) {
 	    throw new Exception("Datarecords can not be merged! Different playerUUIDs!");
@@ -85,6 +85,21 @@ public class DataRecord {
 	    oldRecord = newRecord;
 	    newRecord = temp;
 	}
-	return new DataRecord(oldRecord.getPlayerUUID(), oldRecord.getKills() + newRecord.getKills(), (newRecord.getMaxKills() > oldRecord.getMaxKills() ? newRecord.getMaxKills() : oldRecord.getMaxKills()), oldRecord.getDeaths() + newRecord.getDeaths(), newRecord.getLeftMoney(), newRecord.getTimestamp().getTime());
+	
+	int killrecord = 0;
+	double money = 0;
+	if (mergeAll) {
+	    killrecord = oldRecord.getKills() + newRecord.getKills();
+	    money = oldRecord.getLeftMoney() + newRecord.getLeftMoney();
+	} else {
+	    killrecord = (newRecord.getMaxKills() > oldRecord.getMaxKills() ? newRecord.getMaxKills() : oldRecord.getMaxKills());
+	    money = newRecord.getLeftMoney();
+	}
+	
+	DataRecord newR = new DataRecord(oldRecord.getPlayerUUID(), oldRecord.getKills() + newRecord.getKills(), killrecord, oldRecord.getDeaths() + newRecord.getDeaths(), money, newRecord.getTimestamp().getTime());
+	
+	System.out.println("merging old\n" + oldRecord + "\nand new\n" + newRecord + "\ninto\n" + newR);
+	
+	return newR;
     }
 }
