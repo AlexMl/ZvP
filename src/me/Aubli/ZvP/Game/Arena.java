@@ -557,6 +557,7 @@ public class Arena implements Comparable<Arena> {
 	this.currentRound = 0;
 	this.currentWave = 0;
 	this.score = null;
+	this.players.clear();
 	
 	getWorld().setMonsterSpawnLimit(-1);
 	getWorld().setTime(5000L);
