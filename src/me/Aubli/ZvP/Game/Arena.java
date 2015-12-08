@@ -20,6 +20,7 @@ import me.Aubli.ZvP.Game.ArenaParts.ArenaDifficulty;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaLobby;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaScore;
 import me.Aubli.ZvP.Sign.SignManager;
+import me.Aubli.ZvP.Statistic.DataRecordManager;
 import me.Aubli.ZvP.Translation.MessageKeys.game;
 import me.Aubli.ZvP.Translation.MessageManager;
 
@@ -53,6 +54,8 @@ public class Arena implements Comparable<Arena> {
     private ArenaLobby preLobby;
     private ArenaConfig config;
     
+    private DataRecordManager recordManager;
+    
     private Random rand;
     
     private ArrayList<ZvPPlayer> players;
@@ -72,6 +75,7 @@ public class Arena implements Comparable<Arena> {
 	this.players = new ArrayList<ZvPPlayer>();
 	this.difficultyTool = new ArenaDifficulty(this, difficulty);
 	this.config = new ArenaConfig(this, new File(arenaPath, getID() + ".yml"));
+	this.recordManager = new DataRecordManager();
     }
     
     public Arena(File arenaFile) throws Exception {
@@ -110,6 +114,7 @@ public class Arena implements Comparable<Arena> {
 	this.difficultyTool = new ArenaDifficulty(this, ArenaDifficultyLevel.valueOf(getConfig().getConfigValue("arena.Difficulty").toString()));
 	this.players = new ArrayList<ZvPPlayer>();
 	this.preLobby = loadArenaLobby();
+	this.recordManager = new DataRecordManager();
     }
     
     public boolean saveArenaLobby(ArenaLobby preLobby) {
@@ -224,6 +229,10 @@ public class Arena implements Comparable<Arena> {
     
     public ArenaConfig getConfig() {
 	return this.config;
+    }
+    
+    public DataRecordManager getRecordManager() {
+	return this.recordManager;
     }
     
     public World getWorld() {
@@ -544,6 +553,7 @@ public class Arena implements Comparable<Arena> {
 	
 	setStatus(ArenaStatus.STANDBY);
 	Bukkit.getScheduler().cancelTask(getTaskId());
+	getRecordManager().transmitRecords();
 	
 	if (hasPreLobby()) {
 	    getPreLobby().stopPreLobbyTask();

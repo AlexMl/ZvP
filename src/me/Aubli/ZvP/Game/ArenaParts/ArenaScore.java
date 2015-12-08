@@ -108,6 +108,7 @@ public class ArenaScore {
 		ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + "; Task:" + type.name(), false);
 	    }
 	}
+	this.arena.getRecordManager().addMoney(player.getUuid(), score);
 	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "A" + getArena().getID() + ": " + player.getName() + " ++ " + score + " --> " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")) + "; Task:" + type, true);
     }
     
@@ -147,6 +148,7 @@ public class ArenaScore {
 		ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! Insufficent Balance!; Task:" + type.name(), false);
 	    }
 	}
+	this.arena.getRecordManager().subtractMoney(player.getUuid(), score);
 	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "A" + getArena().getID() + ": " + player.getName() + " -- " + score + " --> " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")) + "; Task:" + type, true);
     }
     
