@@ -250,8 +250,6 @@ public class GameRunnable extends BukkitRunnable {
 			String endMessage = MessageManager.getFormatedMessage(game.won, kills, (this.arena.getConfig().getMaxRounds() * this.arena.getConfig().getMaxWaves()), deaths, Math.round(money), donP[index]);
 			// TODO change message. Econ doesnt make much sense here
 			this.arena.sendMessage(endMessage);
-			
-			this.arena.getRecordManager().transmitRecords();
 			this.cancel();
 			return;
 		    }
