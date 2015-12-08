@@ -119,14 +119,14 @@ public class ArenaLobby {
     }
     
     public void removePlayer(ZvPPlayer player) {
-	this.playerList.remove(player);
-	
 	if (this.openKitSelectTasks.containsKey(player)) {
 	    if (this.openKitSelectTasks.get(player) != null) {
 		this.openKitSelectTasks.get(player).cancel();
 		this.openKitSelectTasks.remove(player);
 	    }
 	}
+	
+	this.playerList.remove(player);
     }
     
     public void addPlayerToLobby(final ZvPPlayer player) {
@@ -254,8 +254,9 @@ public class ArenaLobby {
 	}
 	
 	if (!this.playerList.isEmpty()) {
-	    for (int i = 0; i < getPlayers().length; i++) {
-		removePlayer(getPlayers()[i]);
+	    for (ZvPPlayer player : getPlayers()) {
+		removePlayer(player);
+		player.reset();
 	    }
 	}
 	
