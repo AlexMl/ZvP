@@ -136,26 +136,26 @@ public class ZvP extends JavaPlugin {
 		SignManager.init();
 		KitManager.init();
 		
+		if (ZvPConfig.getEnabledStatistics()) {
+		    try {
+			DatabaseManager.init(ZvPConfig.getDBInfo());
+		    } catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+		}
+		
 		registerListeners();
 		getCommand("zvp").setExecutor(new ZvPCommands());
 		getCommand("zvptest").setExecutor(new ZvPCommands());
 		logger.log(this.getClass(), "Plugin is enabled!", false);
 	    }
 	}, isServerReload() ? 0L : 4 * 20L);
-	
-	if (ZvPConfig.getEnabledStatistics()) {
-	    try {
-		DatabaseManager.init(ZvPConfig.getDBInfo());
-	    } catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    } catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    } catch (Exception e) {
-		e.printStackTrace();
-	    }
-	}
 	
 	if (ZvPConfig.getUseMetrics() == true) {
 	    try {
@@ -216,6 +216,7 @@ public class ZvP extends JavaPlugin {
     public void reloadPlugin() {
 	
 	ZvPConfig.reloadConfig();
+	Bukkit.getScheduler().cancelTasks(getInstance());
 	
 	for (Player player : Bukkit.getOnlinePlayers()) {
 	    ZvP.removeTool(player);
@@ -226,6 +227,20 @@ public class ZvP extends JavaPlugin {
 	SignManager.getManager().reloadConfig();
 	ShopManager.reload();
 	KitManager.getManager().loadKits();
+	
+	if (ZvPConfig.getEnabledStatistics()) {
+	    try {
+		DatabaseManager.getManager().reload();
+	    } catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    } catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    } catch (Exception e) {
+		e.printStackTrace();
+	    }
+	}
     }
     
     private boolean isServerReload() {
