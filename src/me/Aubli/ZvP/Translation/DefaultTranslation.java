@@ -84,7 +84,9 @@ public class DefaultTranslation extends ListResourceBundle {
 	    {manage.sign_removed.name(), ChatColor.GREEN + "Sign successfully removed!"},
 	    {manage.kit_saved.name(), ChatColor.GREEN + "Kit " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " successfully saved!"},
 	    {manage.kit_removed.name(), ChatColor.GREEN + "Kit " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " successfully removed!"},
-	    
+	    {manage.record_start.name(), ChatColor.GREEN + "Separated statistics will be recorded for the next " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " hours!"},
+	    {manage.record_already_running.name(), ChatColor.RED + "A different record is currently running. There can only be one at a time!"},
+			   
 	    {error.sign_remove.name(), ChatColor.RED + "An error occured while removing this Sign!"},
 	    {error.sign_place.name(), ChatColor.RED + "An error occured while placing this Sign!"},
 	    {error.sign_layout.name(), ChatColor.RED + "The layout of this sign is wrong!"},
@@ -98,7 +100,9 @@ public class DefaultTranslation extends ListResourceBundle {
 	    {error.transaction_failed.name(), ChatColor.RED + "The transaction failed!"},
 	    {error.no_money.name(), ChatColor.RED + "You do not own enough money!"},
 	    {error.wrong_inventory.name(), ChatColor.RED + "You clicked the wrong Inventory! Try the top one!"},
-
+	    {error.record_start.name(), ChatColor.RED + "An internal error occoured! Record was not started!"},
+	    {error.negative_duration.name(), ChatColor.RED + "The duration must be greater than 0!"},
+		   
 	    {category.food.name(), "Food"},
 	    {category.armor.name(), "Armor"},
 	    {category.weapon.name(), "Weapons"},

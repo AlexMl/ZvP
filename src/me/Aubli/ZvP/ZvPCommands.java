@@ -495,12 +495,21 @@ public class ZvPCommands implements CommandExecutor {
 		
 		if (args[0].equalsIgnoreCase("record")) {
 		    if (playerSender.hasPermission("zvp.manage")) {
-			long duration = (long) (Double.parseDouble(args[1]) * 3600 * 1000);
 			try {
-			    DatabaseManager.getManager().startTimedStatistics(duration);
+			    long duration = (long) (Double.parseDouble(args[1]) * 3600 * 1000);
+			    if (duration > 0) {
+				boolean success = DatabaseManager.getManager().startTimedStatistics(duration);
+				if (success) {
+				    playerSender.sendMessage(MessageManager.getFormatedMessage(manage.record_start, (duration / 3600000)));
+				} else {
+				    playerSender.sendMessage(MessageManager.getMessage(manage.record_already_running));
+				}
+			    } else {
+				playerSender.sendMessage(MessageManager.getMessage(error.negative_duration));
+			    }
 			} catch (SQLException e) {
-			    // TODO Auto-generated catch block
-			    e.printStackTrace();
+			    playerSender.sendMessage(MessageManager.getMessage(error.record_start));
+			    ZvP.getPluginLogger().log(getClass(), Level.SEVERE, playerSender.getName() + " tried starting a record but an error interupted: ", true, false, e);
 			}
 			return true;
 		    } else {

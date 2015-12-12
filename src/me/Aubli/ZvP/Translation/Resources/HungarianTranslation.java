@@ -84,7 +84,9 @@ public class HungarianTranslation extends ListResourceBundle {
 	    {manage.sign_removed.name(), ChatColor.GREEN + "Sign successfully removed!"},
 	    {manage.kit_saved.name(), ChatColor.GREEN + "Kit " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " successfully saved!"},
 	    {manage.kit_removed.name(), ChatColor.GREEN + "Kit " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " successfully removed!"},
-	    
+	    {manage.record_start.name(), ChatColor.GREEN + "Separated statistics will be recorded for the next " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " hours!"},
+	    {manage.record_already_running.name(), ChatColor.RED + "A different record is currently running. There can only be one at a time!"},
+	
 	    {error.sign_remove.name(), ChatColor.RED + "An Error occured while removing this Sign!"},
 	    {error.sign_place.name(), ChatColor.RED + "An Error occured while placing this Sign!"},
 	    {error.sign_layout.name(), ChatColor.RED + "The sign layout is wrong!"},
@@ -98,6 +100,8 @@ public class HungarianTranslation extends ListResourceBundle {
 	    {error.transaction_failed.name(), ChatColor.RED + "The transaction failed!"},
 	    {error.no_money.name(), ChatColor.RED + "Nincs elég pénzed!"},
 	    {error.wrong_inventory.name(), ChatColor.RED + "Rossz helyre kattintottál! Próbáld a felsőt!"},
+	    {error.record_start.name(), ChatColor.RED + "An internal error occoured! Record was not started!"},
+	    {error.negative_duration.name(), ChatColor.RED + "The duration must be greater than 0!"},
 		   
 	    {category.food.name(), "Kaja"},
 	    {category.armor.name(), "Páncél"},

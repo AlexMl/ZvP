@@ -66,7 +66,9 @@ public class MessageKeys {
 	sign_saved,
 	sign_removed,
 	kit_saved,
-	kit_removed;
+	kit_removed,
+	record_start,
+	record_already_running;
     }
     
     public enum error {
@@ -82,7 +84,9 @@ public class MessageKeys {
 	kit_not_exist,
 	transaction_failed,
 	no_money,
-	wrong_inventory;
+	wrong_inventory,
+	record_start,
+	negative_duration;
     }
     
     public enum category {

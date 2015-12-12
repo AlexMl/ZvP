@@ -109,7 +109,13 @@ public class DatabaseManager implements DatabaseCallback {
 	return this.timedTableName != null && !this.tableName.equals(this.timedTableName) && this.statisticEnd != null && this.statisticEnd.after(new Date());
     }
     
-    public void startTimedStatistics(long duration) throws SQLException {
+    public boolean startTimedStatistics(long duration) throws SQLException {
+	
+	if (isTimedStatistics()) {
+	    // If record is already running don't start a new one
+	    return false;
+	}
+	
 	Date now = new Date();
 	
 	this.timedTableName = this.tableName + "_" + new SimpleDateFormat("ddMMyyyy_HHmm").format(now);
@@ -124,6 +130,7 @@ public class DatabaseManager implements DatabaseCallback {
 	
 	updateMap(this.tableName);
 	updateMap(this.timedTableName);
+	return true;
     }
     
     private void loadTimedStatistics() throws SQLException {

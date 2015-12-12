@@ -84,7 +84,9 @@ public class GermanTranslation extends ListResourceBundle {
 	    {manage.sign_removed.name(), ChatColor.GREEN + "Schild erfolgreich entfernt!"},
 	    {manage.kit_saved.name(), ChatColor.GREEN + "Kit " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " erfolgreich saved!"},
 	    {manage.kit_removed.name(), ChatColor.GREEN + "Kit " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " erfolgreich entfernt!"},
-	    
+	    {manage.record_start.name(), ChatColor.GREEN + "Statistiken für die nächsten " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " stunden werden seperat aufgezeichnet!"},
+	    {manage.record_already_running.name(), ChatColor.RED + "Es läuft gerade eine andere Aufzeichnung!"},
+		
 	    {error.sign_remove.name(), ChatColor.RED + "Ein Fehler ist beim Entfernen dieses Schildes aufgetreten!"},
 	    {error.sign_place.name(), ChatColor.RED + "Ein Fehler ist beim Platzieren dieses Schildes aufgetreten!"},
 	    {error.sign_layout.name(), ChatColor.RED + "Das Schild Layout ist falsch!"},
@@ -98,6 +100,8 @@ public class GermanTranslation extends ListResourceBundle {
 	    {error.transaction_failed.name(), ChatColor.RED + "Die Transaktion ist gescheitert!"},
 	    {error.no_money.name(), ChatColor.RED + "Du besitzt nicht genügend Geld!"},
 	    {error.wrong_inventory.name(), ChatColor.RED + "Du hast in das falsche Inventar geklickt! Versuchs im obrigen!"},
+	    {error.record_start.name(), ChatColor.RED + "Ein interner Fehler ist aufgetreten! Keine Aufzeichnung gestartet!"},
+	    {error.negative_duration.name(), ChatColor.RED + "Die Dauer muss größer als 0 sein!"},
 		   
 	    {category.food.name(), "Nahrung"},
 	    {category.armor.name(), "Rüstung"},
