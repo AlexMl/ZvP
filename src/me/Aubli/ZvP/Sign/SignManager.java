@@ -15,6 +15,7 @@ import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Shop.ShopManager.ItemCategory;
 import me.Aubli.ZvP.Statistic.DataRecordType;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
@@ -68,7 +69,13 @@ public class SignManager {
 	    this.colorMap.put(type, new HashMap<String, ChatColor>());
 	}
 	
-	reloadConfig();
+	Bukkit.getScheduler().runTask(ZvP.getInstance(), new Runnable() {
+	    
+	    @Override
+	    public void run() {
+		reloadConfig();
+	    }
+	});
     }
     
     public static synchronized SignManager init() {
