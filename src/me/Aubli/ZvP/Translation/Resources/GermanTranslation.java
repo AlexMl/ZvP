@@ -100,7 +100,7 @@ public class GermanTranslation extends ListResourceBundle {
 	    {error.transaction_failed.name(), ChatColor.RED + "Die Transaktion ist gescheitert!"},
 	    {error.no_money.name(), ChatColor.RED + "Du besitzt nicht genügend Geld!"},
 	    {error.wrong_inventory.name(), ChatColor.RED + "Du hast in das falsche Inventar geklickt! Versuchs im obrigen!"},
-	    {error.record_start.name(), ChatColor.RED + "Ein interner Fehler ist aufgetreten! Keine Aufzeichnung gestartet!"},
+	    {error.record_start_error.name(), ChatColor.RED + "Ein interner Fehler ist aufgetreten! Keine Aufzeichnung gestartet!"},
 	    {error.negative_duration.name(), ChatColor.RED + "Die Dauer muss größer als 0 sein!"},
 		   
 	    {category.food.name(), "Nahrung"},

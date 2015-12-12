@@ -85,7 +85,7 @@ public class MessageKeys {
 	transaction_failed,
 	no_money,
 	wrong_inventory,
-	record_start,
+	record_start_error,
 	negative_duration;
     }
     

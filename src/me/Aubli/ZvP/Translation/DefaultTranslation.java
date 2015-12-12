@@ -100,7 +100,7 @@ public class DefaultTranslation extends ListResourceBundle {
 	    {error.transaction_failed.name(), ChatColor.RED + "The transaction failed!"},
 	    {error.no_money.name(), ChatColor.RED + "You do not own enough money!"},
 	    {error.wrong_inventory.name(), ChatColor.RED + "You clicked the wrong Inventory! Try the top one!"},
-	    {error.record_start.name(), ChatColor.RED + "An internal error occoured! Record was not started!"},
+	    {error.record_start_error.name(), ChatColor.RED + "An internal error occoured! Record was not started!"},
 	    {error.negative_duration.name(), ChatColor.RED + "The duration must be greater than 0!"},
 		   
 	    {category.food.name(), "Food"},

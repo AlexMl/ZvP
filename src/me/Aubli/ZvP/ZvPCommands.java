@@ -508,7 +508,7 @@ public class ZvPCommands implements CommandExecutor {
 				playerSender.sendMessage(MessageManager.getMessage(error.negative_duration));
 			    }
 			} catch (SQLException e) {
-			    playerSender.sendMessage(MessageManager.getMessage(error.record_start));
+			    playerSender.sendMessage(MessageManager.getMessage(error.record_start_error));
 			    ZvP.getPluginLogger().log(getClass(), Level.SEVERE, playerSender.getName() + " tried starting a record but an error interupted: ", true, false, e);
 			}
 			return true;
