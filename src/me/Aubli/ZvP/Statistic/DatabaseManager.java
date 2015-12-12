@@ -58,19 +58,19 @@ public class DatabaseManager implements DatabaseCallback {
 	this.conn = initializeConnection();
 	
 	createTables(this.tableName);
+	updateMap(this.tableName, 15);
 	
-	Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
+	Bukkit.getScheduler().runTaskLaterAsynchronously(ZvP.getInstance(), new Runnable() {
 	    
 	    @Override
 	    public void run() {
 		try {
-		    updateMap(DatabaseManager.this.tableName);
 		    loadTimedStatistics();
 		} catch (SQLException e) {
 		    ZvP.getPluginLogger().log(getClass(), Level.SEVERE, "Error executing SQL statement 'SELECT * FROM " + DatabaseManager.this.infoTableName + ";': " + e.getMessage(), true, false, e);
 		}
 	    }
-	}, 15L);
+	}, 20L);
 	
 	ZvP.getPluginLogger().log(getClass(), Level.FINER, "Initialized connection to " + this.conn.getMetaData().getDatabaseProductName() + " " + this.conn.getMetaData().getDatabaseProductVersion() + " using " + this.conn.getMetaData().getDriverName() + " " + this.conn.getMetaData().getDriverVersion() + "!", true, true);
     }
@@ -128,8 +128,8 @@ public class DatabaseManager implements DatabaseCallback {
 	String stmt = "INSERT INTO " + this.infoTableName + "(start, finish) VALUES('" + new Timestamp(now.getTime()) + "', '" + new Timestamp(until.getTime()) + "');";
 	Bukkit.getScheduler().runTaskAsynchronously(ZvP.getInstance(), new DatabaseWriter(this, this.conn, stmt));
 	
-	updateMap(this.tableName);
-	updateMap(this.timedTableName);
+	updateMap(this.tableName, 0);
+	updateMap(this.timedTableName, 20);
 	return true;
     }
     
@@ -145,7 +145,7 @@ public class DatabaseManager implements DatabaseCallback {
 	    if (finish.after(new Date())) {
 		this.timedTableName = this.tableName + "_" + new SimpleDateFormat("ddMMyyyy_HHmm").format(start);
 		this.statisticEnd = finish;
-		updateMap(this.timedTableName);
+		updateMap(this.timedTableName, 5);
 		break;
 	    }
 	}
@@ -175,7 +175,7 @@ public class DatabaseManager implements DatabaseCallback {
 		if (insertRecords.size() > 0) {
 		    insertRecord(this.timedTableName, insertRecords.toArray(new DataRecord[0]));
 		}
-		updateMap(this.timedTableName);
+		updateMap(this.timedTableName, 0);
 		insertRecords.clear();
 	    }
 	    
@@ -195,7 +195,7 @@ public class DatabaseManager implements DatabaseCallback {
 	    if (insertRecords.size() > 0) {
 		insertRecord(this.tableName, insertRecords.toArray(new DataRecord[0]));
 	    }
-	    updateMap(this.tableName);
+	    updateMap(this.tableName, 0);
 	    
 	} catch (Exception e) {
 	    ZvP.getPluginLogger().log(getClass(), Level.WARNING, "Error while queuing data record: " + e.getMessage(), true, false, e);
@@ -255,9 +255,9 @@ public class DatabaseManager implements DatabaseCallback {
 	}
     }
     
-    private void updateMap(String tableName) {
-	System.out.println("updating from " + tableName);
-	Bukkit.getScheduler().runTaskAsynchronously(ZvP.getInstance(), new DatabaseReader(this, this.conn, tableName));
+    private void updateMap(String tableName, long delay) {
+	System.out.println("updating from " + tableName + " with " + delay + " ticks delay");
+	Bukkit.getScheduler().runTaskLaterAsynchronously(ZvP.getInstance(), new DatabaseReader(this, this.conn, tableName), delay);
     }
     
     @Override
