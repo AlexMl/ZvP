@@ -100,7 +100,7 @@ public class HungarianTranslation extends ListResourceBundle {
 	    {error.transaction_failed.name(), ChatColor.RED + "The transaction failed!"},
 	    {error.no_money.name(), ChatColor.RED + "Nincs elég pénzed!"},
 	    {error.wrong_inventory.name(), ChatColor.RED + "Rossz helyre kattintottál! Próbáld a felsőt!"},
-	    {error.record_start.name(), ChatColor.RED + "An internal error occoured! Record was not started!"},
+	    {error.record_start_error.name(), ChatColor.RED + "An internal error occoured! Record was not started!"},
 	    {error.negative_duration.name(), ChatColor.RED + "The duration must be greater than 0!"},
 		   
 	    {category.food.name(), "Kaja"},
