@@ -56,7 +56,7 @@ public class HungarianTranslation extends ListResourceBundle {
 	    {game.voted_next_wave.name(), ChatColor.GREEN + "Beszavaztak a következő fordulóba!"}, 
 	    {game.already_voted.name(), ChatColor.RED + "Már beszavaztak a következő fordulóra!"},
 	    {game.no_voting.name(), ChatColor.RED + "Nem lehet most szavazni!"},
-	    {game.voting_disabled.name(), ChatColor.RED + "A szavazó rendszer nem elérhető!"},
+	    {game.feature_disabled.name(), ChatColor.RED + "This feature is disabled!"},
 	    {game.spawn_protection_enabled.name(), ChatColor.GREEN + "You are protected for " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " seconds!"},
 	    {game.spawn_protection_over.name(), ChatColor.RED + "ATTENTION! "+ ChatColor.GREEN + "Spawnprotection is over!"},
 	    {game.won.name(), ChatColor.GOLD + "" + ChatColor.BOLD + "Gratulálunk!\n" + ChatColor.RESET + "" + ChatColor.DARK_GRAY + "Nyertél a zombik ellen.\nEnnyi " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Zombival harcoltál " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " körben és " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " szor haltál meg. A szerzett pénzed maradéka " + ChatColor.GOLD + "(%s)" + ChatColor.DARK_GRAY + " adományozva lett " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + "." + ChatColor.BOLD + "" + ChatColor.DARK_GREEN + " Köszönjük a játékot!"},

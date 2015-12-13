@@ -56,7 +56,7 @@ public class DefaultTranslation extends ListResourceBundle {
 	    {game.voted_next_wave.name(), ChatColor.GREEN + "You have voted for the next wave!"},
 	    {game.already_voted.name(), ChatColor.RED + "You have already voted for the next round!"},
 	    {game.no_voting.name(), ChatColor.RED + "It is not the Time to vote now!"},
-	    {game.voting_disabled.name(), ChatColor.RED + "The vote system is disabled!"},
+	    {game.feature_disabled.name(), ChatColor.RED + "This feature is disabled!"},
 	    {game.spawn_protection_enabled.name(), ChatColor.GREEN + "You are protected for " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " seconds!"},
 	    {game.spawn_protection_over.name(), ChatColor.RED + "ATTENTION! "+ ChatColor.GREEN + "Spawnprotection is over!"},
 	    {game.won.name(), ChatColor.GOLD + "" + ChatColor.BOLD + "Grongrats!\n" + ChatColor.RESET + "" + ChatColor.DARK_GRAY + "You won against the Zombies.\nYou fought against " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Zombies in " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " waves and have died " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " times. The remains of your acquired money " + ChatColor.GOLD + "( %s )" + ChatColor.DARK_GRAY + " will be donated to the " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + "." + ChatColor.BOLD + "" + ChatColor.DARK_GREEN + " Thanks for playing!"},

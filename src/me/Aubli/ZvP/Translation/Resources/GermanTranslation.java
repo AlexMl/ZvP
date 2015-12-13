@@ -56,7 +56,7 @@ public class GermanTranslation extends ListResourceBundle {
 	    {game.voted_next_wave.name(), ChatColor.GREEN + "Du hast für die nächste Welle gestimmt!"}, 
 	    {game.already_voted.name(), ChatColor.RED + "Du hast bereits abgestimmt!"},
 	    {game.no_voting.name(), ChatColor.RED + "Das ist der falsche Zeitpunkt um abzustimmen!"},
-	    {game.voting_disabled.name(), ChatColor.RED + "Das Abstimm System ist deaktiviert!"},
+	    {game.feature_disabled.name(), ChatColor.RED + "Diese Funktion ist deaktiviert!"},
 	    {game.spawn_protection_enabled.name(), ChatColor.GREEN + "Du bist für " + ChatColor.GOLD + "%s" + ChatColor.GREEN + " Sekunden geschützt!"},
 	    {game.spawn_protection_over.name(), ChatColor.RED + "ACHTUNG!"+ ChatColor.GREEN + " Spawnschutz ist abgelaufen!"},
 	    {game.won.name(), ChatColor.GOLD + "" + ChatColor.BOLD + "Glückwunsch!\n" + ChatColor.RESET + "" + ChatColor.DARK_GRAY + "Ihr habt die Zombies zurückgedrängt und dabei " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " von ihnen zur Strecke gebracht!\nEs hat " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Wellen gedauert in denen ihr " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " mal gestorben seid. Euer verdientes Geld " + ChatColor.GOLD + "( %s )" + ChatColor.DARK_GRAY + " wird an " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " gespendet." + ChatColor.BOLD + "" + ChatColor.DARK_GREEN + " Danke für's Spielen!"},

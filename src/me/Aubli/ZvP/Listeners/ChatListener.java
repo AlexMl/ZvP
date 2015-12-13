@@ -70,7 +70,7 @@ public class ChatListener implements Listener {
 			
 		    }
 		} else {
-		    player.sendMessage(MessageManager.getMessage(game.voting_disabled));
+		    player.sendMessage(MessageManager.getMessage(game.feature_disabled));
 		}
 	    } else {
 		if (ZvPConfig.getModifyChat()) {

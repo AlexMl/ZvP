@@ -495,23 +495,28 @@ public class ZvPCommands implements CommandExecutor {
 		
 		if (args[0].equalsIgnoreCase("record")) {
 		    if (playerSender.hasPermission("zvp.manage")) {
-			try {
-			    long duration = (long) (Double.parseDouble(args[1]) * 3600 * 1000);
-			    if (duration > 0) {
-				boolean success = DatabaseManager.getManager().startTimedStatistics(duration);
-				if (success) {
-				    playerSender.sendMessage(MessageManager.getFormatedMessage(manage.record_start, (duration / 3600000)));
+			if (ZvPConfig.getEnabledStatistics()) {
+			    try {
+				long duration = (long) (Double.parseDouble(args[1]) * 3600 * 1000);
+				if (duration > 0) {
+				    boolean success = DatabaseManager.getManager().startTimedStatistics(duration);
+				    if (success) {
+					playerSender.sendMessage(MessageManager.getFormatedMessage(manage.record_start, (duration / 3600000)));
+				    } else {
+					playerSender.sendMessage(MessageManager.getMessage(manage.record_already_running));
+				    }
 				} else {
-				    playerSender.sendMessage(MessageManager.getMessage(manage.record_already_running));
+				    playerSender.sendMessage(MessageManager.getMessage(error.negative_duration));
 				}
-			    } else {
-				playerSender.sendMessage(MessageManager.getMessage(error.negative_duration));
+			    } catch (SQLException e) {
+				playerSender.sendMessage(MessageManager.getMessage(error.record_start_error));
+				ZvP.getPluginLogger().log(getClass(), Level.SEVERE, playerSender.getName() + " tried starting a record but an error interupted: ", true, false, e);
 			    }
-			} catch (SQLException e) {
-			    playerSender.sendMessage(MessageManager.getMessage(error.record_start_error));
-			    ZvP.getPluginLogger().log(getClass(), Level.SEVERE, playerSender.getName() + " tried starting a record but an error interupted: ", true, false, e);
+			    return true;
+			} else {
+			    playerSender.sendMessage(MessageManager.getMessage(MessageKeys.game.feature_disabled));
+			    return true;
 			}
-			return true;
 		    } else {
 			commandDenied(playerSender);
 			return true;

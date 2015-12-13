@@ -35,7 +35,7 @@ public class MessageKeys {
 	voted_next_wave,
 	already_voted,
 	no_voting,
-	voting_disabled,
+	feature_disabled,
 	spawn_protection_enabled,
 	spawn_protection_over,
 	won,
