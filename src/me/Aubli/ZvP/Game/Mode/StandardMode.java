@@ -33,6 +33,11 @@ public class StandardMode extends ZvPMode {
     }
     
     @Override
+    public boolean allowPlayerInteraction(ZvPPlayer player) {
+	return true;
+    }
+    
+    @Override
     public void run() {
 	
 	if (ZvP.getPluginLogger().isDebugMode() && (ZvP.getPluginLogger().getLogLevel() <= 100)) {
