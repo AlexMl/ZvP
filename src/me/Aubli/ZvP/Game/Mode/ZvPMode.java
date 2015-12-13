@@ -262,6 +262,12 @@ public abstract class ZvPMode extends BukkitRunnable {
 	return;
     }
     
+    public abstract boolean allowPlayerInteraction(ZvPPlayer player);
+    
+    public boolean allowFullArena() {
+	return false;
+    }
+    
     @Override
     public abstract void run();
     
