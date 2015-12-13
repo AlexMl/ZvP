@@ -52,30 +52,35 @@ public class DatabaseManager implements DatabaseCallback {
     private Date statisticEnd;
     private final String infoTableName = "zvp_table_info";
     
-    private DatabaseManager(DatabaseInfo info) throws SQLException, ClassNotFoundException {
+    private DatabaseManager(DatabaseInfo info) {
 	
-	this.db_info = info;
-	this.conn = initializeConnection();
-	
-	createTables(this.tableName);
-	updateMap(this.tableName, 15);
-	
-	Bukkit.getScheduler().runTaskLaterAsynchronously(ZvP.getInstance(), new Runnable() {
+	try {
+	    this.db_info = info;
+	    this.conn = initializeConnection();
 	    
-	    @Override
-	    public void run() {
-		try {
-		    loadTimedStatistics();
-		} catch (SQLException e) {
-		    ZvP.getPluginLogger().log(getClass(), Level.SEVERE, "Error executing SQL statement 'SELECT * FROM " + DatabaseManager.this.infoTableName + ";': " + e.getMessage(), true, false, e);
+	    createTables(this.tableName);
+	    updateMap(this.tableName, 15);
+	    
+	    Bukkit.getScheduler().runTaskLaterAsynchronously(ZvP.getInstance(), new Runnable() {
+		
+		@Override
+		public void run() {
+		    try {
+			loadTimedStatistics();
+		    } catch (SQLException e) {
+			ZvP.getPluginLogger().log(getClass(), Level.SEVERE, "Error executing SQL statement 'SELECT * FROM " + DatabaseManager.this.infoTableName + ";': " + e.getMessage(), true, false, e);
+		    }
 		}
-	    }
-	}, 20L);
-	
-	ZvP.getPluginLogger().log(getClass(), Level.FINER, "Initialized connection to " + this.conn.getMetaData().getDatabaseProductName() + " " + this.conn.getMetaData().getDatabaseProductVersion() + " using " + this.conn.getMetaData().getDriverName() + " " + this.conn.getMetaData().getDriverVersion() + "!", true, true);
+	    }, 20L);
+	    ZvP.getPluginLogger().log(getClass(), Level.FINER, "Initialized connection to " + this.conn.getMetaData().getDatabaseProductName() + " " + this.conn.getMetaData().getDatabaseProductVersion() + " using " + this.conn.getMetaData().getDriverName() + " " + this.conn.getMetaData().getDriverVersion() + "!", true, true);
+	} catch (SQLException e) {
+	    ZvP.getPluginLogger().log(getClass(), Level.SEVERE, "Can not initialize connection. SQL error:", true, false);
+	} catch (ClassNotFoundException e) {
+	    ZvP.getPluginLogger().log(getClass(), Level.SEVERE, "Can not initialize connection with " + this.db_info.getProtocol() + "! Not supported implementation!", true, false);
+	}
     }
     
-    public static DatabaseManager init(DatabaseInfo info) throws ClassNotFoundException, SQLException {
+    public static DatabaseManager init(DatabaseInfo info) {
 	if (instance == null) {
 	    instance = new DatabaseManager(info);
 	}
@@ -97,7 +102,7 @@ public class DatabaseManager implements DatabaseCallback {
 	Bukkit.getScheduler().runTaskAsynchronously(ZvP.getInstance(), new DatabaseWriter(this, this.conn, createTableSTM, createInfoTableSTM));
     }
     
-    public void reload() throws ClassNotFoundException, SQLException {
+    public void reload() {
 	instance = new DatabaseManager(ZvPConfig.getDBInfo());
     }
     

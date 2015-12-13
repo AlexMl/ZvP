@@ -1,7 +1,6 @@
 package me.Aubli.ZvP;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -137,17 +136,7 @@ public class ZvP extends JavaPlugin {
 		KitManager.init();
 		
 		if (ZvPConfig.getEnabledStatistics()) {
-		    try {
-			DatabaseManager.init(ZvPConfig.getDBInfo());
-		    } catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    } catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    } catch (Exception e) {
-			e.printStackTrace();
-		    }
+		    DatabaseManager.init(ZvPConfig.getDBInfo());
 		}
 		
 		registerListeners();
@@ -229,17 +218,7 @@ public class ZvP extends JavaPlugin {
 	KitManager.getManager().loadKits();
 	
 	if (ZvPConfig.getEnabledStatistics()) {
-	    try {
-		DatabaseManager.getManager().reload();
-	    } catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    } catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    } catch (Exception e) {
-		e.printStackTrace();
-	    }
+	    DatabaseManager.getManager().reload();
 	}
     }
     
