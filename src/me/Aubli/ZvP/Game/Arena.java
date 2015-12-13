@@ -19,8 +19,8 @@ import me.Aubli.ZvP.Game.ArenaParts.ArenaConfig;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaDifficulty;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaLobby;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaScore;
-import me.Aubli.ZvP.Game.Mode.IZvPMode;
 import me.Aubli.ZvP.Game.Mode.StandardMode;
+import me.Aubli.ZvP.Game.Mode.ZvPMode;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Statistic.DataRecordManager;
 import me.Aubli.ZvP.Translation.MessageKeys.game;
@@ -49,7 +49,7 @@ public class Arena implements Comparable<Arena> {
     private int currentRound;
     private int currentWave;
     
-    private IZvPMode arenaMode;
+    private ZvPMode arenaMode;
     
     private ArenaStatus status;
     private ArenaScore score;
@@ -81,7 +81,7 @@ public class Arena implements Comparable<Arena> {
 	this.config = new ArenaConfig(this, new File(arenaPath, getID() + ".yml"));
 	this.recordManager = new DataRecordManager();
 	
-	this.arenaMode = new StandardMode(this, "STANDARD");
+	this.arenaMode = new StandardMode(this);
     }
     
     public Arena(File arenaFile) throws Exception {
@@ -122,7 +122,7 @@ public class Arena implements Comparable<Arena> {
 	this.preLobby = loadArenaLobby();
 	this.recordManager = new DataRecordManager();
 	
-	this.arenaMode = new StandardMode(this, "STANDARD");
+	this.arenaMode = new StandardMode(this);
     }
     
     public boolean saveArenaLobby(ArenaLobby preLobby) {
@@ -239,7 +239,7 @@ public class Arena implements Comparable<Arena> {
 	return this.config;
     }
     
-    public IZvPMode getArenaMode() {
+    public ZvPMode getArenaMode() {
 	return this.arenaMode;
     }
     
