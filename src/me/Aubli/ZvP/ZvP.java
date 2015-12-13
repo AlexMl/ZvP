@@ -280,10 +280,15 @@ public class ZvP extends JavaPlugin {
 	return tool;
     }
     
-    public static boolean equalsTool(ItemStack item) {
-	if (item.getType() == getTool("").getType()) {
-	    if (item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
-		if (item.getItemMeta().getDisplayName().equals(getTool("").getItemMeta().getDisplayName())) {
+    public static boolean equalsItemStack(ItemStack item, ItemStack other) {
+	
+	if (item == null || other == null) {
+	    return false;
+	}
+	
+	if (item.getType() == other.getType()) {
+	    if (item.hasItemMeta() && other.hasItemMeta()) {
+		if (item.getItemMeta().getDisplayName().equals(other.getItemMeta().getDisplayName())) {
 		    return true;
 		}
 	    }

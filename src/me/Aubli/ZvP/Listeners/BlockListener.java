@@ -34,7 +34,7 @@ public class BlockListener implements Listener {
 	}
 	
 	if (this.eventPlayer.getItemInHand() != null) {
-	    if (ZvP.equalsTool(this.eventPlayer.getItemInHand())) {
+	    if (ZvP.equalsItemStack(this.eventPlayer.getItemInHand(), ZvP.getTool(""))) {
 		if (this.eventPlayer.hasPermission("zvp.manage.arena")) {
 		    event.setCancelled(true);
 		    return;

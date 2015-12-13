@@ -49,7 +49,7 @@ public class InteractListener implements Listener {
 	Player eventPlayer = event.getPlayer();
 	
 	if (event.getItem() != null) {
-	    if (ZvP.equalsTool(event.getItem())) {
+	    if (ZvP.equalsItemStack(event.getItem(), ZvP.getTool(""))) {
 		if (eventPlayer.hasPermission("zvp.manage.arena")) {
 		    
 		    String toolString = ChatColor.stripColor(event.getItem().getItemMeta().getLore().get(0));
