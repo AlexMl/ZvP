@@ -23,7 +23,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
-public abstract class ZvPMode extends BukkitRunnable implements IZvPMode {
+public abstract class ZvPMode extends BukkitRunnable {
     
     private Arena arena;
     
@@ -42,12 +42,10 @@ public abstract class ZvPMode extends BukkitRunnable implements IZvPMode {
 	this.name = name;
     }
     
-    @Override
     public String getName() {
 	return this.name;
     }
     
-    @Override
     public int getTaskID() {
 	return this.taskID;
     }
@@ -56,27 +54,46 @@ public abstract class ZvPMode extends BukkitRunnable implements IZvPMode {
 	return this.arena;
     }
     
-    @Override
     public void start(int startDelay) {
 	this.startDelay = startDelay;
 	
 	this.taskID = this.runTaskTimer(ZvP.getInstance(), 0L, 1 * 20L).getTaskId();
     }
     
-    @Override
     public void stop() {
 	Bukkit.getScheduler().cancelTask(getTaskID());
     }
     
-    @Override
+    /**
+     * Called when {@link ZvPPlayer} joins {@link Arena}
+     * 
+     * @param player
+     *        player who joined
+     * @param arena
+     *        arena which is joined
+     */
     public void onJoin(ZvPPlayer player, Arena arena) {
+	// NOT IMPLEMENTED IN STANDARD MODE
+	return;
     }
     
-    @Override
+    /**
+     * Called when {@link ZvPPlayer} leaves the game by command or disconnect
+     * 
+     * @param player
+     *        player who left
+     */
     public void onLeave(ZvPPlayer player) {
+	// NOT IMPLEMENTED IN STANDARD MODE
+	return;
     }
     
-    @Override
+    /**
+     * Called when {@link ZvPPlayer} dies. //TODO deathcause enum?
+     * 
+     * @param player
+     *        player who died
+     */
     public void onDeath(ZvPPlayer player, PlayerDeathEvent event) {
 	if (this.arena.getConfig().isKeepXP()) {
 	    player.getXPManager().setExp(0);
@@ -87,7 +104,12 @@ public abstract class ZvPMode extends BukkitRunnable implements IZvPMode {
 	this.arena.sendMessage(MessageManager.getFormatedMessage(MessageKeys.game.player_died, player.getName()));
     }
     
-    @Override
+    /**
+     * Calles when {@link ZvPPlayer} respawns.
+     * 
+     * @param player
+     *        player who respawned
+     */
     public void onRespawn(final ZvPPlayer player, PlayerRespawnEvent event) {
 	
 	event.setRespawnLocation(this.arena.getArea().getNewRandomLocation(true));
@@ -109,7 +131,14 @@ public abstract class ZvPMode extends BukkitRunnable implements IZvPMode {
 	}
     }
     
-    @Override
+    /**
+     * Called when a Zombie is killed by a player
+     * 
+     * @param attacker
+     *        the {@link ZvPPlayer} who killed the zombie
+     * @param zombie
+     *        the zombie {@link Entity} who is killed
+     */
     public void onZombieKill(final ZvPPlayer attacker, Entity zombie, EntityDeathEvent event) {
 	
 	if (this.arena.getConfig().isKeepXP()) {
@@ -138,11 +167,27 @@ public abstract class ZvPMode extends BukkitRunnable implements IZvPMode {
 	
     }
     
-    @Override
+    /**
+     * Called when a Player is killed by another player
+     * 
+     * @param attacker
+     *        the {@link ZvPPlayer} who killed the player
+     * @param victim
+     *        the {@link ZvPPlayer} who is killed by the attacker
+     */
     public void onPlayerKill(ZvPPlayer attacker, ZvPPlayer victim) {
+	// NOT IMPLEMENTED IN STANDARD MODE
+	return;
     }
     
-    @Override
+    /**
+     * Called when {@link ZvPPlayer} got damaged by an entity
+     * 
+     * @param player
+     *        the player who is damaged
+     * @param damager
+     *        the entity who damaged the player
+     */
     public void onPlayerDamage(ZvPPlayer player, Entity damager, EntityDamageByEntityEvent event) {
 	if (player.hasProtection()) { // If player has protection. Cancel all damage
 	    event.setCancelled(true);
@@ -204,8 +249,17 @@ public abstract class ZvPMode extends BukkitRunnable implements IZvPMode {
 	}
     }
     
-    @Override
+    /**
+     * Called when zombie got damaged by an entity
+     * 
+     * @param damager
+     *        the entity causing the damage
+     * @param victim
+     *        the entity who is damaged
+     */
     public void onZombieDamage(ZvPPlayer damager, Entity victim, EntityDamageByEntityEvent event) {
+	// NOT IMPLEMENTED IN STANDARD MODE
+	return;
     }
     
     @Override
