@@ -36,6 +36,9 @@ public class DeathMatch extends ZvPMode {
     private boolean firstSpawn;
     private boolean spawnZombies;
     
+    public static ItemStack speedTool;
+    public static ItemStack playerCompass;
+    
     public DeathMatch(Arena arena) {
 	super(arena, "DEATHMATCH");
     }
@@ -57,7 +60,7 @@ public class DeathMatch extends ZvPMode {
 	player.sendMessage("Du bist spectator");
 	player.getPlayer().getInventory().clear();
 	
-	ItemStack speedTool = new ItemStack(Material.LEATHER_BOOTS);
+	speedTool = new ItemStack(Material.LEATHER_BOOTS);
 	ItemMeta meta = speedTool.getItemMeta();
 	meta.setDisplayName("Speed");
 	meta.setLore(Arrays.asList("Use this item to regulate your speed!"));
@@ -65,7 +68,7 @@ public class DeathMatch extends ZvPMode {
 	meta.addEnchant(Enchantment.DURABILITY, 1, true);
 	speedTool.setItemMeta(meta);
 	
-	ItemStack playerCompass = new ItemStack(Material.COMPASS);
+	playerCompass = new ItemStack(Material.COMPASS);
 	meta = playerCompass.getItemMeta();
 	meta.setDisplayName("Player");
 	meta.setLore(Arrays.asList("Use this item to teleport to players!"));
