@@ -1,5 +1,6 @@
 package me.Aubli.ZvP.Game.Mode;
 
+import java.util.Arrays;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
@@ -16,10 +17,15 @@ import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
@@ -45,9 +51,29 @@ public class DeathMatch extends ZvPMode {
     @Override
     public void onRespawn(ZvPPlayer player, PlayerRespawnEvent event) {
 	event.setRespawnLocation(getArena().getArea().getNewRandomLocation(true));
-	
-	player.sendMessage("Du bist spectator");
 	player.getPlayer().setGameMode(GameMode.SPECTATOR);
+	
+	// TODO Message
+	player.sendMessage("Du bist spectator");
+	player.getPlayer().getInventory().clear();
+	
+	ItemStack speedTool = new ItemStack(Material.LEATHER_BOOTS);
+	ItemMeta meta = speedTool.getItemMeta();
+	meta.setDisplayName("Speed");
+	meta.setLore(Arrays.asList("Use this item to regulate your speed!"));
+	meta.addItemFlags(ItemFlag.values());
+	meta.addEnchant(Enchantment.DURABILITY, 1, true);
+	speedTool.setItemMeta(meta);
+	
+	ItemStack playerCompass = new ItemStack(Material.COMPASS);
+	meta = playerCompass.getItemMeta();
+	meta.setDisplayName("Player");
+	meta.setLore(Arrays.asList("Use this item to teleport to players!"));
+	meta.addItemFlags(ItemFlag.values());
+	meta.addEnchant(Enchantment.DURABILITY, 1, true);
+	playerCompass.setItemMeta(meta);
+	
+	player.getPlayer().getInventory().addItem(speedTool, playerCompass);
     }
     
     @Override
