@@ -19,6 +19,8 @@ import me.Aubli.ZvP.Game.ArenaParts.ArenaConfig;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaDifficulty;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaLobby;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaScore;
+import me.Aubli.ZvP.Game.Mode.IZvPMode;
+import me.Aubli.ZvP.Game.Mode.StandardMode;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Statistic.DataRecordManager;
 import me.Aubli.ZvP.Translation.MessageKeys.game;
@@ -46,6 +48,8 @@ public class Arena implements Comparable<Arena> {
     
     private int currentRound;
     private int currentWave;
+    
+    private IZvPMode arenaMode;
     
     private ArenaStatus status;
     private ArenaScore score;
@@ -229,6 +233,10 @@ public class Arena implements Comparable<Arena> {
     
     public ArenaConfig getConfig() {
 	return this.config;
+    }
+    
+    public IZvPMode getArenaMode() {
+	return this.arenaMode;
     }
     
     public DataRecordManager getRecordManager() {
@@ -470,6 +478,7 @@ public class Arena implements Comparable<Arena> {
 		removePlayerBoards();
 		updatePlayerBoards();
 	    }
+	    this.arenaMode.onJoin(player, this);
 	    return true;
 	}
 	return false;
@@ -511,6 +520,7 @@ public class Arena implements Comparable<Arena> {
 		}
 	    }
 	    
+	    this.arenaMode.onLeave(player);
 	    return true;
 	}
 	return false;
@@ -545,14 +555,16 @@ public class Arena implements Comparable<Arena> {
 	getWorld().setMonsterSpawnLimit(0);
 	clearArena();
 	
-	this.TaskId = new GameRunnable(this, startDelay).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
-	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + getID() + " started a new Task!", true);
+	// this.TaskId = new GameRunnable(this, startDelay).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
+	this.arenaMode.start(startDelay);
+	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + getID() + " started a new Task in mode " + this.arenaMode.getName() + "!", true);
     }
     
     public void stop() {
 	
 	setStatus(ArenaStatus.STANDBY);
-	Bukkit.getScheduler().cancelTask(getTaskId());
+	this.arenaMode.stop();
+	// Bukkit.getScheduler().cancelTask(getTaskId());
 	getRecordManager().transmitRecords();
 	
 	if (hasPreLobby()) {
