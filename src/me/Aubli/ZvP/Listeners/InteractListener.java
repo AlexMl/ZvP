@@ -142,31 +142,34 @@ public class InteractListener implements Listener {
 		} else if (this.sm.getType(event.getClickedBlock().getLocation()) == SignType.SHOP_SIGN) { // player clicked shop sign
 		    if (GameManager.getManager().isInGame(eventPlayer)) {
 			if (eventPlayer.hasPermission("zvp.play")) {
-			    event.setCancelled(true);
-			    
-			    ShopSign shopSign = (ShopSign) this.sm.getSign(event.getClickedBlock().getLocation());
-			    ItemCategory cat = shopSign.getCategory();
 			    ZvPPlayer player = GameManager.getManager().getPlayer(eventPlayer);
 			    
-			    Inventory shopInv = Bukkit.createInventory(eventPlayer, ((int) Math.ceil(ShopManager.getManager().getItems(cat).size() / 9.0)) * 9, "Items: " + cat.toString());
-			    
-			    for (ShopItem shopItem : ShopManager.getManager().getItems(cat)) {
+			    if (player.getArena().getArenaMode().allowPlayerInteraction(player)) {
+				event.setCancelled(true);
 				
-				ItemStack item = shopItem.getItem();
-				ItemMeta meta = item.getItemMeta();
-				List<String> lore = new ArrayList<String>();
+				ShopSign shopSign = (ShopSign) this.sm.getSign(event.getClickedBlock().getLocation());
+				ItemCategory cat = shopSign.getCategory();
 				
-				lore.add("Category: " + shopItem.getCategory().toString());
-				lore.add(player.getArena().getScore().getScore(player) >= shopItem.getBuyPrice() ? (ChatColor.GREEN + "Cost: " + shopItem.getBuyPrice()) : (ChatColor.RED + "Cost: " + shopItem.getBuyPrice()));
-				lore.add(ChatColor.GOLD + "Refund: " + shopItem.getSellPrice());
+				Inventory shopInv = Bukkit.createInventory(eventPlayer, ((int) Math.ceil(ShopManager.getManager().getItems(cat).size() / 9.0)) * 9, "Items: " + cat.toString());
 				
-				meta.setLore(lore);
-				item.setItemMeta(meta);
-				shopInv.addItem(item);
+				for (ShopItem shopItem : ShopManager.getManager().getItems(cat)) {
+				    
+				    ItemStack item = shopItem.getItem();
+				    ItemMeta meta = item.getItemMeta();
+				    List<String> lore = new ArrayList<String>();
+				    
+				    lore.add("Category: " + shopItem.getCategory().toString());
+				    lore.add(player.getArena().getScore().getScore(player) >= shopItem.getBuyPrice() ? (ChatColor.GREEN + "Cost: " + shopItem.getBuyPrice()) : (ChatColor.RED + "Cost: " + shopItem.getBuyPrice()));
+				    lore.add(ChatColor.GOLD + "Refund: " + shopItem.getSellPrice());
+				    
+				    meta.setLore(lore);
+				    item.setItemMeta(meta);
+				    shopInv.addItem(item);
+				}
+				eventPlayer.closeInventory();
+				eventPlayer.openInventory(shopInv);
+				return;
 			    }
-			    eventPlayer.closeInventory();
-			    eventPlayer.openInventory(shopInv);
-			    return;
 			} else {
 			    event.setCancelled(true);
 			    ZvPCommands.commandDenied(eventPlayer);
