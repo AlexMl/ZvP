@@ -105,7 +105,7 @@ public abstract class ZvPMode extends BukkitRunnable {
     }
     
     /**
-     * Calles when {@link ZvPPlayer} respawns.
+     * Called when {@link ZvPPlayer} respawns.
      * 
      * @param player
      *        player who respawned
