@@ -80,7 +80,7 @@ public class Arena implements Comparable<Arena> {
 	this.difficultyTool = new ArenaDifficulty(this, difficulty);
 	this.config = new ArenaConfig(this, new File(arenaPath, getID() + ".yml"));
 	this.recordManager = new DataRecordManager();
-
+	
 	this.arenaMode = new StandardMode(this, "STANDARD");
     }
     
@@ -121,7 +121,7 @@ public class Arena implements Comparable<Arena> {
 	this.players = new ArrayList<ZvPPlayer>();
 	this.preLobby = loadArenaLobby();
 	this.recordManager = new DataRecordManager();
-
+	
 	this.arenaMode = new StandardMode(this, "STANDARD");
     }
     
