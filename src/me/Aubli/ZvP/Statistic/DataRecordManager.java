@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import me.Aubli.ZvP.ZvPConfig;
+
 
 public class DataRecordManager {
     
@@ -43,10 +45,10 @@ public class DataRecordManager {
     }
     
     public void transmitRecords() {
-	if (this.recordQueue.size() > 0) {
+	if (this.recordQueue.size() > 0 && ZvPConfig.getEnabledStatistics()) {
 	    DataRecord[] records = this.recordQueue.values().toArray(new DataRecord[0]);
 	    DatabaseManager.getManager().handleRecord(records);
-	    this.recordQueue.clear();
 	}
+	this.recordQueue.clear();
     }
 }
