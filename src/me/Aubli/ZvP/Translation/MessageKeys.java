@@ -40,6 +40,7 @@ public class MessageKeys {
 	spawn_protection_over,
 	won,
 	won_messages,
+	lost,
 	spectator_mode,
 	speedTool_enabled,
 	speedTool_disabled,

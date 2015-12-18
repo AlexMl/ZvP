@@ -226,7 +226,7 @@ public class DeathMatch extends ZvPMode {
 		    } else { // End of Game
 			fireFirework();
 			
-			int kills = getArena().getKilledZombies();
+			// TODO change message. Econ doesnt make much sense here
 			double money = getArena().getScore().getScore(null);
 			int deaths = 0;
 			
@@ -236,8 +236,7 @@ public class DeathMatch extends ZvPMode {
 			
 			String[] donP = MessageManager.getMessage(game.won_messages).split(";");
 			int index = this.rand.nextInt(donP.length);
-			String endMessage = MessageManager.getFormatedMessage(game.won, kills, (getArena().getConfig().getMaxRounds() * getArena().getConfig().getMaxWaves()), deaths, Math.round(money), donP[index]);
-			// TODO change message. Econ doesnt make much sense here
+			String endMessage = MessageManager.getFormatedMessage(game.won, getArena().getKilledZombies(), (getArena().getConfig().getMaxRounds() * getArena().getConfig().getMaxWaves()), deaths, Math.round(money), donP[index]);
 			getArena().sendMessage(endMessage);
 			this.cancel();
 			return;
@@ -248,7 +247,7 @@ public class DeathMatch extends ZvPMode {
 		if (getLivingPlayers().length == 0) {
 		    getArena().clearArena();
 		    fireFirework();
-		    getArena().sendMessage("Ihr habt verloren!");
+		    getArena().sendMessage(MessageManager.getFormatedMessage(game.lost, getArena().getKilledZombies(), (getArena().getCurrentRound() * getArena().getCurrentWave())));
 		    this.cancel();
 		}
 	    }

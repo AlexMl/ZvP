@@ -61,6 +61,7 @@ public class DefaultTranslation extends ListResourceBundle {
 	    {game.spawn_protection_over.name(), ChatColor.RED + "ATTENTION! "+ ChatColor.GREEN + "Spawnprotection is over!"},
 	    {game.won.name(), ChatColor.GOLD + "" + ChatColor.BOLD + "Grongrats!\n" + ChatColor.RESET + "" + ChatColor.DARK_GRAY + "You won against the Zombies.\nYou fought against " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Zombies in " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " waves and have died " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " times. The remains of your acquired money " + ChatColor.GOLD + "( %s )" + ChatColor.DARK_GRAY + " will be donated to the " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + "." + ChatColor.BOLD + "" + ChatColor.DARK_GREEN + " Thanks for playing!"},
 	    {game.won_messages.name(), "Notch Hospital;Minecraft Factory;Creeper farms;Sheep resorts;Jeb Academy"},
+	    {game.lost.name(), ChatColor.DARK_GRAY + "You lost the game!" + ChatColor.RED + " All your teammates are dead!" + ChatColor.DARK_GRAY + " You killed " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Zombies in " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " waves! " + ChatColor.GREEN + "" + ChatColor.BOLD + "Good luck next time!"},
 	    {game.spectator_mode.name(), ChatColor.GOLD + "You are now in spectator mode. You can use the tools in your inventory."},
 	    {game.speedTool_description.name(), ChatColor.GREEN + "Use this tool to change your flying speed."},
 	    {game.speedTool_enabled.name(), ChatColor.GREEN + "You can travel faster now"},
