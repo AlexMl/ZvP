@@ -36,7 +36,8 @@ public class DeathMatch extends ZvPMode {
     private boolean firstSpawn;
     private boolean spawnZombies;
     
-    public static ItemStack speedTool;
+    public static ItemStack speedToolEnable;
+    public static ItemStack speedToolDisable;
     public static ItemStack playerCompass;
     
     public DeathMatch(Arena arena) {
@@ -60,13 +61,18 @@ public class DeathMatch extends ZvPMode {
 	player.sendMessage("Du bist spectator");
 	player.getPlayer().getInventory().clear();
 	
-	speedTool = new ItemStack(Material.LEATHER_BOOTS);
-	ItemMeta meta = speedTool.getItemMeta();
-	meta.setDisplayName("Speed");
+	speedToolEnable = new ItemStack(Material.LEATHER_BOOTS);
+	ItemMeta meta = speedToolEnable.getItemMeta();
+	meta.setDisplayName(ChatColor.GREEN + "Enable Speed");
 	meta.setLore(Arrays.asList("Use this item to regulate your speed!"));
 	meta.addItemFlags(ItemFlag.values());
 	meta.addEnchant(Enchantment.DURABILITY, 1, true);
-	speedTool.setItemMeta(meta);
+	speedToolEnable.setItemMeta(meta);
+	
+	speedToolDisable = speedToolEnable.clone();
+	meta = speedToolDisable.getItemMeta();
+	meta.setDisplayName(ChatColor.RED + "Disable Speed");
+	speedToolDisable.setItemMeta(meta);
 	
 	playerCompass = new ItemStack(Material.COMPASS);
 	meta = playerCompass.getItemMeta();
@@ -76,7 +82,7 @@ public class DeathMatch extends ZvPMode {
 	meta.addEnchant(Enchantment.DURABILITY, 1, true);
 	playerCompass.setItemMeta(meta);
 	
-	player.getPlayer().getInventory().addItem(speedTool, playerCompass);
+	player.getPlayer().getInventory().addItem(speedToolEnable, playerCompass);
     }
     
     @Override
@@ -303,6 +309,7 @@ public class DeathMatch extends ZvPMode {
 		}
 	    }
 	} else {
+	    this.cancel();
 	    getArena().stop();
 	    return;
 	}

@@ -114,7 +114,8 @@ public class MessageKeys {
 	kit_select,
 	place_icon,
 	select_category,
-	select_recordType;
+	select_recordType,
+	living_players;
     }
     
     public static ArrayList<Class<?>> getEnums() {

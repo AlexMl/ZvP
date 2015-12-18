@@ -122,5 +122,6 @@ public class GermanTranslation extends ListResourceBundle {
 	    {inventory.place_icon.name(), "Platziere ein Icon hier!"},
 	    {inventory.select_category.name(), "Wähle eine Kategorie!"},
 	    {inventory.select_recordType.name(), "Wähle einen Statistik Typen"},
+	    {inventory.living_players.name(), "Lebende Spieler"},
     };    
 }

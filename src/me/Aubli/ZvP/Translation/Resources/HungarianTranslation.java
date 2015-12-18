@@ -122,5 +122,6 @@ public class HungarianTranslation extends ListResourceBundle {
 	    {inventory.place_icon.name(), "Place Kit icon here!"},
 	    {inventory.select_category.name(), "Select Category"},
 	    {inventory.select_recordType.name(), "Select Statistic Type"},
+	    {inventory.living_players.name(), "Living Players"},
     };    
 }
