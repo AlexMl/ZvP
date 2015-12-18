@@ -94,6 +94,14 @@ public class ZvPPlayer {
 	return this.player;
     }
     
+    public String getName() {
+	return this.player.getName();
+    }
+    
+    public GameMode getGameMode() {
+	return this.player.getGameMode();
+    }
+    
     public Arena getArena() {
 	return this.arena;
     }
@@ -108,10 +116,6 @@ public class ZvPPlayer {
     
     public Location getStartLocation() {
 	return this.startPosition;
-    }
-    
-    public String getName() {
-	return this.player.getName();
     }
     
     public ItemStack[] getPlayerContents() {

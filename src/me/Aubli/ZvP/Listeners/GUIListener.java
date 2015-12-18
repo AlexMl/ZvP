@@ -171,7 +171,7 @@ public class GUIListener implements Listener {
 			    
 			    List<ZvPPlayer> playerList = new ArrayList<ZvPPlayer>();
 			    for (ZvPPlayer player : arena.getPlayers()) {
-				if (player.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+				if (player.getGameMode() == GameMode.SURVIVAL) {
 				    playerList.add(player);
 				}
 			    }

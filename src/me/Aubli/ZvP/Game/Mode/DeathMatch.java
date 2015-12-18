@@ -89,7 +89,7 @@ public class DeathMatch extends ZvPMode {
     
     @Override
     public boolean allowPlayerInteraction(ZvPPlayer player) {
-	return player.getPlayer().getGameMode() != GameMode.SPECTATOR;
+	return player.getGameMode() != GameMode.SPECTATOR;
     }
     
     @Override
