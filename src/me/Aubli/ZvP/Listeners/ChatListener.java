@@ -54,9 +54,7 @@ public class ChatListener implements Listener {
 					for (ZvPPlayer p : arena.getPlayers()) {
 					    p.setVoted(false);
 					}
-					// TODO Test
-					arena.getArenaMode().start(0);
-					// arena.setTaskID(new GameRunnable(arena, 0).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+					arena.reStart(0);
 					arena.setStatus(ArenaStatus.RUNNING);
 					this.cancel();
 				    }

@@ -192,7 +192,7 @@ public class DeathMatch extends ZvPMode {
 				
 				ZvP.getPluginLogger().log(getClass(), Level.INFO, "Arena " + getArena().getID() + " moved into the next wave cause of no zombie interaction!", true, true);
 				
-				start(getArena().getConfig().getBreakTime());
+				getArena().reStart(getArena().getConfig().getBreakTime());
 				// getArena().setTaskID(new GameRunnable(getArena(), getArena().getConfig().getBreakTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
 				this.cancel();
 			    }
@@ -224,7 +224,7 @@ public class DeathMatch extends ZvPMode {
 			    this.cancel();
 			} else {
 			    getArena().setStatus(ArenaStatus.BREAKWAITING);
-			    start(getArena().getConfig().getBreakTime());
+			    getArena().reStart(getArena().getConfig().getBreakTime());
 			    // getArena().setTaskID(new GameRunnable(getArena(), getArena().getConfig().getBreakTime()).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
 			    this.cancel();
 			}

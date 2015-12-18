@@ -555,6 +555,17 @@ public class Arena implements Comparable<Arena> {
 	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + getID() + " started a new Task in mode " + this.arenaMode.getName() + "!", true);
     }
     
+    public void reStart(int startDelay) {
+	getWorld().setDifficulty(Difficulty.NORMAL);
+	getWorld().setTime(15000L);
+	getWorld().setMonsterSpawnLimit(0);
+	clearArena();
+	
+	this.arenaMode = this.arenaMode.reInitialize();
+	this.arenaMode.start(startDelay);
+	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + getID() + " started a new Task in mode " + this.arenaMode.getName() + "!", true);
+    }
+    
     public void stop() {
 	
 	setStatus(ArenaStatus.STANDBY);
