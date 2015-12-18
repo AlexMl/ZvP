@@ -44,7 +44,6 @@ import org.util.SortMap.SortMap;
 public class Arena implements Comparable<Arena> {
     
     private int arenaID;
-    private int TaskId;
     
     private int currentRound;
     private int currentWave;
@@ -191,10 +190,6 @@ public class Arena implements Comparable<Arena> {
 	updatePlayerBoards();
     }
     
-    public void setTaskID(int ID) {
-	this.TaskId = ID;
-    }
-    
     public int getID() {
 	return this.arenaID;
     }
@@ -213,10 +208,6 @@ public class Arena implements Comparable<Arena> {
     
     public int getCurrentWave() {
 	return this.currentWave;
-    }
-    
-    public int getTaskId() {
-	return this.TaskId;
     }
     
     public ArenaScore getScore() {
