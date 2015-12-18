@@ -193,7 +193,7 @@ public class GUIListener implements Listener {
 			} else if (ZvP.equalsItemStack(event.getCurrentItem(), DeathMatch.speedToolEnable)) {
 			    event.setCancelled(true);
 			    eventPlayer.closeInventory();
-			    eventPlayer.setFlySpeed(1F);
+			    eventPlayer.setFlySpeed(0.5F);
 			    eventPlayer.getInventory().clear(event.getSlot());
 			    eventPlayer.getInventory().addItem(DeathMatch.speedToolDisable);
 			    eventPlayer.sendMessage(MessageManager.getMessage(game.speedTool_enabled));
@@ -201,7 +201,7 @@ public class GUIListener implements Listener {
 			} else if (ZvP.equalsItemStack(event.getCurrentItem(), DeathMatch.speedToolDisable)) {
 			    event.setCancelled(true);
 			    eventPlayer.closeInventory();
-			    eventPlayer.setFlySpeed(0F);
+			    eventPlayer.setFlySpeed(0.2F);
 			    eventPlayer.getInventory().clear(event.getSlot());
 			    eventPlayer.getInventory().addItem(DeathMatch.speedToolEnable);
 			    eventPlayer.sendMessage(MessageManager.getMessage(game.speedTool_disabled));
