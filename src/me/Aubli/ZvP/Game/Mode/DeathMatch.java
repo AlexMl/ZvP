@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
-import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameEnums.ArenaStatus;
 import me.Aubli.ZvP.Game.ZvPPlayer;
@@ -13,18 +12,12 @@ import me.Aubli.ZvP.Translation.MessageKeys.game;
 import me.Aubli.ZvP.Translation.MessageManager;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.FireworkEffect.Type;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -228,71 +221,7 @@ public class DeathMatch extends ZvPMode {
 			    this.cancel();
 			}
 		    } else { // End of Game
-		    
-			this.taskID = new BukkitRunnable() {
-			    
-			    ZvPPlayer winner = getArena().getBestPlayer();
-			    
-			    int runs = 0;
-			    
-			    @Override
-			    public void run() {
-				if (ZvPConfig.getEnableFirework()) {
-				    getArena().setPlayerLevel(6 - this.runs);
-				    
-				    if (this.runs <= 5) {
-					for (int i = 0; i < 10; i++) {
-					    Firework fw = (Firework) getArena().getWorld().spawnEntity(this.winner.getLocation().clone().add((DeathMatch.this.rand.nextInt(60) - 2.8 * i), DeathMatch.this.rand.nextInt(15), (DeathMatch.this.rand.nextInt(60) - 2.8 * i)), EntityType.FIREWORK);
-					    FireworkMeta fwMeta = fw.getFireworkMeta();
-					    
-					    // Get the type
-					    Type effectType;
-					    switch (DeathMatch.this.rand.nextInt(4) + 1) {
-						case 1:
-						    effectType = Type.BALL;
-						    break;
-						
-						case 2:
-						    effectType = Type.BALL_LARGE;
-						    break;
-						
-						case 3:
-						    effectType = Type.BURST;
-						    break;
-						
-						case 4:
-						    effectType = Type.STAR;
-						    break;
-						
-						default:
-						    effectType = Type.BALL;
-						    break;
-					    }
-					    
-					    // Get our random colours
-					    Color c1 = getColor(DeathMatch.this.rand.nextInt(17) + 1);
-					    Color c2 = getColor(DeathMatch.this.rand.nextInt(17) + 1);
-					    
-					    // Create our effect with this
-					    FireworkEffect effect = FireworkEffect.builder().flicker(DeathMatch.this.rand.nextBoolean()).withColor(c1).withFade(c2).with(effectType).trail(DeathMatch.this.rand.nextBoolean()).build();
-					    
-					    // Then apply the effect to the meta
-					    fwMeta.addEffect(effect);
-					    
-					    // Generate some random power and set it
-					    fwMeta.setPower(DeathMatch.this.rand.nextInt(2) + 1);
-					    fw.setFireworkMeta(fwMeta);
-					}
-					this.runs++;
-				    } else {
-					getArena().stop();
-					this.cancel();
-				    }
-				} else {
-				    getArena().stop();
-				}
-			    }
-			}.runTaskTimer(ZvP.getInstance(), 1 * 20L, 2 * 20L).getTaskId();
+			fireFirework();
 			
 			int kills = getArena().getKilledZombies();
 			double money = getArena().getScore().getScore(null);
@@ -320,49 +249,6 @@ public class DeathMatch extends ZvPMode {
 	
 	getArena().getWorld().setTime(15000L);
 	this.seconds++;
-    }
-    
-    private static Color getColor(int value) {
-	
-	switch (value) {
-	    case 1:
-		return Color.AQUA;
-	    case 2:
-		return Color.BLACK;
-	    case 3:
-		return Color.BLUE;
-	    case 4:
-		return Color.FUCHSIA;
-	    case 5:
-		return Color.GRAY;
-	    case 6:
-		return Color.GREEN;
-	    case 7:
-		return Color.LIME;
-	    case 8:
-		return Color.MAROON;
-	    case 9:
-		return Color.NAVY;
-	    case 10:
-		return Color.OLIVE;
-	    case 11:
-		return Color.ORANGE;
-	    case 12:
-		return Color.PURPLE;
-	    case 13:
-		return Color.RED;
-	    case 14:
-		return Color.SILVER;
-	    case 15:
-		return Color.TEAL;
-	    case 16:
-		return Color.WHITE;
-	    case 17:
-		return Color.YELLOW;
-		
-	    default:
-		return Color.BLUE;
-	}
     }
     
 }
