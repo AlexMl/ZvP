@@ -56,8 +56,6 @@ public class DeathMatch extends ZvPMode {
     public void onRespawn(ZvPPlayer player, PlayerRespawnEvent event) {
 	event.setRespawnLocation(getArena().getArea().getNewRandomLocation(true));
 	player.getPlayer().setGameMode(GameMode.SPECTATOR);
-	
-	player.sendMessage(MessageManager.getMessage(game.spectator_mode));
 	player.getPlayer().getInventory().clear();
 	
 	speedToolEnable = new ItemStack(Material.LEATHER_BOOTS);
@@ -81,7 +79,10 @@ public class DeathMatch extends ZvPMode {
 	meta.addEnchant(Enchantment.DURABILITY, 1, true);
 	playerCompass.setItemMeta(meta);
 	
-	player.getPlayer().getInventory().addItem(speedToolEnable, playerCompass);
+	if (getLivingPlayers().length > 0) {
+	    player.getPlayer().getInventory().addItem(speedToolEnable, playerCompass);
+	    player.sendMessage(MessageManager.getMessage(game.spectator_mode));
+	}
     }
     
     @Override
@@ -243,10 +244,10 @@ public class DeathMatch extends ZvPMode {
 		    }
 		}
 		
+		// Game Over
 		if (getLivingPlayers().length == 0) {
 		    getArena().clearArena();
 		    fireFirework();
-		    // TODO Message
 		    getArena().sendMessage("Ihr habt verloren!");
 		    this.cancel();
 		}
