@@ -39,7 +39,13 @@ public class MessageKeys {
 	spawn_protection_enabled,
 	spawn_protection_over,
 	won,
-	won_messages;
+	won_messages,
+	spectator_mode,
+	speedTool_enabled,
+	speedTool_disabled,
+	speedTool_description,
+	teleportTool_description,
+	teleport_to;
     }
     
     public enum arena {

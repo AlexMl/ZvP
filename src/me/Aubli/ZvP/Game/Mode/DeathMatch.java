@@ -53,7 +53,7 @@ public class DeathMatch extends ZvPMode {
     public void onJoin(ZvPPlayer player, Arena arena) {
 	if (arena.getPlayers().length > arena.getConfig().getMaxPlayers()) {
 	    player.getPlayer().setGameMode(GameMode.SPECTATOR);
-	    player.sendMessage("Du bist spectator");
+	    player.sendMessage(MessageManager.getMessage(game.spectator_mode));
 	}
     }
     
@@ -62,14 +62,13 @@ public class DeathMatch extends ZvPMode {
 	event.setRespawnLocation(getArena().getArea().getNewRandomLocation(true));
 	player.getPlayer().setGameMode(GameMode.SPECTATOR);
 	
-	// TODO Message
-	player.sendMessage("Du bist spectator");
+	player.sendMessage(MessageManager.getMessage(game.spectator_mode));
 	player.getPlayer().getInventory().clear();
 	
 	speedToolEnable = new ItemStack(Material.LEATHER_BOOTS);
 	ItemMeta meta = speedToolEnable.getItemMeta();
 	meta.setDisplayName(ChatColor.GREEN + "Enable Speed");
-	meta.setLore(Arrays.asList("Use this item to regulate your speed!"));
+	meta.setLore(Arrays.asList(MessageManager.getMessage(game.speedTool_description)));
 	meta.addItemFlags(ItemFlag.values());
 	meta.addEnchant(Enchantment.DURABILITY, 1, true);
 	speedToolEnable.setItemMeta(meta);
@@ -81,8 +80,8 @@ public class DeathMatch extends ZvPMode {
 	
 	playerCompass = new ItemStack(Material.COMPASS);
 	meta = playerCompass.getItemMeta();
-	meta.setDisplayName("Player");
-	meta.setLore(Arrays.asList("Use this item to teleport to players!"));
+	meta.setDisplayName("Teleport Tool");
+	meta.setLore(Arrays.asList(MessageManager.getMessage(game.teleportTool_description)));
 	meta.addItemFlags(ItemFlag.values());
 	meta.addEnchant(Enchantment.DURABILITY, 1, true);
 	playerCompass.setItemMeta(meta);

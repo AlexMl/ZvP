@@ -33,6 +33,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -170,25 +171,24 @@ public class GUIListener implements Listener {
 			    
 			    List<ZvPPlayer> playerList = new ArrayList<ZvPPlayer>();
 			    for (ZvPPlayer player : arena.getPlayers()) {
-				// if (player.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-				playerList.add(player);
-				// }
+				if (player.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+				    playerList.add(player);
+				}
 			    }
-			    // TODO Message inventory
+			    
 			    Inventory playerInv = Bukkit.createInventory(eventPlayer, (int) Math.ceil((playerList.size() / 9.0)) * 9, MessageManager.getMessage(inventory.living_players));
 			    for (ZvPPlayer player : playerList) {
 				ItemStack playerSkull = new ItemStack(Material.SKULL_ITEM);
 				playerSkull.setDurability((short) 3);
 				SkullMeta meta = (SkullMeta) playerSkull.getItemMeta();
 				meta.setDisplayName(player.getName());
-				meta.setLore(Arrays.asList("Teleport to " + player.getName()));
+				meta.setLore(Arrays.asList(MessageManager.getFormatedMessage(game.teleport_to, player.getName())));
 				meta.setOwner(player.getName());
 				playerSkull.setItemMeta(meta);
 				playerInv.addItem(playerSkull);
 			    }
 			    
 			    eventPlayer.openInventory(playerInv);
-			    eventPlayer.sendMessage("playerCompass");
 			    return;
 			} else if (ZvP.equalsItemStack(event.getCurrentItem(), DeathMatch.speedToolEnable)) {
 			    event.setCancelled(true);
@@ -196,7 +196,7 @@ public class GUIListener implements Listener {
 			    eventPlayer.setFlySpeed(1F);
 			    eventPlayer.getInventory().clear(event.getSlot());
 			    eventPlayer.getInventory().addItem(DeathMatch.speedToolDisable);
-			    eventPlayer.sendMessage("speedtool");
+			    eventPlayer.sendMessage(MessageManager.getMessage(game.speedTool_enabled));
 			    return;
 			} else if (ZvP.equalsItemStack(event.getCurrentItem(), DeathMatch.speedToolDisable)) {
 			    event.setCancelled(true);
@@ -204,7 +204,7 @@ public class GUIListener implements Listener {
 			    eventPlayer.setFlySpeed(0F);
 			    eventPlayer.getInventory().clear(event.getSlot());
 			    eventPlayer.getInventory().addItem(DeathMatch.speedToolEnable);
-			    eventPlayer.sendMessage("speedtool");
+			    eventPlayer.sendMessage(MessageManager.getMessage(game.speedTool_disabled));
 			}
 		    }
 		}
