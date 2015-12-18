@@ -288,8 +288,10 @@ public class ZvP extends JavaPlugin {
 	
 	if (item.getType() == other.getType()) {
 	    if (item.hasItemMeta() && other.hasItemMeta()) {
-		if (item.getItemMeta().getDisplayName().equals(other.getItemMeta().getDisplayName())) {
-		    return true;
+		if (item.getItemMeta().hasDisplayName() && other.getItemMeta().hasDisplayName()) {
+		    if (item.getItemMeta().getDisplayName().equals(other.getItemMeta().getDisplayName())) {
+			return true;
+		    }
 		}
 	    }
 	}
