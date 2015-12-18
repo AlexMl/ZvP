@@ -1,6 +1,8 @@
 package me.Aubli.ZvP.Game.Mode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
@@ -240,6 +242,14 @@ public class DeathMatch extends ZvPMode {
 			return;
 		    }
 		}
+		
+		if (getLivingPlayers().length == 0) {
+		    getArena().clearArena();
+		    fireFirework();
+		    // TODO Message
+		    getArena().sendMessage("Ihr habt verloren!");
+		    this.cancel();
+		}
 	    }
 	} else {
 	    this.cancel();
@@ -251,4 +261,20 @@ public class DeathMatch extends ZvPMode {
 	this.seconds++;
     }
     
+    public ZvPPlayer[] getLivingPlayers() {
+	
+	List<ZvPPlayer> livingPlayers = new ArrayList<ZvPPlayer>();
+	
+	for (ZvPPlayer p : getArena().getPlayers()) {
+	    if (p.getGameMode() == GameMode.SURVIVAL) {
+		livingPlayers.add(p);
+	    }
+	}
+	
+	ZvPPlayer[] playerArray = new ZvPPlayer[livingPlayers.size()];
+	for (ZvPPlayer p : livingPlayers) {
+	    playerArray[livingPlayers.indexOf(p)] = p;
+	}
+	return playerArray;
+    }
 }
