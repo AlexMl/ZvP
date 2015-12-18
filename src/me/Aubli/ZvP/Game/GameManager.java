@@ -210,6 +210,24 @@ public class GameManager {
 	return null;
     }
     
+    public ZvPPlayer getPlayer(String playerName) {
+	for (Arena a : getArenas()) {
+	    for (ZvPPlayer zp : a.getPlayers()) {
+		if (zp.getName().equals(playerName)) {
+		    return zp;
+		}
+	    }
+	    if (a.hasPreLobby()) {
+		for (ZvPPlayer zp : a.getPreLobby().getPlayers()) {
+		    if (zp.getName().equals(playerName)) {
+			return zp;
+		    }
+		}
+	    }
+	}
+	return null;
+    }
+    
     // get ZvPPlayer from UUID
     public ZvPPlayer getPlayer(UUID uuid) {
 	return getPlayer(Bukkit.getPlayer(uuid));
