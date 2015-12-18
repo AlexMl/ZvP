@@ -559,7 +559,7 @@ public class Arena implements Comparable<Arena> {
 	
 	setStatus(ArenaStatus.STANDBY);
 	this.arenaMode.stop();
-	// Bukkit.getScheduler().cancelTask(getTaskId());
+	this.arenaMode = this.arenaMode.reInitialize();
 	getRecordManager().transmitRecords();
 	
 	if (hasPreLobby()) {

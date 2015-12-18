@@ -33,6 +33,11 @@ public class StandardMode extends ZvPMode {
     }
     
     @Override
+    public ZvPMode reInitialize() {
+	return new StandardMode(getArena());
+    }
+    
+    @Override
     public boolean allowPlayerInteraction(ZvPPlayer player) {
 	return true;
     }

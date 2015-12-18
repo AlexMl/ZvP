@@ -45,6 +45,11 @@ public class DeathMatch extends ZvPMode {
     }
     
     @Override
+    public ZvPMode reInitialize() {
+	return new DeathMatch(getArena());
+    }
+    
+    @Override
     public void onJoin(ZvPPlayer player, Arena arena) {
 	if (arena.getPlayers().length > arena.getConfig().getMaxPlayers()) {
 	    player.getPlayer().setGameMode(GameMode.SPECTATOR);

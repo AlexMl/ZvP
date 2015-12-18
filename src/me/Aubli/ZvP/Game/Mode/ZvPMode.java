@@ -40,6 +40,7 @@ public abstract class ZvPMode extends BukkitRunnable {
     public ZvPMode(Arena arena, String name) {
 	this.arena = arena;
 	this.name = name;
+	// System.out.println("Initialized new " + name + " mode in " + arena.getID());
     }
     
     public String getName() {
@@ -56,11 +57,13 @@ public abstract class ZvPMode extends BukkitRunnable {
     
     public void start(int startDelay) {
 	this.startDelay = startDelay;
-	
 	this.taskID = this.runTaskTimer(ZvP.getInstance(), 0L, 1 * 20L).getTaskId();
     }
     
+    public abstract ZvPMode reInitialize();
+    
     public void stop() {
+	// System.out.println("stop " + this.arena.getID() + " " + getTaskID());
 	Bukkit.getScheduler().cancelTask(getTaskID());
     }
     
