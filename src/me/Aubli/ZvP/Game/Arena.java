@@ -19,8 +19,8 @@ import me.Aubli.ZvP.Game.ArenaParts.ArenaConfig;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaDifficulty;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaLobby;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaScore;
-import me.Aubli.ZvP.Game.Mode.StandardMode;
 import me.Aubli.ZvP.Game.Mode.ZvPMode;
+import me.Aubli.ZvP.Game.Mode.ZvPMode.ModeType;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Statistic.DataRecordManager;
 import me.Aubli.ZvP.Translation.MessageKeys.game;
@@ -80,7 +80,7 @@ public class Arena implements Comparable<Arena> {
 	this.config = new ArenaConfig(this, new File(arenaPath, getID() + ".yml"));
 	this.recordManager = new DataRecordManager();
 	
-	this.arenaMode = new StandardMode(this);
+	this.arenaMode = ModeType.STANDARD.getInstance(this);
     }
     
     public Arena(File arenaFile) throws Exception {
@@ -117,11 +117,10 @@ public class Arena implements Comparable<Arena> {
 	this.arenaArea = new ArenaArea(arenaWorld, this, cornerPoints, spawnPositions, this.rand);
 	
 	this.difficultyTool = new ArenaDifficulty(this, ArenaDifficultyLevel.valueOf(getConfig().getConfigValue("arena.Difficulty").toString()));
+	this.arenaMode = ModeType.valueOf(getConfig().getConfigValue("arena.Mode").toString()).getInstance(this);
 	this.players = new ArrayList<ZvPPlayer>();
 	this.preLobby = loadArenaLobby();
 	this.recordManager = new DataRecordManager();
-	
-	this.arenaMode = new StandardMode(this);
     }
     
     public boolean saveArenaLobby(ArenaLobby preLobby) {
@@ -232,6 +231,10 @@ public class Arena implements Comparable<Arena> {
     
     public ZvPMode getArenaMode() {
 	return this.arenaMode;
+    }
+    
+    public ModeType getArenaModeType() {
+	return getArenaMode().getType();
     }
     
     public DataRecordManager getRecordManager() {

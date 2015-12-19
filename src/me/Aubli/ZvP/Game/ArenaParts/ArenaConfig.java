@@ -104,6 +104,7 @@ public class ArenaConfig {
 	    this.arenaConfig.set("arena.ID", getArena().getID());
 	    this.arenaConfig.set("arena.Online", !(getArena().getStatus() == ArenaStatus.STOPED));
 	    this.arenaConfig.set("arena.Difficulty", getArena().getDifficulty().name());
+	    this.arenaConfig.set("arena.Mode", getArena().getArenaModeType().name());
 	    this.arenaConfig.set("arena.increaseDifficulty", isIncreaseDifficulty());
 	    
 	    this.arenaConfig.set("arena.minPlayers", getMinPlayers());
@@ -158,8 +159,9 @@ public class ArenaConfig {
 	insertComment.addComment("ID", "The internal identifier of the arena!");
 	insertComment.addComment("Online", "'true': The arena is online and can be used.#'false': The arena is offline and can not be used.");
 	insertComment.addComment("Difficulty", "The Difficulty of the arena. There are three modes: EASY, NORMAL, HARD#Each mode will increase amount and health of zombies.");
+	insertComment.addComment("Mode", "The GameMode of the arena. There are currently two different modes: STANDARD and DEATHMATCH#STANDARD: infinite lives, play until waves are over#DEATHMATCH: only one live per player, spectator mode after death, game over if whole team is dead, full arena join possible");
 	insertComment.addComment("increaseDifficulty", "If enabled, the health and strength of zombies increase as the game progresses.");
-	insertComment.addComment("minPlayers", "Minimum amount of players. Set at least to 1.");
+	insertComment.addComment("minPlayers", "Minimal amount of players. Set at least to 1.");
 	insertComment.addComment("maxPlayers", "Maximal amount of players.");
 	insertComment.addComment("rounds", "The amount of rounds you will play.#Note that one round has several waves. To get the full number of waves multiple rounds and waves.");
 	insertComment.addComment("waves", "The amount of waves you will play. To get the full number of waves multiple rounds and waves.");
