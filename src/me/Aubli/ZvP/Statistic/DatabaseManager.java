@@ -350,7 +350,7 @@ public class DatabaseManager implements DatabaseCallback {
 		System.out.println("read finished from " + this.table);
 		statement.close();
 		result.close();
-		onTransmissionEnd();
+		this.callback.onTransmissionEnd();
 	    } catch (SQLException e) {
 		this.callback.handleException(e, "SELECT * FROM " + this.table + ";");
 	    }
