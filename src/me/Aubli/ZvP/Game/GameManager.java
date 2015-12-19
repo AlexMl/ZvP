@@ -10,7 +10,6 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
-import me.Aubli.ZvP.Game.GameEnums.ArenaDifficultyLevel;
 import me.Aubli.ZvP.Game.GameEnums.ArenaStatus;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaArea;
 import me.Aubli.ZvP.Sign.ISign;
@@ -289,7 +288,7 @@ public class GameManager {
 	    int arenaID = getNewID(this.arenaPath);
 	    
 	    try {
-		Arena arena = new Arena(arenaID, this.arenaPath, world, arenaCorners, ArenaDifficultyLevel.NORMAL);
+		Arena arena = new Arena(arenaID, this.arenaPath, world, arenaCorners);
 		this.arenas.add(arena);
 		
 		ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + arena.getID() + " in World " + arena.getWorld().getUID().toString() + " added! MaxPlayer=" + arena.getConfig().getMaxPlayers() + ", Size=" + arena.getArea().getDiagonal(), true);

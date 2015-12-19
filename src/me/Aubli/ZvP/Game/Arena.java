@@ -63,7 +63,7 @@ public class Arena implements Comparable<Arena> {
     
     private ArrayList<ZvPPlayer> players;
     
-    public Arena(int ID, String arenaPath, World world, List<Location> arenaCorners, ArenaDifficultyLevel difficulty) throws Exception {
+    public Arena(int ID, String arenaPath, World world, List<Location> arenaCorners) throws Exception {
 	
 	this.arenaID = ID;
 	
@@ -76,7 +76,7 @@ public class Arena implements Comparable<Arena> {
 	this.currentWave = 0;
 	
 	this.players = new ArrayList<ZvPPlayer>();
-	this.difficultyTool = new ArenaDifficulty(this, difficulty);
+	this.difficultyTool = new ArenaDifficulty(this, ArenaDifficultyLevel.NORMAL);
 	this.config = new ArenaConfig(this, new File(arenaPath, getID() + ".yml"));
 	this.recordManager = new DataRecordManager();
 	
