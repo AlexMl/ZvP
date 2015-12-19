@@ -120,6 +120,11 @@ public class DeathMatch extends ZvPMode {
 	playerCompass.setItemMeta(meta);
 	
 	if (getLivingPlayers().length > 0) {
+	    
+	    for (Zombie z : getArena().getLivingZombies()) {
+		z.setTarget(getLivingPlayers()[this.rand.nextInt(getLivingPlayers().length)].getPlayer());
+	    }
+	    
 	    player.getPlayer().getInventory().addItem(speedToolEnable, playerCompass);
 	    player.sendMessage(MessageManager.getMessage(game.spectator_mode));
 	}
