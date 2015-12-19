@@ -35,7 +35,7 @@ public class DataRecordManager {
 	    if (record != null) {
 		this.recordQueue.put(playerUUID, DataRecord.merge(record, newRecord, true));
 	    } else {
-		System.out.println("Create new record\n" + newRecord);
+		// System.out.println("Create new record\n" + newRecord);
 		this.recordQueue.put(playerUUID, newRecord);
 	    }
 	} catch (Exception e) {

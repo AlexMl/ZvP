@@ -96,10 +96,7 @@ public class DataRecord {
 	    money = newRecord.getLeftMoney();
 	}
 	
-	DataRecord newR = new DataRecord(oldRecord.getPlayerUUID(), oldRecord.getKills() + newRecord.getKills(), killrecord, oldRecord.getDeaths() + newRecord.getDeaths(), money, newRecord.getTimestamp().getTime());
-	
-	System.out.println("merging old\n" + oldRecord + "\nand new\n" + newRecord + "\ninto\n" + newR);
-	
-	return newR;
+	// System.out.println("merging old\n" + oldRecord + "\nand new\n" + newRecord + "\ninto\n" + newR);
+	return new DataRecord(oldRecord.getPlayerUUID(), oldRecord.getKills() + newRecord.getKills(), killrecord, oldRecord.getDeaths() + newRecord.getDeaths(), money, newRecord.getTimestamp().getTime());
     }
 }
