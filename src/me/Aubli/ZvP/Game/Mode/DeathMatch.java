@@ -87,6 +87,7 @@ public class DeathMatch extends ZvPMode {
 	playerSkull.setItemMeta(meta);
 	
 	Zombie z = (Zombie) entitiy;
+	z.setBaby(false);
 	z.getEquipment().setHelmet(playerSkull);
 	z.setMaxHealth(2 * 20);
 	getArena().updatePlayerBoards();
