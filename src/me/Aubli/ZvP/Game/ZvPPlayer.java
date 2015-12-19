@@ -28,7 +28,6 @@ import org.util.Experience.ExperienceManager;
 
 public class ZvPPlayer {
     
-    private Player player;
     private UUID playerUUID;
     
     private Lobby lobby;
@@ -55,7 +54,6 @@ public class ZvPPlayer {
     private IZvPKit kit;
     
     public ZvPPlayer(Player player, Arena arena, Lobby lobby) {
-	this.player = player;
 	this.playerUUID = player.getUniqueId();
 	
 	this.arena = arena;
@@ -91,7 +89,7 @@ public class ZvPPlayer {
     }
     
     public Player getPlayer() {
-	return this.player;
+	return Bukkit.getPlayer(getUuid());
     }
     
     public Arena getArena() {
@@ -103,7 +101,7 @@ public class ZvPPlayer {
     }
     
     public Location getLocation() {
-	return this.player.getLocation();
+	return getPlayer().getLocation();
     }
     
     public Location getStartLocation() {
@@ -111,7 +109,7 @@ public class ZvPPlayer {
     }
     
     public String getName() {
-	return this.player.getName();
+	return getPlayer().getName();
     }
     
     public ItemStack[] getPlayerContents() {
@@ -323,40 +321,40 @@ public class ZvPPlayer {
     public void getReady() {
 	
 	if (KitManager.getManager().isEnabled()) {
-	    this.player.getInventory().clear();
+	    getPlayer().getInventory().clear();
 	    
 	    // Security fix for Crafting field exploit
 	    for (int i = 0; i < 5; i++) {
-		this.player.getOpenInventory().getTopInventory().clear(i);
+		getPlayer().getOpenInventory().getTopInventory().clear(i);
 	    }
 	    
-	    this.player.getInventory().setHelmet(null);
-	    this.player.getInventory().setChestplate(null);
-	    this.player.getInventory().setLeggings(null);
-	    this.player.getInventory().setBoots(null);
+	    getPlayer().getInventory().setHelmet(null);
+	    getPlayer().getInventory().setChestplate(null);
+	    getPlayer().getInventory().setLeggings(null);
+	    getPlayer().getInventory().setBoots(null);
 	    
-	    this.player.getInventory().setContents(getKit().getContents());
-	    this.player.updateInventory();
+	    getPlayer().getInventory().setContents(getKit().getContents());
+	    getPlayer().updateInventory();
 	}
 	
 	if (!getArena().getConfig().isKeepXP()) {
 	    this.xpManager.setExp(0);
 	}
 	
-	this.player.setGameMode(GameMode.SURVIVAL);
-	this.player.resetPlayerTime();
-	this.player.resetPlayerWeather();
+	getPlayer().setGameMode(GameMode.SURVIVAL);
+	getPlayer().resetPlayerTime();
+	getPlayer().resetPlayerWeather();
 	
-	this.player.setHealth(20D);
-	this.player.setFoodLevel(20);
-	this.player.resetMaxHealth();
+	getPlayer().setHealth(20D);
+	getPlayer().setFoodLevel(20);
+	getPlayer().resetMaxHealth();
 	
-	this.player.setAllowFlight(false);
-	this.player.setFlying(false);
-	this.player.setWalkSpeed((float) 0.2);
-	this.player.setFlySpeed((float) 0.2);
+	getPlayer().setAllowFlight(false);
+	getPlayer().setFlying(false);
+	getPlayer().setWalkSpeed((float) 0.2);
+	getPlayer().setFlySpeed((float) 0.2);
 	
-	this.player.teleport(getStartLocation(), TeleportCause.PLUGIN);
+	getPlayer().teleport(getStartLocation(), TeleportCause.PLUGIN);
     }
     
     @SuppressWarnings("deprecation")
@@ -367,25 +365,25 @@ public class ZvPPlayer {
 	}
 	
 	if (!getArena().getConfig().isKeepInventory()) {
-	    this.player.getInventory().clear();
-	    this.player.getInventory().setArmorContents(this.armorContents);
-	    this.player.getInventory().setContents(this.contents);
+	    getPlayer().getInventory().clear();
+	    getPlayer().getInventory().setArmorContents(this.armorContents);
+	    getPlayer().getInventory().setContents(this.contents);
 	}
 	
 	// Security fix for Crafting field exploit
 	for (int i = 0; i < 5; i++) {
-	    this.player.getOpenInventory().getTopInventory().clear(i);
+	    getPlayer().getOpenInventory().getTopInventory().clear(i);
 	}
 	
 	setCanceled(true);
 	
-	this.player.teleport(this.lobby.getLocation());
-	this.player.setVelocity(new Vector(0, 0, 0));
+	getPlayer().teleport(this.lobby.getLocation());
+	getPlayer().setVelocity(new Vector(0, 0, 0));
 	
-	this.player.setHealth(20D);
-	this.player.setFoodLevel(20);
+	getPlayer().setHealth(20D);
+	getPlayer().setFoodLevel(20);
 	
-	this.player.setGameMode(this.mode);
+	getPlayer().setGameMode(this.mode);
 	
 	if (!getArena().getConfig().isKeepXP()) {
 	    getXPManager().setExp(this.prevTotalXP);
@@ -393,11 +391,11 @@ public class ZvPPlayer {
 	
 	for (PotionEffectType effect : PotionEffectType.values()) {
 	    if (effect != null) {
-		this.player.removePotionEffect(effect);
+		getPlayer().removePotionEffect(effect);
 	    }
 	}
 	
-	this.player.updateInventory();
+	getPlayer().updateInventory();
     }
     
     @Override
