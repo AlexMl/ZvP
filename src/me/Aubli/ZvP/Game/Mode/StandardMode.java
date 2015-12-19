@@ -21,8 +21,13 @@ public class StandardMode extends ZvPMode {
     private boolean firstSpawn;
     private boolean spawnZombies;
     
-    public StandardMode(Arena arena) {
+    protected StandardMode(Arena arena) {
 	super(arena, "STANDARD");
+    }
+    
+    @Override
+    public ModeType getType() {
+	return ModeType.STANDARD;
     }
     
     @Override

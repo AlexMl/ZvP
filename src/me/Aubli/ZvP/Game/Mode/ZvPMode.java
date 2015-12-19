@@ -32,6 +32,24 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class ZvPMode extends BukkitRunnable {
     
+    public enum ModeType {
+	STANDARD,
+	DEATHMATCH, ;
+	
+	public ZvPMode getInstance(Arena arena) {
+	    switch (this) {
+		case STANDARD:
+		    return new StandardMode(arena);
+		    
+		case DEATHMATCH:
+		    return new DeathMatch(arena);
+		    
+		default:
+		    throw new IllegalArgumentException("Not supported ZvPMode: " + this.name());
+	    }
+	}
+    }
+    
     private Arena arena;
     
     private String name;
@@ -44,7 +62,7 @@ public abstract class ZvPMode extends BukkitRunnable {
     
     protected final Random rand = new Random(System.currentTimeMillis());
     
-    public ZvPMode(Arena arena, String name) {
+    protected ZvPMode(Arena arena, String name) {
 	this.arena = arena;
 	this.name = name;
 	// System.out.println("Initialized new " + name + " mode in " + arena.getID());
@@ -61,6 +79,8 @@ public abstract class ZvPMode extends BukkitRunnable {
     public Arena getArena() {
 	return this.arena;
     }
+    
+    public abstract ModeType getType();
     
     public void start(int startDelay) {
 	this.startDelay = startDelay;

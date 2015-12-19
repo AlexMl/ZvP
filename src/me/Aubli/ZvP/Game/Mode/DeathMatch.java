@@ -35,8 +35,13 @@ public class DeathMatch extends ZvPMode {
     public static ItemStack speedToolDisable;
     public static ItemStack playerCompass;
     
-    public DeathMatch(Arena arena) {
+    protected DeathMatch(Arena arena) {
 	super(arena, "DEATHMATCH");
+    }
+    
+    @Override
+    public ModeType getType() {
+	return ModeType.DEATHMATCH;
     }
     
     @Override
