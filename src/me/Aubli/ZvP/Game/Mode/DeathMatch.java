@@ -2,12 +2,15 @@ package me.Aubli.ZvP.Game.Mode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameEnums.ArenaStatus;
+import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Listeners.EntityListener;
 import me.Aubli.ZvP.Translation.MessageKeys.game;
@@ -17,10 +20,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Zombie;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
@@ -34,6 +43,8 @@ public class DeathMatch extends ZvPMode {
     public static ItemStack speedToolEnable;
     public static ItemStack speedToolDisable;
     public static ItemStack playerCompass;
+    
+    private Map<ZvPPlayer, List<ItemStack>> playerDrops = new HashMap<ZvPPlayer, List<ItemStack>>();
     
     protected DeathMatch(Arena arena) {
 	super(arena, "DEATHMATCH");
@@ -55,6 +66,30 @@ public class DeathMatch extends ZvPMode {
 	    player.getPlayer().setGameMode(GameMode.SPECTATOR);
 	    player.sendMessage(MessageManager.getMessage(game.spectator_mode));
 	}
+    }
+    
+    @Override
+    public void onDeath(ZvPPlayer player, PlayerDeathEvent event) {
+	super.onDeath(player, event);
+	
+	this.playerDrops.put(player, new ArrayList<ItemStack>(event.getDrops()));
+	event.getDrops().clear();
+	
+	Entity entitiy = getArena().getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE);
+	if (entitiy != null) {
+	    getArena().getDifficultyTool().customizeEntity(entitiy);
+	}
+	
+	ItemStack playerSkull = new ItemStack(Material.SKULL_ITEM);
+	playerSkull.setDurability((short) 3);
+	SkullMeta meta = (SkullMeta) playerSkull.getItemMeta();
+	meta.setOwner(player.getName());
+	playerSkull.setItemMeta(meta);
+	
+	Zombie z = (Zombie) entitiy;
+	z.getEquipment().setHelmet(playerSkull);
+	z.setMaxHealth(2 * 20);
+	getArena().updatePlayerBoards();
     }
     
     @Override
@@ -87,6 +122,30 @@ public class DeathMatch extends ZvPMode {
 	if (getLivingPlayers().length > 0) {
 	    player.getPlayer().getInventory().addItem(speedToolEnable, playerCompass);
 	    player.sendMessage(MessageManager.getMessage(game.spectator_mode));
+	}
+    }
+    
+    @Override
+    public void onZombieKill(ZvPPlayer attacker, Entity zombie, EntityDeathEvent event) {
+	super.onZombieKill(attacker, zombie, event);
+	
+	Zombie z = (Zombie) zombie;
+	if (z.getEquipment().getHelmet().getType() == Material.SKULL_ITEM) {
+	    if (z.getEquipment().getHelmet().hasItemMeta() && z.getEquipment().getHelmet().getItemMeta() instanceof SkullMeta) {
+		SkullMeta meta = (SkullMeta) z.getEquipment().getHelmet().getItemMeta();
+		
+		if (meta.hasOwner()) {
+		    ZvPPlayer player = GameManager.getManager().getPlayer(meta.getOwner());
+		    
+		    if (player != null) {
+			if (this.playerDrops.containsKey(player)) {
+			    event.getDrops().clear();
+			    event.getDrops().addAll(this.playerDrops.get(player));
+			    this.playerDrops.remove(player);
+			}
+		    }
+		}
+	    }
 	}
     }
     
