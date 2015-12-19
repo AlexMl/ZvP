@@ -383,7 +383,8 @@ public class ZvPPlayer {
 	
 	getPlayer().teleport(this.lobby.getLocation());
 	getPlayer().setVelocity(new Vector(0, 0, 0));
-	getPlayer().setFlySpeed(0.2F);
+	getPlayer().setWalkSpeed((float) 0.2);
+	getPlayer().setFlySpeed((float) 0.2);
 	
 	getPlayer().setHealth(20D);
 	getPlayer().setFoodLevel(20);
