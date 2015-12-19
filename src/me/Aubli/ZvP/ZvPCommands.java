@@ -85,7 +85,7 @@ public class ZvPCommands implements CommandExecutor {
 	    if (cmd.getName().equals("zvp")) {
 		if (args.length == 1) {
 		    if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
-			ZvP.getInstance().reloadConfig();
+			ZvP.getInstance().reloadPlugin();
 			sender.sendMessage(MessageManager.getMessage(config.reloaded));
 			return true;
 		    }
