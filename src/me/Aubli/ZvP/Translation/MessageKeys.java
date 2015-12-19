@@ -39,7 +39,14 @@ public class MessageKeys {
 	spawn_protection_enabled,
 	spawn_protection_over,
 	won,
-	won_messages;
+	won_messages,
+	lost,
+	spectator_mode,
+	speedTool_enabled,
+	speedTool_disabled,
+	speedTool_description,
+	teleportTool_description,
+	teleport_to;
     }
     
     public enum arena {
@@ -114,7 +121,8 @@ public class MessageKeys {
 	kit_select,
 	place_icon,
 	select_category,
-	select_recordType;
+	select_recordType,
+	living_players;
     }
     
     public static ArrayList<Class<?>> getEnums() {

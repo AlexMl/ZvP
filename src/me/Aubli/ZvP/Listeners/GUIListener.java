@@ -1,6 +1,9 @@
 package me.Aubli.ZvP.Listeners;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
@@ -10,6 +13,7 @@ import me.Aubli.ZvP.Game.GameEnums.ScoreType;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Game.ZvPPlayer;
+import me.Aubli.ZvP.Game.Mode.DeathMatch;
 import me.Aubli.ZvP.Kits.IZvPKit;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Shop.ShopItem;
@@ -29,6 +33,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -36,15 +41,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 
 public class GUIListener implements Listener {
     
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-	
 	Player eventPlayer = (Player) event.getWhoClicked();
 	
 	// Super awesome Clickevent future
@@ -153,6 +159,70 @@ public class GUIListener implements Listener {
 			SignManager.getManager().updateSigns(SignType.STATISTIC_SIGN);
 		    }
 		    return;
+		}
+		
+		if (event.getInventory().getType() == InventoryType.CRAFTING) {
+		    if (GameManager.getManager().isInGame(eventPlayer)) {
+			if (ZvP.equalsItemStack(event.getCurrentItem(), DeathMatch.playerCompass)) {
+			    event.setCancelled(true);
+			    eventPlayer.closeInventory();
+			    
+			    Arena arena = GameManager.getManager().getPlayer(eventPlayer).getArena();
+			    
+			    List<ZvPPlayer> playerList = new ArrayList<ZvPPlayer>();
+			    for (ZvPPlayer player : arena.getPlayers()) {
+				if (player.getGameMode() == GameMode.SURVIVAL) {
+				    playerList.add(player);
+				}
+			    }
+			    
+			    Inventory playerInv = Bukkit.createInventory(eventPlayer, (int) Math.ceil((playerList.size() / 9.0)) * 9, MessageManager.getMessage(inventory.living_players));
+			    for (ZvPPlayer player : playerList) {
+				ItemStack playerSkull = new ItemStack(Material.SKULL_ITEM);
+				playerSkull.setDurability((short) 3);
+				SkullMeta meta = (SkullMeta) playerSkull.getItemMeta();
+				meta.setDisplayName(player.getName());
+				meta.setLore(Arrays.asList(MessageManager.getFormatedMessage(game.teleport_to, player.getName())));
+				meta.setOwner(player.getName());
+				playerSkull.setItemMeta(meta);
+				playerInv.addItem(playerSkull);
+			    }
+			    
+			    eventPlayer.openInventory(playerInv);
+			    return;
+			} else if (ZvP.equalsItemStack(event.getCurrentItem(), DeathMatch.speedToolEnable)) {
+			    event.setCancelled(true);
+			    eventPlayer.closeInventory();
+			    eventPlayer.setFlySpeed(0.5F);
+			    eventPlayer.getInventory().clear(event.getSlot());
+			    eventPlayer.getInventory().addItem(DeathMatch.speedToolDisable);
+			    eventPlayer.sendMessage(MessageManager.getMessage(game.speedTool_enabled));
+			    return;
+			} else if (ZvP.equalsItemStack(event.getCurrentItem(), DeathMatch.speedToolDisable)) {
+			    event.setCancelled(true);
+			    eventPlayer.closeInventory();
+			    eventPlayer.setFlySpeed(0.2F);
+			    eventPlayer.getInventory().clear(event.getSlot());
+			    eventPlayer.getInventory().addItem(DeathMatch.speedToolEnable);
+			    eventPlayer.sendMessage(MessageManager.getMessage(game.speedTool_disabled));
+			}
+		    }
+		}
+		
+		if (event.getInventory().getTitle().equals(MessageManager.getMessage(inventory.living_players))) {
+		    event.setCancelled(true);
+		    eventPlayer.closeInventory();
+		    
+		    if (GameManager.getManager().isInGame(eventPlayer)) {
+			if (event.getCurrentItem().getType() == Material.SKULL_ITEM) {
+			    SkullMeta meta = (SkullMeta) event.getCurrentItem().getItemMeta();
+			    
+			    ZvPPlayer player = GameManager.getManager().getPlayer(meta.getDisplayName());
+			    
+			    eventPlayer.teleport(player.getLocation());
+			    return;
+			}
+		    }
 		}
 		
 		// Item sell/buy

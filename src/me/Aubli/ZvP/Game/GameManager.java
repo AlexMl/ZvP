@@ -101,7 +101,8 @@ public class GameManager {
 	    // version 2.7.0 needs converted positions in arena file
 	    // version 2.8.0 has new config values --> ordering
 	    // version 2.8.3 has new config value --> new order
-	    ZvP.getConverter().convert(FileType.ARENAFILE, arenaFile, 283.0);
+	    // version 2.9.0 has new config value(ArenaMode) --> new order
+	    ZvP.getConverter().convert(FileType.ARENAFILE, arenaFile, 290.0);
 	    
 	    try {
 		Arena arena = new Arena(arenaFile);
@@ -202,6 +203,24 @@ public class GameManager {
 	    if (a.hasPreLobby()) {
 		for (ZvPPlayer zp : a.getPreLobby().getPlayers()) {
 		    if (zp.getUuid().equals(player.getUniqueId())) {
+			return zp;
+		    }
+		}
+	    }
+	}
+	return null;
+    }
+    
+    public ZvPPlayer getPlayer(String playerName) {
+	for (Arena a : getArenas()) {
+	    for (ZvPPlayer zp : a.getPlayers()) {
+		if (zp.getName().equals(playerName)) {
+		    return zp;
+		}
+	    }
+	    if (a.hasPreLobby()) {
+		for (ZvPPlayer zp : a.getPreLobby().getPlayers()) {
+		    if (zp.getName().equals(playerName)) {
 			return zp;
 		    }
 		}
@@ -323,7 +342,7 @@ public class GameManager {
     // Manage Players
     public boolean createPlayer(Player player, Arena arena, Lobby lobby) {
 	
-	if (!arena.isFull() && arena.isOnline()) {
+	if ((!arena.isFull() || arena.getArenaMode().allowFullArena()) && arena.isOnline()) {
 	    if (ZvPConfig.getAllowDuringGameJoin() || !arena.isRunning()) {
 		new ZvPPlayer(player, arena, lobby);
 		SignManager.getManager().updateSigns(lobby);

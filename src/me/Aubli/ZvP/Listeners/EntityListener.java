@@ -9,9 +9,8 @@ import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.ExperienceOrb;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,7 +27,7 @@ public class EntityListener implements Listener {
     private GameManager game = GameManager.getManager();
     private BukkitTask task;
     
-    private static boolean entityInteraction = true;
+    public static boolean entityInteraction = true;
     
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
@@ -37,75 +36,16 @@ public class EntityListener implements Listener {
 	    ZvPPlayer victim = this.game.getPlayer((Player) event.getEntity());
 	    
 	    if (victim != null) {
-		if (victim.hasProtection()) { // If player has protection. Cancel all damage
-		    event.setCancelled(true);
-		    return;
-		}
-		
-		if (event.getDamager() instanceof Player) { // Player vs Player actions
-		    ZvPPlayer damager = this.game.getPlayer((Player) event.getDamager());
-		    
-		    if (damager != null) {
-			if (damager.hasProtection()) {
-			    event.setCancelled(true);
-			    return;
-			}
-			
-			if (damager.getArena().equals(victim.getArena())) {
-			    Arena arena = victim.getArena();
-			    
-			    if (!arena.getConfig().isPlayerVsPlayer()) {
-				event.setCancelled(true);
-				return;
-			    }
-			    
-			}
-		    }
-		}
-		
-		if (event.getDamager() instanceof Projectile) { // player got hit by a projectile
-		    if (((Projectile) event.getDamager()).getShooter() instanceof Player) { // projectile came from player
-			ZvPPlayer shooter = this.game.getPlayer((Player) ((Projectile) event.getDamager()).getShooter());
-			
-			if (shooter != null) {
-			    if (shooter.getArena().equals(victim.getArena())) {
-				Arena arena = victim.getArena();
-				
-				if (!arena.getConfig().isPlayerVsPlayer()) {
-				    event.setCancelled(true);
-				    return;
-				} else {
-				    event.setCancelled(false);
-				    return;
-				}
-			    }
-			}
-			
-			// In case of shooting players outside of the arena
-			event.setCancelled(true);
-			return;
-		    } else {
-			event.setCancelled(true);
-			return;
-		    }
-		    
-		}
-		
-		if (event.getDamager() instanceof Zombie) {
-		    entityInteraction = true;
-		    if (victim.getArena().getConfig().isIncreaseDifficulty()) {
-			event.setDamage(event.getDamage() * victim.getArena().getDifficultyTool().getZombieStrengthFactor());
-		    }
-		}
+		victim.getArena().getArenaMode().onPlayerDamage(victim, event.getDamager(), event);
 	    }
 	}
 	
 	if (event.getEntity() instanceof Zombie) { // Zombie is victim
-	
 	    if (event.getDamager() instanceof Player) {
 		ZvPPlayer damager = this.game.getPlayer((Player) event.getDamager());
 		
 		if (damager != null) {
+		    
 		    if (damager.hasProtection()) { // Don't hurt zombies if player has Spawnprotection
 			entityInteraction = true;
 			event.setCancelled(true);
@@ -163,38 +103,22 @@ public class EntityListener implements Listener {
     public void onEntityDeath(EntityDeathEvent event) {
 	
 	if (event.getEntity().getKiller() != null) {
+	    Player killer = event.getEntity().getKiller();
 	    
-	    Player eventPlayer = event.getEntity().getKiller();
-	    if (this.game.isInGame(eventPlayer)) {
-		if (event.getEntity() instanceof Zombie) {
+	    if (this.game.isInGame(killer)) {
+		ZvPPlayer zvpKiller = this.game.getPlayer(killer);
+		if (event.getEntity().getType() == EntityType.ZOMBIE) {
+		    zvpKiller.getArena().getArenaMode().onZombieKill(zvpKiller, event.getEntity(), event);
+		    return;
+		} else if (event.getEntity().getType() == EntityType.PLAYER) {
+		    Player victim = (Player) event.getEntity();
 		    
-		    final ZvPPlayer player = this.game.getPlayer(eventPlayer);
-		    
-		    if (player.getArena().getConfig().isKeepXP()) {
-			// entity.remove() does cancel xp spawn.
-			// --> spawn xp
-			
-			int droppedExp = (int) Math.ceil((event.getDroppedExp() / 2.0) * player.getArena().getDifficultyTool().getExpFactor());
-			
-			for (int xp = 0; xp < droppedExp; xp++) {
-			    event.getEntity().getWorld().spawn(event.getEntity().getLocation().clone(), ExperienceOrb.class).setExperience(1);
+		    if (this.game.isInGame(victim)) {
+			ZvPPlayer zvpVictim = this.game.getPlayer(victim);
+			if (zvpKiller.getArena().equals(zvpVictim.getArena())) {
+			    zvpKiller.getArena().getArenaMode().onPlayerKill(zvpKiller, zvpVictim);
 			}
 		    }
-		    
-		    // Remove entity is faster than waiting for Server to do it
-		    event.getEntity().remove();
-		    
-		    // Task is needed because entity.remove() is asyncron and takes longer
-		    // therefor the scoreboard gets updated to early!
-		    Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
-			
-			@Override
-			public void run() {
-			    player.addKill();
-			}
-		    }, 5L);
-		    
-		    return;
 		}
 	    }
 	}

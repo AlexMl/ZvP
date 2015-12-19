@@ -46,6 +46,7 @@ public class FileConverter {
 			boolean online = conf.getBoolean("arena.Online");
 			
 			String difficulty = conf.getString("arena.Difficulty", "NORMAL");
+			String mode = conf.getString("arena.Mode", "STANDARD");
 			
 			int minPlayers = conf.getInt("arena.minPlayers");
 			int maxPlayers = conf.getInt("arena.maxPlayers");
@@ -124,6 +125,7 @@ public class FileConverter {
 			conf.set("arena.ID", arenaID);
 			conf.set("arena.Online", online);
 			conf.set("arena.Difficulty", difficulty);
+			conf.set("arena.Mode", mode);
 			conf.set("arena.increaseDifficulty", increaseDifficulty);
 			
 			conf.set("arena.minPlayers", minPlayers);

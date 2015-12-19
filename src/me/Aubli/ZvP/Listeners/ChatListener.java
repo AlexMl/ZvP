@@ -7,7 +7,6 @@ import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameEnums.ArenaStatus;
 import me.Aubli.ZvP.Game.GameManager;
-import me.Aubli.ZvP.Game.GameRunnable;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Translation.MessageKeys.commands;
 import me.Aubli.ZvP.Translation.MessageKeys.game;
@@ -55,7 +54,7 @@ public class ChatListener implements Listener {
 					for (ZvPPlayer p : arena.getPlayers()) {
 					    p.setVoted(false);
 					}
-					arena.setTaskID(new GameRunnable(arena, 0).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId());
+					arena.reStart(0);
 					arena.setStatus(ArenaStatus.RUNNING);
 					this.cancel();
 				    }

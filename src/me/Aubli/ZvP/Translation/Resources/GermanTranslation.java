@@ -61,6 +61,13 @@ public class GermanTranslation extends ListResourceBundle {
 	    {game.spawn_protection_over.name(), ChatColor.RED + "ACHTUNG!"+ ChatColor.GREEN + " Spawnschutz ist abgelaufen!"},
 	    {game.won.name(), ChatColor.GOLD + "" + ChatColor.BOLD + "Glückwunsch!\n" + ChatColor.RESET + "" + ChatColor.DARK_GRAY + "Ihr habt die Zombies zurückgedrängt und dabei " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " von ihnen zur Strecke gebracht!\nEs hat " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Wellen gedauert in denen ihr " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " mal gestorben seid. Euer verdientes Geld " + ChatColor.GOLD + "( %s )" + ChatColor.DARK_GRAY + " wird an " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " gespendet." + ChatColor.BOLD + "" + ChatColor.DARK_GREEN + " Danke für's Spielen!"},
 	    {game.won_messages.name(), "Notchs Krankenhaus;die Minecraftfabrik;die Creeperfarmen;das Schaf Erholungszentrum;Jebs Akademie"},
+	    {game.lost.name(), ChatColor.DARK_GRAY + "Du hast das Spiel verloren!" + ChatColor.RED + " Alle deine Mitspieler sind tot!" + ChatColor.DARK_GRAY + " Ihr habt " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Zombies in " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Wellen getötet! " + ChatColor.GREEN + "" + ChatColor.BOLD + "Viel Glück beim nächsten mal!"},
+	    {game.spectator_mode.name(), ChatColor.GOLD + "Du bist nun im Zuschauer Modus. Du kannst die Tools in deinem Inventar benutzen."},
+	    {game.speedTool_description.name(), ChatColor.GREEN + "Benutze das Tool um deine Fluggeschwindigkeit zu ändern."},
+	    {game.speedTool_enabled.name(), ChatColor.GREEN + "Du fliegst jetzt schneller."},
+	    {game.speedTool_disabled.name(), ChatColor.RED + "Du fliegst wieder langsam."},
+	    {game.teleportTool_description.name(), ChatColor.GREEN + "Benutze das Tool um dich zu lebenden Sielern zu teleportieren."},
+	    {game.teleport_to.name(), ChatColor.DARK_GRAY + "Zu " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " teleportieren!"},
 	    
 	    {arena.stop_all.name(), ChatColor.DARK_GRAY + "Alle Arenen gestoppt!"},
 	    {arena.stop.name(), ChatColor.DARK_GRAY + "Arena " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " gestoppt!"},
@@ -122,5 +129,6 @@ public class GermanTranslation extends ListResourceBundle {
 	    {inventory.place_icon.name(), "Platziere ein Icon hier!"},
 	    {inventory.select_category.name(), "Wähle eine Kategorie!"},
 	    {inventory.select_recordType.name(), "Wähle einen Statistik Typen"},
+	    {inventory.living_players.name(), "Lebende Spieler"},
     };    
 }

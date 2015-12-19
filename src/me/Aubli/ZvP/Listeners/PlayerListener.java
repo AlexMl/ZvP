@@ -3,10 +3,7 @@ package me.Aubli.ZvP.Listeners;
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.ZvPPlayer;
-import me.Aubli.ZvP.Translation.MessageKeys;
-import me.Aubli.ZvP.Translation.MessageManager;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,45 +48,19 @@ public class PlayerListener implements Listener {
 	
 	if (this.game.isInGame(this.eventPlayer)) {
 	    ZvPPlayer player = this.game.getPlayer(this.eventPlayer);
-	    
-	    if (player.getArena().getConfig().isKeepXP()) {
-		player.getXPManager().setExp(0);
-	    }
-	    
-	    player.die();
-	    
-	    event.setDeathMessage("");
-	    player.getArena().sendMessage(MessageManager.getFormatedMessage(MessageKeys.game.player_died, player.getName()));
+	    player.getArena().getArenaMode().onDeath(player, event);
 	    return;
 	}
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     // INFO: Highest Priority, otherwise overridden by essentials
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-	
 	this.eventPlayer = event.getPlayer();
 	
 	if (this.game.isInGame(this.eventPlayer)) {
-	    final ZvPPlayer player = this.game.getPlayer(this.eventPlayer);
-	    
-	    event.setRespawnLocation(player.getArena().getArea().getNewRandomLocation(true));
-	    
-	    if (player.getArena().getConfig().isSpawnProtection()) {
-		player.setSpawnProtected(true);
-		player.sendMessage(MessageManager.getFormatedMessage(MessageKeys.game.spawn_protection_enabled, player.getArena().getConfig().getProtectionDuration()));
-		
-		Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
-		    
-		    @Override
-		    public void run() {
-			if (GameManager.getManager().isInGame(player.getPlayer())) {
-			    player.setSpawnProtected(false);
-			    player.sendMessage(MessageManager.getMessage(MessageKeys.game.spawn_protection_over));
-			}
-		    }
-		}, player.getArena().getConfig().getProtectionDuration() * 20L);
-	    }
+	    ZvPPlayer player = this.game.getPlayer(this.eventPlayer);
+	    player.getArena().getArenaMode().onRespawn(player, event);
 	    return;
 	}
     }
@@ -110,6 +81,6 @@ public class PlayerListener implements Listener {
 		}
 	    }
 	}
-	
     }
+    
 }

@@ -61,6 +61,13 @@ public class HungarianTranslation extends ListResourceBundle {
 	    {game.spawn_protection_over.name(), ChatColor.RED + "ATTENTION! "+ ChatColor.GREEN + "Spawnprotection is over!"},
 	    {game.won.name(), ChatColor.GOLD + "" + ChatColor.BOLD + "Gratulálunk!\n" + ChatColor.RESET + "" + ChatColor.DARK_GRAY + "Nyertél a zombik ellen.\nEnnyi " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Zombival harcoltál " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " körben és " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " szor haltál meg. A szerzett pénzed maradéka " + ChatColor.GOLD + "(%s)" + ChatColor.DARK_GRAY + " adományozva lett " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + "." + ChatColor.BOLD + "" + ChatColor.DARK_GREEN + " Köszönjük a játékot!"},
 	    {game.won_messages.name(), "Clonecraft házára;Pankix ebédjére;Új stadionokra;Új pályára;MesterMC Akadémiára"},
+	    {game.lost.name(), ChatColor.DARK_GRAY + "You lost the game!" + ChatColor.RED + " All your teammates are dead!" + ChatColor.DARK_GRAY + " You killed " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " Zombies in " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " waves! " + ChatColor.GREEN + "" + ChatColor.BOLD + "Good luck next time!"},
+	    {game.spectator_mode.name(), ChatColor.GOLD + "You are now in spectator mode. You can use the tools in your inventory."},
+	    {game.speedTool_description.name(), ChatColor.GREEN + "Use this tool to change your flying speed."},
+	    {game.speedTool_enabled.name(), ChatColor.GREEN + "You can travel faster now"},
+	    {game.speedTool_disabled.name(), ChatColor.RED + "You are now as fast as usuall"},
+	    {game.teleportTool_description.name(), ChatColor.GREEN + "Use this tool to teleport to living players."},
+	    {game.teleport_to.name(), ChatColor.DARK_GRAY + "Teleport to " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + "!"},
 	    
 	    {arena.stop_all.name(), ChatColor.DARK_GRAY + "Minden arena leallt!"},
 	    {arena.stop.name(), ChatColor.DARK_GRAY + "Arena " + ChatColor.GOLD + "%s" + ChatColor.DARK_GRAY + " leallt!"},
@@ -122,5 +129,6 @@ public class HungarianTranslation extends ListResourceBundle {
 	    {inventory.place_icon.name(), "Place Kit icon here!"},
 	    {inventory.select_category.name(), "Select Category"},
 	    {inventory.select_recordType.name(), "Select Statistic Type"},
+	    {inventory.living_players.name(), "Living Players"},
     };    
 }

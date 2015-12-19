@@ -19,6 +19,8 @@ import me.Aubli.ZvP.Game.ArenaParts.ArenaConfig;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaDifficulty;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaLobby;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaScore;
+import me.Aubli.ZvP.Game.Mode.ZvPMode;
+import me.Aubli.ZvP.Game.Mode.ZvPMode.ModeType;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Statistic.DataRecordManager;
 import me.Aubli.ZvP.Translation.MessageKeys.game;
@@ -42,10 +44,11 @@ import org.util.SortMap.SortMap;
 public class Arena implements Comparable<Arena> {
     
     private int arenaID;
-    private int TaskId;
     
     private int currentRound;
     private int currentWave;
+    
+    private ZvPMode arenaMode;
     
     private ArenaStatus status;
     private ArenaScore score;
@@ -76,6 +79,8 @@ public class Arena implements Comparable<Arena> {
 	this.difficultyTool = new ArenaDifficulty(this, difficulty);
 	this.config = new ArenaConfig(this, new File(arenaPath, getID() + ".yml"));
 	this.recordManager = new DataRecordManager();
+	
+	this.arenaMode = ModeType.STANDARD.getInstance(this);
     }
     
     public Arena(File arenaFile) throws Exception {
@@ -112,6 +117,7 @@ public class Arena implements Comparable<Arena> {
 	this.arenaArea = new ArenaArea(arenaWorld, this, cornerPoints, spawnPositions, this.rand);
 	
 	this.difficultyTool = new ArenaDifficulty(this, ArenaDifficultyLevel.valueOf(getConfig().getConfigValue("arena.Difficulty").toString()));
+	this.arenaMode = ModeType.valueOf(getConfig().getConfigValue("arena.Mode").toString()).getInstance(this);
 	this.players = new ArrayList<ZvPPlayer>();
 	this.preLobby = loadArenaLobby();
 	this.recordManager = new DataRecordManager();
@@ -183,10 +189,6 @@ public class Arena implements Comparable<Arena> {
 	updatePlayerBoards();
     }
     
-    public void setTaskID(int ID) {
-	this.TaskId = ID;
-    }
-    
     public int getID() {
 	return this.arenaID;
     }
@@ -207,10 +209,6 @@ public class Arena implements Comparable<Arena> {
 	return this.currentWave;
     }
     
-    public int getTaskId() {
-	return this.TaskId;
-    }
-    
     public ArenaScore getScore() {
 	return this.score;
     }
@@ -229,6 +227,14 @@ public class Arena implements Comparable<Arena> {
     
     public ArenaConfig getConfig() {
 	return this.config;
+    }
+    
+    public ZvPMode getArenaMode() {
+	return this.arenaMode;
+    }
+    
+    public ModeType getArenaModeType() {
+	return getArenaMode().getType();
     }
     
     public DataRecordManager getRecordManager() {
@@ -470,6 +476,7 @@ public class Arena implements Comparable<Arena> {
 		removePlayerBoards();
 		updatePlayerBoards();
 	    }
+	    this.arenaMode.onJoin(player, this);
 	    return true;
 	}
 	return false;
@@ -511,6 +518,7 @@ public class Arena implements Comparable<Arena> {
 		}
 	    }
 	    
+	    this.arenaMode.onLeave(player);
 	    return true;
 	}
 	return false;
@@ -545,14 +553,27 @@ public class Arena implements Comparable<Arena> {
 	getWorld().setMonsterSpawnLimit(0);
 	clearArena();
 	
-	this.TaskId = new GameRunnable(this, startDelay).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
-	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + getID() + " started a new Task!", true);
+	// this.TaskId = new GameRunnable(this, startDelay).runTaskTimer(ZvP.getInstance(), 0L, 20L).getTaskId();
+	this.arenaMode.start(startDelay);
+	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + getID() + " started a new Task in mode " + this.arenaMode.getName() + "!", true);
+    }
+    
+    public void reStart(int startDelay) {
+	getWorld().setDifficulty(Difficulty.NORMAL);
+	getWorld().setTime(15000L);
+	getWorld().setMonsterSpawnLimit(0);
+	clearArena();
+	
+	this.arenaMode = this.arenaMode.reInitialize();
+	this.arenaMode.start(startDelay);
+	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Arena " + getID() + " started a new Task in mode " + this.arenaMode.getName() + "!", true);
     }
     
     public void stop() {
 	
 	setStatus(ArenaStatus.STANDBY);
-	Bukkit.getScheduler().cancelTask(getTaskId());
+	this.arenaMode.stop();
+	this.arenaMode = this.arenaMode.reInitialize();
 	getRecordManager().transmitRecords();
 	
 	if (hasPreLobby()) {

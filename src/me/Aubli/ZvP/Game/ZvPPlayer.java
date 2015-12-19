@@ -92,6 +92,14 @@ public class ZvPPlayer {
 	return Bukkit.getPlayer(getUuid());
     }
     
+    public String getName() {
+	return getPlayer().getName();
+    }
+    
+    public GameMode getGameMode() {
+	return getPlayer().getGameMode();
+    }
+    
     public Arena getArena() {
 	return this.arena;
     }
@@ -106,10 +114,6 @@ public class ZvPPlayer {
     
     public Location getStartLocation() {
 	return this.startPosition;
-    }
-    
-    public String getName() {
-	return getPlayer().getName();
     }
     
     public ItemStack[] getPlayerContents() {
@@ -379,6 +383,7 @@ public class ZvPPlayer {
 	
 	getPlayer().teleport(this.lobby.getLocation());
 	getPlayer().setVelocity(new Vector(0, 0, 0));
+	getPlayer().setFlySpeed(0.2F);
 	
 	getPlayer().setHealth(20D);
 	getPlayer().setFoodLevel(20);
