@@ -151,7 +151,6 @@ public class ZvP extends JavaPlugin {
 		Metrics metrics = new Metrics(this);
 		
 		Graph localeUsed = metrics.createGraph("Language Locale usage");
-		
 		localeUsed.addPlotter(new Metrics.Plotter(ZvPConfig.getLocale().getDisplayLanguage(Locale.ENGLISH)) {
 		    
 		    @Override
@@ -160,7 +159,8 @@ public class ZvP extends JavaPlugin {
 		    }
 		});
 		
-		localeUsed.addPlotter(new Metrics.Plotter(getDescription().getVersion()) {
+		Graph versionUsed = metrics.createGraph("Plugin versions");
+		versionUsed.addPlotter(new Metrics.Plotter(getDescription().getVersion()) {
 		    
 		    @Override
 		    public int getValue() {
