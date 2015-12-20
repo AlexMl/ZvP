@@ -96,10 +96,7 @@ public class ZvPCommands implements CommandExecutor {
 		    }
 		}
 		
-		String pluginName = ZvP.getInstance().getDescription().getName();
-		String pluginVersion = ZvP.getInstance().getDescription().getVersion();
-		
-		sender.sendMessage("|--------------- " + pluginName + " v" + pluginVersion + " Console Commands ---------------|");
+		sender.sendMessage(getChatHeader("Console Commands"));
 		sender.sendMessage("| /zvp reload");
 		sender.sendMessage("| /zvp stop-all");
 		return true;
@@ -331,11 +328,7 @@ public class ZvPCommands implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("status")) {
 		    
 		    if (playerSender.hasPermission("zvp.status")) {
-			String pluginName = ZvP.getInstance().getDescription().getName();
-			String pluginVersion = ZvP.getInstance().getDescription().getVersion();
-			
-			playerSender.sendMessage("\n\n");
-			playerSender.sendMessage(ChatColor.GRAY + "|------------ " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Status" + ChatColor.GRAY + " ------------|");
+			playerSender.sendMessage(getChatHeader("Status"));
 			
 			String tableString = "A ID`Status`P/MaxP`Score`Living`Spawning`Killed\n";
 			
@@ -741,14 +734,10 @@ public class ZvPCommands implements CommandExecutor {
     
     private void list(Player player, String option) {
 	
-	String pluginName = ZvP.getInstance().getDescription().getName();
-	String pluginVersion = ZvP.getInstance().getDescription().getVersion();
-	
 	if (option.equalsIgnoreCase("signs") || option.equalsIgnoreCase("sign")) {
 	    if (SignManager.getManager().getSigns().length > 0) {
 		
-		player.sendMessage("\n\n");
-		player.sendMessage(ChatColor.GRAY + "|------------ " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Signs" + ChatColor.GRAY + " -------------|");
+		player.sendMessage(getChatHeader("Signs"));
 		String tableString = "Arena`Lobby`Type`ID`X`Y`Z`World\n";
 		
 		for (ISign sign : SignManager.getManager().getSigns()) {
@@ -761,8 +750,7 @@ public class ZvPCommands implements CommandExecutor {
 	} else if (option.equalsIgnoreCase("arenas") || option.equalsIgnoreCase("arena")) {
 	    if (this.game.getArenas().length > 0) {
 		
-		player.sendMessage("\n\n");
-		player.sendMessage(ChatColor.GRAY + "|----------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Arenas" + ChatColor.GRAY + " ------------|");
+		player.sendMessage(getChatHeader("Arenas"));
 		String tableString = "ID`Status`Min / Max`PreLobby`Mode`World\n";
 		
 		for (Arena a : this.game.getArenas()) {
@@ -775,8 +763,7 @@ public class ZvPCommands implements CommandExecutor {
 	} else if (option.equalsIgnoreCase("lobbys") || option.equalsIgnoreCase("lobby")) {
 	    if (this.game.getLobbys().length > 0) {
 		
-		player.sendMessage("\n\n");
-		player.sendMessage(ChatColor.GRAY + "|----------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Lobbys" + ChatColor.GRAY + " ------------|");
+		player.sendMessage(getChatHeader("Lobbies"));
 		String tableString = "ID`World\n";
 		
 		for (Lobby l : this.game.getLobbys()) {
@@ -789,8 +776,7 @@ public class ZvPCommands implements CommandExecutor {
 	} else if (option.equalsIgnoreCase("kits") || option.equalsIgnoreCase("kit")) {
 	    if (KitManager.getManager().getKits().length > 0) {
 		
-		player.sendMessage("\n\n");
-		player.sendMessage(ChatColor.GRAY + "|------------ " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Kits" + ChatColor.GRAY + " -------------|");
+		player.sendMessage(getChatHeader("Kits"));
 		String tableString = "Name`Price`Enabled`Permission\n";
 		
 		for (IZvPKit kit : KitManager.getManager().getKits()) {
@@ -801,8 +787,7 @@ public class ZvPCommands implements CommandExecutor {
 		player.sendMessage("\n" + text.getPage(0, false));
 	    }
 	} else {
-	    player.sendMessage("\n\n");
-	    player.sendMessage(ChatColor.GRAY + "|----------- " + ChatColor.YELLOW + "List command Syntax" + ChatColor.GRAY + " ------------|");
+	    player.sendMessage(getChatHeader("Command Syntax"));
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list signs");
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list arenas");
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list lobbys");
@@ -819,11 +804,7 @@ public class ZvPCommands implements CommandExecutor {
 		return;
 	    }
 	    
-	    String pluginName = ZvP.getInstance().getDescription().getName();
-	    String pluginVersion = ZvP.getInstance().getDescription().getVersion();
-	    
-	    player.sendMessage("\n\n");
-	    player.sendMessage(ChatColor.GRAY + "|--------- " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " Help: Page (" + page + "/2)" + ChatColor.GRAY + " ---------|");
+	    player.sendMessage(getChatHeader("Help: Page (" + page + "/2)"));
 	    player.sendMessage(ChatColor.GRAY + "| Use /zvp help [n] to get page [n] of help.\n|");
 	    
 	    switch (page) {
@@ -872,6 +853,32 @@ public class ZvPCommands implements CommandExecutor {
 	} catch (NumberFormatException e) {
 	    return -1;
 	}
+    }
+    
+    private String getChatHeader(String headerType) {
+	
+	String pluginName = ZvP.getInstance().getDescription().getName();
+	String pluginVersion = ZvP.getInstance().getDescription().getVersion();
+	String content = " " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " " + headerType + " ";
+	
+	int contentLength = ChatColor.stripColor(content).length();
+	int dashCount = (53 - contentLength - 2) / 2;// INFO: Magic numbers
+	
+	StringBuilder builder = new StringBuilder();
+	builder.append("\n\n");
+	builder.append(ChatColor.GRAY + "|");
+	
+	for (int i = 0; i < dashCount; i++) {
+	    builder.append('-');
+	}
+	builder.append(content);
+	builder.append(ChatColor.DARK_GRAY);
+	for (int i = 0; i < dashCount; i++) {
+	    builder.append('-');
+	}
+	
+	builder.append('|');
+	return builder.toString();
     }
     
     public static void commandDenied(Player player) {
