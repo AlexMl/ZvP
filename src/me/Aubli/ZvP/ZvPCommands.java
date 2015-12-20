@@ -329,6 +329,7 @@ public class ZvPCommands implements CommandExecutor {
 		    
 		    if (playerSender.hasPermission("zvp.status")) {
 			playerSender.sendMessage(getChatHeader("Status"));
+			playerSender.sendMessage(ChatColor.GRAY + " Use '" + ChatColor.RED + "/zvp status [A ID]" + ChatColor.GRAY + "' for more info");
 			
 			String tableString = "A ID`Status`P/MaxP`Score`Living`Spawning`Killed\n";
 			
@@ -420,6 +421,35 @@ public class ZvPCommands implements CommandExecutor {
 		    if (playerSender.hasPermission("zvp.status")) {
 			list(playerSender, args[1]);
 			return true;
+		    } else {
+			commandDenied(playerSender);
+			return true;
+		    }
+		}
+		
+		if (args[0].equalsIgnoreCase("status")) {
+		    if (playerSender.hasPermission("zvp.status")) {
+			Arena arena = GameManager.getManager().getArena(parseInt(args[1]));
+			
+			if (arena != null) {
+			    playerSender.sendMessage(getChatHeader("Arena " + arena.getID()));
+			    playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "ID: " + ChatColor.BLUE + arena.getID());
+			    playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "World: " + ChatColor.BLUE + arena.getWorld().getName());
+			    playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Prelobby: " + ChatColor.BLUE + arena.hasPreLobby());
+			    playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Status: " + ChatColor.BLUE + arena.getStatus().name());
+			    playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Waves: " + ChatColor.BLUE + arena.getCurrentWave() + ChatColor.GRAY + "/" + ChatColor.BLUE + arena.getConfig().getMaxWaves());
+			    playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Rounds: " + ChatColor.BLUE + arena.getCurrentRound() + ChatColor.GRAY + "/" + ChatColor.BLUE + arena.getConfig().getMaxRounds());
+			    playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Players(current/min/max): " + ChatColor.BLUE + arena.getPlayers().length + ChatColor.GRAY + "/" + ChatColor.BLUE + arena.getConfig().getMinPlayers() + ChatColor.GRAY + "/" + ChatColor.BLUE + arena.getConfig().getMaxPlayers());
+			    playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Difficulty: " + ChatColor.BLUE + arena.getDifficulty().name());
+			    playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Mode: " + ChatColor.BLUE + arena.getArenaMode().getName());
+			    playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Zombies(current/spawning/dead): " + ChatColor.BLUE + arena.getLivingZombieAmount() + ChatColor.GRAY + "/" + ChatColor.BLUE + arena.getSpawningZombies() + ChatColor.GRAY + "/" + ChatColor.BLUE + arena.getKilledZombies());
+			    playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Interaction Timeout: " + ChatColor.BLUE + EntityListener.getArenaInteractionTime(arena.getSpawningZombies()) + " s");
+			    playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "Seperated Scores: " + ChatColor.BLUE + ((ZvPConfig.getEnableEcon() && ZvPConfig.getIntegrateGame()) ? true : arena.getConfig().isSeparatedScores()));
+			    return true;
+			} else {
+			    playerSender.sendMessage(MessageManager.getMessage(error.arena_not_available));
+			    return true;
+			}
 		    } else {
 			commandDenied(playerSender);
 			return true;
