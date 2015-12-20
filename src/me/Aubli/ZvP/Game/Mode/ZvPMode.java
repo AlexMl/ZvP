@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -218,63 +219,67 @@ public abstract class ZvPMode extends BukkitRunnable {
      * @param damager
      *        the entity who damaged the player
      */
-    public void onPlayerDamage(ZvPPlayer player, Entity damager, EntityDamageByEntityEvent event) {
+    public void onPlayerDamage(ZvPPlayer player, Entity damager, EntityDamageEvent entityEvent) {
 	if (player.hasProtection()) { // If player has protection. Cancel all damage
-	    event.setCancelled(true);
+	    entityEvent.setCancelled(true);
 	    return;
 	}
 	
-	if (damager instanceof Player) { // Player vs Player actions
-	    ZvPPlayer attacker = GameManager.getManager().getPlayer((Player) event.getDamager());
+	if (entityEvent instanceof EntityDamageByEntityEvent) {
+	    EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) entityEvent;
 	    
-	    if (attacker != null) {
-		if (attacker.hasProtection()) {
-		    event.setCancelled(true);
-		    return;
-		}
+	    if (damager instanceof Player) { // Player vs Player actions
+		ZvPPlayer attacker = GameManager.getManager().getPlayer((Player) event.getDamager());
 		
-		if (attacker.getArena().equals(this.arena)) {
-		    
-		    if (!this.arena.getConfig().isPlayerVsPlayer()) {
+		if (attacker != null) {
+		    if (attacker.hasProtection()) {
 			event.setCancelled(true);
 			return;
 		    }
 		    
-		}
-	    }
-	}
-	
-	if (damager instanceof Projectile) { // player got hit by a projectile
-	    if (((Projectile) damager).getShooter() instanceof Player) { // projectile came from player
-		ZvPPlayer shooter = GameManager.getManager().getPlayer((Player) ((Projectile) damager).getShooter());
-		
-		if (shooter != null) {
-		    if (shooter.getArena().equals(this.arena)) {
+		    if (attacker.getArena().equals(this.arena)) {
 			
 			if (!this.arena.getConfig().isPlayerVsPlayer()) {
 			    event.setCancelled(true);
 			    return;
-			} else {
-			    event.setCancelled(false);
-			    return;
 			}
+			
 		    }
 		}
-		
-		// In case that other players shooting players from outside of the arena
-		event.setCancelled(true);
-		return;
-	    } else {
-		event.setCancelled(true);
-		return;
 	    }
 	    
-	}
-	
-	if (damager instanceof Zombie) {
-	    EntityListener.entityInteraction = true;
-	    if (this.arena.getConfig().isIncreaseDifficulty()) {
-		event.setDamage(event.getDamage() * this.arena.getDifficultyTool().getZombieStrengthFactor());
+	    if (damager instanceof Projectile) { // player got hit by a projectile
+		if (((Projectile) damager).getShooter() instanceof Player) { // projectile came from player
+		    ZvPPlayer shooter = GameManager.getManager().getPlayer((Player) ((Projectile) damager).getShooter());
+		    
+		    if (shooter != null) {
+			if (shooter.getArena().equals(this.arena)) {
+			    
+			    if (!this.arena.getConfig().isPlayerVsPlayer()) {
+				event.setCancelled(true);
+				return;
+			    } else {
+				event.setCancelled(false);
+				return;
+			    }
+			}
+		    }
+		    
+		    // In case that other players shooting players from outside of the arena
+		    event.setCancelled(true);
+		    return;
+		} else {
+		    event.setCancelled(true);
+		    return;
+		}
+		
+	    }
+	    
+	    if (damager instanceof Zombie) {
+		EntityListener.entityInteraction = true;
+		if (this.arena.getConfig().isIncreaseDifficulty()) {
+		    event.setDamage(event.getDamage() * this.arena.getDifficultyTool().getZombieStrengthFactor());
+		}
 	    }
 	}
     }

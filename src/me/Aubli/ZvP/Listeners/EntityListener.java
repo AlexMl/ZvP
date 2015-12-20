@@ -15,6 +15,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scheduler.BukkitTask;
@@ -30,7 +31,18 @@ public class EntityListener implements Listener {
     public static boolean entityInteraction = true;
     
     @EventHandler
-    public void onDamage(EntityDamageByEntityEvent event) {
+    public void onDamage(EntityDamageEvent event) {
+	if (event.getEntity() instanceof Player) { // Player is victim
+	    ZvPPlayer victim = this.game.getPlayer((Player) event.getEntity());
+	    
+	    if (victim != null) {
+		victim.getArena().getArenaMode().onPlayerDamage(victim, null, event);
+	    }
+	}
+    }
+    
+    @EventHandler
+    public void onEntityDamage(EntityDamageByEntityEvent event) {
 	
 	if (event.getEntity() instanceof Player) { // Player is victim
 	    ZvPPlayer victim = this.game.getPlayer((Player) event.getEntity());
