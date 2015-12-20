@@ -352,10 +352,7 @@ public class ZvPCommands implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("list")) {
 		    
 		    if (playerSender.hasPermission("zvp.status")) {
-			list(playerSender, "arenas");
-			list(playerSender, "lobbys");
-			list(playerSender, "signs");
-			list(playerSender, "kits");
+			list(playerSender, "");
 			return true;
 		    } else {
 			commandDenied(playerSender);
@@ -812,7 +809,7 @@ public class ZvPCommands implements CommandExecutor {
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp help [page]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp reload");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp update");
-		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list");
+		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list [arena|lobby|sign|kit]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp status");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp leave");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp join [Arena-ID]");
@@ -862,7 +859,7 @@ public class ZvPCommands implements CommandExecutor {
 	String content = " " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " " + headerType + " ";
 	
 	int contentLength = ChatColor.stripColor(content).length();
-	int dashCount = (53 - contentLength - 2) / 2;// INFO: Magic numbers
+	int dashCount = (int) Math.ceil((53 - contentLength - 2) / 2.0);// INFO: Magic numbers
 	
 	StringBuilder builder = new StringBuilder();
 	builder.append("\n\n");
@@ -872,7 +869,7 @@ public class ZvPCommands implements CommandExecutor {
 	    builder.append('-');
 	}
 	builder.append(content);
-	builder.append(ChatColor.DARK_GRAY);
+	builder.append(ChatColor.GRAY);
 	for (int i = 0; i < dashCount; i++) {
 	    builder.append('-');
 	}
