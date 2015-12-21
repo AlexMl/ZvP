@@ -247,6 +247,15 @@ public class SignManager {
 	return null;
     }
     
+    public ISign getAttachedSign(Location signBlock) {
+	for (ISign sign : getSigns()) {
+	    if (sign.getAttachedBlock().getLocation().equals(signBlock)) {
+		return sign;
+	    }
+	}
+	return null;
+    }
+    
     public ISign[] getSigns() {
 	ISign[] signArray = new ISign[this.signs.size()];
 	
@@ -306,6 +315,10 @@ public class SignManager {
 	    }
 	}
 	return false;
+    }
+    
+    public boolean isSignBlock(Location loc) {
+	return getAttachedSign(loc) != null;
     }
     
     public ISign createSign(SignType type, Location signLoc, Arena arena, Lobby lobby) {

@@ -9,6 +9,7 @@ import me.Aubli.ZvP.Sign.SignManager.SignType;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 
 
 public interface ISign {
@@ -22,6 +23,8 @@ public interface ISign {
     public World getWorld();
     
     public Location getLocation();
+    
+    public Block getAttachedBlock();
     
     public SignType getType();
     

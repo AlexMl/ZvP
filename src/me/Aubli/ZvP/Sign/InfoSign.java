@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -118,6 +119,12 @@ public class InfoSign implements ISign, Comparable<ISign> {
     @Override
     public Location getLocation() {
 	return this.signLoc.clone();
+    }
+    
+    @Override
+    public Block getAttachedBlock() {
+	org.bukkit.material.Sign signData = (org.bukkit.material.Sign) this.sign.getData();
+	return this.sign.getBlock().getRelative(signData.getAttachedFace());
     }
     
     @Override
