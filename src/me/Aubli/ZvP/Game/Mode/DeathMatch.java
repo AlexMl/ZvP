@@ -297,7 +297,7 @@ public class DeathMatch extends ZvPMode {
 			fireFirework();
 			
 			// TODO change message. Econ doesnt make much sense here
-			double money = getArena().getScore().getScore(null);
+			double money = getArena().getScore().getScoreDiffSum();
 			int deaths = 0;
 			
 			for (ZvPPlayer p : getArena().getPlayers()) {

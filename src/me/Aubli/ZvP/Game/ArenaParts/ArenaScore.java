@@ -20,6 +20,7 @@ public class ArenaScore {
     private double score;
     
     private HashMap<ZvPPlayer, Double> playerScore;
+    private HashMap<ZvPPlayer, Double> originScore;
     
     private final boolean separated;
     private final boolean vaultEcon;
@@ -39,6 +40,7 @@ public class ArenaScore {
     
     private void initMap() {
 	this.playerScore = new HashMap<ZvPPlayer, Double>();
+	this.originScore = new HashMap<ZvPPlayer, Double>();
 	
 	for (ZvPPlayer player : getArena().getPlayers()) {
 	    initPlayer(player);
@@ -48,9 +50,11 @@ public class ArenaScore {
     private void initPlayer(ZvPPlayer player) {
 	if (useVaultEconomy()) {
 	    this.playerScore.put(player, ZvP.getEconProvider().getBalance(player.getPlayer()));
+	    this.originScore.put(player, ZvP.getEconProvider().getBalance(player.getPlayer()));
 	    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Finished init for " + player.getName() + ": " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")), true, true);
 	} else {
 	    this.playerScore.put(player, 0.0);
+	    this.originScore.put(player, 0.0);
 	    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Finished init for " + player.getName() + ": " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")), true, true);
 	}
     }
@@ -73,8 +77,21 @@ public class ArenaScore {
 	} else if (isSeparated() && player != null) {
 	    return this.playerScore.get(player);
 	} else {
-	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while returning score for Arena:" + this.arena.getID() + "; separated:" + isSeparated() + " player==null:" + (player == null), true, true);
+	    ZvP.getPluginLogger().log(this.getClass(), Level.WARNING, "Error while returning score for Arena:" + this.arena.getID() + "; separated:" + isSeparated() + " player==null:" + (player == null), true, false);
 	    return 0.0;
+	}
+    }
+    
+    public double getScoreDiffSum() {
+	if (isSeparated()) {
+	    double money = 0;
+	    
+	    for (Entry<ZvPPlayer, Double> entry : this.playerScore.entrySet()) {
+		money += (entry.getValue() - this.originScore.get(entry.getKey()));
+	    }
+	    return money;
+	} else {
+	    return this.score;
 	}
     }
     
