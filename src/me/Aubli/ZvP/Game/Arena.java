@@ -447,8 +447,7 @@ public class Arena implements Comparable<Arena> {
 		player.getReady();
 	    } catch (Exception e) {
 		ZvP.getPluginLogger().log(this.getClass(), Level.INFO, e.getMessage(), true, false, e);
-		addPlayer(player);
-		return false;
+		return addPlayer(player);
 	    }
 	    
 	    if (!hasPreLobby()) {
