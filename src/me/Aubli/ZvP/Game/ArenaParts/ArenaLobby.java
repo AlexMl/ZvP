@@ -11,6 +11,7 @@ import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.Game.Arena;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.ZvPPlayer;
+import me.Aubli.ZvP.Translation.MessageKeys;
 import me.Aubli.ZvP.Translation.MessageKeys.game;
 import me.Aubli.ZvP.Translation.MessageManager;
 
@@ -193,7 +194,7 @@ public class ArenaLobby {
 	return;
     }
     
-    private void startPreLobbyTask(ZvPPlayer player) {
+    private void startPreLobbyTask(final ZvPPlayer player) {
 	
 	if (this.task == null) {
 	    this.task = new BukkitRunnable() {
@@ -232,6 +233,16 @@ public class ArenaLobby {
 	    this.task.runTaskTimer(ZvP.getInstance(), 0L, 1L);
 	} else if (getArena().getPlayers().length >= getArena().getConfig().getMinPlayers() && getArena().isRunning()) { // Player joined PreLobby and Arena is already running
 	
+	    player.sendMessage(MessageManager.getFormatedMessage(MessageKeys.game.spawn_protection_enabled, player.getArena().getConfig().getProtectionDuration()));
+	    Bukkit.getScheduler().runTaskLater(ZvP.getInstance(), new Runnable() {
+		
+		@Override
+		public void run() {
+		    player.setSpawnProtected(false);
+		    player.sendMessage(MessageManager.getMessage(MessageKeys.game.spawn_protection_over));
+		}
+	    }, this.arena.getConfig().getProtectionDuration() * 20L);
+	    
 	    boolean success = getArena().addPlayer(player);
 	    removePlayer(player);
 	    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Added player " + player.getName() + " to running game! Arena returned: " + (success ? "success" : "failure").toUpperCase() + "!", true);
