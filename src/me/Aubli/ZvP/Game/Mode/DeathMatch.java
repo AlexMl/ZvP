@@ -296,7 +296,6 @@ public class DeathMatch extends ZvPMode {
 		    } else { // End of Game
 			fireFirework();
 			
-			// TODO change message. Econ doesnt make much sense here
 			double money = getArena().getScore().getScoreDiffSum();
 			int deaths = 0;
 			

@@ -171,8 +171,7 @@ public class StandardMode extends ZvPMode {
 		    } else { // End of Game
 			fireFirework();
 			
-			int kills = getArena().getKilledZombies();
-			double money = getArena().getScore().getScore(null);
+			double money = getArena().getScore().getScoreDiffSum();
 			int deaths = 0;
 			
 			for (ZvPPlayer p : getArena().getPlayers()) {
@@ -181,8 +180,7 @@ public class StandardMode extends ZvPMode {
 			
 			String[] donP = MessageManager.getMessage(game.won_messages).split(";");
 			int index = this.rand.nextInt(donP.length);
-			String endMessage = MessageManager.getFormatedMessage(game.won, kills, (getArena().getConfig().getMaxRounds() * getArena().getConfig().getMaxWaves()), deaths, Math.round(money), donP[index]);
-			// TODO change message. Econ doesnt make much sense here
+			String endMessage = MessageManager.getFormatedMessage(game.won, getArena().getKilledZombies(), (getArena().getConfig().getMaxRounds() * getArena().getConfig().getMaxWaves()), deaths, Math.round(money), donP[index]);
 			getArena().sendMessage(endMessage);
 			this.cancel();
 			return;
