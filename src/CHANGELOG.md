@@ -1,6 +1,10 @@
 Changelog:
 
 ---------------------------------------
+ZvP Version 2.9.1 - 23.12.2015
+- [Fixed] Bug in arena creation
+
+---------------------------------------
 ZvP Version 2.9.0 - 23.12.2015
 - [Added] ZvP game statistics
 - [Added] Statistic signs
