@@ -56,6 +56,24 @@ public class DeathMatch extends ZvPMode {
     }
     
     @Override
+    public ZvPPlayer[] getLivingPlayers() {
+	
+	List<ZvPPlayer> livingPlayers = new ArrayList<ZvPPlayer>();
+	
+	for (ZvPPlayer p : getArena().getPlayers()) {
+	    if (p.getGameMode() == GameMode.SURVIVAL) {
+		livingPlayers.add(p);
+	    }
+	}
+	
+	ZvPPlayer[] playerArray = new ZvPPlayer[livingPlayers.size()];
+	for (ZvPPlayer p : livingPlayers) {
+	    playerArray[livingPlayers.indexOf(p)] = p;
+	}
+	return playerArray;
+    }
+    
+    @Override
     public ZvPMode reInitialize() {
 	return new DeathMatch(getArena());
     }
@@ -123,7 +141,7 @@ public class DeathMatch extends ZvPMode {
 	if (getLivingPlayers().length > 0) {
 	    
 	    for (Zombie z : getArena().getLivingZombies()) {
-		z.setTarget(getLivingPlayers()[this.rand.nextInt(getLivingPlayers().length)].getPlayer());
+		z.setTarget(getArena().getRandomPlayer().getPlayer());
 	    }
 	    
 	    player.getPlayer().getInventory().addItem(speedToolEnable, playerCompass);
@@ -328,22 +346,5 @@ public class DeathMatch extends ZvPMode {
 	
 	getArena().getWorld().setTime(15000L);
 	this.seconds++;
-    }
-    
-    public ZvPPlayer[] getLivingPlayers() {
-	
-	List<ZvPPlayer> livingPlayers = new ArrayList<ZvPPlayer>();
-	
-	for (ZvPPlayer p : getArena().getPlayers()) {
-	    if (p.getGameMode() == GameMode.SURVIVAL) {
-		livingPlayers.add(p);
-	    }
-	}
-	
-	ZvPPlayer[] playerArray = new ZvPPlayer[livingPlayers.size()];
-	for (ZvPPlayer p : livingPlayers) {
-	    playerArray[livingPlayers.indexOf(p)] = p;
-	}
-	return playerArray;
     }
 }

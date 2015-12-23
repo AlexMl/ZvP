@@ -83,6 +83,8 @@ public abstract class ZvPMode extends BukkitRunnable {
     
     public abstract ModeType getType();
     
+    public abstract ZvPPlayer[] getLivingPlayers();
+    
     public void start(int startDelay) {
 	this.startDelay = startDelay;
 	this.taskID = this.runTaskTimer(ZvP.getInstance(), 0L, 1 * 20L).getTaskId();

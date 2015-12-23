@@ -31,6 +31,11 @@ public class StandardMode extends ZvPMode {
     }
     
     @Override
+    public ZvPPlayer[] getLivingPlayers() {
+	return getArena().getPlayers();
+    }
+    
+    @Override
     public ZvPMode reInitialize() {
 	return new StandardMode(getArena());
     }
