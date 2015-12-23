@@ -72,7 +72,7 @@ public class DatabaseManager implements DatabaseCallback {
 		    }
 		}
 	    }, 20L);
-	    ZvP.getPluginLogger().log(getClass(), Level.FINER, "Initialized connection to " + this.conn.getMetaData().getDatabaseProductName() + " " + this.conn.getMetaData().getDatabaseProductVersion() + " using " + this.conn.getMetaData().getDriverName() + " " + this.conn.getMetaData().getDriverVersion() + "!", true, true);
+	    ZvP.getPluginLogger().log(getClass(), Level.FINE, "Initialized connection to " + this.conn.getMetaData().getDatabaseProductName() + " " + this.conn.getMetaData().getDatabaseProductVersion() + " using " + this.conn.getMetaData().getDriverName() + " " + this.conn.getMetaData().getDriverVersion() + "!", true, true);
 	} catch (SQLException e) {
 	    ZvP.getPluginLogger().log(getClass(), Level.SEVERE, "Can not initialize connection. SQL error:", true, false);
 	} catch (ClassNotFoundException e) {
@@ -161,8 +161,7 @@ public class DatabaseManager implements DatabaseCallback {
     public void handleRecord(DataRecord... records) {
 	List<DataRecord> insertRecords = new LinkedList<DataRecord>();
 	
-	System.out.println("isTimed? " + isTimedStatistics());
-	System.out.println("dataMapSize: " + this.dataMap.size());
+	ZvP.getPluginLogger().log(getClass(), Level.FINE, "Handling Records. isTimed? " + isTimedStatistics() + ", dataMapSize: " + this.dataMap.size(), true, true);
 	
 	try {
 	    if (isTimedStatistics()) {
@@ -187,7 +186,7 @@ public class DatabaseManager implements DatabaseCallback {
 	    for (DataRecord record : records) {
 		DataRecord playerRecord = getRecord(false, record.getPlayerUUID());
 		
-		System.out.println(record.getPlayerUUID() + " has old Record? " + (playerRecord != null));
+		ZvP.getPluginLogger().log(getClass(), Level.FINEST, record.getPlayerUUID() + " has old Record? " + (playerRecord != null), true, true);
 		
 		if (playerRecord == null) {
 		    insertRecords.add(record);
@@ -261,7 +260,7 @@ public class DatabaseManager implements DatabaseCallback {
     }
     
     private void updateMap(String tableName, long delay) {
-	System.out.println("updating from " + tableName + " with " + delay + " ticks delay");
+	// System.out.println("updating from " + tableName + " with " + delay + " ticks delay");
 	Bukkit.getScheduler().runTaskLaterAsynchronously(ZvP.getInstance(), new DatabaseReader(this, this.conn, tableName), delay);
     }
     
@@ -306,13 +305,13 @@ public class DatabaseManager implements DatabaseCallback {
 	@Override
 	public void run() {
 	    try {
-		System.out.println("write exe");
+		// System.out.println("write exe");
 		Statement s = this.conn.createStatement();
 		for (String stmt : this.sqlStatement) {
 		    s.executeUpdate(stmt);
 		}
 		s.close();
-		System.out.println("write finish");
+		// System.out.println("write finish");
 	    } catch (SQLException e) {
 		this.callback.handleException(e, Arrays.toString(this.sqlStatement));
 	    }
@@ -336,7 +335,7 @@ public class DatabaseManager implements DatabaseCallback {
 	    try {
 		Statement statement = this.conn.createStatement();
 		ResultSet result = statement.executeQuery("SELECT * FROM " + this.table + ";");
-		System.out.println("read exe from " + this.table);
+		// System.out.println("read exe from " + this.table);
 		while (result.next()) {
 		    UUID playerUUID = UUID.fromString(result.getString(1));
 		    int kills = result.getInt(2);
@@ -347,7 +346,7 @@ public class DatabaseManager implements DatabaseCallback {
 		    
 		    this.callback.onRecordTransmission(new DataRecord(playerUUID, kills, maxKills, deaths, leftMoney, timestamp), this.table);
 		}
-		System.out.println("read finished from " + this.table);
+		// System.out.println("read finished from " + this.table);
 		statement.close();
 		result.close();
 		this.callback.onTransmissionEnd();
