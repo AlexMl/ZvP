@@ -1,10 +1,16 @@
 Changelog:
 
 ---------------------------------------
-ZvP Version 2.9.0 - 
+ZvP Version 2.9.0 - 23.12.2015
+- [Added] ZvP game statistics
+- [Added] Statistic signs
+- [Added] time related statistics
+- [Added] ZvP GameModes (Standard/Deathmatch)
+- [Added] Items have sell and buy price
+- [Fixed] PreLobby join message only one time
+- [Fixed] Join during game bug
 
 ---------------------------------------
-
 ZvP Version 2.8.9 - 27.10.2015
 - [Fixed] Error in shop sign
 
