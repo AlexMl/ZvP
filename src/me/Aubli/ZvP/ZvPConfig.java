@@ -90,7 +90,7 @@ public class ZvPConfig {
 	
 	getConfig().addDefault("zombies.default_spawnRate", 8);
 	
-	getConfig().addDefault("stats.enable_game_statistics", false);
+	getConfig().addDefault("stats.enable_game_statistics", true);
 	getConfig().addDefault("stats.useDatabase", true);
 	getConfig().addDefault("stats.db_host", "localhost");
 	getConfig().addDefault("stats.db_port", 3306);
@@ -168,7 +168,6 @@ public class ZvPConfig {
 	
 	modifyChat = getConfig().getBoolean("chat.modifyChat", true);
 	commandWhiteList = getConfig().getStringList("chat.commandWhitelist");
-	// this.getConfig().addDefault("config.misc.changeToSpectatorAfterDeath", false);
     }
     
     public static void reloadConfig() {
