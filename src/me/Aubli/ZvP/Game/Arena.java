@@ -246,7 +246,7 @@ public class Arena implements Comparable<Arena> {
     }
     
     public ZvPPlayer getRandomPlayer() {
-	return getPlayers()[this.rand.nextInt(getPlayers().length)];
+	return getArenaMode().getLivingPlayers()[this.rand.nextInt(getArenaMode().getLivingPlayers().length)];
     }
     
     public ZvPPlayer[] getPlayers() {
