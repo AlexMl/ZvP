@@ -77,10 +77,10 @@ public class Arena implements Comparable<Arena> {
 	
 	this.players = new ArrayList<ZvPPlayer>();
 	this.difficultyTool = new ArenaDifficulty(this, ArenaDifficultyLevel.NORMAL);
-	this.config = new ArenaConfig(this, new File(arenaPath, getID() + ".yml"));
-	this.recordManager = new DataRecordManager();
-	
 	this.arenaMode = ModeType.STANDARD.getInstance(this);
+	this.config = new ArenaConfig(this, new File(arenaPath, getID() + ".yml"));
+	
+	this.recordManager = new DataRecordManager();
     }
     
     public Arena(File arenaFile) throws Exception {
