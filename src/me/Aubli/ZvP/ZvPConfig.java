@@ -91,7 +91,7 @@ public class ZvPConfig {
 	getConfig().addDefault("zombies.default_spawnRate", 8);
 	
 	getConfig().addDefault("stats.enable_game_statistics", true);
-	getConfig().addDefault("stats.useDatabase", true);
+	getConfig().addDefault("stats.useDatabase", false);
 	getConfig().addDefault("stats.db_host", "localhost");
 	getConfig().addDefault("stats.db_port", 3306);
 	getConfig().addDefault("stats.db_protocol", "mysql");
