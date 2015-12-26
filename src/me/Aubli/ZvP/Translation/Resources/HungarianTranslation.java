@@ -1,8 +1,8 @@
 package me.Aubli.ZvP.Translation.Resources;
 
-import java.util.ListResourceBundle;
 import java.util.Locale;
 
+import me.Aubli.ZvP.Translation.LanguageBundle;
 import me.Aubli.ZvP.Translation.MessageKeys.arena;
 import me.Aubli.ZvP.Translation.MessageKeys.category;
 import me.Aubli.ZvP.Translation.MessageKeys.commands;
@@ -17,11 +17,16 @@ import me.Aubli.ZvP.Translation.MessageKeys.status;
 import org.bukkit.ChatColor;
 
 
-public class HungarianTranslation extends ListResourceBundle {
+public class HungarianTranslation extends LanguageBundle {
     
     @Override
     public Locale getLocale() {
 	return new Locale("hu");
+    }
+    
+    @Override
+    public String getAuthor() {
+	return "Norbert Kenéz";
     }
     
     @Override
