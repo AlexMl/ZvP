@@ -128,7 +128,7 @@ public class MessageManager {
     private Map<String, String> getTranslation() {
 	
 	Map<String, String> translation = new HashMap<String, String>();
-	ResourceBundle defaultBundle = ResourceBundle.getBundle("me.Aubli.ZvP.Translation.DefaultTranslation");
+	ResourceBundle defaultBundle = ResourceBundle.getBundle("me.Aubli.ZvP.Translation.Resources.DefaultTranslation");
 	
 	for (String enumKey : defaultBundle.keySet()) {
 	    String key = getEnumName(enumKey) + ":" + enumKey;
