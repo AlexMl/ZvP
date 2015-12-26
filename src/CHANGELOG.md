@@ -1,6 +1,10 @@
 Changelog:
 
 ---------------------------------------
+ZvP Version 2.9.2 - 26.12.2015
+- [Added] Spanish translation by zuhir
+
+---------------------------------------
 ZvP Version 2.9.1 - 23.12.2015
 - [Fixed] Bug in arena creation
 
