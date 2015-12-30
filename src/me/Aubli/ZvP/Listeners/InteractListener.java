@@ -3,6 +3,7 @@ package me.Aubli.ZvP.Listeners;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPCommands;
@@ -105,7 +106,10 @@ public class InteractListener implements Listener {
 	}
 	
 	if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+	    ZvP.getPluginLogger().log(getClass(), Level.ALL, "action == RIGHT_CLICK_BLOCK; isSign:" + this.sm.isZVPSign(event.getClickedBlock().getLocation()), true, true);
 	    if (this.sm.isZVPSign(event.getClickedBlock().getLocation())) {
+		ZvP.getPluginLogger().log(getClass(), Level.ALL, "signType:" + this.sm.getType(event.getClickedBlock().getLocation()), true, true);
+		
 		if (this.sm.getType(event.getClickedBlock().getLocation()) == SignType.INTERACT_SIGN) { // Player join per Sign
 		    if (!GameManager.getManager().isInGame(eventPlayer)) {
 			if (eventPlayer.hasPermission("zvp.play")) {
@@ -140,40 +144,52 @@ public class InteractListener implements Listener {
 			return;
 		    }
 		} else if (this.sm.getType(event.getClickedBlock().getLocation()) == SignType.SHOP_SIGN) { // player clicked shop sign
+		    ZvP.getPluginLogger().log(getClass(), Level.ALL, "InGame:" + GameManager.getManager().isInGame(eventPlayer) + " hasPerm:" + eventPlayer.hasPermission("zvp.play"), true, true);
+		    
 		    if (GameManager.getManager().isInGame(eventPlayer)) {
-			if (eventPlayer.hasPermission("zvp.play")) {
-			    ZvPPlayer player = GameManager.getManager().getPlayer(eventPlayer);
-			    
-			    if (player.getArena().getArenaMode().allowPlayerInteraction(player)) {
-				event.setCancelled(true);
+			try {
+			    if (eventPlayer.hasPermission("zvp.play")) {
+				ZvPPlayer player = GameManager.getManager().getPlayer(eventPlayer);
+				ZvP.getPluginLogger().log(getClass(), Level.ALL, "zvpplayer==null:" + (player == null) + " allowInteraction:" + player.getArena().getArenaMode().allowPlayerInteraction(player), true, true);
 				
-				ShopSign shopSign = (ShopSign) this.sm.getSign(event.getClickedBlock().getLocation());
-				ItemCategory cat = shopSign.getCategory();
-				
-				Inventory shopInv = Bukkit.createInventory(eventPlayer, ((int) Math.ceil(ShopManager.getManager().getItems(cat).size() / 9.0)) * 9, "Items: " + cat.toString());
-				
-				for (ShopItem shopItem : ShopManager.getManager().getItems(cat)) {
+				if (player.getArena().getArenaMode().allowPlayerInteraction(player)) {
+				    event.setCancelled(true);
 				    
-				    ItemStack item = shopItem.getItem();
-				    ItemMeta meta = item.getItemMeta();
-				    List<String> lore = new ArrayList<String>();
+				    ShopSign shopSign = (ShopSign) this.sm.getSign(event.getClickedBlock().getLocation());
+				    ItemCategory cat = shopSign.getCategory();
 				    
-				    lore.add("Category: " + shopItem.getCategory().toString());
-				    lore.add(player.getArena().getScore().getScore(player) >= shopItem.getBuyPrice() ? (ChatColor.GREEN + "Cost: " + shopItem.getBuyPrice()) : (ChatColor.RED + "Cost: " + shopItem.getBuyPrice()));
-				    lore.add(ChatColor.GOLD + "Refund: " + shopItem.getSellPrice());
+				    Inventory shopInv = Bukkit.createInventory(eventPlayer, ((int) Math.ceil(ShopManager.getManager().getItems(cat).size() / 9.0)) * 9, "Items: " + cat.toString());
 				    
-				    meta.setLore(lore);
-				    item.setItemMeta(meta);
-				    shopInv.addItem(item);
+				    for (ShopItem shopItem : ShopManager.getManager().getItems(cat)) {
+					
+					ItemStack item = shopItem.getItem();
+					ItemMeta meta = item.getItemMeta();
+					List<String> lore = new ArrayList<String>();
+					
+					lore.add("Category: " + shopItem.getCategory().toString());
+					lore.add(player.getArena().getScore().getScore(player) >= shopItem.getBuyPrice() ? (ChatColor.GREEN + "Cost: " + shopItem.getBuyPrice()) : (ChatColor.RED + "Cost: " + shopItem.getBuyPrice()));
+					lore.add(ChatColor.GOLD + "Refund: " + shopItem.getSellPrice());
+					
+					meta.setLore(lore);
+					item.setItemMeta(meta);
+					shopInv.addItem(item);
+				    }
+				    
+				    ZvP.getPluginLogger().log(getClass(), Level.ALL, "shopsign==null:" + (shopSign == null) + " cat==null:" + (shopSign.getCategory() == null) + " cat:" + shopSign.getCategory(), true, true);
+				    
+				    eventPlayer.closeInventory();
+				    eventPlayer.openInventory(shopInv);
+				    ZvP.getPluginLogger().log(getClass(), Level.ALL, "InvSize:" + shopInv.getSize() + " shopInvTitle:" + shopInv.getTitle() + " playerOpenInv:" + eventPlayer.getOpenInventory().getTitle(), true, true);
+				    
+				    return;
 				}
-				eventPlayer.closeInventory();
-				eventPlayer.openInventory(shopInv);
+			    } else {
+				event.setCancelled(true);
+				ZvPCommands.commandDenied(eventPlayer);
 				return;
 			    }
-			} else {
-			    event.setCancelled(true);
-			    ZvPCommands.commandDenied(eventPlayer);
-			    return;
+			} catch (Exception e) {
+			    ZvP.getPluginLogger().log(getClass(), Level.ALL, "Error in shop interaction: " + e.getMessage(), true, true, e);
 			}
 		    } else {
 			event.setCancelled(true);
