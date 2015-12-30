@@ -106,7 +106,7 @@ public class InteractListener implements Listener {
 	}
 	
 	if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-	    ZvP.getPluginLogger().log(getClass(), Level.ALL, "action == RIGHT_CLICK_BLOCK; isSign:" + this.sm.isZVPSign(event.getClickedBlock().getLocation()), true, true);
+	    ZvP.getPluginLogger().log(getClass(), Level.ALL, "action == RIGHT_CLICK_BLOCK; Block:" + event.getClickedBlock().getType() + " isSign:" + this.sm.isZVPSign(event.getClickedBlock().getLocation()), true, true);
 	    if (this.sm.isZVPSign(event.getClickedBlock().getLocation())) {
 		ZvP.getPluginLogger().log(getClass(), Level.ALL, "signType:" + this.sm.getType(event.getClickedBlock().getLocation()), true, true);
 		
