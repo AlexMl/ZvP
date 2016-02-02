@@ -175,6 +175,14 @@ public class ZvPCommands implements CommandExecutor {
 		    return true;
 		}
 		
+		if (args[0].equalsIgnoreCase("spawn")) {
+		    int amount = Integer.parseInt(args[1]);
+		    
+		    ZvPPlayer player = this.game.getPlayer(playerSender);
+		    player.getArena().spawnZombies(amount);
+		    return true;
+		}
+		
 		if (args[0].equalsIgnoreCase("kit")) {
 		    
 		    String kit = args[1];
