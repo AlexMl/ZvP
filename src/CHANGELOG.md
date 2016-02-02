@@ -1,6 +1,10 @@
 Changelog:
 
 ---------------------------------------
+ZvP Version 2.9.3 - 02.02.2016
+- [Fixed] Zombie Spawn bug
+
+---------------------------------------
 ZvP Version 2.9.2 - 26.12.2015
 - [Added] Spanish translation by zuhir
 
