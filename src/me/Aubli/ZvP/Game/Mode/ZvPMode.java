@@ -35,7 +35,8 @@ public abstract class ZvPMode extends BukkitRunnable {
     
     public enum ModeType {
 	STANDARD,
-	DEATHMATCH, ;
+	DEATHMATCH,
+	DEV, ;
 	
 	public ZvPMode getInstance(Arena arena) {
 	    switch (this) {
@@ -44,6 +45,9 @@ public abstract class ZvPMode extends BukkitRunnable {
 		    
 		case DEATHMATCH:
 		    return new DeathMatch(arena);
+		    
+		case DEV:
+		    return new DevMode(arena);
 		    
 		default:
 		    throw new IllegalArgumentException("Not supported ZvPMode: " + this.name());
