@@ -188,8 +188,8 @@ public class ArenaArea {
 	    
 	    if (contains(x, z)) {
 		int highestY = getWorld().getHighestBlockYAt(x, z) - 1;
-		// System.out.println("max: " + max.getBlockY() + " min: " + min.getBlockY() + " hby@: " + highestY);
-		if (highestY >= min.getBlockY() && highestY <= max.getBlockY()) {
+		// ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "max: " + max.getBlockY() + " min: " + min.getBlockY() + " hby@: " + highestY, true, true);
+		if (highestY >= min.getBlockY() && highestY < max.getBlockY()) {
 		    // If highest y is between min and max, go for it
 		    // ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "Highest point is between min and max", true, true);
 		    
@@ -208,12 +208,17 @@ public class ArenaArea {
 		} else {
 		    // iterate over y from min to max to find a perfect y
 		    // not very performant but needed in worst case (above doesnt match)
-		    // ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "Iterate from 0 - " + (max.getBlockY() - min.getBlockY()), true, true);
+		    // ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "Iterate from 0 - " + (max.getBlockY() - min.getBlockY()) + " @" + x + "," + z, true, true);
 		    
 		    ArrayList<Integer> yList = new ArrayList<Integer>();
-		    for (int iy = 0; iy < (max.getBlockY() - min.getBlockY()); iy++) {
-			if (isValidLocation(min.clone().add(0, iy, 0))) {
-			    yList.add(min.getBlockY() + iy);
+		    
+		    int range = max.getBlockY() - min.getBlockY();
+		    Location tempMin = new Location(getWorld(), x, min.getBlockY(), z);
+		    
+		    for (int iy = 0; iy < range; iy++) {
+			if (isValidLocation(tempMin.clone().add(0, iy, 0))) {
+			    yList.add(tempMin.getBlockY() + iy);
+			    // ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "added " + yList.get(yList.size() - 1) + " to y-list" , true, true);
 			}
 		    }
 		    if (yList.isEmpty()) {
@@ -239,7 +244,10 @@ public class ArenaArea {
     private boolean isValidLocation(Location location) {
 	
 	if (contains(location)) {
+	    // ZvP.getPluginLogger().log(this.getClass(), Level.ALL, location.clone().add(0, -1, 0).getBlock().getType() + " " + location.getBlock().getType() + " " + location.clone().add(0, 1,
+	    // 0).getBlock().getType(), true, true);
 	    if (isValidBlock(location) && isValidBlock(location.clone().add(0, 1, 0))) { // Make sure the location is not a Block
+		// ZvP.getPluginLogger().log(this.getClass(), Level.ALL, "Location free to stand; down_air?: " + isValidBlock(location.clone().subtract(0, 1, 0)), true, true);
 		if (!isValidBlock(location.clone().subtract(0, 1, 0))) {
 		    // Make sure the location under the location is a Block
 		    return true;
@@ -263,9 +271,7 @@ public class ArenaArea {
 	    case DEAD_BUSH:
 	    case DETECTOR_RAIL:
 	    case DOUBLE_PLANT:
-	    case ENDER_PORTAL:
 	    case FLOWER_POT:
-	    case GRASS:
 	    case LONG_GRASS:
 	    case PORTAL:
 	    case POWERED_RAIL:
