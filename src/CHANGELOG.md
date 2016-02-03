@@ -1,6 +1,10 @@
 Changelog:
 
 ---------------------------------------
+ZvP Version 2.9.4 - 03.02.2016
+- [Fixed] NPE if shop is accessed before game start
+
+---------------------------------------
 ZvP Version 2.9.3 - 02.02.2016
 - [Fixed] Zombie Spawn bug
 
