@@ -97,7 +97,7 @@ public class ZvP extends JavaPlugin {
 		
 		if (economyProvider != null) {
 		    economy = economyProvider.getProvider();
-		    getPluginLogger().log(this.getClass(), Level.INFO, "Successfully hooked into Vault economy!", false, false);
+		    getPluginLogger().log(this.getClass(), Level.INFO, "Successfully hooked into Vault economy!", true, false);
 		} else {
 		    getPluginLogger().log(this.getClass(), Level.WARNING, "Could not hook into Vault! Disabling economy ...", false);
 		    ZvPConfig.setEconEnabled(false);
