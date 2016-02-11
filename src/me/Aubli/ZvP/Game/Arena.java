@@ -12,17 +12,17 @@ import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
-import me.Aubli.ZvP.Game.GameEnums.ArenaDifficultyLevel;
-import me.Aubli.ZvP.Game.GameEnums.ArenaStatus;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaArea;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaConfig;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaDifficulty;
+import me.Aubli.ZvP.Game.ArenaParts.ArenaDifficulty.ArenaDifficultyLevel;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaLobby;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaScore;
 import me.Aubli.ZvP.Game.Mode.ZvPMode;
 import me.Aubli.ZvP.Game.Mode.ZvPMode.ModeType;
 import me.Aubli.ZvP.Sign.SignManager;
 import me.Aubli.ZvP.Statistic.DataRecordManager;
+import me.Aubli.ZvP.Translation.MessageKeys;
 import me.Aubli.ZvP.Translation.MessageKeys.game;
 import me.Aubli.ZvP.Translation.MessageManager;
 
@@ -42,6 +42,25 @@ import org.util.SortMap.SortMap;
 
 
 public class Arena implements Comparable<Arena> {
+    
+    public enum ArenaStatus {
+	RUNNING(MessageManager.getMessage(MessageKeys.status.running)),
+	VOTING(MessageManager.getMessage(MessageKeys.status.running)),
+	BREAKWAITING(MessageManager.getMessage(MessageKeys.status.running)),
+	WAITING(MessageManager.getMessage(MessageKeys.status.waiting)),
+	STANDBY(MessageManager.getMessage(MessageKeys.status.waiting)),
+	STOPED(MessageManager.getMessage(MessageKeys.status.stoped));
+	
+	private String name;
+	
+	private ArenaStatus(String name) {
+	    this.name = name;
+	}
+	
+	public String getName() {
+	    return this.name;
+	}
+    }
     
     private int arenaID;
     

@@ -3,7 +3,6 @@ package me.Aubli.ZvP.Game.ArenaParts;
 import java.util.Random;
 
 import me.Aubli.ZvP.Game.Arena;
-import me.Aubli.ZvP.Game.GameEnums.ArenaDifficultyLevel;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -14,6 +13,22 @@ import org.bukkit.potion.PotionEffectType;
 
 
 public class ArenaDifficulty {
+    
+    public enum ArenaDifficultyLevel {
+	EASY(1),
+	NORMAL(2),
+	HARD(3);
+	
+	private int level;
+	
+	private ArenaDifficultyLevel(int level) {
+	    this.level = level;
+	}
+	
+	public int getLevel() {
+	    return this.level;
+	}
+    }
     
     private Arena arena;
     

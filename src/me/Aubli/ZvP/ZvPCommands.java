@@ -8,12 +8,12 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.Game.Arena;
-import me.Aubli.ZvP.Game.GameEnums.ArenaStatus;
-import me.Aubli.ZvP.Game.GameEnums.ScoreType;
+import me.Aubli.ZvP.Game.Arena.ArenaStatus;
 import me.Aubli.ZvP.Game.GameManager;
 import me.Aubli.ZvP.Game.Lobby;
 import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Game.ArenaParts.ArenaArea;
+import me.Aubli.ZvP.Game.ArenaParts.ArenaScore.ScoreType;
 import me.Aubli.ZvP.Kits.IZvPKit;
 import me.Aubli.ZvP.Kits.KitManager;
 import me.Aubli.ZvP.Listeners.EntityListener;

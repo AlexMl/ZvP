@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
 import me.Aubli.ZvP.Game.Arena;
-import me.Aubli.ZvP.Game.GameEnums.ArenaStatus;
+import me.Aubli.ZvP.Game.Arena.ArenaStatus;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
