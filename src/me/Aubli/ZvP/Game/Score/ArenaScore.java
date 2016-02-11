@@ -1,4 +1,4 @@
-package me.Aubli.ZvP.Game.ArenaParts;
+package me.Aubli.ZvP.Game.Score;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -20,7 +20,7 @@ public class ArenaScore {
 	SHOP_SCORE;
     }
     
-    private Arena arena;
+    private Arena arena; 
     
     private double score;
     

@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import me.Aubli.ZvP.ZvP;
 import me.Aubli.ZvP.ZvPConfig;
-import me.Aubli.ZvP.Game.ArenaParts.ArenaScore.ScoreType;
+import me.Aubli.ZvP.Game.Score.ArenaScore.ScoreType;
 import me.Aubli.ZvP.Kits.IZvPKit;
 import me.Aubli.ZvP.Kits.KNullKit;
 import me.Aubli.ZvP.Kits.KitManager;
