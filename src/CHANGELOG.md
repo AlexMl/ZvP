@@ -1,6 +1,11 @@
 Changelog:
 
 ---------------------------------------
+ZvP Version 2.9.5 - 11.02.2016
+- [Added] Default zvp.play permission without permission plugin
+- [Edit] Only show prices in kits if economy is enabled
+
+---------------------------------------
 ZvP Version 2.9.4 - 03.02.2016
 - [Fixed] NPE if shop is accessed before game start
 
