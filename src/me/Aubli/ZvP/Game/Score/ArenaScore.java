@@ -2,7 +2,6 @@ package me.Aubli.ZvP.Game.Score;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import me.Aubli.ZvP.ZvP;
@@ -12,6 +11,7 @@ import me.Aubli.ZvP.Game.ZvPPlayer;
 import me.Aubli.ZvP.Translation.MessageKeys.error;
 import me.Aubli.ZvP.Translation.MessageManager;
 import net.milkbowl.vault.economy.EconomyResponse;
+import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
 
 
 public class ArenaScore {
@@ -27,9 +27,8 @@ public class ArenaScore {
     private double score;
 
     private Map<ZvPPlayer, Double> playerScore;
-    private Map<ZvPPlayer, Double> originScore;
 
-    private static final ScoreBenefit nullBenefit = new ScoreBenefit("zvp.play", 1.0, 1.0);
+    private static final ScoreBenefit NULL_BENEFIT = new ScoreBenefit("zvp.play", 1.0, 1.0);
     private ScoreBenefit[] benefits;
 
     private final boolean separated;
@@ -40,35 +39,71 @@ public class ArenaScore {
 	this.vaultEcon = (econSupport && econGameIntegration);
 	this.separated = useVaultEconomy() ? true : separated;
 
-	if (isSeparated()) {
-	    initMap();
-	} else {
-	    this.score = 0.0;
-	}
+	initAccounts(ZvPConfig.getStartCapital(), isSeparated());
 	initBenefits();
 
 	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Finished init of " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")) + " for arena " + arena.getID(), true);
     }
 
-    private void initMap() {
-	this.playerScore = new HashMap<ZvPPlayer, Double>();
-	this.originScore = new HashMap<ZvPPlayer, Double>();
+    private void initAccounts(String startCapital, boolean separated) {
+	if (separated) {
+	    this.playerScore = new HashMap<ZvPPlayer, Double>();
 
-	for (ZvPPlayer player : getArena().getPlayers()) {
-	    initPlayer(player);
+	    for (ZvPPlayer player : getArena().getPlayers()) {
+		initPlayer(player, getStartAmount(player));
+	    }
+
+	} else {
+	    this.score = getStartAmount(null);
 	}
     }
 
-    private void initPlayer(ZvPPlayer player) {
-	if (useVaultEconomy()) {
-	    this.playerScore.put(player, ZvP.getEconProvider().getBalance(player.getPlayer()));
-	    this.originScore.put(player, ZvP.getEconProvider().getBalance(player.getPlayer()));
-	    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Finished init for " + player.getName() + ": " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")), true, true);
+    private double getStartAmount(ZvPPlayer player) {
+	/* startCapital = 0:
+	 * - this.score = 0
+	 * - playerScore = 0
+	 * - econScore = 0
+	 *
+	 * startCapital != 0:
+	 * - this.score = start
+	 * - playerScore = start
+	 * - econScore = start; account -= start;
+	 *
+	 * startCapital = all:
+	 * - this.score = 0
+	 * - this.playerScore = 0
+	 * - this.econScore = account
+	 */
+
+	boolean all = false;
+	double start = 0.0;
+
+	if (ZvPConfig.getStartCapital().equalsIgnoreCase("all")) {
+	    all = true;
 	} else {
-	    this.playerScore.put(player, 0.0);
-	    this.originScore.put(player, 0.0);
-	    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Finished init for " + player.getName() + ": " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")), true, true);
+	    try {
+		start = Double.parseDouble(ZvPConfig.getStartCapital());
+	    } catch (NumberFormatException e) {
+		start = 0.0;
+	    }
 	}
+
+	if (useVaultEconomy()) {
+	    if (all | !ZvP.getEconProvider().has(player.getPlayer(), start)) {
+		return ZvP.getEconProvider().getBalance(player.getPlayer());
+	    }
+	}
+	return start;
+    }
+
+    private void initPlayer(ZvPPlayer player, double startAmount) {
+	if (useVaultEconomy()) {
+	    EconomyResponse response = ZvP.getEconProvider().withdrawPlayer(player.getPlayer(), startAmount);
+	    printResponse(response);
+	}
+
+	this.playerScore.put(player, startAmount);
+	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Finished init for " + player.getName() + "'s " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore") + " with startamount of " + startAmount), true, true);
     }
 
     private void initBenefits() {
@@ -78,18 +113,12 @@ public class ArenaScore {
 
     public void reInitPlayer(ZvPPlayer player) {
 	if (isSeparated()) {
-	    initPlayer(player);
+	    initPlayer(player, getStartAmount(player));
 	}
     }
 
     public double getScore(ZvPPlayer player) {
-	if (player == null && isSeparated()) {
-	    double score = 0.0;
-	    for (Entry<ZvPPlayer, Double> entry : this.playerScore.entrySet()) {
-		score += entry.getValue();
-	    }
-	    return score;
-	} else if (!isSeparated()) {
+	if (!isSeparated()) {
 	    return this.score;
 	} else if (isSeparated() && player != null) {
 	    return this.playerScore.get(player);
@@ -101,7 +130,7 @@ public class ArenaScore {
 
     public ScoreBenefit getBenefit(ZvPPlayer player, ScoreType scoreType) {
 	if (scoreType == ScoreType.SHOP_SCORE) {
-	    return nullBenefit;
+	    return NULL_BENEFIT;
 	}
 
 	for (ScoreBenefit b : this.benefits) {
@@ -109,20 +138,7 @@ public class ArenaScore {
 		return b;
 	    }
 	}
-	return nullBenefit;
-    }
-
-    public double getScoreDiffSum() {
-	if (isSeparated()) {
-	    double money = 0;
-
-	    for (Entry<ZvPPlayer, Double> entry : this.playerScore.entrySet()) {
-		money += (entry.getValue() - this.originScore.get(entry.getKey()));
-	    }
-	    return money;
-	} else {
-	    return this.score;
-	}
+	return NULL_BENEFIT;
     }
 
     public Arena getArena() {
@@ -149,15 +165,6 @@ public class ArenaScore {
 	    this.arena.updatePlayerBoards();
 	}
 
-	if (useVaultEconomy()) {
-	    EconomyResponse response = ZvP.getEconProvider().depositPlayer(player.getPlayer(), score);
-	    printResponse(response);
-
-	    if (!response.transactionSuccess()) {
-		player.sendMessage(MessageManager.getMessage(error.transaction_failed));
-		ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + "; Task:" + type.name(), false);
-	    }
-	}
 	this.arena.getRecordManager().addMoney(player.getUuid(), score);
 	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "A" + getArena().getID() + ": " + player.getName() + " ++ " + origScore + "x" + benefit.getPositivMultiplier() + "; " + score + " --> " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")) + "; Task:" + type, true);
     }
@@ -168,14 +175,14 @@ public class ArenaScore {
 
 	if (isSeparated()) {
 	    double prevScore = this.playerScore.get(player);
-	    if (prevScore <= score) {
+	    if (prevScore <= score && !ZvPConfig.getAllowDebts()) {
 		this.playerScore.put(player, 0.0);
 	    } else {
 		this.playerScore.put(player, this.playerScore.get(player) - score);
 	    }
 	    player.updateScoreboard();
 	} else {
-	    if (score >= this.score) {
+	    if (score >= this.score && !ZvPConfig.getAllowDebts()) {
 		this.score = 0;
 	    } else {
 		this.score -= score;
@@ -183,29 +190,37 @@ public class ArenaScore {
 	    this.arena.updatePlayerBoards();
 	}
 
-	if (useVaultEconomy()) {
-	    if (ZvP.getEconProvider().has(player.getPlayer(), score)) {
-		EconomyResponse response = ZvP.getEconProvider().withdrawPlayer(player.getPlayer(), score);
-		printResponse(response);
-
-		if (!response.transactionSuccess()) {
-		    player.sendMessage(MessageManager.getMessage(error.transaction_failed));
-		    ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + "; Task:" + type.name(), false);
-		}
-	    } else if (type == ScoreType.DEATH_SCORE) {
-		// Player does not have enough money! Should only fire on death. Set balance to zero!
-		subtractScore(player, ZvP.getEconProvider().getBalance(player.getPlayer()), type);
-		return;
-	    } else {
-		// This case should never be activated!
-		ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! Insufficent Balance!; Task:" + type.name(), false);
-	    }
-	}
 	this.arena.getRecordManager().subtractMoney(player.getUuid(), score);
 	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "A" + getArena().getID() + ": " + player.getName() + " -- " + origScore + "x" + benefit.getNegativMultiplier() + "; " + score + " --> " + (useVaultEconomy() ? "EconAccount" : (isSeparated() ? "personalScore" : "sharedScore")) + "; Task:" + type, true);
     }
 
+    public void syncScores() {
+	for (ZvPPlayer player : getArena().getPlayers()) {
+	    syncScore(player);
+	}
+    }
+
+    public void syncScore(ZvPPlayer player) {
+	if (!useVaultEconomy() || !this.playerScore.containsKey(player)) {
+	    return;
+	}
+
+	Double playerScore = getScore(player);
+	EconomyResponse response;
+	if (playerScore < 0) {
+	    response = ZvP.getEconProvider().withdrawPlayer(player.getPlayer(), Math.abs(playerScore));
+	} else {
+	    response = ZvP.getEconProvider().depositPlayer(player.getPlayer(), playerScore);
+	}
+	if (!response.transactionSuccess()) {
+	    player.sendMessage(MessageManager.getMessage(error.transaction_failed));
+	    ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! Acquired score was " + playerScore + response.errorMessage + "; Task: ScoreSync", false);
+	}
+
+	printResponse(response);
+    }
+
     private void printResponse(EconomyResponse res) {
-	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "EconomyResponse: " + res.type + " Amount:" + res.amount + " ---> " + res.balance, true);
+	ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "EconomyResponse: " + res.type + (res.type == ResponseType.FAILURE ? ": " + res.errorMessage : "") + " Amount:" + res.amount + " ---> " + res.balance, true);
     }
 }

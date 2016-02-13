@@ -31,6 +31,8 @@ public class ZvPConfig {
     private static boolean enableEcon = false;
     private static boolean integrateGame = true;
     private static boolean integrateKits = true;
+    private static String startCapital = "all";
+    private static boolean allowDebts = false;
 
     private static boolean useEssentialsKits = false;
 
@@ -83,6 +85,8 @@ public class ZvPConfig {
 	getConfig().addDefault("economy.enableEcon", false);
 	getConfig().addDefault("economy.integrateKits", true);
 	getConfig().addDefault("economy.integrateGame", true);
+	getConfig().addDefault("economy.startCapital", "all");
+	getConfig().addDefault("economy.allowDebts", false);
 
 	getConfig().addDefault("game.enableKits", true);
 	getConfig().addDefault("game.enableFirework", true);
@@ -119,6 +123,9 @@ public class ZvPConfig {
 	insertComments.addComment("enableEcon", "Enable or disable economy support.#If enabled your bank account will be used for the game!#Note that you need Vault for working economics on your server!");
 	insertComments.addComment("integrateKits", "If enabled kits costs money too.#Note that the price of the kit is set in their kit-file.");
 	insertComments.addComment("integrateGame", "If enabled your bank account will be used for purchasing/selling and Kill/death bonuses.#Note that this game could ruin your bank balance!");
+	insertComments.addComment("startCapital", "Define a start capital.#If economy support is enabled, the amount will be withdrawn from the player on game-start.#You can set a number from 0.0 to 'all'");
+	insertComments.addComment("allowDebts", "If enabled, you can have a negativ score in the game.#Note: If economy support is enabled and you are in debt, ZvP will remove money from your account!");
+
 	insertComments.addComment("enableKits", "Enable kits for the game.#If disabled the player will start and end the game with their current items.#The inventory will be restored after the game.#Note that this has to be false if you use keepInventory!");
 	insertComments.addComment("enableFirework", "Fireworks will shoot when the game ends.#Note that Fireworks take extra time!");
 	insertComments.addComment("allowDuringGameJoin", "If set to true the game will allow players to join a running game.#Note that a change of players will affect the number of Zombies!");
@@ -153,6 +160,8 @@ public class ZvPConfig {
 	enableEcon = getConfig().getBoolean("economy.enableEcon", false);
 	integrateKits = getConfig().getBoolean("economy.integrateKits", true);
 	integrateGame = getConfig().getBoolean("economy.integrateGame", true);
+	startCapital = getConfig().getString("economy.startCapital");
+	allowDebts = getConfig().getBoolean("economy.allowDebts");
 
 	allowDuringGameJoin = getConfig().getBoolean("game.allowDuringGameJoin", true);
 
@@ -224,6 +233,10 @@ public class ZvPConfig {
 	return integrateGame;
     }
 
+    public static boolean getAllowDebts() {
+	return allowDebts;
+    }
+
     public static boolean getUseEssentialsKits() {
 	return useEssentialsKits;
     }
@@ -271,6 +284,10 @@ public class ZvPConfig {
 	    beArray[benefits.indexOf(be)] = be;
 	}
 	return beArray;
+    }
+
+    public static String getStartCapital() {
+	return startCapital;
     }
 
     public static int getLogLevel() {
