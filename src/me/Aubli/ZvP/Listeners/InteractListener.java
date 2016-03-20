@@ -152,6 +152,13 @@ public class InteractListener implements Listener {
 				    ShopSign shopSign = (ShopSign) this.sm.getSign(event.getClickedBlock().getLocation());
 				    ItemCategory cat = shopSign.getCategory();
 
+				    // 1.9 Potion start
+				    if (cat == ItemCategory.POTION) {
+					player.sendMessage(ChatColor.RED + "This category is not supported!");
+					return;
+				    }
+				    // 1.9 Potion end
+
 				    Inventory shopInv = Bukkit.createInventory(eventPlayer, ((int) Math.ceil(ShopManager.getManager().getItems(cat).size() / 9.0)) * 9, "Items: " + cat.toString());
 
 				    for (ShopItem shopItem : ShopManager.getManager().getItems(cat)) {
