@@ -87,6 +87,20 @@ public class KitManager {
 	    ZvP.getConverter().convert(FileType.KITFILE, f, 280.0);
 	    IZvPKit kit = new KCustomKit(f);
 	    if (kit.isEnabled()) {
+		// 1.9 Potion start
+		boolean potion = false;
+		for (ItemStack item : kit.getContents()) {
+		    if (item.getType() == Material.POTION || item.getTypeId() == 438) {
+			ZvP.getPluginLogger().log(getClass(), Level.WARNING, "Disable " + kit.getName() + " kit due to potion incompatibility!", false);
+			potion = true;
+			break;
+		    }
+		}
+		if (potion) {
+		    continue;
+		}
+		// 1.9 Potion end
+
 		this.kits.add(kit);
 		ZvP.getPluginLogger().log(this.getClass(), Level.FINEST, "Loaded " + kit.getName() + " from " + f.getPath(), true);
 	    } else {
@@ -211,12 +225,11 @@ public class KitManager {
 		    if (stack.getType() == Material.POTION || stack.getTypeId() == 438) {
 			// 1.9 Potion start
 			add = false;
-			System.out.println("Disable " + kit.getName() + " due to potion incompatibelity!");
 			break;
 
 			// Potion p = Potion.fromItemStack(stack);
 			// lore.add(ChatColor.DARK_BLUE + "  -" + p.getType() + " L" + p.getLevel());
-			// 1.9 Potion stop
+			// 1.9 Potion end
 		    }
 
 		    Map<Enchantment, Integer> enchs = stack.getEnchantments();
