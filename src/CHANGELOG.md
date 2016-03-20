@@ -1,6 +1,11 @@
 Changelog:
 
 ---------------------------------------
+ZvP Version 2.9.6_1.9 - 20.03.2016
+- [Fixed] 1.9 Compatibility
+- [Fixed] Typos, Messages, logs
+
+---------------------------------------
 ZvP Version 2.9.5 - 11.02.2016
 - [Added] Default zvp.play permission without permission plugin
 - [Edit] Only show prices in kits if economy is enabled
