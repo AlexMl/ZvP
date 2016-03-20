@@ -25,7 +25,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.Potion;
 import org.util.File.Converter.FileConverter.FileType;
 
 
@@ -177,6 +176,11 @@ public class KitManager {
 
 	for (IZvPKit kit : this.kits) {
 	    if (player.getPlayer().hasPermission(kit.getPermissionNode())) {
+
+		// 1.9 Potion start
+		boolean add = true;
+		// 1.9 Potion end
+
 		ItemStack kitItem = kit.getIcon();
 		ItemMeta kitMeta = kitItem.getItemMeta();
 
@@ -204,9 +208,15 @@ public class KitManager {
 
 		    lore.add(ChatColor.DARK_GREEN + "" + stack.getAmount() + "x " + stack.getType().toString());
 
-		    if (stack.getType() == Material.POTION) {
-			Potion p = Potion.fromItemStack(stack);
-			lore.add(ChatColor.DARK_BLUE + "  -" + p.getType() + " L" + p.getLevel());
+		    if (stack.getType() == Material.POTION || stack.getTypeId() == 438) {
+			// 1.9 Potion start
+			add = false;
+			System.out.println("Disable " + kit.getName() + " due to potion incompatibelity!");
+			break;
+
+			// Potion p = Potion.fromItemStack(stack);
+			// lore.add(ChatColor.DARK_BLUE + "  -" + p.getType() + " L" + p.getLevel());
+			// 1.9 Potion stop
 		    }
 
 		    Map<Enchantment, Integer> enchs = stack.getEnchantments();
@@ -221,6 +231,13 @@ public class KitManager {
 		kitMeta.setDisplayName(ChatColor.DARK_GRAY + kit.getName());
 		kitMeta.setLore(lore);
 		kitItem.setItemMeta(kitMeta);
+
+		// 1.9 Potion start
+		if (!add) {
+		    continue;
+		}
+		// 1.9 Potion end
+
 		kitInventory.addItem(kitItem);
 		// System.out.println(player.getName() + " hasPermission " + kit.getPermissionNode() + " for " + kit.getName());
 	    }
