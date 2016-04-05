@@ -1,5 +1,9 @@
 Changelog:
 ---------------------------------------
+ZvP Version 2.9.6-2_1.9 - 05.04.2016
+- [Fixed] zombie equipment error
+
+---------------------------------------
 ZvP Version 2.9.6-1_1.9 - 26.03.2016
 - [Fixed] Few errors
 
