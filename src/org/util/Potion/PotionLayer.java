@@ -244,7 +244,7 @@ public class PotionLayer {
      */
     public ItemStack toItemStack(int amount) throws Exception {
 	ItemStack item = new ItemStack(Material.POTION, amount);
-	System.out.println("1.9? " + is19 + " " + Bukkit.getServer().getVersion());
+	// System.out.println("1.9? " + is19 + " " + Bukkit.getServer().getVersion());
 	if (!is19) {
 	    org.bukkit.potion.PotionType bukkitPotionType = getType().getBukkitType();
 
@@ -301,7 +301,7 @@ public class PotionLayer {
 	    compoundSetString.invoke(nbtTagCompound, "Potion", "minecraft:" + tag);
 	    stackSetTag.invoke(nmsStack, nbtTagCompound);
 	    ItemStack stack = (ItemStack) asBukkitCopy.invoke(null, nmsStack);
-	    System.out.println(stack);
+	    // System.out.println(stack);
 	    return stack;
 	    // tagCompound.setString("Potion", "minecraft:" + tag);
 	    // stack.setTag(tagCompound);
