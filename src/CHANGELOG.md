@@ -1,6 +1,25 @@
 Changelog:
 
 ---------------------------------------
+ZvP Version 2.9.7 - 11.04.2016
+- [Fixed] 1.9 Compatibility
+- [Fixed] 1.9 Potions
+- [Fixed] zombie equipment bug (again)
+- [Fixed] Merged 1.9 and main development branch and versions
+
+---------------------------------------
+ZvP Version 2.9.6-2_1.9 - 05.04.2016
+- [Fixed] Zombie equipment error
+
+---------------------------------------
+ZvP Version 2.9.6-1_1.9 - 26.03.2016
+- [Fixed] Few errors
+ 
+--------------------------------------
+ZvP Version 2.9.6_1.9 - 20.03.2016
+- [Fixed] 1.9 Compatibility
+
+---------------------------------------
 ZvP Version 2.9.6 - 20.03.2016
 - [Fixed] Typos, Messages, logs
 
