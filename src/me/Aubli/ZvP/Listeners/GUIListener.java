@@ -92,19 +92,23 @@ public class GUIListener implements Listener {
 			if (ZvPConfig.getEnableEcon()) {
 			    // if economy and sellKits is true withdraw some money
 			    if (ZvPConfig.getIntegrateKits()) {
-				if (ZvP.getEconProvider().has(eventPlayer, kit.getPrice())) {
-				    EconomyResponse response = ZvP.getEconProvider().withdrawPlayer(eventPlayer, kit.getPrice());
-				    if (response.transactionSuccess()) {
-					player.sendMessage(MessageManager.getFormatedMessage(game.player_bought_kit, kitName, new DecimalFormat("#0.00").format(response.amount) + " " + ZvP.getEconProvider().currencyNamePlural(), new DecimalFormat("#0.00").format(response.balance) + " " + ZvP.getEconProvider().currencyNamePlural()));
-					player.setKit(kit);
+				if (ZvP.getEconProvider() != null) {
+				    if (ZvP.getEconProvider().has(eventPlayer, kit.getPrice())) {
+					EconomyResponse response = ZvP.getEconProvider().withdrawPlayer(eventPlayer, kit.getPrice());
+					if (response.transactionSuccess()) {
+					    player.sendMessage(MessageManager.getFormatedMessage(game.player_bought_kit, kitName, new DecimalFormat("#0.00").format(response.amount) + " " + ZvP.getEconProvider().currencyNamePlural(), new DecimalFormat("#0.00").format(response.balance) + " " + ZvP.getEconProvider().currencyNamePlural()));
+					    player.setKit(kit);
+					} else {
+					    player.setKit(kit);
+					    player.sendMessage(MessageManager.getMessage(error.transaction_failed));
+					    ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + " for Kit " + kit.getName(), false);
+					}
 				    } else {
-					player.setKit(kit);
-					player.sendMessage(MessageManager.getMessage(error.transaction_failed));
-					ZvP.getPluginLogger().log(this.getClass(), Level.SEVERE, "Transaction failed for " + player.getName() + "! " + response.errorMessage + " for Kit " + kit.getName(), false);
+					player.sendMessage(MessageManager.getMessage(error.no_money));
+					return;
 				    }
 				} else {
-				    player.sendMessage(MessageManager.getMessage(error.no_money));
-				    return;
+				    player.setKit(kit);
 				}
 			    } else {
 				player.setKit(kit);

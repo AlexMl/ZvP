@@ -61,7 +61,7 @@ public class ArenaDifficulty {
 	boolean setVillager = false;
 	boolean setCanPickupItems = false;
 	double maxHealth = 20D;
-	ItemStack[] armorContent = null;
+	ItemStack[] armorContent = new ItemStack[4];
 	Float dropchance = 0.25F;
 	PotionEffect potionEffect = null;
 
@@ -71,7 +71,6 @@ public class ArenaDifficulty {
 		setVillager = (this.rand.nextBoolean() && this.rand.nextBoolean());
 		setCanPickupItems = false;
 		maxHealth = 15D;
-		armorContent = new ItemStack[4];
 		dropchance = 0F;
 		break;
 
@@ -82,14 +81,12 @@ public class ArenaDifficulty {
 			setCanPickupItems = true;
 			maxHealth = 40D;
 			dropchance = 0.35F;
-			armorContent = new ItemStack[4];
 			break;
 		    case 1:
 			setBaby = true;
 			setCanPickupItems = false;
 			maxHealth = 20D;
 			dropchance = 0.35F;
-			armorContent = new ItemStack[4];
 			break;
 		    case 2:
 			setBaby = false;
@@ -154,6 +151,11 @@ public class ArenaDifficulty {
 
 	if (getArena().getConfig().isIncreaseDifficulty()) {
 	    maxHealth *= getZombieHealthFactor();
+	}
+	for (int i = 0; i < armorContent.length; i++) {
+	    if (armorContent[i] == null) {
+		armorContent[i] = new ItemStack(Material.AIR);
+	    }
 	}
 
 	z.setMaxHealth(Math.ceil(maxHealth));
@@ -220,7 +222,7 @@ public class ArenaDifficulty {
 		break;
 
 	    default:
-		content = null;
+		content = new ItemStack[4];
 		break;
 	}
 
