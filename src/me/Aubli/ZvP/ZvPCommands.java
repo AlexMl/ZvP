@@ -47,11 +47,13 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.util.Potion.PotionLayer;
+import org.util.Potion.PotionLayer.PotionType;
 import org.util.TabText.TabText;
 
 
 public class ZvPCommands implements CommandExecutor {
-    
+
     /*
      * ZvP-Commands:
      *
@@ -75,12 +77,12 @@ public class ZvPCommands implements CommandExecutor {
      *
      *
      */
-    
+
     private GameManager game = GameManager.getManager();
-    
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String[] args) {
-	
+
 	if (!(sender instanceof Player)) {
 	    if (cmd.getName().equals("zvp")) {
 		if (args.length == 1) {
@@ -95,7 +97,7 @@ public class ZvPCommands implements CommandExecutor {
 			return true;
 		    }
 		}
-		
+
 		sender.sendMessage(getChatHeader("Console Commands"));
 		sender.sendMessage("| /zvp reload");
 		sender.sendMessage("| /zvp stop-all");
@@ -103,17 +105,17 @@ public class ZvPCommands implements CommandExecutor {
 	    }
 	    return true;
 	}
-	
+
 	Player playerSender = (Player) sender;
-	
+
 	if (cmd.getName().equalsIgnoreCase("zvptest") && ZvP.getPluginLogger().isDebugMode()) {
 	    // Test command
-	    
+
 	    if (args.length == 1) {
-		
+
 		if (args[0].startsWith("pos")) {
 		    int arenaID = Integer.parseInt(args[0].substring(3, args[0].length()));
-		    
+
 		    ArenaArea aa = GameManager.getManager().getArena(arenaID).getArea();
 		    Location spawn;
 		    for (int i = 0; i < 30000; i++) {
@@ -128,19 +130,19 @@ public class ZvPCommands implements CommandExecutor {
 		    }
 		    return true;
 		}
-		
+
 		if (args[0].equalsIgnoreCase("u")) {
 		    SignManager.getManager().updateSigns();
 		    GameManager.getManager().getPlayer(playerSender).getArena().updatePlayerBoards();
 		    return true;
 		}
-		
+
 		if (args[0].equalsIgnoreCase("tpr")) {
 		    ZvPPlayer p = this.game.getPlayer(playerSender);
 		    playerSender.teleport(p.getArena().getArea().getNewRandomLocation(true), TeleportCause.PLUGIN);
 		    return true;
 		}
-		
+
 		if (args[0].equalsIgnoreCase("kill")) {
 		    for (Entity e : playerSender.getWorld().getEntities()) {
 			if (e instanceof Zombie) {
@@ -152,14 +154,14 @@ public class ZvPCommands implements CommandExecutor {
 		    return true;
 		}
 	    }
-	    
+
 	    if (args.length == 2) {
-		
+
 		if (args[0].equalsIgnoreCase("uloc")) {
 		    double md = Double.parseDouble(args[1]);
-		    
+
 		    ZvPPlayer player = this.game.getPlayer(playerSender);
-		    
+
 		    long start = System.currentTimeMillis();
 		    int i = 0;
 		    for (i = 0; i < 10000; i++) {
@@ -169,50 +171,68 @@ public class ZvPCommands implements CommandExecutor {
 			    e.printStackTrace();
 			}
 		    }
-		    
+
 		    long ende = System.currentTimeMillis();
 		    System.out.println("Für " + i + " durchläufe " + ((ende - start) / 1000.0) + " sekunden gebraucht!");
 		    return true;
 		}
-		
+
 		if (args[0].equalsIgnoreCase("spawn")) {
 		    int amount = Integer.parseInt(args[1]);
-		    
+
 		    ZvPPlayer player = this.game.getPlayer(playerSender);
 		    player.getArena().spawnZombies(amount);
 		    return true;
 		}
-		
+
+		if (args[0].equalsIgnoreCase("potion")) {
+		    PotionType type = PotionType.valueOf(args[1]);
+		    if (type != null) {
+			try {
+			    // [type: STRENGTH, level: 1, isSplash: true, isExtended: true]
+			    PotionLayer l = PotionLayer.createPotion(PotionType.STRENGTH);
+			    l.setStrong(false);
+			    l.setSplash(true);
+			    l.setHasExtendedDuration(true);
+
+			    playerSender.getInventory().addItem(PotionLayer.createPotion(type).toItemStack(1), l.toItemStack(1));
+			} catch (Exception e) {
+			    e.printStackTrace();
+			}
+		    }
+		    return true;
+		}
+
 		if (args[0].equalsIgnoreCase("kit")) {
-		    
+
 		    String kit = args[1];
-		    
+
 		    if (KitManager.getManager().getKit(kit) != null) {
-			
+
 			IZvPKit zKit = KitManager.getManager().getKit(kit);
-			
+
 			for (ItemStack item : zKit.getContents()) {
 			    playerSender.getInventory().addItem(item);
 			}
 		    }
 		    return true;
 		}
-		
+
 		if (args[0].equalsIgnoreCase("shop")) {
 		    ItemCategory cat = ItemCategory.valueOf(args[1]);
-		    
+
 		    if (cat != null) {
 			Inventory shopInv = Bukkit.createInventory(playerSender, ((int) Math.ceil(ShopManager.getManager().getItems(cat).size() / 9.0)) * 9, "Items: " + cat.toString());
-			
+
 			for (ShopItem shopItem : ShopManager.getManager().getItems(cat)) {
-			    
+
 			    ItemStack item = shopItem.getItem();
 			    ItemMeta meta = item.getItemMeta();
 			    List<String> lore = new ArrayList<String>();
-			    
+
 			    lore.add("Category: " + shopItem.getCategory().toString());
 			    lore.add(ChatColor.RED + "Price: " + shopItem.getBuyPrice());
-			    
+
 			    meta.setLore(lore);
 			    item.setItemMeta(meta);
 			    shopInv.addItem(item);
@@ -222,7 +242,7 @@ public class ZvPCommands implements CommandExecutor {
 		    }
 		    return true;
 		}
-		
+
 		if (args[0].equalsIgnoreCase("m")) {
 		    if (!ZvPConfig.getEnableEcon() || (!ZvPConfig.getEnableEcon() && !ZvPConfig.getIntegrateGame())) { // possibility of cheating money
 			Double sum = Double.parseDouble(args[1]);
@@ -231,53 +251,53 @@ public class ZvPCommands implements CommandExecutor {
 		    }
 		    return true;
 		}
-		
+
 		if (args[0].equalsIgnoreCase("insert")) {
 		    int max = Integer.parseInt(args[1]);
-		    
+
 		    long start = System.currentTimeMillis();
 		    Random rand = new Random();
-		    
+
 		    for (int l = 0; l < 2; l++) {
-			
+
 			DataRecord[] ra = new DataRecord[max];
 			for (int i = 0; i < max; i++) {
 			    ra[i] = new DataRecord(UUID.randomUUID(), rand.nextInt(50), rand.nextInt(50), rand.nextInt(50), rand.nextDouble() * 100.0);
 			}
 			DatabaseManager.getManager().handleRecord(ra);
-			
+
 		    }
 		    long end = System.currentTimeMillis();
-		    
+
 		    // double diff1 = (middle - start) / 1000.0;
 		    // double diff2 = (end - middle) / 1000.0;
 		    double diff3 = (end - start) / 1000.0;
-		    
+
 		    System.out.println("Für " + max + ":");
 		    // System.out.println("Randomize: " + diff1);
 		    // System.out.println("Insert: " + diff2);
 		    System.out.println("Together: " + diff3);
 		    return true;
 		}
-		
+
 		Arena a = this.game.getArena(Integer.parseInt(args[0]));
 		int round = Integer.parseInt(args[1].split(":")[0]);
 		int wave = Integer.parseInt(args[1].split(":")[1]);
 		a.setRound(round);
 		a.setWave(wave);
 	    }
-	    
+
 	    if (args.length == 4) {
 		if (args[0].equalsIgnoreCase("insert")) {
 		    int kills = Integer.parseInt(args[1]);
 		    int deaths = Integer.parseInt(args[2]);
 		    double money = Double.parseDouble(args[3]);
-		    
+
 		    DatabaseManager.getManager().handleRecord(new DataRecord(playerSender.getUniqueId(), kills, kills, deaths, money));
 		    return true;
 		}
 	    }
-	    
+
 	    if (args.length == 6) {
 		if (args[0].equalsIgnoreCase("rt")) {
 		    int id = Integer.parseInt(args[1]);
@@ -286,7 +306,7 @@ public class ZvPCommands implements CommandExecutor {
 		    int p = Integer.parseInt(args[4]);
 		    int d = Integer.parseInt(args[5]);
 		    Arena a = this.game.getArena(id);
-		    
+
 		    for (int ir = 1; ir <= r; ir++) {
 			for (int iw = 1; iw <= w; iw++) {
 			    int sz = a.getSpawningZombies(iw, ir, p, d);
@@ -297,23 +317,23 @@ public class ZvPCommands implements CommandExecutor {
 		}
 	    }
 	}
-	
+
 	if (cmd.getName().equalsIgnoreCase("zvp")) {
-	    
+
 	    String arguments = "";
 	    for (String arg : args) {
 		arguments += " " + arg;
 	    }
-	    
+
 	    ZvP.getPluginLogger().log(this.getClass(), Level.FINE, "Player " + playerSender.getName() + " attempts to execute Command: " + cmd.getName() + arguments, true);
-	    
+
 	    if (args.length == 0) {
 		printCommands(playerSender, 1);
 		return true;
 	    }
-	    
+
 	    if (args.length == 1) {
-		
+
 		if (args[0].equalsIgnoreCase("help")) {
 		    printCommands(playerSender, 1);
 		    return true;
@@ -334,13 +354,13 @@ public class ZvPCommands implements CommandExecutor {
 		    }
 		}
 		if (args[0].equalsIgnoreCase("status")) {
-		    
+
 		    if (playerSender.hasPermission("zvp.status")) {
 			playerSender.sendMessage(getChatHeader("Status"));
 			playerSender.sendMessage(ChatColor.GRAY + " Use '" + ChatColor.RED + "/zvp status [A ID]" + ChatColor.GRAY + "' for more info");
-			
+
 			String tableString = "A ID`Status`P/MaxP`Score`Living`Spawning`Killed\n";
-			
+
 			for (Arena a : this.game.getArenas()) {
 			    if (a.isRunning()) {
 				tableString += ChatColor.BLUE + "" + a.getID() + "`" + a.getStatus().toString() + "`" + a.getPlayers().length + ChatColor.RED + " / " + ChatColor.BLUE + a.getConfig().getMaxPlayers() + "`" + (a.getScore().isSeparated() ? "separated" : "shared") + "`" + a.getLivingZombieAmount() + "`" + a.getSpawningZombies() + "`" + a.getKilledZombies() + "\n";
@@ -348,7 +368,7 @@ public class ZvPCommands implements CommandExecutor {
 				tableString += ChatColor.BLUE + "" + a.getID() + "`" + a.getStatus().toString() + "`" + "0" + ChatColor.RED + " / " + ChatColor.BLUE + a.getConfig().getMaxPlayers() + "`-`-`-`-\n";
 			    }
 			}
-			
+
 			TabText text = new TabText(tableString);
 			text.setTabs(5, 15, 23, 33, 39, 47);
 			playerSender.sendMessage("\n" + text.getPage(0, false));
@@ -359,7 +379,7 @@ public class ZvPCommands implements CommandExecutor {
 		    }
 		}
 		if (args[0].equalsIgnoreCase("list")) {
-		    
+
 		    if (playerSender.hasPermission("zvp.status")) {
 			list(playerSender, "");
 			return true;
@@ -378,14 +398,14 @@ public class ZvPCommands implements CommandExecutor {
 			return true;
 		    }
 		}
-		
+
 		if (args[0].equalsIgnoreCase("leave")) {
 		    if (playerSender.hasPermission("zvp.play") || this.game.isInGame(playerSender)) {
 			ZvPPlayer p = this.game.getPlayer(playerSender);
 			if (p != null) {
 			    Arena a = p.getArena();
 			    boolean success = this.game.removePlayer(p);
-			    
+
 			    if (success) {
 				playerSender.sendMessage(MessageManager.getFormatedMessage(MessageKeys.game.left, p.getArena().getID()));
 				a.sendMessage(MessageManager.getFormatedMessage(MessageKeys.game.player_left, playerSender.getName()));
@@ -403,7 +423,7 @@ public class ZvPCommands implements CommandExecutor {
 			return true;
 		    }
 		}
-		
+
 		if (args[0].equalsIgnoreCase("stop")) {
 		    if (playerSender.hasPermission("zvp.stop.all")) {
 			this.game.stopGames();
@@ -414,17 +434,17 @@ public class ZvPCommands implements CommandExecutor {
 			return true;
 		    }
 		}
-		
+
 		printCommands(playerSender, parseInt(args[0]));
 		return true;
 	    }
-	    
+
 	    if (args.length == 2) {
 		if (args[0].equalsIgnoreCase("help")) {
 		    printCommands(playerSender, parseInt(args[1]));
 		    return true;
 		}
-		
+
 		if (args[0].equalsIgnoreCase("list")) {
 		    if (playerSender.hasPermission("zvp.status")) {
 			list(playerSender, args[1]);
@@ -434,11 +454,11 @@ public class ZvPCommands implements CommandExecutor {
 			return true;
 		    }
 		}
-		
+
 		if (args[0].equalsIgnoreCase("status")) {
 		    if (playerSender.hasPermission("zvp.status")) {
 			Arena arena = GameManager.getManager().getArena(parseInt(args[1]));
-			
+
 			if (arena != null) {
 			    playerSender.sendMessage(getChatHeader("Arena " + arena.getID()));
 			    playerSender.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "ID: " + ChatColor.BLUE + arena.getID());
@@ -463,15 +483,15 @@ public class ZvPCommands implements CommandExecutor {
 			return true;
 		    }
 		}
-		
+
 		if (args[0].equalsIgnoreCase("join")) {
 		    if (playerSender.hasPermission("zvp.play")) {
 			if (!GameManager.getManager().isInGame(playerSender)) {
 			    Arena arena = GameManager.getManager().getArena(parseInt(args[1]));
-			    
+
 			    if (arena != null) {
 				boolean success = GameManager.getManager().createPlayer(playerSender, arena, SignManager.getManager().getSigns(arena)[0].getLobby());
-				
+
 				if (!success) {
 				    playerSender.sendMessage(MessageManager.getMessage(MessageKeys.arena.not_ready));
 				}
@@ -489,7 +509,7 @@ public class ZvPCommands implements CommandExecutor {
 			return true;
 		    }
 		}
-		
+
 		if (args[0].equalsIgnoreCase("addkit")) {
 		    if (playerSender.hasPermission("zvp.manage.kit")) {
 			if (KitManager.getManager().getKit(args[1]) == null) {
@@ -504,7 +524,7 @@ public class ZvPCommands implements CommandExecutor {
 			return true;
 		    }
 		}
-		
+
 		if (args[0].equalsIgnoreCase("removekit")) {
 		    if (playerSender.hasPermission("zvp.manage.kit")) {
 			if (KitManager.getManager().getKit(args[1]) != null) {
@@ -520,7 +540,7 @@ public class ZvPCommands implements CommandExecutor {
 			return true;
 		    }
 		}
-		
+
 		if (args[0].equalsIgnoreCase("record")) {
 		    if (playerSender.hasPermission("zvp.manage")) {
 			if (ZvPConfig.getEnabledStatistics()) {
@@ -550,7 +570,7 @@ public class ZvPCommands implements CommandExecutor {
 			return true;
 		    }
 		}
-		
+
 		if (args[0].equalsIgnoreCase("add")) {
 		    if (args[1].equalsIgnoreCase("arena")) {
 			if (playerSender.hasPermission("zvp.manage.arena")) {
@@ -562,7 +582,7 @@ public class ZvPCommands implements CommandExecutor {
 			    return true;
 			}
 		    }
-		    
+
 		    if (args[1].equalsIgnoreCase("lobby")) {
 			if (playerSender.hasPermission("zvp.manage.lobby")) {
 			    GameManager.getManager().addLobby(playerSender.getLocation().clone());
@@ -573,7 +593,7 @@ public class ZvPCommands implements CommandExecutor {
 			    return true;
 			}
 		    }
-		    
+
 		    if (args[1].equalsIgnoreCase("position")) {
 			if (playerSender.hasPermission("zvp.manage.arena")) {
 			    playerSender.getInventory().addItem(ZvP.getTool(ZvP.ADDPOSITION));
@@ -583,11 +603,11 @@ public class ZvPCommands implements CommandExecutor {
 			    return true;
 			}
 		    }
-		    
+
 		    printCommands(playerSender, 2);
 		    return true;
 		}
-		
+
 		if (args[0].equalsIgnoreCase("stop")) {
 		    if (playerSender.hasPermission("zvp.stop")) {
 			Arena a = this.game.getArena(parseInt(args[1]));
@@ -604,11 +624,11 @@ public class ZvPCommands implements CommandExecutor {
 			return true;
 		    }
 		}
-		
+
 		printCommands(playerSender, 2);
 		return true;
 	    }
-	    
+
 	    if (args.length == 3) {
 		if (args[0].equalsIgnoreCase("set")) {
 		    if (playerSender.hasPermission("zvp.manage.arena")) {
@@ -655,7 +675,7 @@ public class ZvPCommands implements CommandExecutor {
 			    if (args[2].equalsIgnoreCase("finish")) {
 				Arena arena = InteractListener.createArenaFromList();
 				InteractListener.clearPositionList();
-				
+
 				if (arena != null) {
 				    playerSender.sendMessage(MessageManager.getFormatedMessage(manage.arena_saved, arena.getID()));
 				} else {
@@ -666,12 +686,12 @@ public class ZvPCommands implements CommandExecutor {
 			    printCommands(playerSender, 2);
 			    return true;
 			}
-			
+
 			Arena arena = this.game.getArena(parseInt(args[1]));
 			if (arena != null) {
 			    if (args[2].equalsIgnoreCase("prelobby") || args[2].equalsIgnoreCase("lobby")) {
 				boolean success = arena.addArenaLobby(playerSender.getLocation().clone());
-				
+
 				if (success) {
 				    playerSender.sendMessage(MessageManager.getMessage(manage.lobby_saved));
 				} else {
@@ -689,7 +709,7 @@ public class ZvPCommands implements CommandExecutor {
 				    return true;
 				}
 			    }
-			    
+
 			    printCommands(playerSender, 2);
 			    return true;
 			} else {
@@ -705,7 +725,7 @@ public class ZvPCommands implements CommandExecutor {
 		    if (args[1].equalsIgnoreCase("arena")) {
 			if (playerSender.hasPermission("zvp.manage.arena")) {
 			    boolean success = GameManager.getManager().removeArena(GameManager.getManager().getArena(parseInt(args[2])));
-			    
+
 			    if (success) {
 				playerSender.sendMessage(MessageManager.getMessage(manage.arena_removed));
 				return true;
@@ -718,11 +738,11 @@ public class ZvPCommands implements CommandExecutor {
 			    return true;
 			}
 		    }
-		    
+
 		    if (args[1].equalsIgnoreCase("lobby")) {
 			if (playerSender.hasPermission("zvp.manage.lobby")) {
 			    boolean success = GameManager.getManager().removeLobby(GameManager.getManager().getLobby(parseInt(args[2])));
-			    
+
 			    if (success) {
 				playerSender.sendMessage(MessageManager.getMessage(manage.lobby_removed));
 				return true;
@@ -735,11 +755,11 @@ public class ZvPCommands implements CommandExecutor {
 			    return true;
 			}
 		    }
-		    
+
 		    if (args[1].equalsIgnoreCase("prelobby")) {
 			if (playerSender.hasPermission("zvp.manage.arena")) {
 			    Arena arena = GameManager.getManager().getArena(parseInt(args[2]));
-			    
+
 			    if (arena != null) {
 				arena.deleteArenaLobby();
 				playerSender.sendMessage(MessageManager.getMessage(manage.lobby_removed));
@@ -753,28 +773,28 @@ public class ZvPCommands implements CommandExecutor {
 			    return true;
 			}
 		    }
-		    
+
 		    printCommands(playerSender, 2);
 		    return true;
 		}
 		printCommands(playerSender, 2);
 		return true;
 	    }
-	    
+
 	    printCommands(playerSender, 1);
 	    return true;
 	}
 	return true;
     }
-    
+
     private void list(Player player, String option) {
-	
+
 	if (option.equalsIgnoreCase("signs") || option.equalsIgnoreCase("sign")) {
 	    if (SignManager.getManager().getSigns().length > 0) {
-		
+
 		player.sendMessage(getChatHeader("Signs"));
 		String tableString = "Arena`Lobby`Type`ID`X`Y`Z`World\n";
-		
+
 		for (ISign sign : SignManager.getManager().getSigns()) {
 		    tableString += ChatColor.BLUE + "" + sign.getArena().getID() + "`" + sign.getLobby().getID() + "`" + sign.getType() + "`" + sign.getID() + "`" + +sign.getLocation().getBlockX() + "`" + sign.getLocation().getBlockY() + "`" + sign.getLocation().getBlockZ() + "`" + sign.getWorld().getName() + "\n";
 		}
@@ -784,10 +804,10 @@ public class ZvPCommands implements CommandExecutor {
 	    }
 	} else if (option.equalsIgnoreCase("arenas") || option.equalsIgnoreCase("arena")) {
 	    if (this.game.getArenas().length > 0) {
-		
+
 		player.sendMessage(getChatHeader("Arenas"));
 		String tableString = "ID`Status`Min / Max`PreLobby`Mode`World\n";
-		
+
 		for (Arena a : this.game.getArenas()) {
 		    tableString += ChatColor.BLUE + "" + a.getID() + "`" + a.getStatus().toString() + "`" + a.getConfig().getMinPlayers() + ChatColor.RED + " / " + ChatColor.BLUE + a.getConfig().getMaxPlayers() + "`" + a.hasPreLobby() + "`" + a.getDifficulty().name() + "`" + a.getWorld().getName() + "\n";
 		}
@@ -797,10 +817,10 @@ public class ZvPCommands implements CommandExecutor {
 	    }
 	} else if (option.equalsIgnoreCase("lobbys") || option.equalsIgnoreCase("lobby")) {
 	    if (this.game.getLobbys().length > 0) {
-		
+
 		player.sendMessage(getChatHeader("Lobbies"));
 		String tableString = "ID`World\n";
-		
+
 		for (Lobby l : this.game.getLobbys()) {
 		    tableString += ChatColor.BLUE + "" + l.getID() + "`" + l.getWorld().getName() + "\n";
 		}
@@ -810,10 +830,10 @@ public class ZvPCommands implements CommandExecutor {
 	    }
 	} else if (option.equalsIgnoreCase("kits") || option.equalsIgnoreCase("kit")) {
 	    if (KitManager.getManager().getKits().length > 0) {
-		
+
 		player.sendMessage(getChatHeader("Kits"));
 		String tableString = "Name`Price`Enabled`Permission\n";
-		
+
 		for (IZvPKit kit : KitManager.getManager().getKits()) {
 		    tableString += ChatColor.BLUE + "" + kit.getName() + "`" + kit.getPrice() + "`" + kit.isEnabled() + "`" + kit.getPermissionNode() + "\n";
 		}
@@ -829,19 +849,19 @@ public class ZvPCommands implements CommandExecutor {
 	    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp list kits");
 	}
     }
-    
+
     private void printCommands(Player player, int page) {
-	
+
 	if (player.hasPermission("zvp.help")) {
-	    
+
 	    if (page > 2 || page < 1) {
 		printCommands(player, 1);
 		return;
 	    }
-	    
+
 	    player.sendMessage(getChatHeader("Help: Page (" + page + "/2)"));
 	    player.sendMessage(ChatColor.GRAY + "| Use /zvp help [n] to get page [n] of help.\n|");
-	    
+
 	    switch (page) {
 		case 1:
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp help [page]");
@@ -857,7 +877,7 @@ public class ZvPCommands implements CommandExecutor {
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp removekit [Name]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp record [duration (in hours)]");
 		    break;
-		
+
 		case 2:
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add lobby");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp add arena");
@@ -872,16 +892,16 @@ public class ZvPCommands implements CommandExecutor {
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove lobby [Lobby-ID]");
 		    player.sendMessage(ChatColor.GRAY + "| " + ChatColor.RED + "/zvp remove preLobby [Arena-ID]");
 		    break;
-		
+
 		default:
 		    break;
 	    }
-	    
+
 	} else {
 	    commandDenied(player);
 	}
     }
-    
+
     private int parseInt(String s) {
 	try {
 	    return Integer.parseInt(s);
@@ -889,20 +909,20 @@ public class ZvPCommands implements CommandExecutor {
 	    return -1;
 	}
     }
-    
+
     private String getChatHeader(String headerType) {
-	
+
 	String pluginName = ZvP.getInstance().getDescription().getName();
 	String pluginVersion = ZvP.getInstance().getDescription().getVersion();
 	String content = " " + ChatColor.YELLOW + pluginName + " v" + pluginVersion + " " + headerType + " ";
-	
+
 	int contentLength = ChatColor.stripColor(content).length();
 	int dashCount = (int) Math.ceil((53 - contentLength - 2) / 2.0);// INFO: Magic numbers
-	
+
 	StringBuilder builder = new StringBuilder();
 	builder.append("\n\n");
 	builder.append(ChatColor.GRAY + "|");
-	
+
 	for (int i = 0; i < dashCount; i++) {
 	    builder.append('-');
 	}
@@ -911,11 +931,11 @@ public class ZvPCommands implements CommandExecutor {
 	for (int i = 0; i < dashCount; i++) {
 	    builder.append('-');
 	}
-	
+
 	builder.append('|');
 	return builder.toString();
     }
-    
+
     public static void commandDenied(Player player) {
 	player.sendMessage(MessageManager.getMessage(commands.missing_permission));
     }
