@@ -1,6 +1,9 @@
 package org.util.Potion;
 
 import java.lang.reflect.Method;
+import java.util.logging.Level;
+
+import me.Aubli.ZvP.ZvP;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -284,12 +287,6 @@ public class PotionLayer {
 	    if (nbtTagCompound == null) {
 		nbtTagCompound = getNMSClass("NBTTagCompound").newInstance();
 	    }
-	    /*
-	    net.minecraft.server.v1_9_R1.ItemStack stack = org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asNMSCopy(item);
-	    net.minecraft.server.v1_9_R1.NBTTagCompound tagCompound = stack.getTag();
-	    if (tagCompound == null) {
-	        tagCompound = new net.minecraft.server.v1_9_R1.NBTTagCompound();
-	    }*/
 	    String tag = "";
 	    if (this.extended) {
 		tag = "long_";
@@ -301,11 +298,7 @@ public class PotionLayer {
 	    compoundSetString.invoke(nbtTagCompound, "Potion", "minecraft:" + tag);
 	    stackSetTag.invoke(nmsStack, nbtTagCompound);
 	    ItemStack stack = (ItemStack) asBukkitCopy.invoke(null, nmsStack);
-	    // System.out.println(stack);
 	    return stack;
-	    // tagCompound.setString("Potion", "minecraft:" + tag);
-	    // stack.setTag(tagCompound);
-	    // return org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack.asBukkitCopy(stack);
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    return null;
@@ -335,21 +328,23 @@ public class PotionLayer {
      * 
      * @param item
      * @return {@link PotionLayer}. If it fails to parse, or the item argument is not a valid potion this will return null.
-     * @throws Exception
      */
-    public static PotionLayer fromItemStack(ItemStack item) throws Exception {
+    public static PotionLayer fromItemStack(ItemStack item) {
 	Validate.notNull(item, "Item cannot be null!");
 	Validate.isTrue(item.getType().name().equals("POTION") || item.getType().name().equals("SPLASH_POTION") || item.getType().name().equals("LINGERING_POTION"), "Item is not a potion!");
 
 	if (!is19) {
-	    return fromPotion(Potion.fromItemStack(item));
+	    try {
+		return fromPotion(Potion.fromItemStack(item));
+	    } catch (Exception e) {
+		ZvP.getPluginLogger().log(PotionLayer.class, Level.WARNING, "Can't process potion: " + item.toString() + " " + e.getMessage(), true, false, e);
+	    }
+	    return null;
 	}
 
 	try {
 	    Object nmsStack = asNMSCopy.invoke(null, item);
 	    Object nbtTagCompound = stackGetTag.invoke(nmsStack);
-	    // net.minecraft.server.v1_9_R1.ItemStack stack = CraftItemStack.asNMSCopy(item);
-	    // NBTTagCompound tagCompound = stack.getTag();
 
 	    if (nbtTagCompound != null && compoundGetString.invoke(nbtTagCompound, "Potion") != null && !((String) compoundGetString.invoke(nbtTagCompound, "Potion")).isEmpty()) {
 
@@ -400,13 +395,11 @@ public class PotionLayer {
 		}
 
 		return new PotionLayer(type, strong, _long, item.getType().name().equals("LINGERING_POTION"), item.getType().name().equals("SPLASH_POTION"));
-	    } else {
-		return null;
 	    }
 	} catch (Exception e) {
-	    e.printStackTrace();
-	    return null;
+	    ZvP.getPluginLogger().log(PotionLayer.class, Level.SEVERE, "Can't process potion: " + item.toString() + " " + e.getMessage(), true, false, e);
 	}
+	return null;
     }
 
     /**

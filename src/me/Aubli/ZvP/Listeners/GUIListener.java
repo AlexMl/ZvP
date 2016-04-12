@@ -258,7 +258,9 @@ public class GUIListener implements Listener {
 					    try {
 						boughtItem = PotionLayer.fromItemStack(item.getItem()).toItemStack(boughtItem.getAmount());
 					    } catch (Exception e) {
-						e.printStackTrace();
+						player.sendMessage(MessageManager.getMessage(error.transaction_failed));
+						ZvP.getPluginLogger().log(GUIListener.class, Level.SEVERE, "Can't process potion: " + item.getItem().toString() + " " + e.getMessage() + "; Aborting transaction!", true, false, e);
+						return;
 					    }
 					}
 
@@ -287,7 +289,9 @@ public class GUIListener implements Listener {
 					    try {
 						boughtItem = PotionLayer.fromItemStack(item.getItem()).toItemStack(boughtItem.getAmount());
 					    } catch (Exception e) {
-						e.printStackTrace();
+						player.sendMessage(MessageManager.getMessage(error.transaction_failed));
+						ZvP.getPluginLogger().log(GUIListener.class, Level.SEVERE, "Can't process potion: " + item.getItem().toString() + " " + e.getMessage() + "; Aborting transaction!", true, false, e);
+						return;
 					    }
 					}
 
@@ -309,7 +313,9 @@ public class GUIListener implements Listener {
 					try {
 					    stack = PotionLayer.fromItemStack(item.getItem()).toItemStack(1);
 					} catch (Exception e) {
-					    e.printStackTrace();
+					    player.sendMessage(MessageManager.getMessage(error.transaction_failed));
+					    ZvP.getPluginLogger().log(GUIListener.class, Level.SEVERE, "Can't process potion: " + item.getItem().toString() + " " + e.getMessage() + "; Aborting transaction!", true, false, e);
+					    return;
 					}
 				    }
 
@@ -333,7 +339,9 @@ public class GUIListener implements Listener {
 					try {
 					    stack1 = PotionLayer.fromItemStack(item.getItem()).toItemStack(1);
 					} catch (Exception e) {
-					    e.printStackTrace();
+					    player.sendMessage(MessageManager.getMessage(error.transaction_failed));
+					    ZvP.getPluginLogger().log(GUIListener.class, Level.SEVERE, "Can't process potion: " + item.getItem().toString() + " " + e.getMessage() + "; Aborting transaction!", true, false, e);
+					    return;
 					}
 				    }
 
