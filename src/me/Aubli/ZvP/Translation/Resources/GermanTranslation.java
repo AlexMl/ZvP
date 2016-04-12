@@ -1,8 +1,8 @@
 package me.Aubli.ZvP.Translation.Resources;
 
-import java.util.ListResourceBundle;
 import java.util.Locale;
 
+import me.Aubli.ZvP.Translation.LanguageBundle;
 import me.Aubli.ZvP.Translation.MessageKeys.arena;
 import me.Aubli.ZvP.Translation.MessageKeys.category;
 import me.Aubli.ZvP.Translation.MessageKeys.commands;
@@ -17,11 +17,15 @@ import me.Aubli.ZvP.Translation.MessageKeys.status;
 import org.bukkit.ChatColor;
 
 
-public class GermanTranslation extends ListResourceBundle {
+public class GermanTranslation extends LanguageBundle {
     
     @Override
     public Locale getLocale() {
 	return Locale.GERMAN;
+    }
+    
+    public String getAuthor() {
+	return "Aubli";
     }
     
     @Override

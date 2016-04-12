@@ -24,8 +24,6 @@ public class MessageManager {
     private File languageFile;
     private FileConfiguration conf;
     
-    private final static String[] bundleBaseNames = new String[] {"me.Aubli.ZvP.Translation.DefaultTranslation", "me.Aubli.ZvP.Translation.Resources.GermanTranslation", "me.Aubli.ZvP.Translation.Resources.HungarianTranslation"};
-    
     private static Map<String, String> messages;
     
     public MessageManager(Locale locale) {
@@ -59,10 +57,12 @@ public class MessageManager {
 	getConfig().options().header("This file contains all Text messages used in ZvP.\n" + "A guide for translation can be found here: http://dev.bukkit.org/bukkit-plugins/zombievsplayer/pages/language-setup/\n");
 	getConfig().options().copyHeader(true);
 	
-	getConfig().set("version", ZvP.getInstance().getDescription().getVersion());
-	save();
+	LanguageBundle bundle = LanguageBundle.getLanguageBundle("me.Aubli.ZvP.Translation.Resources.DefaultTranslation");
 	
-	ResourceBundle bundle = ResourceBundle.getBundle("me.Aubli.ZvP.Translation.DefaultTranslation");
+	getConfig().set("version", ZvP.getInstance().getDescription().getVersion());
+	getConfig().set("author", bundle.getAuthor());
+	getConfig().set("locale", bundle.getLocale().toString());
+	save();
 	
 	SortedMap<String, String> sortedBundle = new TreeMap<String, String>();
 	
@@ -79,8 +79,7 @@ public class MessageManager {
     
     private void copyTranslations() {
 	
-	for (String baseName : bundleBaseNames) {
-	    ResourceBundle bundle = ResourceBundle.getBundle(baseName);
+	for (LanguageBundle bundle : LanguageBundle.getLanguageBundles()) {
 	    
 	    try {
 		this.languageFile = new File(ZvP.getInstance().getDataFolder().getPath() + "/Messages/" + bundle.getLocale().toString() + ".yml");
@@ -89,7 +88,7 @@ public class MessageManager {
 		if (!this.languageFile.exists() || isOutdated()) {
 		    ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "Copying new translation for " + bundle.getLocale().toString() + "!", false);
 		    
-		    if (isOutdated() && this.languageFile.exists()) {
+		    if (this.languageFile.exists() && isOutdated()) {
 			this.languageFile.renameTo(new File(this.languageFile.getParentFile(), this.languageFile.getName() + "." + getConfig().getString("version")));
 			this.languageFile.delete();
 			this.languageFile.createNewFile();
@@ -103,6 +102,8 @@ public class MessageManager {
 		    getConfig().options().copyHeader(true);
 		    
 		    getConfig().set("version", ZvP.getInstance().getDescription().getVersion());
+		    getConfig().set("author", bundle.getAuthor());
+		    getConfig().set("locale", bundle.getLocale().toString());
 		    save();
 		    
 		    SortedMap<String, String> sortedBundle = new TreeMap<String, String>();
@@ -127,7 +128,7 @@ public class MessageManager {
     private Map<String, String> getTranslation() {
 	
 	Map<String, String> translation = new HashMap<String, String>();
-	ResourceBundle defaultBundle = ResourceBundle.getBundle("me.Aubli.ZvP.Translation.DefaultTranslation");
+	ResourceBundle defaultBundle = ResourceBundle.getBundle("me.Aubli.ZvP.Translation.Resources.DefaultTranslation");
 	
 	for (String enumKey : defaultBundle.keySet()) {
 	    String key = getEnumName(enumKey) + ":" + enumKey;

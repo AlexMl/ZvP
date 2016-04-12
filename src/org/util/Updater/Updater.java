@@ -40,7 +40,7 @@ import org.json.simple.JSONValue;
  * @version 2.3
  */
 public class Updater {
-    
+
     /* Constants */
     // Remote file's title
     private static final String TITLE_VALUE = "name";
@@ -61,7 +61,7 @@ public class Updater {
     // If the local version number contains one of these and the version equals the remote version, force update.
     private static final String[] UPDATE_TAG_LOCAL = {"_DEV", "_PRE"};
     // If the remote version number contains one of these, don't update.
-    private static final String[] NO_UPDATE_TAG_REMOTE = {"_DEV"};
+    private static final String[] NO_UPDATE_TAG_REMOTE = {"_DEV, _1.9"};
     // Used for downloading files
     private static final int BYTE_SIZE = 1024;
     // Config key for api key
@@ -101,7 +101,7 @@ public class Updater {
     private Thread thread;
     // Used for determining the outcome of the update process
     private Updater.UpdateResult result = Updater.UpdateResult.SUCCESS;
-    
+
     /**
      * Gives the developer the result of the update process. Can be obtained by called {@link #getResult()}
      */
@@ -143,7 +143,7 @@ public class Updater {
 	 */
 	UPDATE_AVAILABLE
     }
-    
+
     /**
      * Allows the developer to specify the type of update that will be run.
      */
@@ -161,7 +161,7 @@ public class Updater {
 	 */
 	NO_DOWNLOAD
     }
-    
+
     /**
      * Represents the various release types of a file on BukkitDev.
      */
@@ -179,7 +179,7 @@ public class Updater {
 	 */
 	RELEASE
     }
-    
+
     /**
      * Initialize the updater.
      *
@@ -197,7 +197,7 @@ public class Updater {
     public Updater(Plugin plugin, int id, File file, UpdateType type, boolean announce) {
 	this(plugin, id, file, type, null, announce);
     }
-    
+
     /**
      * Initialize the updater with the provided callback.
      *
@@ -215,7 +215,7 @@ public class Updater {
     public Updater(Plugin plugin, int id, File file, UpdateType type, UpdateCallback callback) {
 	this(plugin, id, file, type, callback, false);
     }
-    
+
     /**
      * Initialize the updater with the provided callback.
      *
@@ -290,7 +290,7 @@ public class Updater {
 	    runUpdater();
 	}
     }
-    
+
     /**
      * Get the result of the update process.
      *
@@ -301,7 +301,7 @@ public class Updater {
 	this.waitForThread();
 	return this.result;
     }
-    
+
     /**
      * Get the latest version's release type.
      *
@@ -319,7 +319,7 @@ public class Updater {
 	}
 	return null;
     }
-    
+
     /**
      * Get the latest version's game version (such as "CB 1.2.5-R1.0").
      *
@@ -329,7 +329,7 @@ public class Updater {
 	this.waitForThread();
 	return this.versionGameVersion;
     }
-    
+
     /**
      * Get the latest version's name (such as "Project v1.0").
      *
@@ -339,7 +339,7 @@ public class Updater {
 	this.waitForThread();
 	return this.versionName;
     }
-    
+
     /**
      * Get the latest version's direct file link.
      *
@@ -349,7 +349,7 @@ public class Updater {
 	this.waitForThread();
 	return this.versionLink;
     }
-    
+
     /**
      * As the result of Updater output depends on the thread's completion, it is necessary to wait for the thread to finish before allowing anyone to check the result.
      */
@@ -362,7 +362,7 @@ public class Updater {
 	    }
 	}
     }
-    
+
     /**
      * Save an update from dev.bukkit.org into the server's update folder.
      *
@@ -386,7 +386,7 @@ public class Updater {
 	    this.plugin.getLogger().info("Finished updating.");
 	}
     }
-    
+
     /**
      * Download a file and save it to the specified folder.
      */
@@ -432,7 +432,7 @@ public class Updater {
 	    }
 	}
     }
-    
+
     /**
      * Remove possibly leftover files from the update folder.
      */
@@ -445,7 +445,7 @@ public class Updater {
 	    }
 	}
     }
-    
+
     /**
      * Part of Zip-File-Extractor, modified by Gravity for use with Updater.
      *
@@ -491,7 +491,7 @@ public class Updater {
 	    this.fileIOOrError(fSourceZip, fSourceZip.delete(), false);
 	}
     }
-    
+
     /**
      * Find any new files extracted from an update into the plugin's data directory.
      * 
@@ -533,7 +533,7 @@ public class Updater {
 	File zip = new File(zipPath);
 	this.fileIOOrError(zip, zip.delete(), false);
     }
-    
+
     /**
      * Check if the name of a jar is one of the plugins currently installed, used for extracting the correct files out of a zip.
      *
@@ -550,7 +550,7 @@ public class Updater {
 	}
 	return false;
     }
-    
+
     /**
      * Check to see if the program should continue by evaluating whether the plugin is already updated, or shouldn't be updated.
      *
@@ -582,7 +582,7 @@ public class Updater {
 	}
 	return true;
     }
-    
+
     /**
      * <b>If you wish to run mathematical versioning checks, edit this method.</b>
      * <p>
@@ -610,10 +610,10 @@ public class Updater {
 	double local = parseVersion(localVersion);
 	double remote = parseVersion(remoteVersion);
 	ZvP.getPluginLogger().log(this.getClass(), Level.INFO, "LV=" + local + " : RV=" + remote + " Update? " + (updateTag ? remote >= local : remote > local), true, true);
-	
+
 	return updateTag ? remote >= local : remote > local;
     }
-    
+
     private double parseVersion(String version) {
 	// Possibilities: 2.3.7-5_LP
 	if (version.contains("_")) {
@@ -622,7 +622,7 @@ public class Updater {
 	    return Double.parseDouble(version.replace(".", "").replace("-", "."));
 	}
     }
-    
+
     /**
      * Evaluate whether the version number is marked showing that it should not be updated by this program.
      *
@@ -646,7 +646,7 @@ public class Updater {
 	}
 	return false;
     }
-    
+
     /**
      * Make a connection to the BukkitDev API and request the newest file's details.
      *
@@ -689,7 +689,7 @@ public class Updater {
 	    return false;
 	}
     }
-    
+
     /**
      * Perform a file operation and log any errors if it fails.
      * 
@@ -705,7 +705,7 @@ public class Updater {
 	    this.plugin.getLogger().severe("The updater could not " + (create ? "create" : "delete") + " file at: " + file.getAbsolutePath());
 	}
     }
-    
+
     private File[] listFilesOrError(File folder) {
 	File[] contents = folder.listFiles();
 	if (contents == null) {
@@ -715,12 +715,12 @@ public class Updater {
 	    return contents;
 	}
     }
-    
+
     /**
      * Called on main thread when the Updater has finished working, regardless of result.
      */
     public interface UpdateCallback {
-	
+
 	/**
 	 * Called when the updater has finished working.
 	 * 
@@ -729,15 +729,15 @@ public class Updater {
 	 */
 	void onFinish(Updater updater);
     }
-    
+
     private class UpdateRunnable implements Runnable {
-	
+
 	@Override
 	public void run() {
 	    runUpdater();
 	}
     }
-    
+
     private void runUpdater() {
 	if (this.url != null && (this.read() && this.versionCheck())) {
 	    // Obtain the results of the project's file feed
@@ -754,7 +754,7 @@ public class Updater {
 	}
 	if (this.callback != null) {
 	    new BukkitRunnable() {
-		
+
 		@Override
 		public void run() {
 		    runCallback();
@@ -762,7 +762,7 @@ public class Updater {
 	    }.runTask(this.plugin);
 	}
     }
-    
+
     private void runCallback() {
 	this.callback.onFinish(this);
     }

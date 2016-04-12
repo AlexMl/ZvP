@@ -1,5 +1,5 @@
 name: ZombieVsPlayer
-version: 2.9.0_DEV
+version: 2.9.7_DEV
 description: Fight against zombies with a lot of extra features!
 website: http://dev.bukkit.org/bukkit-plugins/zombievsplayer/
 author: Aubli
@@ -15,3 +15,8 @@ commands:
      zvptest:
           description: ZvP Test command [Requires DebugMode]
           usage: /<command>
+          
+permissions:
+     zvp.play:
+          description: Allows players to play ZvP
+          default: true

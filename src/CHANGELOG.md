@@ -1,10 +1,60 @@
 Changelog:
 
 ---------------------------------------
-ZvP Version 2.9.0 - 
+ZvP Version 2.9.7 - 11.04.2016
+- [Fixed] 1.9 Compatibility
+- [Fixed] 1.9 Potions
+- [Fixed] zombie equipment bug (again)
+- [Fixed] Merged 1.9 and main development branch and versions
 
 ---------------------------------------
+ZvP Version 2.9.6-2_1.9 - 05.04.2016
+- [Fixed] Zombie equipment error
 
+---------------------------------------
+ZvP Version 2.9.6-1_1.9 - 26.03.2016
+- [Fixed] Few errors
+ 
+--------------------------------------
+ZvP Version 2.9.6_1.9 - 20.03.2016
+- [Fixed] 1.9 Compatibility
+
+---------------------------------------
+ZvP Version 2.9.6 - 20.03.2016
+- [Fixed] Typos, Messages, logs
+
+---------------------------------------
+ZvP Version 2.9.5 - 11.02.2016
+- [Added] Default zvp.play permission without permission plugin
+- [Edit] Only show prices in kits if economy is enabled
+
+---------------------------------------
+ZvP Version 2.9.4 - 03.02.2016
+- [Fixed] NPE if shop is accessed before game start
+
+---------------------------------------
+ZvP Version 2.9.3 - 02.02.2016
+- [Fixed] Zombie Spawn bug
+
+---------------------------------------
+ZvP Version 2.9.2 - 26.12.2015
+- [Added] Spanish translation by zuhir
+
+---------------------------------------
+ZvP Version 2.9.1 - 23.12.2015
+- [Fixed] Bug in arena creation
+
+---------------------------------------
+ZvP Version 2.9.0 - 23.12.2015
+- [Added] ZvP game statistics
+- [Added] Statistic signs
+- [Added] time related statistics
+- [Added] ZvP GameModes (Standard/Deathmatch)
+- [Added] Items have sell and buy price
+- [Fixed] PreLobby join message only one time
+- [Fixed] Join during game bug
+
+---------------------------------------
 ZvP Version 2.8.9 - 27.10.2015
 - [Fixed] Error in shop sign
 
