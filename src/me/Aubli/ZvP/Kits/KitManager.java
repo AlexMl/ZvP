@@ -26,8 +26,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.Potion;
 import org.util.File.Converter.FileConverter.FileType;
+import org.util.Potion.PotionLayer;
 
 
 public class KitManager {
@@ -202,12 +202,11 @@ public class KitManager {
 		lore.add(ChatColor.GOLD + "Content:");
 
 		for (ItemStack stack : kit.getContents()) {
-
 		    lore.add(ChatColor.DARK_GREEN + "" + stack.getAmount() + "x " + stack.getType().toString());
 
 		    if (stack.getItemMeta() instanceof PotionMeta) {
-			Potion p = Potion.fromItemStack(stack);
-			lore.add(ChatColor.DARK_BLUE + "  -" + p.getType() + " L" + p.getLevel());
+			PotionLayer potionLayer = PotionLayer.fromItemStack(stack);
+			lore.add(ChatColor.DARK_BLUE + "  -" + potionLayer.getType().name() + " L" + potionLayer.getLevel());
 		    }
 
 		    Map<Enchantment, Integer> enchs = stack.getEnchantments();
